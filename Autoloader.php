@@ -73,7 +73,7 @@ class Autoloader {
         private function load_absolute_class_name( $module, $class_type, $class_name ) {
 		$root_path = Application::$root_paths[ $module ];
 		$file_path = $root_path . strtolower( $class_type ) . '/' . $class_name . '.php';
-		echo '-- ' . $file_path . '<br>';
+		// echo '-- ' . $file_path . '<br>';
 		if ( is_file( $file_path ) ) {
 			require_once( $file_path );
 			return TRUE;
@@ -88,7 +88,7 @@ class Autoloader {
 			$new_class_name = substr_after_last( $new_class_name, '\\' );
 		}
 		$code .= 'class ' . $new_class_name . ' extends \\' . $real_class_name . ' { }' . PHP_EOL;
-		echo $code . PHP_EOL;
+		// echo $code . PHP_EOL;
 		eval( $code );
 	}
 	private function autoload_create_child( $class_name ) {

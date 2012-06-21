@@ -13,6 +13,7 @@ class Application {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+	public static $configuration;
 	public static $modules = array( );
 	public static $root_paths = array( );
 	private $root_path;
@@ -42,12 +43,12 @@ class Application {
 
 		// Configuration file
 		if ( is_null( $configuration_file ) ) {
-			$configuration_file = $this->root_path . $project_name . '/conf/project.ini';
+			$configuration_file = $this->root_path . $project_name . '/conf/application.ini';
 		}
-		$conf = new Configuration( $configuration_file );
+		self::$configuration = new Configuration( $configuration_file );
 
 		// Enabled modules
-		$modules = array_merge( array( $project_name ), $conf->get( 'Modules', 'Enabled' ) );
+		$modules = array_merge( array( $project_name ), self::$configuration->get( 'Modules', 'Enabled' ) );
 		foreach( $modules as $module ) {
 			$module_name = str_replace( '/', '\\', $module );
 			$module_path = str_replace( '\\', '/', $module );
@@ -56,6 +57,5 @@ class Application {
 		}
 	}
 	public function run( ) {
-		echo 'bou';
 	}
 }
