@@ -16,10 +16,9 @@ class Application {
 	public static $configuration;
 	public static $modules = array( );
 	public static $root_paths = array( );
+	private $controllers = array( );
 	private $root_path;
-	private $rootes = array( );
-	// TODO: Supprimer le default controller !
-	public $default_controller = 'welcome';
+	private $routes = array( );
 
 
 	/*************************************************************************
@@ -56,6 +55,17 @@ class Application {
 			$module_path = str_replace( '\\', '/', $module );
 			self::$modules[ ] = $module_name;
 			self::$root_paths[ $module_name ] = $this->root_path . $module_path . '/';
+		}
+
+		// Enabled controllers
+		$controllers = self::$configuration->get( 'Controllers', 'Enabled' );
+		foreach( $controllers as $controller ) {
+			try {
+				$controller_class = '\\Controller\\' . $controller;
+				$this->controllers[ ] = new $controller_class( );
+			} catch ( Exception $e ) {
+				throw new Exception( 'We can not instanciate "' . $controller . '" controller', 0, $e );
+			}
 		}
 	}
 	public function render( ) {
@@ -99,36 +109,10 @@ class Application {
 		$this->routes[ ] = $route;
 	}
 	private function route( ) {
-		$url_parts = explode( '/', substr( $this->current_route( ), 1 ) );
-
-		// Controller
-		if ( strlen( $this->current_route( ) ) == 1 ) {
-			$controller_name = $this->default_controller;
-		} else {
-			$controller_name = $url_parts[ 0 ];
+		foreach ( $this->controllers as $controller ) {
+			if ( $callable = $controller->handle_route( $this->current_route( ) ) ) {
+				return call_user_func_array( array( $controller, $callable[ 0 ] ), $callable[ 1 ] );
+			}
 		}
-		try {		
-			$controller_name = '\\Controller\\' . ucfirst( $controller_name );
-			$this->controller = new $controller_name( );
-		} catch ( Exception $e ) {
-			var_dump( $e );
-			// throw new \Exception\Redirect( '/error/view/404', 'Unknown controller "' . $controller_name . '"' );
-		}
-
-		// Action
-		if ( count( $url_parts ) < 2 ) {
-			$this->action = $this->controller->action_method( );
-		} else {
-			$this->action = $this->controller->action_method( $url_parts[ 1 ] );
-		}
-		if ( ! is_callable( $this->callable_action( ) ) ) {
-			throw new \Exception\Redirect( '/error/view/404', 'Unknown controller\'s action "' . $controller_name . '::' . $this->action .'"' );
-		}
-
-		$this->parameters = array_slice( $url_parts, 2 );
-		return call_user_func_array( $this->callable_action( ), $this->parameters );
-	}
-	private function callable_action( ) {
-		return array( $this->controller, $this->action );
 	}
 }
