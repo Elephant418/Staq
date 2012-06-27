@@ -5,6 +5,8 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
+session_start( );
+
 $root_path = dirname( __FILE__);
 require_once( $root_path . '/utils.php' );
 require_once( $root_path . '/Configuration.php' );
