@@ -16,7 +16,7 @@ class Application {
 	public static $configuration;
 	public static $modules = array( );
 	public static $root_paths = array( );
-	private $controllers = array( );
+	public static $controllers = array( );
 	private $root_path;
 	private $routes = array( );
 
@@ -62,7 +62,7 @@ class Application {
 		foreach( $controllers as $controller ) {
 			try {
 				$controller_class = '\\Controller\\' . $controller;
-				$this->controllers[ ] = new $controller_class( );
+				self::$controllers[ $controller ] = new $controller_class( );
 			} catch ( Exception $e ) {
 				throw new Exception( 'We can not instanciate "' . $controller . '" controller', 0, $e );
 			}
@@ -94,6 +94,14 @@ class Application {
 		header( 'Location: ' . $route );
 		die();
 	}
+	public static function redirect_to_action( $controller, $action, $parameters = array( ) ) {
+		$controller = self::$controllers[ $controller ];
+		$route = $controller->get_action_route( $action );
+		foreach ( $parameters as $name => $value ) {
+			$route = str_replace( ':' . $name, $value, $route );
+		}
+		self::redirect( $route );
+	}
 
 
 	/*************************************************************************
@@ -110,7 +118,7 @@ class Application {
 	}
 	private function route( ) {
 		$current_route = strtolower( $this->current_route( ) );
-		foreach ( $this->controllers as $controller ) {
+		foreach ( self::$controllers as $controller ) {
 			if ( $callable = $controller->handle_route( $current_route ) ) {
 				return call_user_func_array( array( $controller, $callable[ 0 ] ), $callable[ 1 ] );
 			}
