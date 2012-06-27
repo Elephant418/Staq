@@ -75,10 +75,10 @@ class Application {
 			\Message::push( $e->getMessage( ), \Message::EXCEPTION );
 			$this->change_route( $e->route );
 			return $this->render( );
-		/*} catch( \Exception $e ) {
+		} catch( \Exception $e ) {
 			\Message::push( $e->getMessage( ), \Message::EXCEPTION );
-			$this->change_route( '/error/view/500' );
-			return $this->render( );*/
+			$this->change_route( '/error/500' );
+			return $this->render( );
 		}
 	}
 	public function run( ) {
@@ -109,10 +109,12 @@ class Application {
 		$this->routes[ ] = $route;
 	}
 	private function route( ) {
+		$current_route = strtolower( $this->current_route( ) );
 		foreach ( $this->controllers as $controller ) {
-			if ( $callable = $controller->handle_route( $this->current_route( ) ) ) {
+			if ( $callable = $controller->handle_route( $current_route ) ) {
 				return call_user_func_array( array( $controller, $callable[ 0 ] ), $callable[ 1 ] );
 			}
 		}
+		throw new \Exception\Redirect( '/error/404', 'Route not found' );
 	}
 }
