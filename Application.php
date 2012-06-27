@@ -72,11 +72,11 @@ class Application {
 		try {
 			return $this->route( );
 		} catch( \Exception\Redirect $e ) {
-			\Message::push( $e->getMessage( ), \Message::EXCEPTION );
+			\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
 			$this->change_route( $e->route );
 			return $this->render( );
 		} catch( \Exception $e ) {
-			\Message::push( $e->getMessage( ), \Message::EXCEPTION );
+			\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
 			$this->change_route( '/error/500' );
 			return $this->render( );
 		}
