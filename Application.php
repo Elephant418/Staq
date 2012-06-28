@@ -97,9 +97,6 @@ class Application {
 	public static function redirect_to_action( $controller, $action, $parameters = array( ) ) {
 		$controller = self::$controllers[ $controller ];
 		$route = $controller->get_action_route( $action );
-		foreach ( $parameters as $name => $value ) {
-			$route = str_replace( ':' . $name, $value, $route );
-		}
 		self::redirect( $route );
 	}
 
