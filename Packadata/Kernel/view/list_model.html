@@ -1,0 +1,11 @@
+<?php
+foreach ( $this->all as $model ) {
+?>
+	<ul>
+		<li><a href="/<?= $model->type ?>/view/<?= $model->id ?>" ><?= $model->name( ) ?></a></li>
+	</ul>
+<?php
+}
+?>
+<button onclick="location.href='<?= $this->action_url[ 'create' ] ?>'">Create</button>
+
