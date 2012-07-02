@@ -104,6 +104,7 @@ abstract class Model extends \Controller\__Base {
 		}
 		$archive = new \Model_Archive( );
 		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
+			$this->view->title .= $this->type . ' ' . $id;
 			$this->view->archives = $archives;
 			$this->view->content = $this->render_archive_model( $model );
 		} else {
