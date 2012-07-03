@@ -11,8 +11,10 @@ class Versioned_Model extends \Controller\Model {
 	public function __construct( ) {
 		parent::__construct( );
 		$root = '/' . strtolower( $this->type );
-		$this->add_handled_route( 'archive', $root . '/archive/:id' );
 		$this->add_handled_route( 'archives', '/archives' );
+		$this->add_handled_route( 'archive', $root . '/archive/:id' );
+		$this->add_handled_route( 'restore', $root . '/restore/:id' );
+		$this->add_handled_route( 'erase'  , $root . '/erase/:id' );
 	}
 
 
@@ -20,6 +22,10 @@ class Versioned_Model extends \Controller\Model {
 	 ACTION METHODS
 	*************************************************************************/
 	public function archives( ) {
+		
+		//TODO Decide whether we place here all the archives or the archives of models who were deleted
+		//Second choice seems more logical as seeing everything isn't a greaaat functionality...
+		
 		$models= new \Model_Archive( );
 		$content = '';
 		$models = $models->all( );
@@ -83,9 +89,9 @@ class Versioned_Model extends \Controller\Model {
 		}
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
 	}
-	public function erase ( $id ) {
+	public function erase ( $id, $version = NULL ) {
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
+		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $version[ 'attributes' ] ) ) ) {
 			foreach ( $archives as $archive ) {
 				$archive->delete( );
 			}
@@ -96,7 +102,7 @@ class Versioned_Model extends \Controller\Model {
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 		}
 	}
-	public function restore ( $id ) {
+	public function restore ( $id, $version = NULL ) {
 		$archive = new \Model_Archive( );
 	}
 
