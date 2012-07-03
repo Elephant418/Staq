@@ -23,8 +23,7 @@ foreach ( $this->archives as $archive ) {
 	?><br/><?php
 	if ( $archive != $archive->last_version( $archive->model_id ) ) {
 	?>
-		<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore version</button>
-		<button onclick="location.href='<?= $this->action_url[ 'erase' ] ?>'">Erase</button>
+		<button onclick="location.href='<?= $this->action_url[ 'see' ] ?>'">See</button>
 	<?php
 	}
 }
@@ -36,11 +35,6 @@ foreach ( $this->archives as $archive ) {
 ?>
 	<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
 	<button onclick="location.href='<?= $this->action_url[ 'view' ] ?>'">View</button>
-<?php
-} else {
-?>
-	<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore</button>
-	<button onclick="location.href='<?= $this->action_url[ 'erase' ] ?>'">Erase</button>
 <?php
 }
 ?>

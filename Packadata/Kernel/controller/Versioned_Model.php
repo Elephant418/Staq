@@ -83,7 +83,7 @@ class Versioned_Model extends \Controller\Model {
 		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
 			$this->view->title .= $this->type . ' ' . $id;
 			$this->view->archives = $archives;
-			$this->view->content = $this->render_archive_model( $model );
+			$this->view->content = $this->render_list_archive( $model );
 		} else {
 			$this->view->title   = $this->type . ' not found';
 		}
@@ -91,13 +91,16 @@ class Versioned_Model extends \Controller\Model {
 	}
 	public function see ( $id, $versions ) {
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
-			
+		if ( $archive = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
+			$this->view->title .= $this->type . ' ' . $id . ' version ' . $archive->model_attributes_version;
+			$this->view->archive = $archive;
+			$this->view->content = $this->render_view_archive( $archive );
 		}
+		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
 	}
 	public function erase ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
+		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
 			foreach ( $archives as $archive ) {
 				$archive->delete( );
 			}
@@ -116,21 +119,28 @@ class Versioned_Model extends \Controller\Model {
 	/*************************************************************************
 	 PROTECTED METHODS
 	*************************************************************************/
-	protected function model_archive_url( $model ) {
+	protected function archive_list_url( $model ) {
 		return $this->model_action_url( $model, 'archive' );
 	}
-	protected function model_erase_url( $model ) {
-		return $this->model_action_url( $model, 'erase' );
+	protected function archive_view_url( $archive ) {
+		return $this->archive_action_url( $archive, 'see' );
 	}
-	protected function model_restore_url( $model ) {
-		return $this->model_action_url( $model, 'restore' );
+	protected function archive_erase_url( $archive ) {
+		return $this->archive_action_url( $archive, 'erase' );
 	}
-	protected function init_var( $model = NULL ) {
-		$action_url = parent::init_var( $model );
-		if ( $model ) {
-			$action_url[ 'archive' ]	= $this->model_archive_url( $model );
-			$action_url[ 'erase' ]		= $this->model_erase_url( $model );
-			$action_url[ 'restore' ]	= $this->model_restore_url( $model );
+	protected function archive_restore_url( $archive ) {
+		return $this->archive_action_url( $archive, 'restore' );
+	}
+	protected function archive_action_url( $archive, $action ) {
+		return '/' . strtolower( $this->type ) . '/archive/' . $action . '/' . $archive->id;
+	}
+	protected function init_var( $archive = NULL ) {
+		$action_url = parent::init_var( $archive );
+		if ( $archive ) {
+			$action_url[ 'archive' ]	= $this->archive_list_url( $archive );
+			$action_url[ 'see' ]		= $this->archive_view_url( $archive );
+			$action_url[ 'erase' ]		= $this->archive_erase_url( $archive );
+			$action_url[ 'restore' ]	= $this->archive_restore_url( $archive );
 		}
 		$this->view->action_url = $action_url;
 	}
@@ -138,8 +148,12 @@ class Versioned_Model extends \Controller\Model {
 	/*************************************************************************
 	 PROTECTED RENDER METHODS
 	*************************************************************************/
-	protected function render_archive_model( $model ) {
+	protected function render_list_archive( $model ) {
 		$this->init_var( $model );
 		return $this->view->render( \View\__Base::LIST_ARCHIVE_TEMPLATE );
+	}
+	protected function render_view_archive( $archive ) {
+		$this->init_var( $archive );
+		return $this->view->render( \View\__Base::VIEW_ARCHIVE_TEMPLATE );
 	}
 }
