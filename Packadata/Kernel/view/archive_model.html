@@ -21,6 +21,12 @@ foreach ( $this->archives as $archive ) {
 		?><?= $key ?> = <?= $value ?> // <?php
 	}
 	?><br/><?php
+	if ( $archive != $archive->last_version( $archive->model_id ) ) {
+	?>
+		<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore version</button>
+		<button onclick="location.href='<?= $this->action_url[ 'erase' ] ?>'">Erase</button>
+	<?php
+	}
 }
 ?>
 <br/>
@@ -32,10 +38,9 @@ foreach ( $this->archives as $archive ) {
 	<button onclick="location.href='<?= $this->action_url[ 'view' ] ?>'">View</button>
 <?php
 } else {
-	//TODO create methods & routes for the following actions
-
-	/*<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore</button>
+?>
+	<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore</button>
 	<button onclick="location.href='<?= $this->action_url[ 'erase' ] ?>'">Erase</button>
-	*/
+<?php
 }
 ?>

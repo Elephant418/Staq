@@ -83,9 +83,6 @@ class Versioned_Model extends \Controller\Model {
 		}
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
 	}
-	public function restore ( $id ) {
-		$archive = new \Model_Archive( );
-	}
 	public function erase ( $id ) {
 		$archive = new \Model_Archive( );
 		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
@@ -99,8 +96,8 @@ class Versioned_Model extends \Controller\Model {
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 		}
 	}
-	protected function model_erase_url( $model ) {
-		return $this->model_action_url( $model, 'erase' );
+	public function restore ( $id ) {
+		$archive = new \Model_Archive( );
 	}
 
 
@@ -110,11 +107,18 @@ class Versioned_Model extends \Controller\Model {
 	protected function model_archive_url( $model ) {
 		return $this->model_action_url( $model, 'archive' );
 	}
+	protected function model_erase_url( $model ) {
+		return $this->model_action_url( $model, 'erase' );
+	}
+	protected function model_restore_url( $model ) {
+		return $this->model_action_url( $model, 'restore' );
+	}
 	protected function init_var( $model = NULL ) {
 		$action_url = parent::init_var( $model );
 		if ( $model ) {
-			$action_url[ 'archive' ] = $this->model_archive_url( $model );
-			$action_url[ 'erase' ] = $this->model_erase_url( $model );
+			$action_url[ 'archive' ]	= $this->model_archive_url( $model );
+			$action_url[ 'erase' ]		= $this->model_erase_url( $model );
+			$action_url[ 'restore' ]	= $this->model_restore_url( $model );
 		}
 		$this->view->action_url = $action_url;
 	}
