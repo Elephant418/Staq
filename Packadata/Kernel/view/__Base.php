@@ -13,7 +13,7 @@ class __Base {
 	const VIEW_MODEL_TEMPLATE = 'view_model.html';
 	const EDIT_MODEL_TEMPLATE = 'edit_model.html';
 	const LIST_MODEL_TEMPLATE = 'list_model.html';
-	const ARCHIVE_MODEL_TEMPLATE = 'archive_model.html';
+	const LIST_ARCHIVE_TEMPLATE = 'list_archive.html';
 
 	protected $_attributes = array( );
 

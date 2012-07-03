@@ -89,9 +89,15 @@ class Versioned_Model extends \Controller\Model {
 		}
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
 	}
-	public function erase ( $id, $version = NULL ) {
+	public function see ( $id, $versions ) {
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $version[ 'attributes' ] ) ) ) {
+		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
+			
+		}
+	}
+	public function erase ( $id, $versions = NULL ) {
+		$archive = new \Model_Archive( );
+		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
 			foreach ( $archives as $archive ) {
 				$archive->delete( );
 			}
@@ -102,7 +108,7 @@ class Versioned_Model extends \Controller\Model {
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 		}
 	}
-	public function restore ( $id, $version = NULL ) {
+	public function restore ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
 	}
 
@@ -134,6 +140,6 @@ class Versioned_Model extends \Controller\Model {
 	*************************************************************************/
 	protected function render_archive_model( $model ) {
 		$this->init_var( $model );
-		return $this->view->render( \View\__Base::ARCHIVE_MODEL_TEMPLATE );
+		return $this->view->render( \View\__Base::LIST_ARCHIVE_TEMPLATE );
 	}
 }

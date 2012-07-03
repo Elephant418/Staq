@@ -115,4 +115,3 @@ abstract class __Base {
 		return $this->view->render( $template );
 	}
 }
-
