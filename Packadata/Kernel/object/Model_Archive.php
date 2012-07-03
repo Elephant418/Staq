@@ -16,12 +16,22 @@ abstract class Model_Archive extends \Database_Table {
 	public $ip_version;
 	public $date_version;
 
+
 	/*************************************************************************
 	 CONSTRUCTOR
 	*************************************************************************/
 	public function __construct( ) {
 		parent::__construct( );
-		$this->_database->table_fields = array( 'id', 'model_id', 'model_type', 'model_type_version', 'model_attributes', 'model_attributes_version', 'ip_version', 'date_version' );
+		$this->_database->table_fields = array(
+			'id',
+			'model_id',
+			'model_type',
+			'model_type_version',
+			'model_attributes',
+			'model_attributes_version',
+			'ip_version',
+			'date_version'
+		);
 		$this->_database->table_name = 'model_archives';
 	}
 
@@ -39,6 +49,9 @@ abstract class Model_Archive extends \Database_Table {
 		$fields = array( 'model_id' => $id );
 		if ( isset( $versions[ 'type' ] ) ) {
 			$fields[ 'model_type' ] = $versions[ 'type' ];
+		}
+		if ( isset( $versions[ 'attributes' ] ) ) {
+			$fields[ 'model_attributes_version' ] = $versions[ 'attributes' ];
 		}
 		return parent::list_by_fields( $fields );
 	}
@@ -141,6 +154,10 @@ abstract class Model_Archive extends \Database_Table {
 	/*************************************************************************
 	 UTILS
 	*************************************************************************/
+	/*
+	 * Gets all the archives in the database
+	 * @return $results an array containing all the archives
+	 */
 	public function all( ) {
 		$all = parent::list_by_fields( array ( 'model_attributes' => array ( '>', '0' ) ) );
 		$results = array( );

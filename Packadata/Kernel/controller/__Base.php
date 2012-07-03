@@ -13,7 +13,7 @@ abstract class __Base {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public static $autoload_create_child = 'Controller\\Model';
+	public static $autoload_create_child = 'Controller\\Versioned_Model';
 	public $view;
 	public $type;
 	protected $no_routes = FALSE;
