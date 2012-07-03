@@ -159,4 +159,3 @@ abstract class Model extends \Controller\__Base {
 		return $this->view->render( \View\__Base::LIST_MODEL_TEMPLATE );
 	}
 }
-

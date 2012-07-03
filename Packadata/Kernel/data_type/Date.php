@@ -31,7 +31,6 @@ class Date extends \Data_Type\__Base {
 			$this->init( $value );
 		} else {
 			\Notification::push( 'Wrong Input for the date ! Hasn\'t been saved.', \Notification::NOTICE );
-			//TODO Interrompre totalement l'entrée en base
 		}
 	}
 	public function get_format( ) {

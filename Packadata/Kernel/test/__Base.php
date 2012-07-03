@@ -31,8 +31,7 @@ class __Base {
 	public function execute_script( $model ) {
 		
 		/* 
-		 * TODO Initialisation à transférer en paramètre ?
-		 * Faire un modèle de toutes pièces à la volée ?
+		 * TODO Initialisation to make somewhere else ?
 		 */
 		$index = $this->new_object( $model );
 		$index = $index->get_attribute_fields( );

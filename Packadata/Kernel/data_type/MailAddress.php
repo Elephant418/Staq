@@ -27,7 +27,6 @@ class MailAddress extends \Data_Type\__Base {
 			$this->init( $value );
 		} else {
 			\Notification::push( 'Wrong Input for the mail ! Hasn\'t been saved.', \Notification::NOTICE );
-			//TODO Interrompre totalement l'entrée en base
 		}
 	}
 }
