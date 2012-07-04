@@ -4,31 +4,30 @@ foreach ( $this->archives as $archive ) {
 	$attributes = $archive->model_attributes;
 	if ( $archive == $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 		?><h4>Last model</h4><?php
-		if ( ! $archive->current_version( $archive->model_id, $archive->model_type ) ) {
+		if ( $this->current ) {
+			?>
+			<a href="/<?= $archive->model_type ?>/view/<?= $archive->model_id ?>" >
+				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?> (Current)
+			</a>
+			<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
+			<?php
+		} else {
 			?>Warning: has been deleted (no current version)<br/><?php
 		}
+		?>
+		<br/>
+	<?php
 	} else {
-		?><br/><?php
+		if ( $archive != $archive->last_version( $archive->model_id, $archive->model_type ) ) {
+		?>
+			<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br>
+		<?php
+		}
 	}
 	?>
-	Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'd/m/Y' ); ?> at <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'G:i' ); ?><br/>
-	Changed by the IP : <?= $archive->ip_version ?><br/>
-	Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?><br/>
-	<?php
-	if ( $archive != $archive->last_version( $archive->model_id, $archive->model_type ) ) {
-	?>
-		<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >See</a></li>
-	<?php
-	}
+	Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'd/m/Y - G:i' ); ?><br/>
+	Changed by the IP : <?= $archive->ip_version ?><br/><br/><?php
 }
 ?>
-<br/>
 <button onclick="location.href='<?= $this->action_url[ 'all' ] ?>'">List</button>
 <button onclick="location.href='<?= $this->action_url[ 'create' ] ?>'">Create</button>
-<?php if ( $this->current ) {
-?>
-	<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
-	<button onclick="location.href='<?= $this->action_url[ 'view' ] ?>'">View</button>
-<?php
-}
-?>

@@ -142,7 +142,7 @@ class Versioned_Model extends \Controller\Model {
 		return $this->archive_action_url( $archive, 'restore' );
 	}
 	protected function archive_action_url( $archive, $action ) {
-		return '/' . strtolower( $this->type ) . '/archive/' . $action . '/' . $archive->id;
+		return '/' . strtolower( $this->type ) . '/archive/' . $action . '/' . $archive->model_id;
 	}
 	protected function init_var( $archive = NULL ) {
 		$action_url = parent::init_var( $archive );
