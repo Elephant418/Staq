@@ -11,19 +11,13 @@ foreach ( $this->archives as $archive ) {
 		?><br/><?php
 	}
 	?>
-	Modification date : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'd/m/Y' ); ?><br/>
-	Modification hour : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'G:i' ); ?><br/>
+	Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'd/m/Y' ); ?> at <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'G:i' ); ?><br/>
 	Changed by the IP : <?= $archive->ip_version ?><br/>
-	Version of the model : <?= $archive->model_type_version ?><br/>
-	Version of the attributes : <?= $archive->model_attributes_version ?><br/>
-	Values of the attributes : <br/><?php
-	foreach ( $attributes as $key => $value ) {
-		?><?= $key ?> = <?= $value ?> // <?php
-	}
-	?><br/><?php
+	Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?><br/>
+	<?php
 	if ( $archive != $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 	?>
-		<button onclick="location.href='<?= $this->action_url[ 'see' ] ?>'">See</button>
+		<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >See</a></li>
 	<?php
 	}
 }
