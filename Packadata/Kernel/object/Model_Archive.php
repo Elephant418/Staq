@@ -42,35 +42,44 @@ abstract class Model_Archive extends \Database_Table {
 	/*
 	 * Gets the previous versions of an object
 	 * @param $id the id of the concerned object
-	 * @param $versions the specific model_type and/or attributes version to search for
+	 * @param $type the specific model_type to search for
 	 * @return the array of objects found in the archives
 	 */
-	public function get_object_history( $id, $versions = NULL ) {
+	public function get_object_history( $id, $type ) {
 		$fields = array( 'model_id' => $id );
-		if ( isset( $versions[ 'type' ] ) ) {
-			$fields[ 'model_type' ] = $versions[ 'type' ];
-		}
+		$fields[ 'model_type' ] = $type;
+		return parent::list_by_fields( $fields );
+	}
+	/*
+	 * Gets a specific version of an object
+	 */
+	public function get_object_version( $id, $type, $versions ) {
+		$fields = array( 'model_id' => $id );
+		$fields[ 'model_type' ] = $type;
 		if ( isset( $versions[ 'attributes' ] ) ) {
 			$fields[ 'model_attributes_version' ] = $versions[ 'attributes' ];
 		}
-		return parent::list_by_fields( $fields );
+		$results = parent::list_by_fields( $fields );
+		if ( sizeof( $results ) == 1 ) {
+			$result = array_values( $results );
+			return $result[ 0 ];
+		} else {
+			return $results;
+		}
 	}
 	/*
 	 * Checks whether there is a current version of an item and gets it if there is one
 	 * @param $id the id of the object to get
 	 * @return the current version of the object if there is one
 	 */
-	public function current_version( $id ) {
-		$model_type = array_values( $this->get_object_history( $id ) );
-		$model = $model_type[0]->model_type;
-		$model_create = '\Model\\' . $model;
+	public function current_version( $id, $type ) {
+		$model_create = '\Model\\' . $type; //TODO Régler le problèèèème
 		$search = new $model_create;
 		$result = $search->init_by_id( $id );
 		
 		$versions =  array( "attributes" => $search->attributes_version );
 		if ( $result ) {
-			$result =  array_values( $this->get_object_history( $id, $versions ) );
-			$result = $result[0];
+			$result = $this->get_object_version( $id, $type, $versions );
 		}
 		return $result;
 	}
@@ -79,11 +88,11 @@ abstract class Model_Archive extends \Database_Table {
 	 * @param $id the id of the concerned object
 	 * @return the current version of the object if there is one, else the last archived version
 	 */
-	public function last_version( $id ) {
-		if ( $this->current_version( $id ) ) {
-			return ( $this->current_version( $id ) );
+	public function last_version( $id, $type ) {
+		if ( $this->current_version( $id, $type ) ) {
+			return ( $this->current_version( $id, $type ) );
 		} else {
-			$versions = $this->get_object_history( $id );
+			$versions = $this->get_object_history( $id, $type );
 			$max_version = 0;
 			$max = NULL;
 			foreach( $versions as $version ) {
@@ -94,19 +103,6 @@ abstract class Model_Archive extends \Database_Table {
 			}
 			return $max;
 		}
-	}
-	/*
-	 * Gets the previous version of a versioned object
-	 * @param $id the id of the concerned object
-	 * @param $version the version of the concerned object
-	 * @return the previous version of the object if there is one, else the last archived version
-	 */
-	public function previous_version( $id, $version ) {
-		if ( $version >= 1 ) {
-			$version --;
-			return $this->get_object_history( $id, array( 'attributes' => $version ) );
-		}
-		return FALSE;
 	}
 
 

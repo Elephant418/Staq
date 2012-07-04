@@ -37,14 +37,14 @@ class Versioned_Model extends \Controller\Model {
 		foreach ( $models as $model ) {
 			if ( ! in_array( $model->model_id, $ignore ) ) {
 				$iterator = new \Model_Archive( );
-				$objects = $iterator->get_object_history( $model->model_id );
+				$objects = $iterator->get_object_history( $model->model_id, $model->model_type );
 				if ( $objects ) {
 					$content .= '<h3>'. $model->model_type . ' number ' . $model->model_id . ' : </h3>';
 					foreach ( $objects as $object ) {
 						$attributes = $object->model_attributes;
-						if ( $object == $model->last_version( $model->model_id ) ) {
+						if ( $object == $model->last_version( $model->model_id, $model->model_type ) ) {
 							$content .= '<h4>Last model</h4>';
-							if ( ! $model->current_version( $model->model_id ) ) {
+							if ( ! $model->current_version( $model->model_id, $model->model_type ) ) {
 								$content .= 'Warning: has been deleted (no current version)<br/>';
 							}
 						} else {
@@ -81,7 +81,7 @@ class Versioned_Model extends \Controller\Model {
 			$this->view->title   = 'Archives of ';
 		}
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
+		if ( $archives = $archive->get_object_history( $id, $this->type ) ) {
 			$this->view->title .= $this->type . ' ' . $id;
 			$this->view->archives = $archives;
 			$this->view->content = $this->render_list_archive( $model );
@@ -92,7 +92,7 @@ class Versioned_Model extends \Controller\Model {
 	}
 	public function see ( $id, $versions ) {
 		$archive = new \Model_Archive( );
-		if ( $archive = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
+		if ( $archive = $archive->get_object_version( $id, $this->type, array( 'attributes' => $versions[ 'attributes' ] ) ) ) {
 			$this->view->title .= $this->type . ' ' . $id . ' version ' . $archive->model_attributes_version;
 			$this->view->archive = $archive;
 			$this->view->content = $this->render_view_archive( $archive );
@@ -101,7 +101,7 @@ class Versioned_Model extends \Controller\Model {
 	}
 	public function erase ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, array( 'type' => $this->type ) ) ) {
+		if ( $archives = $archive->get_object_history( $id, $this->type ) ) {
 			foreach ( $archives as $archive ) {
 				$archive->delete( );
 			}
@@ -114,7 +114,7 @@ class Versioned_Model extends \Controller\Model {
 	}
 	public function restore ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
-		if ( $archive = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
+		if ( $archive = $archive->get_object_version( $id, $this->type, array( 'attributes' => $versions[ 'attributes' ] ) ) ) {
 			$model_restore = 'Model\\' . $this->type;
 			$model = new $model_restore;
 			//TODO
