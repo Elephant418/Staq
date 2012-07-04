@@ -13,6 +13,7 @@ class Versioned_Model extends \Controller\Model {
 		$root = '/' . strtolower( $this->type );
 		$this->add_handled_route( 'archives', '/archives' );
 		$this->add_handled_route( 'archive', $root . '/archive/:id' );
+		$this->add_handled_route( 'see', $root . '/archive/see/:id/:versions' );
 		$this->add_handled_route( 'restore', $root . '/restore/:id' );
 		$this->add_handled_route( 'erase'  , $root . '/erase/:id' );
 	}
@@ -113,7 +114,14 @@ class Versioned_Model extends \Controller\Model {
 	}
 	public function restore ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
-		//TODO
+		if ( $archive = $archive->get_object_history( $id, array( 'type' => $this->type, 'attributes' => $versions[ 'attributes' ] ) ) ) {
+			$model_restore = 'Model\\' . $this->type;
+			$model = new $model_restore;
+			//TODO
+		} else {
+			$this->view->title   = 'Archive not found';
+			return $this->render( \View\__Base::LAYOUT_TEMPLATE );
+		}
 	}
 
 
@@ -124,7 +132,8 @@ class Versioned_Model extends \Controller\Model {
 		return $this->model_action_url( $model, 'archive' );
 	}
 	protected function archive_view_url( $archive ) {
-		return $this->archive_action_url( $archive, 'see' );
+		$see_url = $this->archive_action_url( $archive, 'see' ) . '/' . $archive->model_attributes_version;
+		return $see_url;
 	}
 	protected function archive_erase_url( $archive ) {
 		return $this->archive_action_url( $archive, 'erase' );
