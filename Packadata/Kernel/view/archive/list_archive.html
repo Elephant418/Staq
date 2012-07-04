@@ -5,14 +5,17 @@ foreach ( $this->archives as $archive ) {
 	if ( $archive == $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 		?><h4>Last model</h4><?php
 		if ( $archive->current_version( $archive->model_id, $archive->model_type ) ) {
-			?>
+		?>
 			<a href="/<?= $archive->model_type ?>/view/<?= $archive->model_id ?>" >
-				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?> (Current)
-			</a>
+				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?>
+			</a> (Current) 
 			<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
-			<?php
+		<?php
 		} else {
-			?>Warning: has been deleted (no current version)<br/><?php
+		?>
+			<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >
+			Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br/>
+			Warning: has been deleted (no current version)<br/><?php
 		}
 		?>
 		<br/>
