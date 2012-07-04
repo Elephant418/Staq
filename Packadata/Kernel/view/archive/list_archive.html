@@ -4,7 +4,7 @@ foreach ( $this->archives as $archive ) {
 	$attributes = $archive->model_attributes;
 	if ( $archive == $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 		?><h4>Last model</h4><?php
-		if ( $this->current ) {
+		if ( $archive->current_version( $archive->model_id, $archive->model_type ) ) {
 			?>
 			<a href="/<?= $archive->model_type ?>/view/<?= $archive->model_id ?>" >
 				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?> (Current)

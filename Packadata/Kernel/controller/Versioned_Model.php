@@ -22,14 +22,15 @@ class Versioned_Model extends \Controller\Model {
 	/*************************************************************************
 	 ACTION METHODS
 	*************************************************************************/
-	public function archives( ) {
+	public function archives( $type = NULL ) {
 		
 		//TODO Decide whether we place here all the archives or the archives of models who were deleted
 		//Second choice seems more logical as seeing everything isn't a greaaat functionality...
-		
 		$models= new \Model_Archive( );
+		$models = $models->all( $type );
+		
+		///Refactor
 		$content = '';
-		$models = $models->all( );
 		$ignore = array( );
 		//TODO Better method using the template for archives
 		// 			$this->view->archives = $archives;
@@ -74,12 +75,11 @@ class Versioned_Model extends \Controller\Model {
 	public function archive( $id ) {
 		$model = $this->model( );
 		if ( $model->init_by_id( $id ) ) {
-			$this->view->current = TRUE;
 			$this->view->title   = 'Versions of ';
 		} else {
-			$this->view->current = FALSE;
 			$this->view->title   = 'Archives of ';
 		}
+		//TODO Remove the previous 6 lines ? -> useless
 		$archive = new \Model_Archive( );
 		if ( $archives = $archive->get_object_history( $id, $this->type ) ) {
 			$this->view->title .= $this->type . ' ' . $id;

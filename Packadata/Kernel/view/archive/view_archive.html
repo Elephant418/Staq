@@ -23,15 +23,5 @@ foreach ( $attributes as $key => $value ) {
 ?></ul>
 <br/>
 <button onclick="location.href='<?= $this->action_url[ 'archive' ] ?>'">List</button>
-<?php if ( $this->current ) {
-?>
-	<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
-	<button onclick="location.href='<?= $this->action_url[ 'view' ] ?>'">View</button>
-<?php
-} else {
-?>
-	<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore</button>
-	<button onclick="location.href='<?= $this->action_url[ 'erase' ] ?>'">Erase</button>
-<?php
-}
-?>
+<button onclick="location.href='<?= $this->action_url[ 'restore' ] ?>'">Restore</button>
+<button onclick="location.href='<?= $this->action_url[ 'erase' ] ?>'">Erase</button>

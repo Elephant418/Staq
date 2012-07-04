@@ -42,7 +42,7 @@ abstract class Model_Archive extends \Database_Table {
 	/*
 	 * Gets the previous versions of an object
 	 * @param $id the id of the concerned object
-	 * @param $type the specific model_type to search for
+	 * @param $type the specific type of model to search for
 	 * @return the array of objects found in the archives
 	 */
 	public function get_object_history( $id, $type ) {
@@ -52,6 +52,10 @@ abstract class Model_Archive extends \Database_Table {
 	}
 	/*
 	 * Gets a specific version of an object
+	 * @param $id the id of the object to get
+	 * @param $type the type of model of the object to get
+	 * @param array $versions the array containing the versions (model or attributes) to get
+	 * @return the object or the array of objects found in the archives
 	 */
 	public function get_object_version( $id, $type, $versions ) {
 		$fields = array( 'model_id' => $id );
@@ -70,22 +74,25 @@ abstract class Model_Archive extends \Database_Table {
 	/*
 	 * Checks whether there is a current version of an item and gets it if there is one
 	 * @param $id the id of the object to get
-	 * @return the current version of the object if there is one
+	 * @param $type the type of the object
+	 * @return the current version of the object if there is one, else return FALSE
 	 */
 	public function current_version( $id, $type ) {
-		$model_create = '\Model\\' . $type; //TODO Régler le problèèèème
+		$model_create = '\Model\\' . $type;
 		$search = new $model_create;
 		$result = $search->init_by_id( $id );
 		
 		$versions =  array( "attributes" => $search->attributes_version );
 		if ( $result ) {
 			$result = $this->get_object_version( $id, $type, $versions );
+			return $result;
 		}
-		return $result;
+		return FALSE;
 	}
 	/*
 	 * Gets the last version of an object
 	 * @param $id the id of the concerned object
+	 * @param $type the type of the object
 	 * @return the current version of the object if there is one, else the last archived version
 	 */
 	public function last_version( $id, $type ) {
@@ -152,10 +159,15 @@ abstract class Model_Archive extends \Database_Table {
 	*************************************************************************/
 	/*
 	 * Gets all the archives in the database
+	 * @param $type the type of the objects to get
 	 * @return $results an array containing all the archives
 	 */
-	public function all( ) {
-		$all = parent::list_by_fields( array ( 'model_attributes' => array ( '>', '0' ) ) );
+	public function all( $type=NULL ) {
+		if ( isset( $type ) ) {
+			$all = parent::list_by_fields( array ( 'model_type' => $type ) );
+		} else {
+			$all = parent::list_by_fields( array ( 'model_attributes' => array ( '>', '0' ) ) );
+		}
 		$results = array( );
 		foreach ( $all as $result ) {
 			$result->init_by_data( $result->loaded_data );
