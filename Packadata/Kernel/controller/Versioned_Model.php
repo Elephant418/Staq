@@ -15,7 +15,7 @@ class Versioned_Model extends \Controller\Model {
 		$this->add_handled_route( 'archive', $root . '/archive/:id' );
 		$this->add_handled_route( 'see', $root . '/archive/see/:id/:versions' );
 		$this->add_handled_route( 'restore', $root . '/restore/:id/:versions' );
-		$this->add_handled_route( 'erase'  , $root . '/erase/:id/:versions' );
+		$this->add_handled_route( 'erase'  , $root . '/erase/:id(/:versions)' );
 	}
 
 
@@ -85,7 +85,7 @@ class Versioned_Model extends \Controller\Model {
 			$this->view->archives = $archives;
 			$this->view->content = $this->view->render( \View\__Base::LIST_ARCHIVE_TEMPLATE );
 		} else {
-			$this->view->title   = $this->type . ' not found';
+			$this->view->title   = 'Archives of this ' . $this->type . ' not found';
 		}
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
 	}

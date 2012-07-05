@@ -34,3 +34,4 @@ foreach ( $this->archives as $archive ) {
 ?>
 <button onclick="location.href='<?= $action_url( 'all' ) ?>'">List</button>
 <button onclick="location.href='<?= $action_url( 'create' ) ?>'">Create</button>
+<button onclick="location.href='<?= $action_url( 'erase', $archive->model_id ) ?>'">Erase All Archives</button>

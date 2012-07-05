@@ -83,8 +83,9 @@ abstract class __Base {
 			foreach ( $parameters as $value ) {
 				$route = preg_replace( '#^([^:]*):\w+#', '${1}' . $value, $route );
 			}
-			$route = preg_replace( '#:(\w+)#', '', $route );
+			$route = preg_replace( '#\(([^):]*)\)#', '${1}', $route ); 
 			$route = preg_replace( '#\([^)]*\)#', '', $route ); 
+			$route = preg_replace( '#:(\w+)#', '', $route );
 			return $route;
 
 		// Automatic route
