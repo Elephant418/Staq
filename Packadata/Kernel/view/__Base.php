@@ -43,6 +43,14 @@ class __Base {
 	  PUBLIC METHODS                   
 	 *************************************************************************/
 	public function render( $template_name ) {
+		$controller_action_url = function( $controller, $action, $parameter = NULL ) {
+			$parameters = array_slice( func_get_args( ), 2 );
+			return \Supersoniq\Application::action_url( $controller, $action, $parameters );
+		};
+		$action_url = function( $action, $parameter = NULL ) {
+			$parameters = array_slice( func_get_args( ), 1 );
+			return \Supersoniq\Application::action_url( \Supersoniq\Application::$current_controller, $action, $parameters );
+		};
 		$template_path = $this->find_template( $template_name );
 		ob_start();		
 		require( $template_path );

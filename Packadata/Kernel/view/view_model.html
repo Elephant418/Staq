@@ -25,8 +25,8 @@ foreach ( $this->model->get_attribute_fields( ) as $name ) {
 	}
 }
 ?>
-<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
-<button onclick="location.href='<?= $this->action_url[ 'all' ] ?>'">List</button>
-<button onclick="location.href='<?= $this->action_url[ 'create' ] ?>'">Create</button>
-<button onclick="location.href='<?= $this->action_url[ 'archive' ] ?>'">Archives</button>
+<button onclick="location.href='<?= $action_url( 'edit', $this->model->id ) ?>'">Edit</button>
+<button onclick="location.href='<?= $action_url( 'all' ) ?>'">List</button>
+<button onclick="location.href='<?= $action_url( 'create' ) ?>'">Create</button>
+<button onclick="location.href='<?= $action_url( 'archive', $this->model->id ) ?>'">Archives</button>
 

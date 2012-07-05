@@ -15,7 +15,7 @@ foreach ( $this->archives as $archive ) {
 		?>
 			<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >
 			Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br/>
-			Warning: has been deleted (no current version)<br/><?php
+			Warning: has been deleted (no current version)<?php
 		}
 		?>
 		<br/>

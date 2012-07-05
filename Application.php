@@ -16,6 +16,7 @@ class Application {
 	public static $configuration;
 	public static $modules = array( );
 	public static $root_paths = array( );
+	public static $current_controller;
 	public static $controllers = array( );
 	private $root_path;
 	private $routes = array( );
@@ -95,9 +96,12 @@ class Application {
 		die();
 	}
 	public static function redirect_to_action( $controller, $action, $parameters = array( ) ) {
+		self::redirect( self::action_url( $controller, $action, $parameters ) );
+	}
+	public static function action_url( $controller, $action, $parameters = array( ) ) {
 		$controller = self::$controllers[ $controller ];
 		$route = $controller->get_action_route( $action, $parameters );
-		self::redirect( $route );
+		return $route;
 	}
 
 
@@ -117,6 +121,7 @@ class Application {
 		$current_route = strtolower( $this->current_route( ) );
 		foreach ( self::$controllers as $controller ) {
 			if ( $callable = $controller->handle_route( $current_route ) ) {
+				self::$current_controller = $controller->type;
 				return call_user_func_array( array( $controller, $callable[ 0 ] ), $callable[ 1 ] );
 			}
 		}

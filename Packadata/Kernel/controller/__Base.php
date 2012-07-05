@@ -74,7 +74,14 @@ abstract class __Base {
 		if ( ! empty( $this->handled_routes ) ) {
 			$route = $this->handled_routes[ $action ];
 			foreach ( $parameters as $name => $value ) {
-				$route = str_replace( ':' . $name, $value, $route );
+				if ( ! is_numeric ( $name ) ) {
+					$route = str_replace( ':' . $name, $value, $route );
+					unset( $parameters[ $name ] );
+				}
+			}
+			ksort( $parameters );
+			foreach ( $parameters as $value ) {
+				$route = preg_replace( '#^([^:]*):\w+#', '${1}' . $value, $route );
 			}
 			$route = preg_replace( '#:(\w+)#', '', $route );
 			$route = preg_replace( '#\([^)]*\)#', '', $route ); 
@@ -94,7 +101,7 @@ abstract class __Base {
 	protected function route_match( $route, $subject, &$matches ) {
 		$route = str_replace( array( '.', '+', '?' ),  array( '\.', '\+', '\?' ), $route ); 
 		$route = preg_replace( '#\(([^)]*)\)#', '(?:\1)?', $route ); 
-		$route = preg_replace( '#:(\w+)#', '(?<\1>\w+)', $route ); 
+		$route = preg_replace( '#\:(\w+)#', '(?<\1>\w+)', $route ); 
 		$pattern = '#^' . $route . '/?$#';
 		$result = preg_match( $pattern, $subject, $matches );
 		if ( $result ) {

@@ -31,14 +31,15 @@ abstract class Model extends \Controller\__Base {
 		$model = $this->model( );
 		$this->view->all     = $model->all( );
 		$this->view->title   = 'List of ' . $this->type;
-		$this->view->content = $this->render_list_model( $model );
+		$this->view->content = $this->view->render( \View\__Base::LIST_MODEL_TEMPLATE );
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 	}
 	public function view( $id ) {
 		$model = $this->model( );
+		$this->view->model = $model;
 		if ( $model->init_by_id( $id ) ) {
 			$this->view->title   = $this->type . ' ' . $id;
-			$this->view->content = $this->render_view_model( $model );
+			$this->view->content = $this->view->render( \View\__Base::VIEW_MODEL_TEMPLATE );
 		} else {
 			$this->view->title   = $this->type . ' not found';
 		}
@@ -46,6 +47,7 @@ abstract class Model extends \Controller\__Base {
 	}
 	public function create( ) {
 		$model = $this->model( );
+		$this->view->model = $model;
 		if ( isset( $_POST[ 'model' ] ) ) {
 			foreach ( $_POST[ 'model' ] as $name => $value ) {
 				$model->$name = $value;
@@ -58,11 +60,12 @@ abstract class Model extends \Controller\__Base {
 			\Notification::push( $this->type . ' not created !', \Notification::ERROR );
 		}
 		$this->view->title   = 'New ' . $this->type;
-		$this->view->content = $this->render_edit_model( $model ); 
+		$this->view->content = $this->view->render( \View\__Base::EDIT_MODEL_TEMPLATE );
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 	}
 	public function edit( $id ) {
 		$model = $this->model( );
+		$this->view->model = $model;
 		if ( $model->init_by_id( $id ) ) {
 			if ( isset( $_POST[ 'model' ] ) ) {
 				foreach ( $_POST[ 'model' ] as $name => $value ) {
@@ -74,8 +77,8 @@ abstract class Model extends \Controller\__Base {
 				}
 				\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
 			}
-			$this->view->title   = 'New ' . $this->type;
-			$this->view->content = $this->render_edit_model( $model );
+			$this->view->title   = 'Edit ' . $this->type;
+			$this->view->content = $this->view->render( \View\__Base::EDIT_MODEL_TEMPLATE );
 		} else {
 			$this->view->title   = $this->type . ' not found';
 		}
@@ -83,6 +86,7 @@ abstract class Model extends \Controller\__Base {
 	}
 	public function delete( $id ) {
 		$model = $this->model( );
+		$this->view->model = $model;
 		if ( $model->init_by_id( $id ) ) {
 			$model->delete( );
 			\Notification::push( $this->type . ' deleted with success ! ', \Notification::SUCCESS );
@@ -109,53 +113,5 @@ abstract class Model extends \Controller\__Base {
 	protected function model( ) {
 		$class = $this->model_class( );
 		return new $class;
-	}
-	protected function model_all_url( ) {
-		return '/' . strtolower( $this->type ) . '/';
-	}
-	protected function model_create_url( ) {
-		return '/' . strtolower( $this->type ) . '/create/';
-	}
-	protected function model_view_url( $model ) {
-		return $this->model_action_url( $model, 'view' );
-	}
-	protected function model_edit_url( $model ) {
-		return $this->model_action_url( $model, 'edit' );
-	}
-	protected function model_delete_url( $model ) {
-		return $this->model_action_url( $model, 'delete' );
-	}
-	protected function model_action_url( $model, $action ) {
-		return '/' . strtolower( $this->type ) . '/' . $action . '/' . $model->id;
-	}
-	protected function init_var( $model = NULL ) {
-		$action_url             = array( );
-		$action_url[ 'all' ]    = $this->model_all_url( );
-		$action_url[ 'create' ] = $this->model_create_url( );
-		if ( $model ) {
-			$this->view->model = $model;
-			$action_url[ 'view' ]   = $this->model_view_url( $model );
-			$action_url[ 'edit' ]   = $this->model_edit_url( $model );
-			$action_url[ 'delete' ] = $this->model_delete_url( $model );
-		}
-		$this->view->action_url = $action_url;
-		return $action_url;
-	}
-
-
-	/*************************************************************************
-	  PROTECTED RENDER METHODS                   
-	 *************************************************************************/
-	protected function render_view_model( $model ) {
-		$this->init_var( $model );
-		return $this->view->render( \View\__Base::VIEW_MODEL_TEMPLATE );
-	}
-	protected function render_edit_model( $model ) {
-		$this->init_var( $model );
-		return $this->view->render( \View\__Base::EDIT_MODEL_TEMPLATE );
-	}
-	protected function render_list_model( ) {
-		$this->init_var( );
-		return $this->view->render( \View\__Base::LIST_MODEL_TEMPLATE );
 	}
 }
