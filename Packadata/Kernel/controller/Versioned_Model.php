@@ -79,7 +79,6 @@ class Versioned_Model extends \Controller\Model {
 		} else {
 			$this->view->title   = 'Archives of ';
 		}
-		//TODO Remove the previous 6 lines ? -> useless
 		$archive = new \Model_Archive( );
 		if ( $archives = $archive->get_object_history( $id, $this->type ) ) {
 			$this->view->title .= $this->type . ' ' . $id;
@@ -104,18 +103,25 @@ class Versioned_Model extends \Controller\Model {
 	public function erase ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
 		if ( isset( $versions ) ) {
-			$archives = $archive->get_object_history( $id, $this->type, array( 'attributes' => $versions  ) );
+			$archives = $archive->get_object_version( $id, $this->type, array( 'attributes' => $versions  ) );
 		} else {
 			$archives = $archive->get_object_history( $id, $this->type);
 		}
 		if ( $archives ) {
-			foreach ( $archives as $archive ) {
-				$archive->delete( );
+			if ( is_array( $archives ) ) {
+				foreach ( $archives as $archive ) {
+					$archive->delete( );
+				}
+				\Notification::push( 'Archives of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
+				\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $id ) );
+			} else {
+				$deleted_version = $archives->model_type_version . '.' .$archives->model_attributes_version;
+				$archives->delete( );
+				\Notification::push( 'Version ' . $deleted_version . ' of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
+				\Supersoniq\Application::redirect_to_action( $this->type, 'archive', array( 'id' => $id ) );
 			}
-			\Notification::push( 'Archives of ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
-			\Supersoniq\Application::redirect_to_action( $this->type, 'all' );
 		} else {
-			$this->view->title   = 'Archives of ' . $this->type . ' not found';
+			$this->view->title   = 'Archives of this ' . $this->type . ' not found';
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 		}
 	}

@@ -9,7 +9,7 @@ foreach ( $this->archives as $archive ) {
 			<a href="/<?= $archive->model_type ?>/view/<?= $archive->model_id ?>" >
 				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?>
 			</a> (Current) 
-			<button onclick="location.href='<?= $this->action_url[ 'edit' ] ?>'">Edit</button>
+			<button onclick="location.href='<?= $action_url( 'edit', $archive->model_id ) ?>'">Edit</button>
 		<?php
 		} else {
 		?>
@@ -32,5 +32,5 @@ foreach ( $this->archives as $archive ) {
 	Changed by the IP : <?= $archive->ip_version ?><br/><br/><?php
 }
 ?>
-<button onclick="location.href='<?= $this->action_url[ 'all' ] ?>'">List</button>
-<button onclick="location.href='<?= $this->action_url[ 'create' ] ?>'">Create</button>
+<button onclick="location.href='<?= $action_url( 'all' ) ?>'">List</button>
+<button onclick="location.href='<?= $action_url( 'create' ) ?>'">Create</button>

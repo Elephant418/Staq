@@ -23,5 +23,5 @@ foreach ( $attributes as $key => $value ) {
 ?></ul>
 <br/>
 <button onclick="location.href='<?= $action_url( 'archive', $archive->model_id ) ?>'">List</button>
-<button onclick="location.href='<?= $action_url( 'restore', $archive->id       ) ?>'">Restore</button>
-<button onclick="location.href='<?= $action_url( 'erase'  , $archive->id       ) ?>'">Erase</button>
+<button onclick="location.href='<?= $action_url( 'restore', $archive->model_id, $archive->model_attributes_version ) ?>'">Restore</button>
+<button onclick="location.href='<?= $action_url( 'erase'  , $archive->model_id, $archive->model_attributes_version ) ?>'">Erase</button>
