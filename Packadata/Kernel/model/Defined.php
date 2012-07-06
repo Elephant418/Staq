@@ -120,7 +120,9 @@ class Defined extends \Model\__Base {
 	  EXTENDED METHODS
 	 *************************************************************************/
 	protected function init_by_data( $data ) {
-		$this->attributes_version = $data[ 'attributes_version' ];
+		if ( isset( $data[ 'attributes_version' ] ) ) {
+			$this->attributes_version = $data[ 'attributes_version' ];
+		}
 		$init = parent::init_by_data( $data );
 		foreach ( $this->get_attribute_fields( ) as $name ) {
 			$this->_attributes[ $name ]->model_initialized( $this );
