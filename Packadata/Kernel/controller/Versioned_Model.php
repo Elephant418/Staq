@@ -26,15 +26,15 @@ class Versioned_Model extends \Controller\Model {
 		
 		//TODO Decide whether we place here all the archives or the archives of models who were deleted
 		//Second choice seems more logical as seeing everything isn't a greaaat functionality...
+		//Start of a better method using the template for archives
+		// 	$this->view->archives = $archives;
+		//	$this->view->content = $this->view->render( \View\__Base::VIEW_TRASHCAN_TEMPLATE ); //Trashcan will re-use LIST-ARCHIVE-TEMPLATE for the history of each deleted object
 		$models= new \Model_Archive( );
 		$models = $models->all( $type );
 		
-		///Refactor
 		$content = '';
 		$ignore = array( );
-		//TODO Better method using the template for archives
-		// 			$this->view->archives = $archives;
-		//			$this->view->content = $this->render_archive_model( $model );
+
 		foreach ( $models as $model ) {
 			if ( ! in_array( $model->model_id, $ignore ) ) {
 				$iterator = new \Model_Archive( );
