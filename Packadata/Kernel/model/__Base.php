@@ -64,7 +64,7 @@ abstract class __Base extends \Database_Table {
 	}
 	public function get_archives( ) {
 		$archive = new \Model_Archive( );
-		return $archive->get_object_history( $this->id, $this->type );
+		return $archive->get_model_history( $this->id, $this->type );
 	}
 	
 	

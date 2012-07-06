@@ -38,7 +38,7 @@ class Versioned_Model extends \Controller\Model {
 		foreach ( $models as $model ) {
 			if ( ! in_array( $model->model_id, $ignore ) ) {
 				$iterator = new \Model_Archive( );
-				$objects = $iterator->get_object_history( $model->model_id, $model->model_type );
+				$objects = $iterator->get_model_history( $model->model_id, $model->model_type );
 				if ( $objects ) {
 					$content .= '<h3>'. $model->model_type . ' number ' . $model->model_id . ' : </h3>';
 					foreach ( $objects as $object ) {
@@ -80,7 +80,7 @@ class Versioned_Model extends \Controller\Model {
 			$this->view->title   = 'Archives of ';
 		}
 		$archive = new \Model_Archive( );
-		if ( $archives = $archive->get_object_history( $id, $this->type ) ) {
+		if ( $archives = $archive->get_model_history( $id, $this->type ) ) {
 			$this->view->title .= $this->type . ' ' . $id;
 			$this->view->archives = $archives;
 			$this->view->content = $this->view->render( \View\__Base::LIST_ARCHIVE_TEMPLATE );
@@ -91,7 +91,7 @@ class Versioned_Model extends \Controller\Model {
 	}
 	public function see( $id, $versions ) {
 		$archive = new \Model_Archive( );
-		if ( $archive = $archive->get_object_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
+		if ( $archive = $archive->get_model_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
 			$this->view->title = $this->type . ' ' . $id . ' version ' . $archive->model_attributes_version;
 			$this->view->archive = $archive;
 			$this->view->content = $this->view->render( \View\__Base::VIEW_ARCHIVE_TEMPLATE );
@@ -103,9 +103,9 @@ class Versioned_Model extends \Controller\Model {
 	public function erase ( $id, $versions = NULL ) {
 		$archive = new \Model_Archive( );
 		if ( isset( $versions ) ) {
-			$archives = $archive->get_object_version( $id, $this->type, array( 'attributes' => $versions  ) );
+			$archives = $archive->get_model_version( $id, $this->type, array( 'attributes' => $versions  ) );
 		} else {
-			$archives = $archive->get_object_history( $id, $this->type);
+			$archives = $archive->get_model_history( $id, $this->type);
 		}
 		if ( $archives ) {
 			if ( is_array( $archives ) ) {
@@ -115,7 +115,7 @@ class Versioned_Model extends \Controller\Model {
 				\Notification::push( 'Archives of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
 				\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $id ) );
 			} else {
-				$deleted_version = $archives->model_type_version . '.' .$archives->model_attributes_version;
+				$deleted_version = $archives->model_type_version . '.' . $archives->model_attributes_version;
 				$archives->delete( );
 				\Notification::push( 'Version ' . $deleted_version . ' of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
 				\Supersoniq\Application::redirect_to_action( $this->type, 'archive', array( 'id' => $id ) );
@@ -125,12 +125,20 @@ class Versioned_Model extends \Controller\Model {
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
 		}
 	}
-	public function restore ( $id, $versions = NULL ) {
+	public function restore ( $id, $versions ) {
 		$archive = new \Model_Archive( );
-		if ( $archive = $archive->get_object_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
+		if ( $archive = $archive->get_model_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
 			$model_restore = 'Model\\' . $this->type;
 			$model = new $model_restore;
-			//TODO
+			$model->init_by_id( $archive->model_id );
+			foreach ( $archive->model_attributes as $attribute => $value ) {
+				$model->set( $attribute, $value );
+			}
+			//TODO Decide if we keep the archives or not and what to do with the versions of the restored model
+			$restored_version = $archive->model_type_version . '.' . $archive->model_attributes_version;
+			$model->save( );
+			\Notification::push( $this->type . 'version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
+			\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
 		} else {
 			$this->view->title   = 'Archive not found';
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE );

@@ -45,7 +45,7 @@ abstract class Model_Archive extends \Database_Table {
 	 * @param $type the specific type of model to search for
 	 * @return the array of objects found in the archives
 	 */
-	public function get_object_history( $id, $type ) {
+	public function get_model_history( $id, $type ) {
 		$fields = array( 'model_id' => $id );
 		$fields[ 'model_type' ] = $type;
 		return parent::list_by_fields( $fields );
@@ -57,7 +57,7 @@ abstract class Model_Archive extends \Database_Table {
 	 * @param array $versions the array containing the versions (model or attributes) to get
 	 * @return the object or the array of objects found in the archives
 	 */
-	public function get_object_version( $id, $type, $versions ) {
+	public function get_model_version( $id, $type, $versions ) {
 		$fields = array( 'model_id' => $id );
 		$fields[ 'model_type' ] = $type;
 		if ( isset( $versions[ 'attributes' ] ) ) {
@@ -84,7 +84,7 @@ abstract class Model_Archive extends \Database_Table {
 		
 		$versions =  array( "attributes" => $search->attributes_version );
 		if ( $result ) {
-			$result = $this->get_object_version( $id, $type, $versions );
+			$result = $this->get_model_version( $id, $type, $versions );
 			return $result;
 		}
 		return FALSE;
@@ -99,7 +99,7 @@ abstract class Model_Archive extends \Database_Table {
 		if ( $this->current_version( $id, $type ) ) {
 			return ( $this->current_version( $id, $type ) );
 		} else {
-			$versions = $this->get_object_history( $id, $type );
+			$versions = $this->get_model_history( $id, $type );
 			$max_version = 0;
 			$max = NULL;
 			foreach( $versions as $version ) {
