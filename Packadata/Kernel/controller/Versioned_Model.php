@@ -23,53 +23,11 @@ class Versioned_Model extends \Controller\Model {
 	 ACTION METHODS
 	*************************************************************************/
 	public function archives( $type = NULL ) {
-		
-		//TODO Decide whether we place here all the archives or the archives of models who were deleted
-		//Second choice seems more logical as seeing everything isn't a greaaat functionality...
-		//Start of a better method using the template for archives
-		// 	$this->view->archives = $archives;
-		//	$this->view->content = $this->view->render( \View\__Base::VIEW_TRASHCAN_TEMPLATE ); //Trashcan will re-use LIST-ARCHIVE-TEMPLATE for the history of each deleted object
-		$models= new \Model_Archive( );
-		$models = $models->all( $type );
-		
-		$content = '';
-		$ignore = array( );
-
-		foreach ( $models as $model ) {
-			if ( ! in_array( $model->model_id, $ignore ) ) {
-				$iterator = new \Model_Archive( );
-				$objects = $iterator->get_model_history( $model->model_id, $model->model_type );
-				if ( $objects ) {
-					$content .= '<h3>'. $model->model_type . ' number ' . $model->model_id . ' : </h3>';
-					foreach ( $objects as $object ) {
-						$attributes = $object->model_attributes;
-						if ( $object == $model->last_version( $model->model_id, $model->model_type ) ) {
-							$content .= '<h4>Last model</h4>';
-							if ( ! $model->current_version( $model->model_id, $model->model_type ) ) {
-								$content .= 'Warning: has been deleted (no current version)<br/>';
-							}
-						} else {
-							if ( ! \String::ends_with($content, '</h3>') ) {
-								$content .= '<br/>';
-							}
-						}
-						$content .= 'Modification date : ' . date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $object->date_version ), 'd/m/Y' ) . '<br/>';
-						$content .= 'Modification hour : ' . date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $object->date_version ), 'G:i' ) . '<br/>';
-						$content .= 'Changed by the IP : ' . $object->ip_version . '<br/>';
-						$content .= 'Version of the model : ' . $object->model_type_version . '<br/>';
-						$content .= 'Version of the attributes : ' . $object->model_attributes_version . '<br/>';
-						$content .= 'Values of the attributes : <br/>';
-						foreach ( $attributes as $key => $value ) {
-							$content .= $key . ' => ' . $value . ' // ';
-						}
-						$content .= '<br/>';
-					}
-				}
-				$ignore[] = $model->model_id; 
-			}
-		}
-		$this->view->title = 'List of Archives';
-		$this->view->content = $content;
+		$archives= new \Model_Archive( );
+		$archives = $archives->all( $type );
+		$this->view->archives = $archives;
+		$this->view->content = $this->view->render( \View\__Base::DELETED_MODELS_TEMPLATE );
+		$this->view->title = 'Archives of Deleted Models';
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
 	}
 	public function archive( $id ) {

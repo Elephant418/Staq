@@ -1,0 +1,28 @@
+<?php
+
+$ignore = array( );
+foreach ( $this->archives as $archive ) {
+	if ( ! in_array( $archive->model_id, $ignore ) ) {
+		if ( ! $archive->current_version( $archive->model_id, $archive->model_type ) ) {
+			$iterator = new \Model_Archive( );
+			$versions = $iterator->get_model_history( $archive->model_id, $archive->model_type );
+			?>
+			<h3><?= $archive->model_type ?> number <?= $archive->model_id ?> : </h3>
+			<?php
+			foreach ( $versions as $version ) {
+			?>
+				<a href="/<?= $version->model_type ?>/archive/see/<?= $version->model_id ?>/<?=$version->model_attributes_version ?>" >
+				Version : <?= $version->model_type_version ?>.<?= $version->model_attributes_version ?></a><br/>
+				Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $version->date_version ), 'd/m/Y - G:i' ); ?><br/>
+				Changed by the IP : <?= $version->ip_version ?><br/><br/>
+			<?php
+			}
+			$ignore[] = $archive->model_id; 
+		} else {
+		?>
+			
+		<?php
+		}
+	}
+}
+?>

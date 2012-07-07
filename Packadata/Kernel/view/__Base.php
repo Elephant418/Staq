@@ -15,6 +15,7 @@ class __Base {
 	const LIST_MODEL_TEMPLATE = 'list_model.html';
 	const LIST_ARCHIVE_TEMPLATE = 'archive/list_archive.html';
 	const VIEW_ARCHIVE_TEMPLATE = 'archive/view_archive.html';
+	const DELETED_MODELS_TEMPLATE = 'archive/deleted_models.html';
 
 	protected $_attributes = array( );
 
