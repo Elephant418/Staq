@@ -53,7 +53,9 @@ class __Base {
 		/* Suppression Test */
 		$obj3 = $this->new_object( $model, array( $index => $model . '3V1.1' ) );
 		$content .= 'Create (must be OK) : ' . $this->save( $obj3 ) . '<br/>';
-		$id3 = $obj3->id;
+		$obj32 = $this->get_object( $model, $obj3->id );
+		$obj32->set( $index, $model . '3V1.2' );
+		$content .= 'Update  (must be OK) : ' . $this->save( $obj32 ) . '<br/>';
 		$obj3d = $this->get_object( $model, $obj3->id );
 		$content .= 'Delete (must be void) : ' . $this->delete( $obj3d ) . '<br/>';
 		/* Model Version Test */
