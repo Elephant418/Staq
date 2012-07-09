@@ -28,6 +28,9 @@ class Supersoniq {
 
 		// Original request 
 		$this->request_base_url = $_SERVER[ 'SERVER_NAME' ];
+		if ( $_SERVER[ 'SERVER_PORT'] != '80' ) {
+			$this->request_base_url .= ':' . $_SERVER[ 'SERVER_PORT' ];
+		}
 		$this->request_uri = \Supersoniq\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 	}
 
@@ -85,12 +88,22 @@ class Supersoniq {
 			}
 		}
 	}
-	private function is_pattern_match( $pattern ) {
-		if ( \Supersoniq\starts_with( $pattern, array( 'http://', 'https://', '//' ) ) ) {
-			return $this->is_pattern_match_by_url( $pattern );
-		} else {
-			return $this->is_pattern_match_by_uri( $pattern );
+	private function is_pattern_match( $patterns ) {
+		if ( ! is_array( $patterns ) ) {
+			$patterns = array( $patterns );
 		}
+		foreach ( $patterns as $pattern ) {
+			if ( \Supersoniq\starts_with( $pattern, array( 'http://', 'https://', '//' ) ) ) {
+				if ( $this->is_pattern_match_by_url( $pattern ) ) {
+					return TRUE;
+				}
+			} else {
+				if ( $this->is_pattern_match_by_uri( $pattern ) ) {
+					return TRUE;
+				}
+			}
+		}
+		return FALSE;
 	}
 	private function is_pattern_match_by_url( $pattern ) {
 		$request = $this->request_base_url . $this->request_uri;
