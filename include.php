@@ -7,6 +7,8 @@
 
 session_start( );
 
+define( 'HTML_EOL', '<br>' . PHP_EOL ) ;
+
 $root_path = dirname( __FILE__);
 require_once( $root_path . '/utils.php' );
 require_once( $root_path . '/Configuration.php' );
