@@ -6,14 +6,14 @@ foreach ( $this->archives as $archive ) {
 		?><h4>Last model</h4><?php
 		if ( $archive->current_version( $archive->model_id, $archive->model_type ) ) {
 		?>
-			<a href="/<?= $archive->model_type ?>/view/<?= $archive->model_id ?>" >
+			<a href="<?= $action_url( 'view', $archive->model_id ) ?>" >
 				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?>
 			</a> (Current) 
 			<button onclick="location.href='<?= $action_url( 'edit', $archive->model_id ) ?>'">Edit</button>
 		<?php
 		} else {
 		?>
-			<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >
+			<a href="<?= $action_url( 'see', $archive->model_id, $archive->model_attributes_version ) ?>" >
 			Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br/>
 			Warning: has been deleted (no current version)<?php
 		}
@@ -23,7 +23,7 @@ foreach ( $this->archives as $archive ) {
 	} else {
 		if ( $archive != $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 		?>
-			<a href="/<?= $archive->model_type ?>/archive/see/<?= $archive->model_id ?>/<?=$archive->model_attributes_version ?>" >Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br>
+			<a href="<?= $action_url( 'see', $archive->model_id, $archive->model_attributes_version ) ?>" >Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br>
 		<?php
 		}
 	}

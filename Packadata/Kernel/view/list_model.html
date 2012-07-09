@@ -2,7 +2,7 @@
 foreach ( $this->all as $model ) {
 ?>
 	<ul>
-		<li><a href="/<?= $model->type ?>/view/<?= $model->id ?>" ><?= $model->name( ) ?></a></li>
+		<li><a href="<?= $action_url( 'view', $model->id ) ?>" ><?= $model->name( ) ?></a></li>
 	</ul>
 <?php
 }

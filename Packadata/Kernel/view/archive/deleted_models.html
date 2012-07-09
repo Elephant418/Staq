@@ -11,7 +11,7 @@ foreach ( $this->archives as $archive ) {
 			<?php
 			foreach ( $versions as $version ) {
 			?>
-				<a href="/<?= $version->model_type ?>/archive/see/<?= $version->model_id ?>/<?=$version->model_attributes_version ?>" >
+				<a href="<?= $action_url( 'see', $version->model_id, $version->model_attributes_version ) ?>" >
 				Version : <?= $version->model_type_version ?>.<?= $version->model_attributes_version ?></a><br/>
 				Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $version->date_version ), 'd/m/Y - G:i' ); ?><br/>
 				Changed by the IP : <?= $version->ip_version ?><br/><br/>
