@@ -13,7 +13,7 @@ class Configuration {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	private $conf = array( );
+	private $data = array( );
 
 
 
@@ -42,10 +42,10 @@ class Configuration {
 		if ( ! $this->has( $section, $property ) ) {
 			return FALSE;
 		}
-		return $this->conf[ $section ][ $property ];
+		return $this->data[ $section ][ $property ];
 	}
 	public function has( $section, $property ) {
-		return isset( $this->conf[ $section ][ $property ] );
+		return isset( $this->data[ $section ][ $property ] );
 	}
 
 
@@ -54,7 +54,7 @@ class Configuration {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function parse( $file_name, $required = FALSE ) {
-		$source_file_path = SUPERSONIQ_ROOT_PATH . SUPERSONIQ_APPLICATION . '/conf/' . $file_name . '.ini';
+		$source_file_path = SUPERSONIQ_ROOT_PATH . SUPERSONIQ_APPLICATION . '/configuration/' . $file_name . '.ini';
 		if ( file_exists( $source_file_path ) ) {
 			$this->register_data( parse_ini_file( $source_file_path, TRUE ) );
 		} else if ( $required ) {
@@ -63,12 +63,12 @@ class Configuration {
 	}
 	private function register_data( $data ) {
 		foreach ( $data as $section => $properties ) {
-			if ( ! isset( $this->conf[ $section ] ) ) {
-				$this->conf[ $section ] = $properties;
+			if ( ! isset( $this->data[ $section ] ) ) {
+				$this->data[ $section ] = $properties;
 			} else {
 				foreach ( $properties as $property => $value ) {
-					if ( ! isset( $this->conf[ $section ][ $property ] ) ) {
-						$this->conf[ $section ][ $property ] = $value;
+					if ( ! isset( $this->data[ $section ][ $property ] ) ) {
+						$this->data[ $section ][ $property ] = $value;
 					}
 				}
 			}
