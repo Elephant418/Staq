@@ -13,7 +13,7 @@ class Versioned_Model extends \Controller\Model {
 		$root = '/' . strtolower( $this->type );
 		$this->add_handled_route( 'archives', '/archives' );
 		$this->add_handled_route( 'archive', $root . '/archive/:id' );
-		$this->add_handled_route( 'see', $root . '/archive/see/:id/:versions' );
+		$this->add_handled_route( 'see'    , $root . '/archive/see/:id/:versions' );
 		$this->add_handled_route( 'restore', $root . '/restore/:id/:versions' );
 		$this->add_handled_route( 'erase'  , $root . '/erase/:id(/:versions)' );
 	}
