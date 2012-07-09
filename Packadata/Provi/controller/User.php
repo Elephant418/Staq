@@ -13,6 +13,7 @@ class User extends  \Controller\__Base {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+	protected $current_user;
 	protected $handled_routes = array( 
 		'login'    => '/user/login',
 		'logout'   => '/user/logout',
@@ -143,5 +144,40 @@ class User extends  \Controller\__Base {
 		$this->view->title = 'Editer votre profil';
 		$this->view->content = 'lorem ipsum'; 
 		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+	}
+
+
+	/*************************************************************************
+	  EDITION ACTION                   
+	 *************************************************************************/
+	public function current_user( ) {
+
+        // Already initialized
+        if ( ! is_null( $this->current_user ) ) {
+            return $this->current_user;
+        }
+
+        // Find the current user
+        if ( ! isset( $_SESSION['Packadata'][ 'user' ] ) ) {
+            $user = FALSE;
+        } else {
+	        $user = new \Model\User( );
+		    if ( ! $user->init_by_id( $_SESSION['Packadata'][ 'user' ] ) ) {
+                $user = FALSE;
+            }
+        }
+        $this->current_user = $user;
+        return $this->current_user;
+    }
+	public function must_logged( ) {
+		if ( $current_user = $this->current_user( ) ) {
+            return $current_user;
+        } else {
+			\Notification::push( 'You must be connected to see this page.', \Notification::ERROR );
+			\Supersoniq\Application::redirect_to_action( 'User', 'login', $error );
+		}
+	}
+	public function is_logged( ) {
+		return ( $this->current_user( ) !== FALSE );
 	}
 }
