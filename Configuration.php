@@ -21,10 +21,10 @@ class Configuration {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( $file_name ) {
-		$this->parse( $file_name, TRUE );
 		if ( SUPERSONIQ_PLATFORM ) {
 			$this->parse( $file_name . '.' . SUPERSONIQ_PLATFORM );
 		}
+		$this->parse( $file_name, TRUE );
 	}
 
 
@@ -50,9 +50,22 @@ class Configuration {
 	private function parse( $file_name, $required = FALSE ) {
 		$source_file_path = SUPERSONIQ_ROOT_PATH . SUPERSONIQ_APPLICATION . '/conf/' . $file_name . '.ini';
 		if ( file_exists( $source_file_path ) ) {
-			$this->conf = array_merge( $this->conf, parse_ini_file( $source_file_path, TRUE ) );
+			$this->register_data( parse_ini_file( $source_file_path, TRUE ) );
 		} else if ( $required ) {
 			throw new \Exception( 'Configuration source file "' . $source_file_path . '" does not exist' );
+		}
+	}
+	private function register_data( $data ) {
+		foreach ( $data as $section => $properties ) {
+			if ( ! isset( $this->conf[ $section ] ) ) {
+				$this->conf[ $section ] = $properties;
+			} else {
+				foreach ( $properties as $property => $value ) {
+					if ( ! isset( $this->conf[ $section ][ $property ] ) ) {
+						$this->conf[ $section ][ $property ] = $value;
+					}
+				}
+			}
 		}
 	}
 }
