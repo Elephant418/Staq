@@ -21,8 +21,14 @@ class Configuration {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( $file_name ) {
-		if ( SUPERSONIQ_PLATFORM ) {
-			$this->parse( $file_name . '.' . SUPERSONIQ_PLATFORM );
+		$platform = SUPERSONIQ_PLATFORM;
+		while ( $platform ) {
+			$this->parse( $file_name . '.' . $platform );
+			if ( contains( $platform, '.' ) ) {
+				$platform = substr_before_last( $platform, '.' );
+			} else {
+				break;
+			}
 		}
 		$this->parse( $file_name, TRUE );
 	}
