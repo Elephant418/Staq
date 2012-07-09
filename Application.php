@@ -99,6 +99,10 @@ class Application {
 		$route = $controller->get_action_route( $action, $parameters );
 		return SUPERSONIQ_REQUEST_BASE_URL . $route;
 	}
+	public static function call_action( $controller, $action, $parameters = array( ) ) {
+		$controller = self::$controllers[ $controller ];
+		return call_user_func_array( array( $controller, $action ), $parameters );
+	}
 
 
 	/*************************************************************************
