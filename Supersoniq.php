@@ -14,7 +14,7 @@ class Supersoniq {
 	public static $application;
 	private $applications = array( );
 	private $platforms    = array( );
-	private $request_base_url;
+	private $request_base_uri = '';
 	private $request_uri;
 
 
@@ -27,10 +27,6 @@ class Supersoniq {
 		define( 'SUPERSONIQ_ROOT_PATH', dirname( dirname( __FILE__ ) ) . '/' );
 
 		// Original request 
-		$this->request_base_url = $_SERVER[ 'SERVER_NAME' ];
-		if ( $_SERVER[ 'SERVER_PORT'] != '80' ) {
-			$this->request_base_url .= ':' . $_SERVER[ 'SERVER_PORT' ];
-		}
 		$this->request_uri = \Supersoniq\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 	}
 
@@ -62,8 +58,9 @@ class Supersoniq {
 		define( 'SUPERSONIQ_APPLICATION'     , $this->select_application( ) );
 
 		// Determine the part of the request is the uri
-		define( 'SUPERSONIQ_REQUEST_BASE_URL', $this->request_base_url );
+		define( 'SUPERSONIQ_REQUEST_BASE_URL', $this->request_base_url( ) );
 		define( 'SUPERSONIQ_REQUEST_URI'     , $this->request_uri );
+		// echo SUPERSONIQ_REQUEST_BASE_URL . ' - ' . SUPERSONIQ_REQUEST_URI . HTML_EOL;
 
 		// Launch application
 		self::$application = new \Supersoniq\Application( );
@@ -93,32 +90,56 @@ class Supersoniq {
 			$patterns = array( $patterns );
 		}
 		foreach ( $patterns as $pattern ) {
+			$method_name = 'is_pattern_match_by_uri';
 			if ( \Supersoniq\starts_with( $pattern, array( 'http://', 'https://', '//' ) ) ) {
-				if ( $this->is_pattern_match_by_url( $pattern ) ) {
-					return TRUE;
-				}
-			} else {
-				if ( $this->is_pattern_match_by_uri( $pattern ) ) {
-					return TRUE;
-				}
+				$method_name = 'is_pattern_match_by_url';
+			} else if ( \Supersoniq\starts_with( $pattern, ':' ) ) {
+				$method_name = 'is_pattern_match_by_port';
+			}
+			if ( $this->$method_name( $pattern ) ) {
+				return TRUE;
 			}
 		}
 		return FALSE;
 	}
 	private function is_pattern_match_by_url( $pattern ) {
-		$request = $this->request_base_url . $this->request_uri;
-		$condition = \Supersoniq\substr_after( $pattern, '//' );
-		$condition = \Supersoniq\must_not_ends_with( $condition, '/' );
-		// echo $request . '<>'. $condition . '<br>' . PHP_EOL;
-		if ( \Supersoniq\starts_with( $request, $condition ) ) {
-			$this->request_base_url = $condition;
-			$this->request_uri = \Supersoniq\substr_after( $request, $condition );
+		$base_request = $this->request_base_url( );
+		$full_request = $base_request . $this->request_uri;
+		$pattern      = \Supersoniq\substr_after( $pattern, '//' );
+		$pattern      = \Supersoniq\must_not_ends_with( $pattern, '/' );
+		// echo $base_request . ' &lt; ' . $pattern . ' &lt; ' . $full_request . HTML_EOL;
+		if ( \Supersoniq\starts_with( $pattern, $base_request ) && \Supersoniq\starts_with( $full_request, $pattern ) ) {
+			$this->request_base_uri .= \Supersoniq\substr_after( $pattern, $base_request );
+			$this->request_uri = \Supersoniq\substr_after( $full_request, $pattern );
 			return TRUE;
 		}
 		return FALSE;
 	}
-	private function is_pattern_match_by_uri( $pattern ) {
-		return $this->is_pattern_match_by_url( '//' . $this->request_base_url . $pattern );
+	private function is_pattern_match_by_uri( $base_uri ) {
+		return $this->is_pattern_match_by_url( '//' . $this->request_base_url( $base_uri ) );
+	}
+	private function is_pattern_match_by_port( $pattern ) {
+		$pattern  = \Supersoniq\substr_after( $pattern, ':' );
+		$port     = \Supersoniq\substr_before( $pattern, '/' );
+		$base_uri = \Supersoniq\substr_after( $pattern, '/' );
+		return $this->is_pattern_match_by_url( '//' . $this->request_base_url( '/' . $base_uri, $port ) );
+	}
+	private function request_base_url( $base_uri = NULL, $port = NULL ) {
+		$request_base_url = $_SERVER[ 'SERVER_NAME' ];
+
+		// Port
+		if ( is_null( $port ) ) {
+			$port = $_SERVER[ 'SERVER_PORT'];
+		}
+		if ( $port != '80' ) {
+			$request_base_url .= ':' . $port;
+		}
+		
+		// Base uri
+		if ( is_null( $base_uri ) ) {
+			$base_uri = $this->request_base_uri;
+		}
+		return $request_base_url . $base_uri;
 	}
 
 
