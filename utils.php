@@ -11,11 +11,27 @@ namespace Supersoniq;
 /*************************************************************************
   STRING METHODS                   
  *************************************************************************/
-function starts_with( $hay, $needle ) {
-	return substr( $hay, 0, strlen( $needle ) ) == $needle;
+function starts_with( $hay, $needles ) {
+	if ( ! is_array( $needles ) ) {
+		$needles = array( $needles );
+	}
+	foreach( $needles as $needle ) {
+		if ( substr( $hay, 0, strlen( $needle ) ) == $needle ) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
-function ends_with( $hay, $needle ) {
-	return substr( $hay, -strlen( $needle ) ) == $needle;
+function ends_with( $hay, $needles ) {
+	if ( ! is_array( $needles ) ) {
+		$needles = array( $needles );
+	}
+	foreach( $needles as $needle ) {
+		if ( substr( $hay, -strlen( $needle ) ) == $needle ) {
+			return TRUE;
+		}
+	}
+	return FALSE;
 }
 function i_starts_with( $hay, $needle ) {
 	return starts_with( strtolower( $hay ), strtolower( $needle ) );
@@ -43,13 +59,13 @@ function substr_before_last( $hay, $needle ) {
 }
 function substr_after( $hay, $needle ) {
 	if ( contains( $hay, $needle ) ) {
-		return substr( $hay, strpos( $hay, $needle ) + 1 );
+		return substr( $hay, strpos( $hay, $needle ) + strlen( $needle ) );
 	}
 	return $hay;
 }
 function substr_after_last( $hay, $needle ) {
 	if ( contains( $hay, $needle ) ) {
-		return substr( $hay, strrpos( $hay, $needle ) + 1 );
+		return substr( $hay, strrpos( $hay, $needle ) + strlen( $needle ) );
 	}
 	return $hay;
 }
@@ -67,13 +83,13 @@ function must_ends_with( $hay, $needle ) {
 }
 function must_not_starts_with( $hay, $needle ) {
 	if ( starts_with( $hay, $needle ) ) {
-		$hay = substr( $hay, 1 );
+		$hay = substr( $hay, strlen( $needle ) );
 	}
 	return $hay;
 }
 function must_not_ends_with( $hay, $needle ) {
 	if ( ends_with( $hay, $needle ) ) {
-		$hay = substr( $hay, 0, -1 );
+		$hay = substr( $hay, 0, -strlen( $needle ) );
 	}
 	return $hay;
 }

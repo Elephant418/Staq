@@ -12,6 +12,7 @@ require_once( $root_path . '/utils.php' );
 require_once( $root_path . '/Configuration.php' );
 require_once( $root_path . '/Autoloader.php' );
 require_once( $root_path . '/Application.php' );
+require_once( $root_path . '/Supersoniq.php' );
 
 $autoloader = new \Supersoniq\Autoloader( );
 $autoloader->init( );

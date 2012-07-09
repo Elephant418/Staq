@@ -99,11 +99,11 @@ class Database_Request {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function connect( ) {
-		$conf = \Supersoniq\Application::$configuration;
+		$db = new \Supersoniq\Configuration( 'database' );
 		$this->PDObject = new \PDO(
-			$conf->get( 'Database', 'Driver' ) . ':host=' . $conf->get( 'Database', 'Host' ) . ';dbname=' . $conf->get( 'Database', 'Name' ),
-			$conf->get( 'Database', 'User' ),
-			$conf->get( 'Database', 'Password' ),
+			$db->get( 'Access', 'Driver' ) . ':host=' . $db->get( 'Access', 'Host' ) . ';dbname=' . $db->get( 'Access', 'Name' ),
+			$db->get( 'Access', 'User' ),
+			$db->get( 'Access', 'Password' ),
 			array( \PDO::ATTR_PERSISTENT => true )
 		);
 		$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );

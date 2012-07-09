@@ -20,7 +20,8 @@ class Configuration {
 	/*************************************************************************
 	  CONSTRUCTOR                   
 	 *************************************************************************/
-	public function __construct( $source_file_path ) {
+	public function __construct( $file_name ) {
+		$source_file_path = SUPERSONIQ_ROOT_PATH . SUPERSONIQ_APPLICATION . '/conf/' . $file_name . '.ini';
 		if ( ! file_exists( $source_file_path ) ) {
 			throw new \Exception( 'Configuration source file "' . $source_file_path . '" does not exist' );
 		}

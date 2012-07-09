@@ -71,8 +71,8 @@ class Autoloader {
 		return FALSE;
 	}
         private function load_absolute_class_name( $module, $class_type, $class_name ) {
-		$root_path = Application::$root_paths[ $module ];
-		$file_path = $root_path . strtolower( $class_type ) . '/' . $class_name . '.php';
+		$module_path = Application::$modules_path[ $module ];
+		$file_path   = $module_path . strtolower( $class_type ) . '/' . $class_name . '.php';
 		// echo '-- ' . $file_path . '<br>';
 		if ( is_file( $file_path ) ) {
 			require_once( $file_path );

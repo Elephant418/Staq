@@ -65,8 +65,8 @@ class __Base {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	protected function find_template( $template_name ) {
-		foreach ( \Supersoniq\Application::$root_paths as $root_path ) {
-			$template_path = $root_path . 'view/' . $template_name;
+		foreach ( \Supersoniq\Application::$modules_path as $module_path ) {
+			$template_path = $module_path . 'view/' . $template_name;
 			if ( file_exists( $template_path ) ) {
 				return $template_path;
 			}
