@@ -97,7 +97,7 @@ class Application {
 	public static function action_url( $controller, $action, $parameters = array( ) ) {
 		$controller = self::$controllers[ $controller ];
 		$route = $controller->get_action_route( $action, $parameters );
-		return $route;
+		return SUPERSONIQ_REQUEST_BASE_URL . $route;
 	}
 
 
