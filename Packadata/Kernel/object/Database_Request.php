@@ -101,9 +101,9 @@ class Database_Request {
 	private function connect( ) {
 		$db = new \Supersoniq\Configuration( 'database' );
 		$this->PDObject = new \PDO(
-			$db->get( 'Access', 'Driver' ) . ':host=' . $db->get( 'Access', 'Host' ) . ';dbname=' . $db->get( 'Access', 'Name' ),
-			$db->get( 'Access', 'User' ),
-			$db->get( 'Access', 'Password' ),
+			$db->get( 'access', 'driver' ) . ':host=' . $db->get( 'access', 'host' ) . ';dbname=' . $db->get( 'access', 'name' ),
+			$db->get( 'access', 'user' ),
+			$db->get( 'access', 'password' ),
 			array( \PDO::ATTR_PERSISTENT => true )
 		);
 		$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
