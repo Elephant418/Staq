@@ -55,13 +55,13 @@ function substr_before_last( $hay, $needle ) {
 	if ( contains( $hay, $needle ) ) {
 		return substr( $hay, 0, strrpos( $hay, $needle ) );
 	}
-	return $hay;
+	return '';
 }
 function substr_after( $hay, $needle ) {
 	if ( contains( $hay, $needle ) ) {
 		return substr( $hay, strpos( $hay, $needle ) + strlen( $needle ) );
 	}
-	return $hay;
+	return '';
 }
 function substr_after_last( $hay, $needle ) {
 	if ( contains( $hay, $needle ) ) {
