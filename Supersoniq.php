@@ -58,7 +58,7 @@ class Supersoniq {
 		define( 'SUPERSONIQ_APPLICATION'     , $this->select_application( ) );
 
 		// Determine the part of the request is the uri
-		define( 'SUPERSONIQ_REQUEST_BASE_URL', $this->request_base_url( ) );
+		define( 'SUPERSONIQ_REQUEST_BASE_URL', 'http://' . $this->request_base_url( ) );
 		define( 'SUPERSONIQ_REQUEST_URI'     , $this->request_uri );
 		// echo SUPERSONIQ_REQUEST_BASE_URL . ' - ' . SUPERSONIQ_REQUEST_URI . HTML_EOL;
 
@@ -105,10 +105,14 @@ class Supersoniq {
 	private function handle_request_by_url( $listen_url ) {
 		$base_request = $this->request_base_url( );
 		$full_request = $base_request . $this->request_uri;
+		$full_request = \Supersoniq\must_ends_with( $full_request, '/' );
 		$listen_url   = \Supersoniq\substr_after( $listen_url, '//' );
 		$listen_url   = \Supersoniq\must_not_ends_with( $listen_url, '/' );
 		// echo $base_request . ' &lt; ' . $listen_url . ' &lt; ' . $full_request . HTML_EOL;
-		if ( \Supersoniq\starts_with( $listen_url, $base_request ) && \Supersoniq\starts_with( $full_request, $listen_url ) ) {
+		if ( 
+			\Supersoniq\starts_with( $listen_url  , $base_request ) && 
+			\Supersoniq\starts_with( $full_request, $listen_url   )
+		) {
 			$this->request_base_uri .= \Supersoniq\substr_after( $listen_url, $base_request );
 			$this->request_uri = \Supersoniq\substr_after( $full_request, $listen_url );
 			return TRUE;
@@ -136,9 +140,7 @@ class Supersoniq {
 		}
 		
 		// Base uri
-		if ( is_null( $base_uri ) ) {
-			$base_uri = $this->request_base_uri;
-		}
+		$base_uri = $this->request_base_uri . $base_uri;
 		return $request_base_url . $base_uri;
 	}
 
