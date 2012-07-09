@@ -17,7 +17,6 @@ class Application {
 	public static $modules_path = array( );
 	public static $controllers  = array( );
 	public static $current_controller;
-	private $configuration;
 	private $routes = array( );
 
 
@@ -30,11 +29,22 @@ class Application {
 		$this->routes = array( SUPERSONIQ_REQUEST_URI );
 
 		// Configuration file
-		$this->configuration = new Configuration( 'application' );
+		$configuration = new Configuration( 'application' );
+
+		// Errors
+		ini_set( 'display_errors', $configuration->get( 'errors', 'display_errors' ) );
+		$level = $configuration->get( 'errors', 'error_reporting' );
+		if ( is_string( $level ) ) {
+			$level = constant( $level );
+		}
+		error_reporting( $level );
+
+		// Service
+		date_default_timezone_set( $configuration->get( 'service', 'timezone' ) );
 
 		// Enabled modules
 		$modules = array( SUPERSONIQ_APPLICATION );
-		$modules = array_merge( $modules, $this->configuration->get( 'Modules', 'Enabled' ) );
+		$modules = array_merge( $modules, $configuration->get( 'modules', 'enabled' ) );
 		foreach( $modules as $module ) {
 			$module_name = $this->uniform_module_name( $module );
 			$module_path = $this->uniform_module_path( $module );
@@ -43,7 +53,7 @@ class Application {
 		}
 
 		// Enabled controllers
-		$controllers = $this->configuration->get( 'Controllers', 'Enabled' );
+		$controllers = $configuration->get( 'controllers', 'enabled' );
 		foreach( $controllers as $controller ) {
 			try {
 				$controller_class = '\\Controller\\' . $controller;
