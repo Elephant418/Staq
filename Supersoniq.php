@@ -96,6 +96,7 @@ class Supersoniq {
 		$request = $this->request_base_url . $this->request_uri;
 		$condition = \Supersoniq\substr_after( $pattern, '//' );
 		$condition = \Supersoniq\must_not_ends_with( $condition, '/' );
+		// echo $request . '<>'. $condition . '<br>' . PHP_EOL;
 		if ( \Supersoniq\starts_with( $request, $condition ) ) {
 			$this->request_base_url = $condition;
 			$this->request_uri = \Supersoniq\substr_after( $request, $condition );
