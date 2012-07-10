@@ -67,11 +67,10 @@ abstract class Database_Table {
 			$this->deleted_handler( );
 		}
 	}
-	public function save( ) {
-
+	public function save( $force_insert = FALSE ) {
 		$current_data = $this->get_current_data( );
 		if ( $this->has_data_changed( $current_data ) ) {
-			if ( $this->exists( ) ) {
+			if ( $this->exists( ) && ! $force_insert ) {
 				$sql = 'UPDATE ' . $this->_database->table_name
 				. ' SET ' . $this->get_set_request( )
 				. ' WHERE `' . $this->_database->id_field.'` = :' . $this->_database->id_field . ' ;';

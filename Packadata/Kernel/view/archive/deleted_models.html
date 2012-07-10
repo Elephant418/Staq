@@ -12,7 +12,7 @@ foreach ( $this->archives as $archive ) {
 			foreach ( $versions as $version ) {
 			?>
 				<?php //TODO fix the following link (doesn't work with action_url) ?>
-				<a href="/<?= $version->model_type ?>/archive/see/<?= $version->model_id ?>/<?=$version->model_attributes_version ?>" >
+				<a href="<?= $controller_action_url( $version->model_type, 'see', $version->model_id, $version->model_attributes_version ) ?>" >
 				Version : <?= $version->model_type_version ?>.<?= $version->model_attributes_version ?></a><br/>
 				Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $version->date_version ), 'd/m/Y - G:i' ); ?><br/>
 				Changed by the IP : <?= $version->ip_version ?><br/><br/>

@@ -88,19 +88,21 @@ class Versioned_Model extends \Controller\Model {
 		if ( $archive = $archive->get_model_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
 			$model_restore = 'Model\\' . $this->type;
 			$model = new $model_restore;
-			$model->init_by_id( $archive->model_id );
+			if ( ! $model->init_by_id( $archive->model_id ) ) {
+				$model->id = $archive->model_id;
+				$model->type_version = $archive->model_type_version;
+				$model->attributes_version = $archive->model_attributes_version;
+			}
 			foreach ( $archive->model_attributes as $attribute => $value ) {
 				$model->set( $attribute, $value );
-				if ( ! $archive->current_version( $archive->model_id, $this->type ) ) {
-					//TODO Restore with the same id for the restoration of a deleted model (following line doesn't work on save)
-					//$model->id = $archive->model_id;
-				}
 			}
 			//TODO Decide if we keep the archives or not and what to do with the versions of the restored model
 			$restored_version = $archive->model_type_version . '.' . $archive->model_attributes_version;
-			$model->save( );
-			\Notification::push( $this->type . ' version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
-			\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
+			if ( $model->save( TRUE ) ) {
+				\Notification::push( $this->type . ' version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
+				\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
+			}
+			\Notification::push( $this->type . ' not restored !', \Notification::ERROR );
 		} else {
 			$this->view->title   = 'Archive not found';
 			return $this->render( \View\__Base::LAYOUT_TEMPLATE );

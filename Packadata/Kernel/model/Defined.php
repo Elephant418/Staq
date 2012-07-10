@@ -96,7 +96,7 @@ class Defined extends \Model\__Base {
 		}
 		return parent::delete( );
 	}
-	public function save( ) {
+	public function save( $force_insert = FALSE ) {
 		foreach ( $this->_uniqs as $name => $index ) {
 			if ( ! $index->is_uniq( $this ) ) {
 				\Notification::push( $name . ' already exists !', \Notification::ERROR );
@@ -104,7 +104,7 @@ class Defined extends \Model\__Base {
 			}
 		}
 		$this->attributes_version ++;
-		$save = parent::save( );
+		$save = parent::save( $force_insert );
 		foreach ( $this->get_attribute_fields( ) as $name ) {
 			$this->_attributes[ $name ]->model_saved( $this );
 		}
