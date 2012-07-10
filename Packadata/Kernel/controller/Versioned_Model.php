@@ -91,11 +91,15 @@ class Versioned_Model extends \Controller\Model {
 			$model->init_by_id( $archive->model_id );
 			foreach ( $archive->model_attributes as $attribute => $value ) {
 				$model->set( $attribute, $value );
+				if ( ! $archive->current_version( $archive->model_id, $this->type ) ) {
+					//TODO Restore with the same id for the restoration of a deleted model (following line doesn't work on save)
+					//$model->id = $archive->model_id;
+				}
 			}
 			//TODO Decide if we keep the archives or not and what to do with the versions of the restored model
 			$restored_version = $archive->model_type_version . '.' . $archive->model_attributes_version;
 			$model->save( );
-			\Notification::push( $this->type . 'version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
+			\Notification::push( $this->type . ' version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
 			\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
 		} else {
 			$this->view->title   = 'Archive not found';

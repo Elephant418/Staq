@@ -21,7 +21,7 @@ class Autoloader {
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-        private function loader( $absolute_class_name ) {
+	private function loader( $absolute_class_name ) {
 		// echo $absolute_class_name . '<br>' . PHP_EOL;
 		$parts = array_reverse( explode( '\\', $absolute_class_name ) );
 		$class_name = $parts[ 0 ];
@@ -62,7 +62,7 @@ class Autoloader {
 			throw new \Exception( 'Unknown relative class name "' . $absolute_class_name . '"' );
 		}
 	}
-        private function load_relative_class_name( $class_type, $class_name ) {
+	private function load_relative_class_name( $class_type, $class_name ) {
 		foreach ( Application::$modules as $module ) {
 			if ( $this->load_absolute_class_name( $module, $class_type, $class_name ) ) {
 				return $module . '\\' . $class_type . '\\' . $class_name;
@@ -70,7 +70,7 @@ class Autoloader {
 		}
 		return FALSE;
 	}
-        private function load_absolute_class_name( $module, $class_type, $class_name ) {
+	private function load_absolute_class_name( $module, $class_type, $class_name ) {
 		$module_path = Application::$modules_path[ $module ];
 		$file_path   = $module_path . strtolower( $class_type ) . '/' . $class_name . '.php';
 		// echo '-- ' . $file_path . '<br>';
