@@ -24,7 +24,7 @@ class Supersoniq {
 	public function __construct( ) {
 
 		// Initialize root path
-		define( 'SUPERSONIQ_ROOT_PATH', dirname( dirname( __FILE__ ) ) . '/' );
+		define( 'SUPERSONIQ_ROOT_PATH', \Supersoniq\dirname( __FILE__, 3 ) . '/' );
 
 		// Original request 
 		$this->request_uri = \Supersoniq\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );

@@ -9,12 +9,12 @@ session_start( );
 
 define( 'HTML_EOL', '<br>' . PHP_EOL ) ;
 
-$root_path = dirname( __FILE__);
-require_once( $root_path . '/utils.php' );
-require_once( $root_path . '/Configuration.php' );
-require_once( $root_path . '/Autoloader.php' );
-require_once( $root_path . '/Application.php' );
-require_once( $root_path . '/Supersoniq.php' );
+$root_path = dirname( __FILE__) . '/Kernel/';
+require_once( $root_path . 'utils.php' );
+require_once( $root_path . 'Configuration.php' );
+require_once( $root_path . 'Autoloader.php' );
+require_once( $root_path . 'Application.php' );
+require_once( $root_path . 'Supersoniq.php' );
 
 $autoloader = new \Supersoniq\Autoloader( );
 $autoloader->init( );

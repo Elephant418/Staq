@@ -101,3 +101,9 @@ function random( $length = 10 ) {
 	}
 	return $string;
 }
+function dirname( $path, $level = 1 ) {
+	for ( $i = 0; $i < $level; $i++ ) {
+		$path = \dirname( $path );
+	}
+	return $path;
+}
