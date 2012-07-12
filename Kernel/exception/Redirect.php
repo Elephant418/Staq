@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Packadata\Kernel\Exception;
+namespace Supersoniq\Kernel\Exception;
 
 class Redirect extends \Exception {
 

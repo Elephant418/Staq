@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Packadata\Kernel\Controller;
+namespace Supersoniq\Kernel\Controller;
 
 abstract class __Base {
 
