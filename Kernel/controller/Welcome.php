@@ -22,8 +22,6 @@ class Welcome extends \Controller\__Base {
 	  ACTION METHODS                   
 	 *************************************************************************/
 	public function view( ) {
-		$this->view->title   = 'Welcome';
-		$this->view->content = 'Hello World';
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+		return 'This Supersoniq instance is empty.';
 	}
 }
