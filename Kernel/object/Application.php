@@ -34,7 +34,7 @@ class Application {
 		// Errors
 		ini_set( 'display_errors', $configuration->get( 'errors', 'display_errors' ) );
 		$level = $configuration->get( 'errors', 'error_reporting' );
-		if ( is_string( $level ) ) {
+		if ( ! is_numeric( $level ) ) {
 			$level = constant( $level );
 		}
 		error_reporting( $level );
@@ -43,7 +43,7 @@ class Application {
 		date_default_timezone_set( $configuration->get( 'service', 'timezone' ) );
 
 		// Enabled modules
-		$modules = array( SUPERSONIQ_APPLICATION );
+		$modules = array( $this->uniform_module_name( SUPERSONIQ_APPLICATION ) );
 		$modules = array_merge( $modules, $configuration->get( 'modules', 'enabled' ) );
 		foreach( $modules as $module ) {
 			$module_name = $this->uniform_module_name( $module );
