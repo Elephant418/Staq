@@ -46,9 +46,6 @@ class Supersoniq {
 	  RUN METHODS                   
 	 *************************************************************************/
 	public function run( ) {
-		echo $this->render( );
-	}
-	public function render( ) {
 
 		// Get current application & platform by the request
 		define( 'SUPERSONIQ_PLATFORM'        , $this->select_platform( ) );
@@ -61,7 +58,7 @@ class Supersoniq {
 
 		// Launch application
 		self::$application = new \Supersoniq\Application( );
-		return self::$application->render( );
+		echo self::$application->render( );
 	}
 
 
