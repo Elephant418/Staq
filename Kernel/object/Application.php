@@ -23,7 +23,7 @@ class Application {
 	/*************************************************************************
 	  CONSTRUCTOR                   
 	 *************************************************************************/
-	public function __construct( ) {
+	public function render( ) {
 
 		// Initial route
 		$this->routes = array( SUPERSONIQ_REQUEST_URI );
@@ -58,27 +58,26 @@ class Application {
 			try {
 				$controller_class = '\\Controller\\' . $controller;
 				self::$controllers[ $controller ] = new $controller_class( );
-			} catch ( Exception $e ) {
-				throw new Exception( 'We can not instanciate "' . $controller . '" controller', 0, $e );
+			} catch ( \Exception $e ) {
+				\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
+				$this->change_route( $this->action_route( 'Error', 'view', array( 'code' => '500' ) ) );
+				return $this->render_route( );
 			}
 		}
+
+		return $this->render_route( );
 	}
-
-
-	/*************************************************************************
-	  PUBLIC METHODS                   
-	 *************************************************************************/
-	public function render( ) {
+	public function render_route( ) {
 		try {
 			return $this->route( );
 		} catch( \Exception\Redirect $e ) {
 			\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
 			$this->change_route( $e->route );
-			return $this->render( );
+			return $this->render_route( );
 		} catch( \Exception $e ) {
 			\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
-			$this->change_route( '/error/500' );
-			return $this->render( );
+			$this->change_route( $this->action_route( 'Error', 'view', array( 'code' => '500' ) ) );
+			return $this->render_route( );
 		}
 	}
 
@@ -95,9 +94,12 @@ class Application {
 		self::redirect( self::action_url( $controller, $action, $parameters ) );
 	}
 	public static function action_url( $controller, $action, $parameters = array( ) ) {
+		return SUPERSONIQ_REQUEST_BASE_URL . $this->action_route( $controller, $action, $parameters );
+	}
+	public static function action_route( $controller, $action, $parameters = array( ) ) {
 		$controller = self::$controllers[ $controller ];
 		$route = $controller->get_action_route( $action, $parameters );
-		return SUPERSONIQ_REQUEST_BASE_URL . $route;
+		return $route;
 	}
 	public static function call_action( $controller, $action, $parameters = array( ) ) {
 		$controller = self::$controllers[ $controller ];
@@ -131,6 +133,6 @@ class Application {
 				return call_user_func_array( array( $controller, $callable[ 0 ] ), $callable[ 1 ] );
 			}
 		}
-		throw new \Exception\Redirect( '/error/404', 'Route not found' );
+		throw new \Exception\Redirect( $this->action_route( 'Error', 'view', array( 'code' => '404' ) ), 'Route not found' );
 	}
 }
