@@ -32,7 +32,7 @@ class Supersoniq {
 	  CONFIGURATION METHODS                   
 	 *************************************************************************/
 	public function application( $application, $listenings = '/' ) {
-		$application_name = $this->uniform_module_name( $application );
+		$application_name = $this->uniform_module_path( $application );
 		$this->applications[ $application_name ] = $listenings;
 		return $this;
 	}
@@ -76,11 +76,24 @@ class Supersoniq {
 		}
 	}
 	private function select_application( ) {
+		if ( empty( $this->applications ) ) {
+			return $this->select_default_application( );
+		}
 		foreach ( $this->applications as $application => $listenings ) {
 			if ( $this->handle_request( $listenings ) ) {
 				return $application;
 			}
 		}
+	}
+	private function select_default_application( ) {
+		$application_path = $_SERVER[ 'DOCUMENT_ROOT' ];
+		if ( 
+			\Supersoniq\ends_with( $application_path, '/public' ) && 
+			\Supersoniq\starts_with( $application_path, SUPERSONIQ_ROOT_PATH )
+		) {
+			return substr( $application_path, strlen( SUPERSONIQ_ROOT_PATH ), - strlen( '/public' ) );
+		}
+		return 'Supersoniq/Welcome';
 	}
 	private function handle_request( $listenings ) {
 		if ( ! is_array( $listenings ) ) {
