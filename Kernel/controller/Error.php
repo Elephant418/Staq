@@ -14,7 +14,7 @@ class Error extends \Controller\__Base {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $handled_routes = array( 
-		'view' => '/error(/:code)(.html)'
+		'view' => '/error(/:code)'
 	);
 
 
@@ -30,11 +30,11 @@ class Error extends \Controller\__Base {
 			header( 'HTTP/1.1 500 Internal Server Error' );
 		}
 
-		$this->view->title    = 'Error ' . $code;
-		$this->view->content  = '<p>We are sorry, but there is a problem.</p>';
+		$str  = '<h1>Error ' . $code . '</h1>';
+		$str .= '<p>We are sorry, but there is a problem.</p>';
 		foreach( \Notification::pull( \Notification::EXCEPTION ) as $message ) {
-			$this->view->content .= '<p>Message : ' . $message . '</p>';
+			$str .= '<p>Message : ' . $message . '</p>';
 		}
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+		return $str; 
 	}
 }
