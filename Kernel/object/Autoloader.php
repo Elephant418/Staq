@@ -22,7 +22,7 @@ class Autoloader {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function loader( $absolute_class_name ) {
-		// echo $absolute_class_name . '<br>' . PHP_EOL;
+		// echo $absolute_class_name . HTML_EOL;
 		$parts = array_reverse( explode( '\\', $absolute_class_name ) );
 		$class_name = $parts[ 0 ];
 		$class_type = 'Object';
@@ -64,19 +64,28 @@ class Autoloader {
 	}
 	private function load_relative_class_name( $class_type, $class_name ) {
 		foreach ( Application::$modules as $module ) {
-			if ( $this->load_absolute_class_name( $module, $class_type, $class_name ) ) {
-				return $module . '\\' . $class_type . '\\' . $class_name;
+			if ( $loaded_class_name = $this->load_absolute_class_name( $module, $class_type, $class_name ) ) {
+				return $loaded_class_name;
 			}
 		}
 		return FALSE;
 	}
 	private function load_absolute_class_name( $module, $class_type, $class_name ) {
 		$module_path = Application::$modules_path[ $module ];
-		$file_path   = $module_path . strtolower( $class_type ) . '/' . $class_name . '.php';
-		// echo '-- ' . $file_path . '<br>';
+		$file_path   = strtolower( $class_type ) . '/' . $class_name . '.php';
+		$file_path = $module_path . $file_path;
+		// echo '-- ' . $file_path . HTML_EOL;
 		if ( is_file( $file_path ) ) {
 			require_once( $file_path );
-			return TRUE;
+			
+			// Check class name
+			$classes = get_declared_classes( );
+			$loaded_class_name = end( $classes );
+			$full_class_name = $module . '\\' . $class_type . '\\' . $class_name;
+			if ( $loaded_class_name != $full_class_name ) {
+				throw new \Exception\Wrong_Class_Definition( 'Wrong class name definition in "' . $file_path . '". Found "' . $loaded_class_name . '" definition, but "' . $full_class_name . '" expected.' ); 
+			}
+			return $loaded_class_name;
 		}
 		return FALSE;
 	}
