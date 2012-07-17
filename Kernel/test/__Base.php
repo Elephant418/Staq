@@ -39,7 +39,7 @@ class __Base {
 	/*************************************************************************
 	  UTILS METHODS                   
 	 *************************************************************************/
-	public function _assert_equals( $value, $match ) {
+	public function assert_equals( $value, $match ) {
 		$return = ( $value == $match );
 		if ( ! $return ) {
 			$this->error = '"' . $match . '" expected but "' . $value . '" found' ;
