@@ -81,10 +81,10 @@ class Url {
 	}
 	public function diff( $url ) {
 		if ( is_object( $url ) ) {
-			if ( ! is_null( $url->host ) ) {
+			if ( isset( $url->host ) ) {
 				unset( $url->host );
 			}
-			if ( ! is_null( $url->port ) ) {
+			if ( isset( $url->port ) ) {
 				unset( $url->port );
 			}
 			if ( ! is_null( $url->uri ) ) {
