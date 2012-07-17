@@ -16,12 +16,14 @@ $require_path = SUPERSONIQ_ROOT_PATH . 'Supersoniq/';
 require_once( $require_path . 'utils.php' );
 
 // REQUIRE KERNEL CLASSES
-$require_path .= 'Kernel/object/';
-require_once( $require_path . 'Configuration.php' );
-require_once( $require_path . 'Autoloader.php' );
-require_once( $require_path . 'Application.php' );
+$require_path .= 'Kernel/include/';
+// require_once( $require_path . 'Configuration.php' );
+// require_once( $require_path . 'Autoloader.php' );
+require_once( $require_path . 'Url.php' );
 require_once( $require_path . 'Supersoniq.php' );
 
-// INIT AUTOLOADER
+// INIT AUTOLOADER 
+/*
 $autoloader = new \Supersoniq\Autoloader( );
 $autoloader->init( );
+*/
