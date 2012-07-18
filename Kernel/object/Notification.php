@@ -70,10 +70,8 @@ class Notification implements \Serializable {
 			$notifications = array( );
 		}
 
-		if ( ! is_null( $levels ) ) {		
-			if ( ! is_array( $levels ) ) {
-				$levels = array( $levels );
-			}
+		if ( ! is_null( $levels ) ) {	
+			\Supersoniq\must_be_array( $levels );	
 		}
 
 		foreach ( $notifications as $key => $notification ) {

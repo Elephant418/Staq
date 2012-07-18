@@ -169,9 +169,18 @@ function must_be_array( &$array ) {
 		$array = [ $array ];
 	}
 }
+function array_merge_unique( $array1, $array2 ) {
+	return array_values( array_unique( array_merge( $array1, $array2 ) ) );
+}
 
 /*************************************************************************
   SUPERSONIQ METHODS                   
  *************************************************************************/
+function format_to_namespace( $path ) {
+	return str_replace( '/', '\\', $path );
+}
+function format_to_path( $namespace ) {
+	return str_replace( '\\', '/', $namespace );
+}
 
 
