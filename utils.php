@@ -14,9 +14,7 @@ namespace Supersoniq;
 
 // STARTS WITH & ENDS WITH FUNCTIONS
 function starts_with( $hay, $needles ) {
-	if ( ! is_array( $needles ) ) {
-		$needles = array( $needles );
-	}
+	must_be_array( $needles );
 	foreach( $needles as $needle ) {
 		if ( substr( $hay, 0, strlen( $needle ) ) == $needle ) {
 			return TRUE;
@@ -25,9 +23,7 @@ function starts_with( $hay, $needles ) {
 	return FALSE;
 }
 function ends_with( $hay, $needles ) {
-	if ( ! is_array( $needles ) ) {
-		$needles = array( $needles );
-	}
+	must_be_array( $needles );
 	foreach( $needles as $needle ) {
 		if ( substr( $hay, -strlen( $needle ) ) == $needle ) {
 			return TRUE;
@@ -41,29 +37,25 @@ function i_starts_with( $hay, $needle ) {
 function i_ends_with( $hay, $needle ) {
 	return ends_with( strtolower( $hay ), strtolower( $needle ) );
 }
-function must_starts_with( $hay, $needle ) {
+function must_starts_with( &$hay, $needle ) {
 	if ( ! starts_with( $hay, $needle ) ) {
 		$hay = $needle . $hay;
 	}
-	return $hay;
 }
-function must_ends_with( $hay, $needle ) {
+function must_ends_with( &$hay, $needle ) {
 	if ( ! ends_with( $hay, $needle ) ) {
 		$hay .= $needle;
 	}
-	return $hay;
 }
-function must_not_starts_with( $hay, $needle ) {
+function must_not_starts_with( &$hay, $needle ) {
 	if ( starts_with( $hay, $needle ) ) {
 		$hay = substr( $hay, strlen( $needle ) );
 	}
-	return $hay;
 }
-function must_not_ends_with( $hay, $needle ) {
+function must_not_ends_with( &$hay, $needle ) {
 	if ( ends_with( $hay, $needle ) ) {
 		$hay = substr( $hay, 0, -strlen( $needle ) );
 	}
-	return $hay;
 }
 
 // CONTAINS FUNCTIONS
@@ -81,9 +73,7 @@ function cut_before( &$hay, $needles ) {
 	return $return;
 }
 function substr_before( $hay, $needles ) {
-	if ( ! is_array( $needles ) ) {
-		$needles = array( $needles );
-	}
+	must_be_array( $needles );
 	$return = $hay;
 	foreach( $needles as $needle ) {
 		if ( contains( $hay, $needle ) ) {
@@ -102,9 +92,7 @@ function cut_before_last( &$hay, $needles ) {
 	return $return;
 }
 function substr_before_last( $hay, $needles ) {
-	if ( ! is_array( $needles ) ) {
-		$needles = array( $needles );
-	}
+	must_be_array( $needles );
 	$return = '';
 	foreach( $needles as $needle ) {
 		if ( contains( $hay, $needle ) ) {
@@ -123,9 +111,7 @@ function cut_after( &$hay, $needles ) {
 	return $return;
 }
 function substr_after( $hay, $needles ) {
-	if ( ! is_array( $needles ) ) {
-		$needles = array( $needles );
-	}
+	must_be_array( $needles );
 	$return = '';
 	foreach( $needles as $needle ) {
 		if ( contains( $hay, $needle ) ) {
@@ -143,9 +129,7 @@ function cut_after_last( &$hay, $needles ) {
 	return $return;
 }
 function substr_after_last( $hay, $needles ) {
-	if ( ! is_array( $needles ) ) {
-		$needles = array( $needles );
-	}
+	must_be_array( $needles );
 	$return = $hay;
 	foreach( $needles as $needle ) {
 		if ( contains( $hay, $needle ) ) {
@@ -176,6 +160,15 @@ function dirname( $path, $level = 1 ) {
 	return $path;
 }
 
+
+/*************************************************************************
+  ARRAY METHODS                   
+ *************************************************************************/
+function must_be_array( &$array ) {
+	if ( ! is_array( $array ) ) {
+		$array = [ $array ];
+	}
+}
 
 /*************************************************************************
   SUPERSONIQ METHODS                   

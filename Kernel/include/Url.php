@@ -32,6 +32,7 @@ class Url {
 			return $this->from_string( $mixed );
 		}
 	}
+
 	public function from_array( $array ) {
 		$return = array( );
 		foreach( $array as $item ) {
@@ -39,6 +40,7 @@ class Url {
 		}
 		return $return;
 	}
+
 	public function from_string( $string ) {
 		$return = new $this;
 		if ( \Supersoniq\starts_with( $string, array( 'http://', 'https://', '//' ) ) ) {
@@ -53,6 +55,7 @@ class Url {
 		$return->uri = $string;
 		return $return;
 	}
+
 	public function by_server( ) {
 		$return = new $this;		
 		$return->host = $_SERVER[ 'SERVER_NAME' ];
@@ -63,7 +66,7 @@ class Url {
 
 
 	/*************************************************************************
-	  PUBLIC METHODS                   
+	  ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function to_string( ) {
 		$url = '';
@@ -78,6 +81,7 @@ class Url {
 		}
 		return $url;
 	}
+
 	public function match( $url ) {
 		return ( 
 			( is_null( $this->host ) || $this->host === $url->host ) &&
@@ -85,6 +89,11 @@ class Url {
 			( is_null( $this->uri  ) || \Supersoniq\starts_with( $url->uri, $this->uri )  )
 		);
 	}
+
+
+	/*************************************************************************
+	  TREATMENT METHODS                   
+	 *************************************************************************/
 	public function diff( $url ) {
 		if ( is_object( $url ) ) {
 			if ( isset( $url->host ) ) {
@@ -97,17 +106,20 @@ class Url {
 		}
 		return $this;
 	}
+
 	public function diff_uri( $url ) {
 		if ( is_object( $url ) && ! is_null( $url->uri ) ) {
 			$this->uri = \Supersoniq\substr_after( $this->uri, $url->uri );
-			$this->uri = \Supersoniq\must_starts_with( $this->uri, '/' );
+			\Supersoniq\must_starts_with( $this->uri, '/' );
 		}
 		return $this;
 	}
+
 	public function reset_uri( ) {
 		$this->uri = '';
 		return $this;
 	}
+
 	public function add_uri( $url ) {
 		if ( is_object( $url ) && isset( $url->uri ) ) {
 			$this->uri .= $url->uri;
