@@ -47,7 +47,7 @@ class Supersoniq {
 	}
 
 	private function format_listenings( &$listenings ) {
-		$listenings = ( new \Supersoniq\Kernel\Url( ) )->from( $listenings );
+		$listenings = ( new \Supersoniq\Kernel\Url )->from( $listenings );
 		if ( ! is_array( $listenings ) ) {
 			$listenings = array( $listenings );
 		}
@@ -88,9 +88,9 @@ class Supersoniq {
 	 *************************************************************************/
 	private function format_request( &$request ) {
 		if ( is_null( $request ) ) {
-			$request = ( new \Supersoniq\Kernel\Url( ) )->by_server( );
+			$request = ( new \Supersoniq\Kernel\Url )->by_server( );
 		} else {
-			$request = ( new \Supersoniq\Kernel\Url( ) )->from( $request );
+			$request = ( new \Supersoniq\Kernel\Url )->from( $request );
 		}
 		return $request;
 	}

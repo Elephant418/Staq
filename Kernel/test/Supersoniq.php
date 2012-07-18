@@ -106,12 +106,12 @@ class Supersoniq extends __Base {
 	  UTILS
 	 *************************************************************************/
 	public function default_supersoniq_request( ) {
-		$sq = new \Supersoniq( );
+		$sq = new \Supersoniq;
 		$sq->run( 'http://hostname/path' );
 		return $sq;
 	}
 	public function complex_supersoniq( ) {
-		$sq = ( new \Supersoniq( ) )
+		$sq = ( new \Supersoniq )
 			->application( 'coco', '/bou' )
 			->platform( 'full'     , 'http://localhost:5000/path')
 			->platform( 'hostport' , 'http://localhost:5000/')
