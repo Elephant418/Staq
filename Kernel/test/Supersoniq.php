@@ -20,6 +20,11 @@ class Supersoniq extends __Base {
 		return $this->assert_equals( $sq->route, '/path' );
 	}
 
+	public function test_default_base_url( ) {
+		$sq = $this->default_supersoniq_request( );
+		return $this->assert_equals( $sq->base_url, 'http://hostname' );
+	}
+
 	public function test_default_platform( ) {
 		$sq = $this->default_supersoniq_request( );
 		return $this->assert_equals( $sq->platform_name, 'prod' );
@@ -41,9 +46,21 @@ class Supersoniq extends __Base {
 		return $this->assert_equals( $sq->application_path, 'Project_Example/Sub_Project' );
 	}
 
-	public function test_complex_platform_full( ) {
+	public function test_base_url_path( ) {
 		$sq = $this->complex_supersoniq( );
 		$sq->run( 'http://localhost:5000/path/tralalala' );
+		return $this->assert_equals( $sq->base_url, 'http://localhost:5000/path' );
+	}
+
+	public function test_base_url_double_path( ) {
+		$sq = $this->complex_supersoniq( );
+		$sq->run( 'http://localhost:5000/path/bou/tralalala' );
+		return $this->assert_equals( $sq->base_url, 'http://localhost:5000/path/bou' );
+	}
+
+	public function test_complex_platform_full( ) {
+		$sq = $this->complex_supersoniq( );
+		$sq->run( 'http://localhost:5000/path' );
 		return $this->assert_equals( $sq->platform_name, 'full' );
 	}
 

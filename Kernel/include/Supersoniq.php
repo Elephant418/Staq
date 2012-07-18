@@ -60,7 +60,7 @@ class Supersoniq {
 	 *************************************************************************/
 	public function run( $request = NULL ) {
 		$this->context_by_request( $request );
-		$this->load_configuration( );
+		// $this->load_configuration( );
 		// TODO: Instance an Application
 	}
 
@@ -69,6 +69,7 @@ class Supersoniq {
 		$platform    = $this->platform_by_request( $request );
 		$application = $this->application_by_request( $request, $platform );
 		$this->route = $this->route_by_request( $request, $platform, $application );
+		$this->base_url         = $this->base_url_by_request( $request, $platform, $application );
 		$this->platform_name    = $platform[ 'name' ];
 		$this->application_path = $application[ 'path' ];
 	}
@@ -94,9 +95,18 @@ class Supersoniq {
 		return $request;
 	}
 
+	private function base_url_by_request( $request, $platform, $application ) {
+		return $request
+			->reset_uri( )
+			->add_uri( $platform[ 'listening' ] )
+			->add_uri( $application[ 'listening' ] )
+			->to_string( );
+	}
+
 	private function route_by_request( $request, $platform, $application ) {
-		return $request->diff( $platform[ 'listening' ] )
-			->diff( $application[ 'listening' ] )
+		return $request
+			->diff_uri( $platform[ 'listening' ] )
+			->diff_uri( $application[ 'listening' ] )
 			->uri;
 	}
 

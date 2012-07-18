@@ -47,6 +47,7 @@ class Url {
 			$return->port = 80;
 		}
 		if ( \Supersoniq\starts_with( $string, array( ':' ) ) ) {
+			$string = \Supersoniq\substr_after( $string, ':' );
 			$return->port = \Supersoniq\cut_before( $string, '/' );
 		}
 		$return->uri = $string;
@@ -64,12 +65,17 @@ class Url {
 	/*************************************************************************
 	  PUBLIC METHODS                   
 	 *************************************************************************/
-	public function to_string( $url ) {
-		$url = 'http://' . $this->host;
-		if ( $this->port != '80' ) {
+	public function to_string( ) {
+		$url = '';
+		if ( isset( $this->host ) ) {
+			$url .= 'http://' . $this->host;
+		}
+		if ( isset( $this->port ) && $this->port != '80' ) {
 			$url .= ':' . $this->port;
 		}
-		$url .= $this->uri;
+		if ( isset( $this->uri ) && ! empty( $this->uri ) ) {
+			$url .= $this->uri;
+		}
 		return $url;
 	}
 	public function match( $url ) {
@@ -87,10 +93,24 @@ class Url {
 			if ( isset( $url->port ) ) {
 				unset( $url->port );
 			}
-			if ( ! is_null( $url->uri ) ) {
-				$this->uri = \Supersoniq\substr_after( $this->uri, $url->uri );
-				$this->uri = \Supersoniq\must_starts_with( $this->uri, '/' );
-			}
+			$this->diff_uri( $url );
+		}
+		return $this;
+	}
+	public function diff_uri( $url ) {
+		if ( is_object( $url ) && ! is_null( $url->uri ) ) {
+			$this->uri = \Supersoniq\substr_after( $this->uri, $url->uri );
+			$this->uri = \Supersoniq\must_starts_with( $this->uri, '/' );
+		}
+		return $this;
+	}
+	public function reset_uri( ) {
+		$this->uri = '';
+		return $this;
+	}
+	public function add_uri( $url ) {
+		if ( is_object( $url ) && isset( $url->uri ) ) {
+			$this->uri .= $url->uri;
 		}
 		return $this;
 	}
