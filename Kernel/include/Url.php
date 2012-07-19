@@ -34,7 +34,7 @@ class Url {
 	}
 
 	public function from_array( $array ) {
-		$return = array( );
+		$return = [ ];
 		foreach( $array as $item ) {
 			$return[ ] = $this->from( $item );
 		}
@@ -43,12 +43,12 @@ class Url {
 
 	public function from_string( $string ) {
 		$return = new $this;
-		if ( \Supersoniq\starts_with( $string, array( 'http://', 'https://', '//' ) ) ) {
+		if ( \Supersoniq\starts_with( $string, [ 'http://', 'https://', '//' ] ) ) {
 			$string = \Supersoniq\cut_after( $string, '//' );
-			$return->host = \Supersoniq\cut_before( $string, array( '/', ':' ) );
+			$return->host = \Supersoniq\cut_before( $string, [ '/', ':' ] );
 			$return->port = 80;
 		}
-		if ( \Supersoniq\starts_with( $string, array( ':' ) ) ) {
+		if ( \Supersoniq\starts_with( $string, ':' ) ) {
 			$string = \Supersoniq\substr_after( $string, ':' );
 			$return->port = intval( \Supersoniq\cut_before( $string, '/' ) );
 		}

@@ -14,7 +14,7 @@ class Autoloader {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
         public function init( ) {
-		spl_autoload_register( array( $this, 'loader' ) );
+		spl_autoload_register( [ $this, 'loader' ] );
         }
 
 
@@ -150,7 +150,7 @@ class Autoloader {
 	  UTILS METHODS                   
 	 *************************************************************************/
 	private function split_class( $class ) {
-		$split = array( );	
+		$split = [ ];	
 		$parts = array_reverse( explode( '\\', $class ) );
 		if ( $parts[ 0 ] == '__Parent' ) {
 			$split[ 'parent' ] = TRUE; 

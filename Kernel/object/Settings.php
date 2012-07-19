@@ -13,9 +13,9 @@ class Settings {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	private $extensions = array( );
+	private $extensions = [ ];
 	private $file_name;
-	public $settings = array( );
+	public $settings = [ ];
 
 
 
@@ -48,8 +48,8 @@ class Settings {
 	  ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function get_list( $property ) {
-		$disabled = array( );
-		$enabled = array( );
+		$disabled = [ ];
+		$enabled = [ ];
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $property ][ 'disabled' ] ) ) {
 				$new = $data[ $property ][ 'disabled' ];
@@ -73,7 +73,7 @@ class Settings {
 	}
 
 	public function get_deep_array( $section, $property ) {
-		$deep_array = array( );
+		$deep_array = [ ];
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $section ][ $property ] ) ) {
 				$elements = $data[ $section ][ $property ];
@@ -99,7 +99,7 @@ class Settings {
 	  FILE METHODS                   
 	 *************************************************************************/
 	private function file_paths( ) {
-		$file_paths = array( );
+		$file_paths = [ ];
 		foreach ( $this->extensions as $extension ) {
 			$file_name = $this->file_name;
 			if ( \Supersoniq::$PLATFORM_NAME ) {
@@ -114,7 +114,7 @@ class Settings {
 	}
 
 	private function parse_files( ) {
-		$datas = array( );
+		$datas = [ ];
 		foreach ( $this->file_paths( ) as $file_path ) {
 			if ( isset( $this->settings[ $file_path ] ) ) {
 				$datas[ $file_path ] = $this->settings[ $file_path ];

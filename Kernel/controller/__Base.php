@@ -13,11 +13,10 @@ abstract class __Base {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public static $autoload_create_child = 'Controller\\Versioned_Model';
 	public $view;
 	public $type;
 	protected $no_routes = FALSE;
-	protected $handled_routes = array( );
+	protected $handled_routes = [ ];
 
 
 	/*************************************************************************
@@ -38,9 +37,9 @@ abstract class __Base {
 		// Route defined
 		if ( ! empty( $this->handled_routes ) ) {
 			foreach ( $this->handled_routes as $action => $handled_route ) {
-				$parameters = array( );
+				$parameters = [ ];
 				if ( $this->route_match( $handled_route, $route, $parameters ) ) {
-					return array( $action, $parameters );
+					return [ $action, $parameters ];
 				}
 			}
 
@@ -62,13 +61,13 @@ abstract class __Base {
 			}
 
 			// Verify action
-			if ( ! is_callable( array( $this, $action_name ) ) ) {
+			if ( ! is_callable( [ $this, $action_name ] ) ) {
 				return FALSE;
 			}
-			return array( $action_name, $parameters );
+			return [ $action_name, $parameters ];
 		}
 	}
-	public function get_action_route( $action, $parameters = array( ) ) {
+	public function get_action_route( $action, $parameters = [ ] ) {
 
 		// Route defined
 		if ( ! empty( $this->handled_routes ) ) {
@@ -94,13 +93,13 @@ abstract class __Base {
 		}
 	}
 	protected function add_handled_route( $action, $route ) {
-		if ( ! is_callable( array( $this, $action ) ) ) {
+		if ( ! is_callable( [ $this, $action ] ) ) {
 			throw new \Exception( 'Unknown "' . $method .'" method' );
 		}
 		$this->handled_routes[ $action ] = $route;
 	}
 	protected function route_match( $route, $subject, &$matches ) {
-		$route = str_replace( array( '.', '+', '?' ),  array( '\.', '\+', '\?' ), $route ); 
+		$route = str_replace( [ '.', '+', '?' ],  [ '\.', '\+', '\?' ], $route ); 
 		$route = preg_replace( '#\(([^)]*)\)#', '(?:\1)?', $route ); 
 		$route = preg_replace( '#\:(\w+)#', '(?<\1>\w+)', $route ); 
 		$pattern = '#^' . $route . '/?$#';

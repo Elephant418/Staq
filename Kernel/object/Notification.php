@@ -58,16 +58,16 @@ class Notification implements \Serializable {
 			$message = $message->message;
 		}
 		if ( ! isset( $_SESSION[ 'Supersoniq' ][ 'notification' ] ) ) {
-			$_SESSION[ 'Supersoniq' ][ 'notification' ] = array( );
+			$_SESSION[ 'Supersoniq' ][ 'notification' ] = [ ];
 		}
-		$_SESSION[ 'Supersoniq' ][ 'notification' ][ ] = array( $message,  $level );
+		$_SESSION[ 'Supersoniq' ][ 'notification' ][ ] = [ $message,  $level ];
 	}
 	public static function pull( $levels = NULL ) {
 		if ( isset( $_SESSION[ 'Supersoniq' ][ 'notification' ] ) ) {
 			$notifications = $_SESSION[ 'Supersoniq' ][ 'notification' ];
 			unset( $_SESSION[ 'Supersoniq' ][ 'notification' ] );
 		} else {
-			$notifications = array( );
+			$notifications = [ ];
 		}
 
 		if ( ! is_null( $levels ) ) {	

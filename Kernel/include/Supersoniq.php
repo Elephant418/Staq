@@ -14,10 +14,10 @@ class Supersoniq {
 	static public $APPLICATION_NAME;
 	static public $PLATFORM_NAME;
 	static public $BASE_URL;
-	static public $EXTENSIONS = array( );
+	static public $EXTENSIONS = [ ];
 	static public $application;
-	private $applications = array( );
-	private $platforms    = array( );
+	private $applications = [ ];
+	private $platforms    = [ ];
 
 
 	/*************************************************************************
@@ -55,7 +55,7 @@ class Supersoniq {
 		$this->initialize_attributes( $request );
 		$this->initialize_settings( );
 		self::$application = $this->instanciate_application( $request );
-		// echo self::$application->current_route( );
+		echo self::$application->current_route( );
 		return $this;
 	}
 
@@ -134,7 +134,7 @@ class Supersoniq {
 	private function get_enabled_extensions( ) {
 		$settings = ( new \Supersoniq\Kernel\Object\Settings );
 		$application_path = \Supersoniq\format_to_path( self::$APPLICATION_NAME );
-		$extensions = array( $application_path );
+		$extensions = [ $application_path ];
 		do {
 			$old = $extensions;
 			$extensions = $settings

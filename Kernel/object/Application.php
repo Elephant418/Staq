@@ -13,9 +13,9 @@ class Application {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	private $modules  = array( );
 	private $current_module;
-	private $routes = array( );
+	private $modules = [ ];
+	private $routes  = [ ];
 
 
 	/*************************************************************************
@@ -32,11 +32,12 @@ class Application {
 				$this->modules[ $module_name ] = $module;
 			} catch ( \Exception $e ) {
 				\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
-				$this->route( $this->action_route( 'Error', 'view', array( 'code' => '500' ) ) );
+				$this->route( $this->action_route( 'Error', 'view', [ 'code' => '500' ] ) );
 			}
 		}
 		return $this;
 	}
+
 	public function render( ) {
 		try {
 			return $this->render_current_route( );
@@ -46,7 +47,7 @@ class Application {
 			return $this->render( );
 		} catch( \Exception $e ) {
 			\Notification::push( $e->getMessage( ), \Notification::EXCEPTION );
-			$this->route( $this->action_route( 'Error', 'view', array( 'code' => '500' ) ) );
+			$this->route( $this->action_route( 'Error', 'view', [ 'code' => '500' ] ) );
 			return $this->render( );
 		}
 	}
@@ -58,6 +59,7 @@ class Application {
 	public function current_route( ) {
 		return end( $this->routes );
 	}
+
 	public function route( $route ) {
 		if ( in_array( $route, $this->routes ) ) {
 			throw new \Exception( 'Redirecting loop detected' );
@@ -65,15 +67,16 @@ class Application {
 		$this->routes[ ] = $route;
 		return $this;
 	}
+
 	public function render_current_route( ) {
 		$current_route = strtolower( $this->current_route( ) );
 		foreach ( $this->modules as $module ) {
 			if ( $callable = $module->handle_route( $current_route ) ) {
 				$this->current_module = $module->type;
-				return call_user_func_array( array( $module, $callable[ 0 ] ), $callable[ 1 ] );
+				return call_user_func_array( [ $module, $callable[ 0 ] ], $callable[ 1 ] );
 			}
 		}
-		throw new \Exception\Redirect( $this->action_route( 'Error', 'view', array( 'code' => '404' ) ), 'Route not found' );
+		throw new \Exception\Redirect( $this->action_route( 'Error', 'view', [ 'code' => '404' ] ), 'Route not found' );
 	}
 
 
@@ -85,19 +88,23 @@ class Application {
 		header( 'Location: ' . $route );
 		die( );
 	}
-	public static function redirect_to_action( $module, $action, $parameters = array( ) ) {
+
+	public static function redirect_to_action( $module, $action, $parameters = [ ] ) {
 		self::redirect( self::action_url( $module, $action, $parameters ) );
 	}
-	public static function action_url( $module, $action, $parameters = array( ) ) {
+
+	public static function action_url( $module, $action, $parameters = [ ] ) {
 		return \Supersoniq::$BASE_URL . $this->action_route( $module, $action, $parameters );
 	}
-	public static function action_route( $module, $action, $parameters = array( ) ) {
+
+	public static function action_route( $module, $action, $parameters = [ ] ) {
 		$module = $this->modules[ $module ];
 		$route = $module->get_action_route( $action, $parameters );
 		return $route;
 	}
-	public static function call_action( $module, $action, $parameters = array( ) ) {
+
+	public static function call_action( $module, $action, $parameters = [ ] ) {
 		$module = $this->modules[ $module ];
-		return call_user_func_array( array( $module, $action ), $parameters );
+		return call_user_func_array( [ $module, $action ], $parameters );
 	}
 }

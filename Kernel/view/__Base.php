@@ -8,7 +8,6 @@ class __Base {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public static $autoload_create_child = 'View\\__Base';
 	const LAYOUT_TEMPLATE = 'layout.html';
 	const VIEW_MODEL_TEMPLATE = 'view_model.html';
 	const EDIT_MODEL_TEMPLATE = 'edit_model.html';
@@ -17,7 +16,7 @@ class __Base {
 	const VIEW_ARCHIVE_TEMPLATE = 'archive/view_archive.html';
 	const DELETED_MODELS_TEMPLATE = 'archive/deleted_models.html';
 
-	protected $_attributes = array( );
+	protected $_attributes = [ ];
 
 
 	/*************************************************************************
