@@ -11,10 +11,11 @@ class Supersoniq {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $application_path;
-	public $platform_name;
-	public $route;
-	public $extensions = array( );
+	static public $APPLICATION;
+	static public $PLATFORM;
+	static public $BASE_URL;
+	static public $EXTENSIONS = array( );
+	private $route;
 	private $applications = array( );
 	private $platforms    = array( );
 
@@ -65,21 +66,23 @@ class Supersoniq {
 	public function context_by_request( $request ) {
 		$this->format_request( $request );
 
-		$platform    = $this->platform_by_request( $request );
-		$this->platform_name    = $platform[ 'name' ];
+		$platform       = $this->platform_by_request( $request );
+		self::$PLATFORM = $platform[ 'name' ];
 		unset( $this->platforms );
 
-		$application = $this->application_by_request( $request, $platform );
-		$this->application_path = $application[ 'path' ];
+		$application       = $this->application_by_request( $request, $platform );
+		self::$APPLICATION = $application[ 'path' ];
 		unset( $this->applications );
 
-		$this->route    = $this->route_by_request( $request, $platform, $application );
-		$this->base_url = $this->base_url_by_request( $request, $platform, $application );
+		self:$BASE_URL = $this->base_url_by_request( $request, $platform, $application );
+		$this->route   = $this->route_by_request( $request, $platform, $application );
 	}
 
 	public function instanciate_application( ) {
-		$this->extensions = $this->get_enabled_extensions( );
-		print_r( $this->extensions );
+		self::$EXTENSIONS = $this->get_enabled_extensions( );
+		( new \Supersoniq\Kernel\Autoloader )->init( );
+		new \Application;
+		print_r( self::$EXTENSIONS );
 	}
 
 
@@ -87,17 +90,15 @@ class Supersoniq {
 	  APPLICATION METHODS                   
 	 *************************************************************************/
 	public function get_enabled_extensions( ) {
-		$settings = ( new \Supersoniq\Kernel\Object\Settings )
-			->file( 'application' )
-			->platform( $this->platform_name );
-		$extensions = array( $this->application_path );
+		$settings = ( new \Supersoniq\Kernel\Object\Settings );
+		$extensions = array( self::$APPLICATION );
 		do {
 			$old = $extensions;
 			$extensions = $settings
 				->extension( $extensions )
-				->load( )
+				->by_file( 'application' )
 				->get_list( 'extensions' );
-			array_unshift( $extensions, $this->application_path );	
+			array_unshift( $extensions, self::$APPLICATION );	
 		} while ( $extensions != $old );
 		return $extensions;
 	}

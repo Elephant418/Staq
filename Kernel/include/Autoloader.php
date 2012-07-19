@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq;
+namespace Supersoniq\Kernel;
 
 class Autoloader {
 
@@ -21,101 +21,111 @@ class Autoloader {
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	private function loader( $absolute_class_name ) {
-		// echo $absolute_class_name . HTML_EOL;
-		$parts = array_reverse( explode( '\\', $absolute_class_name ) );
-		$class_name = $parts[ 0 ];
-		$class_type = 'Object';
-		if ( isset( $parts[ 1 ] ) ) {
-			$class_type = $parts[ 1 ];
-		}
+	private function loader( $class_name ) {
+		$split = $this->split_class_name( $class_name );
 
-		// Specific Module
-		if ( isset( $parts[ 2 ] ) ) {
-			$module = implode( '\\', array_slice( array_reverse( $parts ), 0, -2 ) );
-			if ( ! in_array( $module, Application::$modules ) ) {
-				throw new \Exception( 'Unknown module "' . $module . '"' );
+		// Explicit extension
+		if ( isset( $split[ 'extension' ] ) ) {
+			if ( ! in_array( \Supersoniq\format_to_path( $split[ 'extension' ] ), \Supersoniq::$EXTENSIONS ) ) {
+				throw new \Exception( 'Unknown extension "' . $split[ 'extension' ] . '"' );
 			}
-			if ( $this->load_absolute_class_name( $module, $class_type, $class_name ) ) {
-				return $absolute_class_name;
+			if ( ! $this->load_class( $split ) ) {
+				throw new \Exception( 'Unknown class name "' . $class_name . '"' );
 			}
-			throw new \Exception( 'Unknown absolute class name "' . $absolute_class_name . '"' );
+			return TRUE;
 
-		// Automatic Module
+		// Implicit extension
 		} else {
-			// Short name for an existing class 
-			if ( $real_class_name = $this->load_relative_class_name( $class_type, $class_name ) ) {
-				$this->create_class( $real_class_name, $absolute_class_name );
-				return $real_class_name;
-
-			// Unexisting class created on the fly
-			} else if ( isset( $parts[ 1 ] ) && $class_name != '__Base' ) {
-				$real_class_name = $class_type . '\__Base';
-				if ( ! class_exists( $real_class_name ) ) {
-					$real_class_name = $this->loader( $real_class_name );
-				}
-				if ( $base_class_name = $this->autoload_create_child( $real_class_name ) ) {
-					$this->create_class( $base_class_name, $absolute_class_name );
-					return $base_class_name;
-				}
+			if ( $this->load_implicit_class( $split, $class_name ) ) {
+				return TRUE;
 			}
-			throw new \Exception( 'Unknown relative class name "' . $absolute_class_name . '"' );
+			if ( $this->create_magic_class( $split ) ) {
+				return TRUE;
+			}
+			throw new \Exception( 'Unknown class name "' . $class_name . '"' );
 		}
 	}
-	private function load_relative_class_name( $class_type, $class_name ) {
-		foreach ( Application::$modules as $module ) {
-			if ( $loaded_class_name = $this->load_absolute_class_name( $module, $class_type, $class_name ) ) {
-				return $loaded_class_name;
+
+
+	/*************************************************************************
+	  IMPLICIT EXTENSION LOADER                   
+	 *************************************************************************/
+	private function load_implicit_class( $split, $class ) {
+		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
+			$split[ 'extension' ] = \Supersoniq\format_to_namespace( $extension );
+			if ( $this->load_class( $split ) ) {
+				class_alias( $this->join_class_name( $split ), $class );
+				return TRUE;
 			}
 		}
 		return FALSE;
 	}
-	private function load_absolute_class_name( $module, $class_type, $class_name ) {
-		$module_path = Application::$modules_path[ $module ];
-		$file_path   = strtolower( $class_type ) . '/' . $class_name . '.php';
-		$file_path = $module_path . $file_path;
-		// echo '-- ' . $file_path . HTML_EOL;
+
+
+	/*************************************************************************
+	  EXPLICIT EXTENSION LOADER                   
+	 *************************************************************************/
+	private function load_class( $split ) {
+		$file_path = SUPERSONIQ_ROOT_PATH . \Supersoniq\format_to_path( $split[ 'extension' ] ) . '/';
+		$file_path .= strtolower( $split[ 'type' ] ) . '/' . $split[ 'name' ] . '.php';
 		if ( is_file( $file_path ) ) {
 			require_once( $file_path );
-			
-			// Check class name
-			$classes = get_declared_classes( );
-			$loaded_class_name = end( $classes );
-			$full_class_name = $module . '\\' . $class_type . '\\' . $class_name;
-			if ( $loaded_class_name != $full_class_name ) {
-				throw new \Exception\Wrong_Class_Definition( 'Wrong class name definition in "' . $file_path . '". Found "' . $loaded_class_name . '" definition, but "' . $full_class_name . '" expected.' ); 
-			}
-			return $loaded_class_name;
+			$this->check_class_loaded( $split );
+			return TRUE;
 		}
 		return FALSE;
 	}
-	private function create_class( $real_class_name, $new_class_name ) {
-		$code = '';
-		if ( contains( $new_class_name, '\\' ) ) {
-			$namespace = substr_before_last( $new_class_name, '\\' );
-			$code .= 'namespace ' . $namespace . ';' . PHP_EOL;
-			$new_class_name = substr_after_last( $new_class_name, '\\' );
+	private function check_class_loaded( $split ) {
+		$class = $this->join_class_name( $split );
+		if ( ! class_exists( $class ) ) {
+			$classes = get_declared_classes( );
+			$loaded_class = end( $classes );
+			throw new \Exception\Wrong_Class_Definition( 'Wrong class definition: "' . $loaded_class . '" definition, but "' . $class . '" expected.' ); 
 		}
-		$code .= 'class ' . $new_class_name . ' extends \\' . $real_class_name . ' { }' . PHP_EOL;
-		// echo $code . PHP_EOL;
+	}
+
+
+	/*************************************************************************
+	  MAGIC CLASS CREATION                   
+	 *************************************************************************/
+	private function create_magic_class( $split ) {
+		if ( $split[ 'type' ] != 'Object' && $split[ 'name' ] != '__Base' ) {
+			$settings = ( new \Supersoniq\Kernel\Object\Settings )
+				->by_file( 'application' );
+			if ( $settings->has( 'magic_classes', $split[ 'type' ] ) ) {
+				$base_class = $settings->get( 'magic_classes', $split[ 'type' ] );
+				$this->create_class( $base_class, $split );
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	private function create_class( $base_class, $split ) {
+		$code = 'namespace ' . $split[ 'type' ] . ';' . PHP_EOL;
+		$code .= 'class ' . $split[ 'name' ] . ' extends ' . $base_class . ' { }' . PHP_EOL;
 		eval( $code );
 	}
-	private function autoload_create_child( $class_name ) {
-		if ( $class_name == 'Exception' ) {
-			return '\\Exception';
+
+
+	/*************************************************************************
+	  UTILS METHODS                   
+	 *************************************************************************/
+	private function split_class_name( $class_name ) {
+		$split = array( );	
+		$parts = array_reverse( explode( '\\', $class_name ) );
+		$split[ 'name' ] = $parts[ 0 ];
+		$split[ 'type' ] = 'Object';
+		if ( isset( $parts[ 1 ] ) ) {
+			$split[ 'type' ] = $parts[ 1 ];
 		}
-		return $this->get_user_prop( '\\' . $class_name , 'autoload_create_child' );
+		if ( isset( $parts[ 2 ] ) ) {
+			$split[ 'extension' ] = implode( '\\', array_slice( array_reverse( $parts ), 0, -2 ) );
+		}
+		return $split;
 	}
-	private function get_user_prop( $class_name, $property ) {
-		if( ! class_exists( $class_name ) ) {
-			return NULL;
-		}
-		if( ! property_exists( $class_name, $property ) ) {
-			return NULL;
-		}
-		$class_vars = get_class_vars( $class_name );
-		// echo 'property : ' . $class_vars[ $property ] . PHP_EOL;
-		return $class_vars[ $property ];
+
+	private function join_class_name( $split ) {
+		return $split[ 'extension' ] . '\\' . $split[ 'type' ] . '\\' . $split[ 'name' ];
 	}
 
 }

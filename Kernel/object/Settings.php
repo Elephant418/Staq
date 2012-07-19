@@ -15,32 +15,30 @@ class Settings {
 	 *************************************************************************/
 	private $extensions = array( );
 	private $file_name;
-	private $platform = '';
 	public $settings = array( );
+
+
+
+	/*************************************************************************
+	  CONSTRUCTOR                 
+	 *************************************************************************/
+	public function by_file( $file_name ) {
+		if ( empty( $this->extensions ) ) {
+			$this->extensions = \Supersoniq::$EXTENSIONS;
+		}
+		$this->file_name = $file_name;
+		$this->settings = $this->parse_files( );
+		return $this;
+	}
 
 
 
 	/*************************************************************************
 	  SETTINGS METHODS                   
 	 *************************************************************************/
-	public function file( $file_name ) {
-		$this->file_name = $file_name;
-		return $this;
-	}
-
-	public function platform( $platform ) {
-		$this->platform = $platform;
-		return $this;
-	}
-
 	public function extension( $extensions ) {
 		\Supersoniq\must_be_array( $extensions );
 		$this->extensions = $extensions;
-		return $this;
-	}
-
-	public function load( ) {
-		$this->settings = $this->parse_files( );
 		return $this;
 	}
 
@@ -104,8 +102,8 @@ class Settings {
 		$file_paths = array( );
 		foreach ( $this->extensions as $extension ) {
 			$file_name = $this->file_name;
-			if ( $this->platform ) {
-				$file_name .= '.' . $this->platform;
+			if ( \Supersoniq::$PLATFORM ) {
+				$file_name .= '.' . \Supersoniq::$PLATFORM;
 			}
 			while ( $file_name ) {
 				$file_paths[ ] = $extension . '/settings/' . $file_name . '.ini';
