@@ -7,7 +7,7 @@
 
 namespace Supersoniq\Kernel\Exception;
 
-class Redirect extends \Exception\__Base {
+class Redirect extends \Exception {
 
 
 	/*************************************************************************
