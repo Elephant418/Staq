@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq;
+namespace Supersoniq\Kernel\Object;
 
 class Application {
 
@@ -13,10 +13,8 @@ class Application {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public static $modules      = array( );
-	public static $modules_path = array( );
-	public static $controllers  = array( );
-	public static $current_controller;
+	public static $modules  = array( );
+	public static $current_module;
 	private $routes = array( );
 
 
