@@ -120,7 +120,7 @@ class Settings {
 				$datas[ $file_path ] = $this->settings[ $file_path ];
 			} else {
 				$absolute_file_path = SUPERSONIQ_ROOT_PATH . $file_path;
-				if ( file_exists( $absolute_file_path ) ) {
+				if ( is_file( $absolute_file_path ) ) {
 					$datas[ $file_path ] = parse_ini_file( $absolute_file_path, TRUE );
 				} else {
 					$datas[ $file_path ] = NULL;
