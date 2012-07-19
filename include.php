@@ -17,13 +17,17 @@ require_once( $require_path . 'utils.php' );
 
 // REQUIRE KERNEL CLASSES
 $require_path .= 'Kernel/include/';
-// require_once( $require_path . 'Configuration.php' );
 // require_once( $require_path . 'Autoloader.php' );
 require_once( $require_path . 'Url.php' );
 require_once( $require_path . 'Supersoniq.php' );
 
+// REQUIRE KERNEL OVERRIDABLE OBJECT
+$require_path = SUPERSONIQ_ROOT_PATH . 'Supersoniq/Kernel/object/';
+require_once( $require_path . 'Settings.php' );
+
+// TODO: Autoload
 // INIT AUTOLOADER 
 /*
-$autoloader = new \Supersoniq\Autoloader( );
+$autoloader = new \Supersoniq\Autoloader;
 $autoloader->init( );
 */

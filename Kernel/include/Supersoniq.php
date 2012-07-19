@@ -14,16 +14,9 @@ class Supersoniq {
 	public $application_path;
 	public $platform_name;
 	public $route;
+	public $extensions = array( );
 	private $applications = array( );
 	private $platforms    = array( );
-
-
-	/*************************************************************************
-	  CONSTRUCTOR                   
-	 *************************************************************************/
-	public function __construct( ) {
-		// TODO: Instance a default error module
-	}
 
 
 	/*************************************************************************
@@ -48,9 +41,7 @@ class Supersoniq {
 
 	private function format_listenings( &$listenings ) {
 		$listenings = ( new \Supersoniq\Kernel\Url )->from( $listenings );
-		if ( ! is_array( $listenings ) ) {
-			$listenings = array( $listenings );
-		}
+		\Supersoniq\must_be_array( $listenings );
 		return $listenings;
 	}  
 
@@ -59,27 +50,56 @@ class Supersoniq {
 	  RUN METHODS                   
 	 *************************************************************************/
 	public function run( $request = NULL ) {
+		// TODO: Instance a default error module
+
 		$this->context_by_request( $request );
-		// $this->load_configuration( );
+		$this->instanciate_application( );
+
+		// TODO: Get enabled modules
+		// TODO: Set errors
 		// TODO: Instance an Application
+
+		return $this;
 	}
 
 	public function context_by_request( $request ) {
 		$this->format_request( $request );
+
 		$platform    = $this->platform_by_request( $request );
-		$application = $this->application_by_request( $request, $platform );
-		$this->route = $this->route_by_request( $request, $platform, $application );
-		$this->base_url         = $this->base_url_by_request( $request, $platform, $application );
 		$this->platform_name    = $platform[ 'name' ];
+		unset( $this->platforms );
+
+		$application = $this->application_by_request( $request, $platform );
 		$this->application_path = $application[ 'path' ];
+		unset( $this->applications );
+
+		$this->route    = $this->route_by_request( $request, $platform, $application );
+		$this->base_url = $this->base_url_by_request( $request, $platform, $application );
 	}
 
-	public function load_configuration( ) {
-		$configuration = new \Supersoniq\Kernel\Object\Configuration( 'application' );
-		// TODO: Iterate an enabled extensions with platform
-		// TODO: Get enabled extensions
-		// TODO: Get enabled modules
-		// TODO: Set errors
+	public function instanciate_application( ) {
+		$this->extensions = $this->get_enabled_extensions( );
+		print_r( $this->extensions );
+	}
+
+
+	/*************************************************************************
+	  APPLICATION METHODS                   
+	 *************************************************************************/
+	public function get_enabled_extensions( ) {
+		$settings = ( new \Supersoniq\Kernel\Object\Settings )
+			->file( 'application' )
+			->platform( $this->platform_name );
+		$extensions = array( $this->application_path );
+		do {
+			$old = $extensions;
+			$extensions = $settings
+				->extension( $extensions )
+				->load( )
+				->get_list( 'extensions' );
+			array_unshift( $extensions, $this->application_path );	
+		} while ( $extensions != $old );
+		return $extensions;
 	}
 
 
@@ -169,7 +189,7 @@ class Supersoniq {
 	}
 
 	private function format_application_path( &$application_path ) {
-		$application_path = str_replace( '\\', '/', $application_path );
+		$application_path = \Supersoniq\format_to_path( $application_path );
 		return $application_path;
 	}
 }
