@@ -32,7 +32,8 @@ class Autoloader {
 			if ( $this->create_magic_parent( $split ) ) {
 				return TRUE;
 			}
-			class_alias( $class, 'Supersoniq\Kernel\Empty_Class' );
+			class_alias( 'Supersoniq\Kernel\Empty_Class', $class );
+			return TRUE;
 
 		// Explicit extension
 		} else if ( isset( $split[ 'extension' ] ) ) {
