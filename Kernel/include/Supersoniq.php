@@ -15,9 +15,9 @@ class Supersoniq {
 	static public $PLATFORM_NAME;
 	static public $BASE_URL;
 	static public $EXTENSIONS = [ ];
-	static public $application;
-	private $applications = [ ];
-	private $platforms    = [ ];
+	static public $MODULES    = [ ];
+	private $applications     = [ ];
+	private $platforms        = [ ];
 
 
 	/*************************************************************************
@@ -54,8 +54,8 @@ class Supersoniq {
 		$this->format_request( $request );
 		$this->initialize_attributes( $request );
 		$this->initialize_settings( );
-		self::$application = $this->instanciate_application( $request );
-		echo self::$application->current_route( );
+		$application = $this->instanciate_application( $request );
+		$application->render( );
 		return $this;
 	}
 
@@ -65,15 +65,9 @@ class Supersoniq {
 	  APPLICATION METHODS                   
 	 *************************************************************************/
 	private function instanciate_application( $request ) {
-		$this->activate_autoload( );
 		$route = $this->route_by_request( $request );
 		return ( new \Application )
-			->route( $route )
-			->load_modules( );
-	}
-
-	private function activate_autoload( ) {
-		( new \Supersoniq\Kernel\Autoloader )->init( );
+			->route( $route );
 	}
 
 	private function route_by_request( $request ) {
@@ -87,17 +81,25 @@ class Supersoniq {
 	private function initialize_settings( ) {
 		$settings = ( new \Supersoniq\Kernel\Object\Settings )
 			->by_file( 'application' );
+		$this->initialize_settings_error( $settings );
+		$this->initialize_settings_timezone( $settings );
+	}
 
-		// Errors
+	private function initialize_settings_error( $settings ) {
 		ini_set( 'display_errors', $settings->get( 'errors', 'display_errors' ) );
 		$level = $settings->get( 'errors', 'error_reporting' );
 		if ( ! is_numeric( $level ) ) {
 			$level = constant( $level );
 		}
 		error_reporting( $level );
+	}
 
-		// Service
+	private function initialize_settings_timezone( $settings ) {
 		date_default_timezone_set( $settings->get( 'service', 'timezone' ) );
+	}
+
+	private function activate_autoload( ) {
+		( new \Supersoniq\Kernel\Autoloader )->init( );
 	}
 
 
@@ -110,7 +112,9 @@ class Supersoniq {
 		self::$PLATFORM_NAME    = $platform[ 'name' ];
 		self::$APPLICATION_NAME = \Supersoniq\format_to_namespace( $application[ 'path' ] );
 		self::$BASE_URL         = $this->base_url_by_request( $request, $platform, $application );
-		self::$EXTENSIONS       = $this->get_enabled_extensions( );
+		self::$EXTENSIONS       = $this->get_extensions( );
+		$this->activate_autoload( );
+		self::$MODULES          = $this->get_modules( );
 	}
 
 	private function format_request( &$request ) {
@@ -131,7 +135,7 @@ class Supersoniq {
 			->to_string( );
 	}
 
-	private function get_enabled_extensions( ) {
+	private function get_extensions( ) {
 		$settings = ( new \Supersoniq\Kernel\Object\Settings );
 		$application_path = \Supersoniq\format_to_path( self::$APPLICATION_NAME );
 		$extensions = [ $application_path ];
@@ -144,6 +148,19 @@ class Supersoniq {
 			array_unshift( $extensions, $application_path );	
 		} while ( $extensions != $old );
 		return $extensions;
+	}
+
+	private function get_modules( ) {
+		$modules = [ ];
+		$module_names = ( new \Settings )
+			->by_file( 'application' )
+			->get_list( 'modules' );
+		foreach( $module_names as $module_name ) {
+			$module_class = '\\Module\\' . $module_name;
+			$module = new $module_class;
+			$modules[ $module_name ] = $module;
+		}
+		return $modules;
 	}
 
 
