@@ -21,29 +21,59 @@ class Autoloader {
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	private function loader( $class_name ) {
-		$split = $this->split_class_name( $class_name );
+	private function loader( $class ) {
+		$split = $this->split_class( $class );
+
+		// Explicit parent extension
+		if ( isset( $split[ 'parent' ] ) ) {
+			if ( $this->load_parent_class( $split, $class ) ) {
+				return TRUE;
+			}
+			if ( $this->create_magic_parent( $split ) ) {
+				return TRUE;
+			}
+			class_alias( $class, 'Supersoniq\Kernel\Empty_Class' );
 
 		// Explicit extension
-		if ( isset( $split[ 'extension' ] ) ) {
+		} else if ( isset( $split[ 'extension' ] ) ) {
 			if ( ! in_array( \Supersoniq\format_to_path( $split[ 'extension' ] ), \Supersoniq::$EXTENSIONS ) ) {
 				throw new \Exception( 'Unknown extension "' . $split[ 'extension' ] . '"' );
 			}
 			if ( ! $this->load_class( $split ) ) {
-				throw new \Exception( 'Unknown class name "' . $class_name . '"' );
+				throw new \Exception( 'Unknown class "' . $class . '"' );
 			}
 			return TRUE;
 
 		// Implicit extension
 		} else {
-			if ( $this->load_implicit_class( $split, $class_name ) ) {
+			if ( $this->load_implicit_class( $split, $class ) ) {
 				return TRUE;
 			}
 			if ( $this->create_magic_class( $split ) ) {
 				return TRUE;
 			}
-			throw new \Exception( 'Unknown class name "' . $class_name . '"' );
+			throw new \Exception( 'Unknown class "' . $class . '"' );
 		}
+	}
+
+
+	/*************************************************************************
+	  IMPLICIT PARENT LOADER                   
+	 *************************************************************************/
+	private function load_parent_class( $split, $class ) {
+		$parents = FALSE;
+		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
+			if ( $parents ) {
+				$split[ 'extension' ] = \Supersoniq\format_to_namespace( $extension );
+				if ( $this->load_class( $split ) ) {
+					class_alias( $this->join_class( $split ), $class );
+					return TRUE;
+				}
+			} else if ( $split[ 'extension' ] == \Supersoniq\format_to_namespace( $extension ) ) {
+				$parents = TRUE;
+			}
+		}
+		return FALSE;
 	}
 
 
@@ -54,7 +84,7 @@ class Autoloader {
 		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
 			$split[ 'extension' ] = \Supersoniq\format_to_namespace( $extension );
 			if ( $this->load_class( $split ) ) {
-				class_alias( $this->join_class_name( $split ), $class );
+				class_alias( $this->join_class( $split ), $class );
 				return TRUE;
 			}
 		}
@@ -76,7 +106,7 @@ class Autoloader {
 		return FALSE;
 	}
 	private function check_class_loaded( $split ) {
-		$class = $this->join_class_name( $split );
+		$class = $this->join_class( $split );
 		if ( ! class_exists( $class ) ) {
 			$classes = get_declared_classes( );
 			$loaded_class = end( $classes );
@@ -88,12 +118,21 @@ class Autoloader {
 	/*************************************************************************
 	  MAGIC CLASS CREATION                   
 	 *************************************************************************/
+	private function create_magic_parent( $split ) {
+		if ( $this->create_magic( $split, 'magic_parents' ) ) {
+			return TRUE;
+		}
+		return $this->create_magic_class( $split );
+	}
 	private function create_magic_class( $split ) {
+		return $this->create_magic( $split, 'magic_classes' );
+	}
+	private function create_magic( $split, $property ) {
 		if ( $split[ 'type' ] != 'Object' && $split[ 'name' ] != '__Base' ) {
 			$settings = ( new \Supersoniq\Kernel\Object\Settings )
 				->by_file( 'application' );
-			if ( $settings->has( 'magic_classes', $split[ 'type' ] ) ) {
-				$base_class = $settings->get( 'magic_classes', $split[ 'type' ] );
+			if ( $settings->has( $property, $split[ 'type' ] ) ) {
+				$base_class = $settings->get( $property, $split[ 'type' ] );
 				$this->create_class( $base_class, $split );
 				return TRUE;
 			}
@@ -110,9 +149,13 @@ class Autoloader {
 	/*************************************************************************
 	  UTILS METHODS                   
 	 *************************************************************************/
-	private function split_class_name( $class_name ) {
+	private function split_class( $class ) {
 		$split = array( );	
-		$parts = array_reverse( explode( '\\', $class_name ) );
+		$parts = array_reverse( explode( '\\', $class ) );
+		if ( $parts[ 0 ] == '__Parent' ) {
+			$split[ 'parent' ] = TRUE; 
+			$parts = array_slice( $parts, 1 );
+		}
 		$split[ 'name' ] = $parts[ 0 ];
 		$split[ 'type' ] = 'Object';
 		if ( isset( $parts[ 1 ] ) ) {
@@ -124,8 +167,10 @@ class Autoloader {
 		return $split;
 	}
 
-	private function join_class_name( $split ) {
+	private function join_class( $split ) {
 		return $split[ 'extension' ] . '\\' . $split[ 'type' ] . '\\' . $split[ 'name' ];
 	}
 
 }
+
+class Empty_Class { }
