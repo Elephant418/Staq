@@ -52,8 +52,9 @@ class Url {
 			$string = \Supersoniq\substr_after( $string, ':' );
 			$return->port = intval( \Supersoniq\cut_before( $string, '/' ) );
 		}
-		if ( ! empty( $string ) && strlen( $string ) > 1 ) {
+		if ( ! empty( $string ) ) {
 			$return->uri = $string;
+			\Supersoniq\must_not_ends_with( $return->uri, '/' );
 		}
 		return $return;
 	}
