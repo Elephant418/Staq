@@ -102,8 +102,8 @@ class Settings {
 		$file_paths = array( );
 		foreach ( $this->extensions as $extension ) {
 			$file_name = $this->file_name;
-			if ( \Supersoniq::$PLATFORM ) {
-				$file_name .= '.' . \Supersoniq::$PLATFORM;
+			if ( \Supersoniq::$PLATFORM_NAME ) {
+				$file_name .= '.' . \Supersoniq::$PLATFORM_NAME;
 			}
 			while ( $file_name ) {
 				$file_paths[ ] = $extension . '/settings/' . $file_name . '.ini';

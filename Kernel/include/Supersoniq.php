@@ -11,11 +11,11 @@ class Supersoniq {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	static public $APPLICATION;
-	static public $PLATFORM;
+	static public $APPLICATION_NAME;
+	static public $PLATFORM_NAME;
 	static public $BASE_URL;
 	static public $EXTENSIONS = array( );
-	private $route;
+	static public $application;
 	private $applications = array( );
 	private $platforms    = array( );
 
@@ -51,62 +51,68 @@ class Supersoniq {
 	  RUN METHODS                   
 	 *************************************************************************/
 	public function run( $request = NULL ) {
-		// TODO: Instance a default error module
-
-		$this->context_by_request( $request );
-		$this->instanciate_application( );
-
-		// TODO: Get enabled modules
-		// TODO: Set errors
-		// TODO: Instance an Application
-
+		$this->format_request( $request );
+		$this->initialize_attributes( $request );
+		$this->initialize_settings( );
+		self::$application = $this->instanciate_application( $request );
+		// echo self::$application->current_route( );
 		return $this;
 	}
 
-	public function context_by_request( $request ) {
-		$this->format_request( $request );
-
-		$platform       = $this->platform_by_request( $request );
-		self::$PLATFORM = $platform[ 'name' ];
-		unset( $this->platforms );
-
-		$application       = $this->application_by_request( $request, $platform );
-		self::$APPLICATION = $application[ 'path' ];
-		unset( $this->applications );
-
-		self:$BASE_URL = $this->base_url_by_request( $request, $platform, $application );
-		$this->route   = $this->route_by_request( $request, $platform, $application );
-	}
-
-	public function instanciate_application( ) {
-		self::$EXTENSIONS = $this->get_enabled_extensions( );
-		( new \Supersoniq\Kernel\Autoloader )->init( );
-		new \Application;
-		print_r( self::$EXTENSIONS );
-	}
 
 
 	/*************************************************************************
 	  APPLICATION METHODS                   
 	 *************************************************************************/
-	public function get_enabled_extensions( ) {
-		$settings = ( new \Supersoniq\Kernel\Object\Settings );
-		$extensions = array( self::$APPLICATION );
-		do {
-			$old = $extensions;
-			$extensions = $settings
-				->extension( $extensions )
-				->by_file( 'application' )
-				->get_list( 'extensions' );
-			array_unshift( $extensions, self::$APPLICATION );	
-		} while ( $extensions != $old );
-		return $extensions;
+	private function instanciate_application( $request ) {
+		$this->activate_autoload( );
+		$route = $this->route_by_request( $request );
+		return ( new \Application )
+			->route( $route )
+			->load_modules( );
+	}
+
+	private function activate_autoload( ) {
+		( new \Supersoniq\Kernel\Autoloader )->init( );
+	}
+
+	private function route_by_request( $request ) {
+		return \Supersoniq\substr_after( $request->to_string( ), self::$BASE_URL );
 	}
 
 
 	/*************************************************************************
-	  CONTEXT METHODS                   
+	  SETTINGS METHODS                   
 	 *************************************************************************/
+	private function initialize_settings( ) {
+		$settings = ( new \Supersoniq\Kernel\Object\Settings )
+			->by_file( 'application' );
+
+		// Errors
+		ini_set( 'display_errors', $settings->get( 'errors', 'display_errors' ) );
+		$level = $settings->get( 'errors', 'error_reporting' );
+		if ( ! is_numeric( $level ) ) {
+			$level = constant( $level );
+		}
+		error_reporting( $level );
+
+		// Service
+		date_default_timezone_set( $settings->get( 'service', 'timezone' ) );
+	}
+
+
+	/*************************************************************************
+	  ATTRIBUTES METHODS                   
+	 *************************************************************************/
+	private function initialize_attributes( $request ) {
+		$platform               = $this->platform_by_request( $request );
+		$application            = $this->application_by_request( $request, $platform );
+		self::$PLATFORM_NAME    = $platform[ 'name' ];
+		self::$APPLICATION_NAME = \Supersoniq\format_to_namespace( $application[ 'path' ] );
+		self::$BASE_URL         = $this->base_url_by_request( $request, $platform, $application );
+		self::$EXTENSIONS       = $this->get_enabled_extensions( );
+	}
+
 	private function format_request( &$request ) {
 		if ( is_null( $request ) ) {
 			$request = ( new \Supersoniq\Kernel\Url )->by_server( );
@@ -117,18 +123,27 @@ class Supersoniq {
 	}
 
 	private function base_url_by_request( $request, $platform, $application ) {
-		return $request
+		$base_url = clone $request;
+		return $base_url
 			->reset_uri( )
 			->add_uri( $platform[ 'listening' ] )
 			->add_uri( $application[ 'listening' ] )
 			->to_string( );
 	}
 
-	private function route_by_request( $request, $platform, $application ) {
-		return $request
-			->diff_uri( $platform[ 'listening' ] )
-			->diff_uri( $application[ 'listening' ] )
-			->uri;
+	private function get_enabled_extensions( ) {
+		$settings = ( new \Supersoniq\Kernel\Object\Settings );
+		$application_path = \Supersoniq\format_to_path( self::$APPLICATION_NAME );
+		$extensions = array( $application_path );
+		do {
+			$old = $extensions;
+			$extensions = $settings
+				->extension( $extensions )
+				->by_file( 'application' )
+				->get_list( 'extensions' );
+			array_unshift( $extensions, $application_path );	
+		} while ( $extensions != $old );
+		return $extensions;
 	}
 
 
@@ -160,7 +175,8 @@ class Supersoniq {
 	  APPLICATION METHODS                
 	 *************************************************************************/
 	private function application_by_request( $request, $platform ) {
-		$unmatched = $request->diff( $platform[ 'listening' ] );
+		$unmatched = clone $request;
+		$unmatched = $unmatched->diff( $platform[ 'listening' ] );
 		foreach ( $this->applications as $application ) {
 			if ( $application[ 'listening' ]->match( $unmatched ) ) {
 				return $application;
