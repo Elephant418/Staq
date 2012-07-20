@@ -119,7 +119,7 @@ class Url {
 	  URI TREATMENT METHODS                   
 	 *************************************************************************/
 	public function diff_uri( $url ) {
-		if ( is_object( $url ) && ! is_null( $url->uri ) ) {
+		if ( is_object( $url ) && ! empty( $url->uri ) ) {
 			$this->uri = \Supersoniq\substr_after( $this->uri, $url->uri );
 			\Supersoniq\must_starts_with( $this->uri, '/' );
 		}
