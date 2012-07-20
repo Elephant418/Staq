@@ -63,13 +63,13 @@ class Settings {
 		return $enabled;
 	}
 
-	public function get( $section, $property ) {
+	public function get( $section, $property, $default = NULL ) {
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $section ][ $property ] ) ) {
 				return $data[ $section ][ $property ];
 			}
 		}
-		return NULL;
+		return $default;
 	}
 
 	public function get_deep_array( $section, $property ) {
