@@ -31,6 +31,10 @@ class Public_File {
 		return FALSE;
 	}
 
+	public function handle_exception( $exception ) {
+		return FALSE;
+	}
+
 
 
 	/*************************************************************************
@@ -50,7 +54,7 @@ class Public_File {
 
 	
 	/**************************************************************************
-				UTILS					 
+	  UTILS					 
 	 *************************************************************************/
 	private function get_content_type( $file_path ) {
 		$extension = \Supersoniq\substr_after( $file_path, '.' );

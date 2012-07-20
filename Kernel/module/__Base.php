@@ -37,6 +37,10 @@ abstract class __Base {
 		return FALSE;
 	}
 
+	public function handle_exception( $exception ) {
+		return FALSE;
+	}
+
 	public function get_side_route( $side, $parameters = [ ] ) {
 		
 	}
