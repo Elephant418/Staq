@@ -11,6 +11,7 @@ class Supersoniq {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+	static public $application;
 	static public $APPLICATION_NAME;
 	static public $PLATFORM_NAME;
 	static public $BASE_URL;
@@ -51,12 +52,15 @@ class Supersoniq {
 	  RUN METHODS                   
 	 *************************************************************************/
 	public function run( $request = NULL ) {
+		echo $this->render( $request );
+		return $this;
+	}
+	public function render( $request = NULL ) {
 		$this->format_request( $request );
 		$this->initialize_attributes( $request );
 		$this->initialize_settings( );
-		$application = $this->instanciate_application( $request );
-		$application->render( );
-		return $this;
+		self::$application = $this->instanciate_application( $request );
+		return self::$application->render( );
 	}
 
 
@@ -86,16 +90,16 @@ class Supersoniq {
 	}
 
 	private function initialize_settings_error( $settings ) {
-		ini_set( 'display_errors', $settings->get( 'errors', 'display_errors' ) );
-		$level = $settings->get( 'errors', 'error_reporting' );
+		ini_set( 'display_errors', 1 ); // $settings->get( 'errors', 'display_errors' ) );
+		$level = $settings->get( 'errors', 'error_reporting', 0 );
 		if ( ! is_numeric( $level ) ) {
 			$level = constant( $level );
 		}
-		error_reporting( $level );
+		error_reporting( E_ALL ); // $level );
 	}
 
 	private function initialize_settings_timezone( $settings ) {
-		date_default_timezone_set( $settings->get( 'service', 'timezone' ) );
+		date_default_timezone_set( $settings->get( 'service', 'timezone', 'Europe/Paris' ) );
 	}
 
 	private function activate_autoload( ) {
