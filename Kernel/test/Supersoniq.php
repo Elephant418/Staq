@@ -47,68 +47,57 @@ class Supersoniq extends __Base {
 	}
 
 	public function test_base_url_path( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost:5000/path/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/tralalala' );
 		return $this->assert_equals( $sq::$BASE_URL, 'http://localhost:5000/path' );
 	}
 
 	public function test_base_url_double_path( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost:5000/path/bou/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/bou/tralalala' );
 		return $this->assert_equals( $sq::$BASE_URL, 'http://localhost:5000/path/bou' );
 	}
 
 	public function test_route_path( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost:5000/path/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/tralalala' );
 		return $this->assert_equals( $sq::$application->current_route( ), '/tralalala' );
 	}
 
 	public function test_route_double_path( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost:5000/path/bou/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/bou/tralalala' );
 		return $this->assert_equals( $sq::$application->current_route( ), '/tralalala' );
 	}
 
 	public function test_complex_platform_full( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost:5000/path' );
+		$sq = $this->complex_supersoniq( 'http://localhost:5000/path' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'full' );
 	}
 
 	public function test_complex_platform_hostport( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost:5000/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://localhost:5000/tralalala' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'hostport' );
 	}
 
 	public function test_complex_platform_host( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://localhost/great/power' );
+		$sq = $this->complex_supersoniq( 'http://localhost/great/power' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'host' );
 	}
 
 	public function test_complex_platform_portpath( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://hostname:5000/path/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://hostname:5000/path/tralalala' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'portpath' );
 	}
 
 	public function test_complex_platform_port( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://hostname:5000/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://hostname:5000/tralalala' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'port' );
 	}
 
 	public function test_complex_platform_path( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://hostname/path/tralalala' );
+		$sq = $this->complex_supersoniq( 'http://hostname/path/tralalala' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'path' );
 	}
 
 	public function test_complex_platform_default( ) {
-		$sq = $this->complex_supersoniq( );
-		$sq->run( 'http://hostname/great/power' );
+		$sq = $this->complex_supersoniq( 'http://hostname/great/power' );
 		return $this->assert_equals( $sq::$PLATFORM_NAME, 'prod' );
 	}
 
@@ -118,11 +107,13 @@ class Supersoniq extends __Base {
 	  UTILS
 	 *************************************************************************/
 	public function default_supersoniq_request( ) {
-		$sq = new \Supersoniq;
-		$sq->run( 'http://hostname/path' );
+		try {
+			$sq = new \Supersoniq;
+			$sq->render( 'http://hostname/path' );
+		} catch ( \Exception $exception ) { }
 		return $sq;
 	}
-	public function complex_supersoniq( ) {
+	public function complex_supersoniq( $request ) {
 		$sq = ( new \Supersoniq )
 			->application( 'coco', '/bou' )
 			->platform( 'full'     , 'http://localhost:5000/path')
@@ -132,6 +123,9 @@ class Supersoniq extends __Base {
 			->platform( 'portpath' , ':5000/path')
 			->platform( 'port'     , ':5000')
 			->platform( 'path'     , '/path');
+		try {
+			$sq->render( $request );
+		} catch ( \Exception $exception ) { }
 		return $sq;
 	}
 
