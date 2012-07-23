@@ -22,7 +22,14 @@ class Settings {
 	/*************************************************************************
 	  CONSTRUCTOR                 
 	 *************************************************************************/
+	public function by_file_type( $file_type, $file_name ) {
+		$file_name = $file_type . '/' . $file_name;
+		return $this->by_file( $file_name );
+	}
 	public function by_file( $file_name ) {
+		if ( ! empty( $file_type ) ) {
+			$file_name = $file_type . '/' . $file_name;
+		}
 		if ( empty( $this->extensions ) ) {
 			$this->extensions = \Supersoniq::$EXTENSIONS;
 		}
@@ -71,6 +78,21 @@ class Settings {
 		}
 		return $default;
 	}
+
+	public function get_array( $section ) {
+		$array = [ ];
+		foreach ( $this->settings as $data ) {
+			if ( isset( $data[ $section ] ) ) {
+				foreach ( $data[ $section ] as $name => $value ) {
+					if ( ! isset( $array[ $name ] ) ) {
+						$array[ $name ] = $value;
+					}
+				}
+			}
+		}
+		return $array;
+	}
+
 
 	public function get_deep_array( $section, $property ) {
 		$deep_array = [ ];
