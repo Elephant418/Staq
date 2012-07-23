@@ -16,6 +16,7 @@ abstract class __Base {
 	 *************************************************************************/
 	public $type;
 	public $routes;
+	public $settings;
 
 
 
@@ -23,9 +24,33 @@ abstract class __Base {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( ) {
-		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
-		// TODO: get routes from settings
-		// TODO: get routes from views
+		$this->type     = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
+		$this->settings = $this->get_settings( );
+		$this->routes   = $this->get_routes( );
+	}
+	private function get_settings( ) {
+		return ( new \Settings )->by_file_type( 'module', strtolower( $this->type ) );
+	}
+	private function get_pages( ) {
+		$pages = $this->settings->get_list( 'pages' );
+		if ( empty( $actions ) ) {
+			$pages = array_diff( get_class_methods( $this ), get_class_methods( get_class( ) ) );
+		}
+		return $pages;
+	}
+	private function get_routes( ) {
+		$pages = $this->get_pages( );
+		$routes = [ ];
+		foreach ( $pages as $page ) {
+			$route = $this->settings->get_array( 'routes_' . $page );
+			if ( empty( $route ) ) {
+				$route = ( new \Route )->from_string( '/' . strtolower( $this->type ) . '/' . $page );
+			} else {
+				$route = ( new \Route )->from_array( $route );
+			}
+			$routes[ $page ] = $route;
+		}
+		return $routes;
 	}
 
 
@@ -34,15 +59,20 @@ abstract class __Base {
 	  ROUTE METHODS                   
 	 *************************************************************************/
 	public function handle_route( $route ) {
-		return FALSE;
+		foreach ( $this->routes as $page => $handle ) {
+			$parameters = $handle->handle( $route );
+			if ( $parameters !== FALSE ) {
+				return [ $page, $parameters ];
+			}
+		}
 	}
 
 	public function handle_exception( $exception ) {
 		return FALSE;
 	}
 
-	public function get_side_route( $side, $parameters = [ ] ) {
-		
+	public function get_page_route( $page, $parameters = [ ] ) {
+		return $this->routes[ $page ]->to_string( $parameters );
 	}
 }
 
