@@ -141,8 +141,9 @@ class Autoloader {
 		return FALSE;
 	}
 	private function create_class( $base_class, $split ) {
-		$code = 'namespace ' . $split[ 'type' ] . ';' . PHP_EOL;
-		$code .= 'class ' . $split[ 'name' ] . ' extends ' . $base_class . ' { }' . PHP_EOL;
+		$name = array_pop( $split );
+		$code = 'namespace ' . implode( '\\', $split ) . ';' . PHP_EOL;
+		$code .= 'class ' . $name . ' extends ' . $base_class . ' { }' . PHP_EOL;
 		eval( $code );
 	}
 
@@ -154,7 +155,7 @@ class Autoloader {
 		$split = [ ];	
 		$parts = array_reverse( explode( '\\', $class ) );
 		if ( $parts[ 0 ] == '__Parent' ) {
-			$split[ 'parent' ] = TRUE; 
+			$split[ 'parent' ] = '__Parent'; 
 			$parts = array_slice( $parts, 1 );
 		}
 		$split[ 'name' ] = $parts[ 0 ];
@@ -165,6 +166,7 @@ class Autoloader {
 		if ( isset( $parts[ 2 ] ) ) {
 			$split[ 'extension' ] = implode( '\\', array_slice( array_reverse( $parts ), 0, -2 ) );
 		}
+		$split = array_reverse( $split );
 		return $split;
 	}
 
