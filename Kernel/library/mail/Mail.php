@@ -1,7 +1,5 @@
 <?php
 
-namespace Supersoniq\Packadata\Kernel\Object;
-
 /**
 * Simple Mail class.
 *

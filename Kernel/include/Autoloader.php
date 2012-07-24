@@ -11,10 +11,19 @@ class Autoloader {
 
 
 	/*************************************************************************
+	  ATTRIBUTES                   
+	 *************************************************************************/
+        private $settings;
+        private $library;
+
+
+	/*************************************************************************
 	  CONSTRUCTOR                   
 	 *************************************************************************/
         public function init( ) {
 		spl_autoload_register( [ $this, 'loader' ] );
+		$this->settings = ( new \Settings )->by_file( 'application' );
+		$this->library  = $this->settings->get_array( 'library' );
         }
 
 
@@ -24,8 +33,12 @@ class Autoloader {
 	private function loader( $class ) {
 		$split = $this->split_class( $class );
 
+		// External library
+		if ( isset( $this->library[ $class ] ) ) {
+			require_once( SUPERSONIQ_ROOT_PATH . $this->library[ $class ] );
+
 		// Explicit parent extension
-		if ( isset( $split[ 'parent' ] ) ) {
+		} else if ( isset( $split[ 'parent' ] ) ) {
 			if ( $this->load_parent_class( $split, $class ) ) {
 				return TRUE;
 			}
@@ -130,10 +143,8 @@ class Autoloader {
 	}
 	private function create_magic( $split, $property ) {
 		if ( $split[ 'type' ] != 'Object' && $split[ 'name' ] != '__Base' ) {
-			$settings = ( new \Supersoniq\Kernel\Object\Settings )
-				->by_file( 'application' );
-			if ( $settings->has( $property, $split[ 'type' ] ) ) {
-				$base_class = $settings->get( $property, $split[ 'type' ] );
+			if ( $this->settings->has( $property, $split[ 'type' ] ) ) {
+				$base_class = $this->settings->get( $property, $split[ 'type' ] );
 				$this->create_class( $base_class, $split );
 				return TRUE;
 			}

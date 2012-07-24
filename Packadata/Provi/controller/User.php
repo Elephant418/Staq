@@ -92,7 +92,7 @@ class User extends  \Controller\__Base {
 				$user->activation_code = $user->id . \String::random( 20 );
 				$user->save( );
 				$activation_url = $_SERVER[ 'SERVER_NAME' ] . '/user/activate/' . $user->id . '/' . $user->activation_code;
-				$mailer = new \Mail( TRUE );
+				$mailer = new Mail( TRUE );
 				$send   = $mailer->setTo( $user->email, $user->name( ) )
 						->setSubject( 'Activate your account' )
 						->setFrom( 'noreply@supersoniq.org', 'Supersoniq' )
