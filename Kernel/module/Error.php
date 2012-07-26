@@ -34,9 +34,6 @@ class Error extends \Module\__Base {
 		return FALSE;
 	}
 
-	public function get_side_route( $side, $parameters = [ ] ) {
-		
-	}
 
 
 	/*************************************************************************
