@@ -87,16 +87,21 @@ class Class_Name {
 		return $this->name == '__Base';
 	}
 
+	public function get_name( ) {
+		return \Supersoniq\substr_after_last( $this->name, '\\' );
+	}
+
+
 	public function get_namespace( ) {
+		return \Supersoniq\substr_before_last( $this->get_full_class_name( ), '\\' );
+	}
+
+	public function get_full_class_name( ) {
 		$namespace = '';
 		if ( ! is_null( $this->extension ) ) {
 			$namespace .= $this->extension . '\\';
 		}
-		return $namespace . $this->type;
-	}
-
-	public function get_full_class_name( ) {
-		return $this->get_namespace( ) . '\\' . $this->name;
+		return $namespace . $this->type . '\\' . $this->name;
 	}
 
 	public function get_file_path( ) {
