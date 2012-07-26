@@ -160,8 +160,7 @@ class Supersoniq {
 			->by_file( 'application' )
 			->get_list( 'modules' );
 		foreach( $module_names as $module_name ) {
-			$module_class = '\\Module\\' . $module_name;
-			$module = new $module_class;
+			$module = ( new \Module )->by_name( $module_name );
 			$modules[ $module_name ] = $module;
 		}
 		return $modules;
