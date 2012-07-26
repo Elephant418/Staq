@@ -19,6 +19,7 @@ class Class_Name {
 	public $type;
 	public $name;
 	public $is_parent = FALSE;
+	public $is_auto_extension = FALSE;
 
 
 	/*************************************************************************
@@ -57,6 +58,7 @@ class Class_Name {
 		// EXTENSION
 		if ( count( $parts ) >= 3 ) {
 			if ( $parts[ 0 ] == '__Auto' ) {
+				$this->is_auto_extension = TRUE; 
 				$this->extension = NULL; 
 				$parts = array_slice( $parts, 1 );
 			} else {
@@ -79,7 +81,7 @@ class Class_Name {
 			$this->type = $parts[ 0 ]; 
 			$parts = array_slice( $parts, 1 );
 		} else {
-			$this->type = 'Object';
+			$this->type = self::OBJECT;
 		}
 		
 		// NAME
@@ -101,6 +103,10 @@ class Class_Name {
 
 	public function is_parent( ) {
 		return $this->is_parent;
+	}
+
+	public function is_auto_extension( ) {
+		return $this->is_auto_extension;
 	}
 
 	public function is_base( ) {

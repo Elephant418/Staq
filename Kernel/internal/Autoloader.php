@@ -192,6 +192,9 @@ class Autoloader {
 		if ( $class->is_parent() ) {
 			$namespace = $class->get_full_class_name( );
 			$name = '__Parent';
+		} else if ( $class->is_auto_extension() ) {
+			$namespace = '__Auto\\' . $class->get_namespace( );
+			$name = $class->get_name( );
 		} else {
 			$namespace = $class->get_namespace( );
 			$name = $class->get_name( );
