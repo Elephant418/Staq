@@ -57,7 +57,6 @@ class Application {
 
 	private function get_module_page_by_route( $route ) {
 		foreach ( \Supersoniq::$MODULES as $module ) {
-			print_r( $module );
 			if ( $callable = $module->handle_route( $route ) ) {
 				return [ $module, $callable ];
 			}
