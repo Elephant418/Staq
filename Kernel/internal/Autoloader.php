@@ -13,7 +13,6 @@ class Autoloader {
 	/*************************************************************************
 	  ATTRIBUTES                   
 	 *************************************************************************/
-        private $settings;
         private $library;
 
 
@@ -22,8 +21,8 @@ class Autoloader {
 	 *************************************************************************/
         public function init( ) {
 		spl_autoload_register( [ $this, 'autoloader' ] );
-		$this->settings = ( new \Settings )->by_file( 'application' );
-		$this->library  = $this->settings->get_array( 'library' );
+		$settings = ( new \Settings )->by_file( 'application' );
+		$this->library  = $settings->get_array( 'library' );
         }
 
 
@@ -179,8 +178,9 @@ class Autoloader {
 	}
 	private function create_magic( $class, $property ) {
 		if ( ! $class->is_object( ) && ! $class->is_base( ) ) {
-			if ( $this->settings->has( $property, $class->type ) ) {
-				$base_name = $this->settings->get( $property, $class->type );
+			$settings = ( new \Settings )->by_file( 'application' );
+			if ( $settings->has( $property, $class->type ) ) {
+				$base_name = $settings->get( $property, $class->type );
 				$base_class = '\\' . $this->load( $class->type, $base_name );
 				$this->create_class( $base_class, $class );
 				return TRUE;
@@ -194,7 +194,7 @@ class Autoloader {
 			$name = '__Parent';
 		} else {
 			$namespace = $class->get_namespace( );
-			$name = $class->name;
+			$name = $class->get_name( );
 		}
 		$code = 'namespace ' . $namespace . ';' . PHP_EOL;
 		$code .= 'class ' . $name . ' extends ' . $base_class . ' { }' . PHP_EOL;
