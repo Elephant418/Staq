@@ -7,7 +7,7 @@
 
 namespace Supersoniq\Kernel\Module;
 
-class Error {
+class Error extends \Module\__Base {
 
 
 
@@ -15,18 +15,12 @@ class Error {
 	  ATTRIBUTES				   
 	 *************************************************************************/
 	public $type = 'Error';
-	protected $handled_routes = [ 'view' => '/error(/:code)' ];
 
 
 
 	/*************************************************************************
 	  ROUTE METHODS                   
 	 *************************************************************************/
-	public function handle_route( $route ) {
-		// TODO
-		return FALSE;
-	}
-
 	public function handle_exception( $exception ) {
 		if ( isset( $exception->type ) ) {
 			if ( $exception->type == 'Resource_Not_Found' ) {	
