@@ -27,21 +27,6 @@ class Autoloader {
 
 
 	/*************************************************************************
-	  PUBLIC LOAD                   
-	 *************************************************************************/
-        public function load( $class_type, $class_name ) {
-		$class = ( new Class_Name )
-			->type( $class_type )
-			->name( $class_name )
-			->no_class_called( );
-		if ( $this->load_implicit_class( $class ) ) {
-			return $class->get_full_class_name( );
-		}
-		throw new \Exception( 'Unknown ' . $class_type . ' "' . $class_name . '"' );
-        }
-
-
-	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function autoloader( $class_name ) {
@@ -181,7 +166,7 @@ class Autoloader {
 			$settings = ( new \Settings )->by_file( 'application' );
 			if ( $settings->has( $property, $class->type ) ) {
 				$base_name = $settings->get( $property, $class->type );
-				$base_class = '\\' . $this->load( $class->type, $base_name );
+				$base_class = '\\__Auto\\' . $class->type . '\\' . $base_name;
 				$this->create_class( $base_class, $class );
 				return TRUE;
 			}
