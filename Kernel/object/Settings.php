@@ -16,6 +16,7 @@ class Settings {
 	private $extensions = [ ];
 	private $file_name;
 	public $settings = [ ];
+	public static $file_parsed = [ ];
 
 
 
@@ -138,15 +139,16 @@ class Settings {
 	private function parse_files( ) {
 		$datas = [ ];
 		foreach ( $this->file_paths( ) as $file_path ) {
-			if ( isset( $this->settings[ $file_path ] ) ) {
-				$datas[ $file_path ] = $this->settings[ $file_path ];
+			if ( isset( self::$file_parsed[ $file_path ] ) ) {
+				$datas[ $file_path ] = self::$file_parsed[ $file_path ];
 			} else {
 				$absolute_file_path = SUPERSONIQ_ROOT_PATH . $file_path;
 				if ( is_file( $absolute_file_path ) ) {
 					$datas[ $file_path ] = parse_ini_file( $absolute_file_path, TRUE );
 				} else {
-					$datas[ $file_path ] = NULL;
+					$datas[ $file_path ] = [ ];
 				}
+				self::$file_parsed[ $file_path ] = $datas[ $file_path ];
 			}
 		}
 		return $datas;
