@@ -103,7 +103,7 @@ class Supersoniq {
 	}
 
 	private function activate_autoload( ) {
-		( new \Supersoniq\Kernel\Autoloader )->init( );
+		( new \Supersoniq\Kernel\Internal\Autoloader )->init( );
 	}
 
 
