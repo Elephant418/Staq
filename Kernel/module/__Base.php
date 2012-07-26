@@ -33,7 +33,7 @@ abstract class __Base {
 	}
 	private function get_pages( ) {
 		$pages = $this->settings->get_list( 'pages' );
-		if ( empty( $actions ) ) {
+		if ( empty( $pages ) ) {
 			$pages = array_diff( get_class_methods( $this ), get_class_methods( get_class( ) ) );
 		}
 		return $pages;
@@ -75,12 +75,15 @@ abstract class __Base {
 		return $this->routes[ $page ]->to_string( $parameters );
 	}
 
-	public function get_page_view( $page ) {
-		return ( new \View )->by_module_page( $this, $page );
+	public function call_page( $page, $parameters ) {
+		if ( ! is_callable( [ $this, $page ] ) ) {
+			return $this->get_page_view( $page );
+		}
+		return call_user_func_array( [ $this, $page ], $parameters );
 	}
 
-	public function call_page( $page, $parameters ) {
-		return call_user_func_array( [ $this, $page ], $parameters );
+	public function get_page_view( $page ) {
+		return ( new \View )->by_module_page( $this, $page );
 	}
 }
 
