@@ -53,8 +53,7 @@ class Autoloader {
 			return $this->load_parent_class( $class );
 		} else if ( ! is_null( $class->extension ) ) {
 			return $this->load_explicit_class( $class );
-		} else if ( $this->load_implicit_class( $class ) ) {
-			class_alias( $class->get_full_class_name( ), $class->called_name );
+		} else if ( $this->load_implicit_class( $class, TRUE ) ) {
 			return TRUE;
 		}
 		throw new \Exception( 'Unknown class "' . $class->called_name . '"' );
@@ -113,8 +112,8 @@ class Autoloader {
 	/*************************************************************************
 	  IMPLICIT EXTENSION LOADER                   
 	 *************************************************************************/
-        public function load_implicit_class( $class ) {
-		if ( $this->load_existing_implicit_class( $class ) ) {
+        public function load_implicit_class( $class, $create_alias = FALSE ) {
+		if ( $this->load_existing_implicit_class( $class, $create_alias ) ) {
 			return TRUE;
 		}
 		if ( $this->create_magic_class( $class ) ) {
@@ -122,10 +121,13 @@ class Autoloader {
 		}
         }
 
-	private function load_existing_implicit_class( $class ) {
+	private function load_existing_implicit_class( $class, $create_alias ) {
 		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
 			$class->extension = \Supersoniq\format_to_namespace( $extension );
 			if ( $this->load_existing_explicit_class( $class ) ) {
+				if ( $create_alias ) {
+					class_alias( $class->get_full_class_name( ), $class->called_name );
+				}
 				return TRUE;
 			}
 		}
