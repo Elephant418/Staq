@@ -35,6 +35,10 @@ class Public_File {
 		return FALSE;
 	}
 
+	public function call_page( $page, $parameters ) {
+		return call_user_func_array( [ $this, $page ], $parameters );
+	}
+
 
 
 	/*************************************************************************
