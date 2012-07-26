@@ -74,5 +74,13 @@ abstract class __Base {
 	public function get_page_route( $page, $parameters = [ ] ) {
 		return $this->routes[ $page ]->to_string( $parameters );
 	}
+
+	public function get_page_view( $page ) {
+		return ( new \View )->by_module_page( $this, $page );
+	}
+
+	public function call_page( $page, $parameters ) {
+		return call_user_func_array( [ $this, $page ], $parameters );
+	}
 }
 

@@ -9,4 +9,16 @@ namespace Supersoniq\Kernel\Object;
 
 class View extends \Class_Type_Accessor {
 
+
+
+	/*************************************************************************
+	  CONSTRUCTOR                 
+	 *************************************************************************/
+	public function by_module_page( $module, $page ) {
+		if ( is_object( $module ) ) {
+			$module = $module->type;
+		}
+		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
+	}
+
 }

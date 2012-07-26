@@ -14,6 +14,6 @@ class Welcome extends \Module\__Base {
 	  ACTION METHODS                   
 	 *************************************************************************/
 	public function view( ) {
-		return 'This Supersoniq instance is empty.';
+		return $this->get_page_view( 'view' );
 	}
 }

@@ -44,38 +44,42 @@ class Application {
 		try {
 			if ( is_null( $exception ) ) {
 				$route = $this->current_route( );
-				$module_side = $this->get_module_side_by_route( $route );
+				$module_page = $this->get_module_page_by_route( $route );
 			} else {
-				$module_side = $this->get_module_side_by_exception( $exception );
+				$module_page = $this->get_module_page_by_exception( $exception );
 			}
-			return $this->call_module_side( $module_side );
+			return $this->call_module_page( $module_page );
 		} catch( \Exception $exception ) {
 			$this->prenvent_exception_boucle( $exception );
 			return $this->render( $exception );
 		}
 	}
 
-	private function get_module_side_by_route( $route ) {
+	private function get_module_page_by_route( $route ) {
 		foreach ( \Supersoniq::$MODULES as $module ) {
 			if ( $callable = $module->handle_route( $route ) ) {
-				return [ [ $module, $callable[ 0 ] ], $callable[ 1 ] ];
+				return [ $module, $callable ];
 			}
 		}
 		throw new \Exception\Resource_Not_Found( );
 	}
 
-	private function get_module_side_by_exception( $exception ) {
+	private function get_module_page_by_exception( $exception ) {
 		foreach ( \Supersoniq::$MODULES as $module ) {
 			if ( $callable = $module->handle_exception( $exception ) ) {
-				return [ [ $module, $callable[ 0 ] ], $callable[ 1 ] ];
+				return [ $module, $callable ];
 			}
 		}
 		throw new \Exception\Resource_Not_Found( );
 	}
 
-	private function call_module_side( $module_side ) {
-		\Supersoniq\must_be_array( $module_side[ 1 ] );
-		return call_user_func_array( $module_side[ 0 ], $module_side[ 1 ] );
+	private function call_module_page( $module_page ) {
+		\Supersoniq\must_be_array( $module_page[ 1 ] );
+		$view = call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
+		if ( is_object( $view ) ) {
+			return $view->render( );
+		}
+		return $view;
 	}
 	
 	private function prenvent_exception_boucle( $exception ) {
