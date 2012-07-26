@@ -23,7 +23,7 @@ abstract class __Base extends \Exception {
 	 *************************************************************************/
 	public function __construct( $message = NULL, $code = 0 ) {
 		parent::__construct( $message, $code );
-		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
+		$this->type = \Supersoniq\class_type_name( $this );
 	}
 }
 

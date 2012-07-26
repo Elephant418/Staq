@@ -23,7 +23,7 @@ abstract class __Base {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( ) {
-		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
+		$this->type = \Supersoniq\class_type_name( $this );
 		$view_class = '\View\\' . $this->type;
 		$this->view = new $view_class( );
 	}

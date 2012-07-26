@@ -41,29 +41,49 @@ class Class_Name {
 	/*************************************************************************
 	  CONSTRUCTOR                   
 	 *************************************************************************/
+        public function by_object( $object ) {
+		return $this->by_name( get_class( $object ) );
+	}
         public function by_name( $class_name ) {
 		$this->called_name = $class_name;
-		$parts = array_reverse( explode( '\\', $class_name ) );
+		$parts = explode( '\\', $class_name );
 		
 		// PARENT
-		if ( $parts[ 0 ] == '__Parent' ) {
+		if ( end( $parts ) == '__Parent' ) {
 			$this->is_parent = TRUE; 
-			$parts = array_slice( $parts, 1 );
-		}
-		
-		// NAME
-		$this->name = $parts[ 0 ];
-		
-		// TYPE
-		$this->type = self::OBJECT;
-		if ( isset( $parts[ 1 ] ) ) {
-			$this->type = $parts[ 1 ];
+			$parts = array_slice( $parts, 0, -1 );
 		}
 		
 		// EXTENSION
-		if ( isset( $parts[ 2 ] ) ) {
-			$this->extension = implode( '\\', array_slice( array_reverse( $parts ), 0, -2 ) );
+		if ( count( $parts ) >= 3 ) {
+			if ( $parts[ 0 ] == '__Auto' ) {
+				$this->extension = NULL; 
+				$parts = array_slice( $parts, 1 );
+			} else {
+				$extension = array_slice( $parts, 0, -2 );
+				do {
+					foreach ( \Supersoniq::$EXTENSIONS as $match ) {
+						if ( implode( '/', $extension ) == $match ) {
+							break 2;
+						}
+					}
+					$extension = array_slice( $extension, 0, -1 );
+				} while ( $extension );
+				$parts = array_slice( $parts, count( $extension ) );
+				$this->extension = implode( '\\', $extension );
+			}
 		}
+		
+		// TYPE
+		if ( count( $parts ) >= 2 ) {
+			$this->type = $parts[ 0 ]; 
+			$parts = array_slice( $parts, 1 );
+		} else {
+			$this->type = 'Object';
+		}
+		
+		// NAME
+		$this->name = implode( '\\', $parts );
 		return $this;
         }
         public function no_class_called( ) {

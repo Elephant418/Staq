@@ -237,4 +237,8 @@ function module_side_route( $module, $side, $parameters = [ ] ) {
 	return $route;
 }
 
+function class_type_name( $object ) {
+	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->name;;
+}
+
 
