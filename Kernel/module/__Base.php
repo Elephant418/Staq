@@ -81,7 +81,7 @@ abstract class __Base {
 		} else {
 			$template = call_user_func_array( [ $this, $page ], $parameters );
 		}
-		if ( is_string( $template ) ) {
+		if ( \Supersoniq\class_type( $template ) != 'Template' ) {
 			$template = ( new \Template )
 				->by_module_page( $this, $page )
 				->by_content( $template );

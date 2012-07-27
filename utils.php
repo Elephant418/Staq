@@ -245,7 +245,9 @@ function class_type_name( $object ) {
 }
 
 function class_type( $object ) {
-	if ( isset( $object->_type ) ) {
+	if ( ! is_object( $object ) ) {
+		return NULL;
+	} else if ( isset( $object->_type ) ) {
 		$name = $object->_type;
 	} else if ( isset( $object->type ) ) {
 		$name = $object->type;
