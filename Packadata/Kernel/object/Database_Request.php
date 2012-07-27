@@ -45,7 +45,7 @@ class Database_Request {
 	}
 	public function execute( $arguments = array( ) ) {
 		if ( empty( $this->request ) ) {
-			throw new Database_Exception( 'The SQL request is empty.' );
+			throw new \Exception\Database( 'The SQL request is empty.' );
 		}
 		
 		$result = array( );
@@ -61,7 +61,7 @@ class Database_Request {
 
 			// Execute the request
 			if ( ! $result ) {
-				throw new Database_Exception( 'Error with the SQL request : ' . $this->request, $statement->errorInfo( ) );
+				throw new \Exception\Database( 'Error with the SQL request : ' . $this->request, $statement->errorInfo( ) );
 			}
 		
 			if ( 
@@ -99,7 +99,7 @@ class Database_Request {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function connect( ) {
-		$db = new \Supersoniq\Configuration( 'database' );
+		$db = ( new \Settings )->by_file( 'database' );
 		$this->PDObject = new \PDO(
 			$db->get( 'access', 'driver' ) . ':host=' . $db->get( 'access', 'host' ) . ';dbname=' . $db->get( 'access', 'name' ),
 			$db->get( 'access', 'user' ),
@@ -113,8 +113,6 @@ class Database_Request {
 	}
 }
 
-class Database_Exception extends \Exception {
-}
 
 
 
