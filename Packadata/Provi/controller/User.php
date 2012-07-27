@@ -89,7 +89,7 @@ class User extends  \Controller\__Base {
 			$user->name = $_POST['name'];
 			$user->lastname = $_POST['lastname'];
 			if ( $user->save( ) ) {
-				$user->activation_code = $user->id . \String::random( 20 );
+				$user->activation_code = $user->id . \Supersoniq\random( 20 );
 				$user->save( );
 				$activation_url = $_SERVER[ 'SERVER_NAME' ] . '/user/activate/' . $user->id . '/' . $user->activation_code;
 				$mailer = new Mail( TRUE );

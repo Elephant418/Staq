@@ -49,7 +49,7 @@ abstract class __Base extends \Database_Table {
 	 *************************************************************************/
 	public function __construct( ) {
 		parent::__construct( );
-		$this->type = \String::substr_after_last( get_class( $this ), '\\' );
+		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
 		$this->_attributes = array( );
 		$this->_database->table_fields = array( 'id', 'type', 'type_version', 'attributes', 'attributes_version' );
 		$this->_database->table_name = 'models';
@@ -111,7 +111,7 @@ abstract class __Base extends \Database_Table {
 	protected function has_data_changed( $current_data ) {
 		$loaded_data = $this->loaded_data;
 		foreach ( $current_data as $field_name => $field__value ) {
-			if ( \String::ends_with( $field_name, '_version' ) ) {
+			if ( \Supersoniq\ends_with( $field_name, '_version' ) ) {
 				unset( $current_data[ $field_name ] );
 				unset( $loaded_data[ $field_name ] );
 			}

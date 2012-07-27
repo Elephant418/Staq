@@ -59,6 +59,6 @@ abstract class __Base {
 	  CONSTRUCTOR
 	 *************************************************************************/
 	public function __construct( ) {
-		$this->type = \String::substr_after_last( get_class( $this ), '\\' );
+		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
 	}
 }

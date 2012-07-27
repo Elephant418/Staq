@@ -34,7 +34,7 @@ abstract class __Base extends \Database_Table {
 	public function __construct( $is_reverse = FALSE ) {
 		parent::__construct( );
 		$this->set_is_reverse( $is_reverse );
-		$this->type = \String::substr_after_last( get_class( $this ), '\\' );
+		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
 		$this->_database->table_fields = array( 'id', 'model_id_1', 'model_type_1', 'model_id_2', 'model_type_2', 'type' );
 		$this->_database->table_name = 'relations';
 	}

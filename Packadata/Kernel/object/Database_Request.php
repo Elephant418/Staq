@@ -65,13 +65,13 @@ class Database_Request {
 			}
 		
 			if ( 
-				String::i_starts_with($this->request, "SELECT") || 
-				String::i_starts_with($this->request, "SHOW") || 
-				String::i_starts_with($this->request, "DESCRIBE") || 
-				String::i_starts_with($this->request, "EXPLAIN ")
+				\Supersoniq\i_starts_with($this->request, "SELECT") || 
+				\Supersoniq\i_starts_with($this->request, "SHOW") || 
+				\Supersoniq\i_starts_with($this->request, "DESCRIBE") || 
+				\Supersoniq\i_starts_with($this->request, "EXPLAIN ")
 			) {
 				$result = $statement->fetchAll( \PDO::FETCH_ASSOC );
-			} else if ( String::i_starts_with( $this->request, "INSERT" ) ) {
+			} else if ( \Supersoniq\i_starts_with( $this->request, "INSERT" ) ) {
 				$id = $this->PDObject->lastInsertId( );
 				if ( $id == '0' ) {
 					// Error Case or a table without autoincrementation
