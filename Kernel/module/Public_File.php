@@ -22,8 +22,8 @@ class Public_File {
 	  ROUTE METHODS				   
 	 *************************************************************************/
 	public function handle_route( $route ) {
-		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
-			$file_path = SUPERSONIQ_ROOT_PATH . $extension . '/public' . $route;
+		foreach ( \Supersoniq::$DESIGNS as $design ) {
+			$file_path = SUPERSONIQ_ROOT_PATH . $design . '/public' . $route;
 			if ( is_file( $file_path ) ) {
 				return [ 'render_static_file', [ $file_path ] ];
 			}

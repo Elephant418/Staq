@@ -77,7 +77,7 @@ class Application {
 		\Supersoniq\must_be_array( $module_page[ 1 ] );
 		$template = call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
 		if ( is_object( $template ) ) {
-			return $template->render( );
+			return $template->compile( )->render( );
 		}
 		return $template;
 	}

@@ -20,5 +20,8 @@ class View extends \Class_Type_Accessor {
 		}
 		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
 	}
+	public function by_layout( $layout ) {
+		return $this->by_name( 'Layout\\' . ucfirst( $layout ) );
+	}
 
 }

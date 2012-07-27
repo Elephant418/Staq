@@ -14,6 +14,7 @@ class __Base {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+	public $parent;
 	public $extensions = [ 'html' ];
 	public $type;
 	public $path;
@@ -26,6 +27,16 @@ class __Base {
 	public function __construct( ) {
 		$this->type = \Supersoniq\class_type_name( $this );
 		$this->path = $this->get_template_path( );
+		if ( \Supersoniq\starts_with( $this->type, 'Module\\' ) ) {
+			$this->parent = ( new \View )->by_layout( 'simple' )->get_template( );
+			$this->parent->content = $this;
+		}
+	}
+	public function compile( ) {
+		if ( is_object( $this->parent ) ) {
+			return $this->parent->compile( );
+		}
+		return $this;
 	}
 
 
