@@ -7,7 +7,7 @@
 
 namespace Supersoniq\Twbootstrap\Template;
 
-class __Base extends \__Auto\Template\__Base {
+class __Base extends __Base\__Parent {
 
 
 

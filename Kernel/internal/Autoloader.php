@@ -75,19 +75,24 @@ class Autoloader {
 	}
 
 	private function load_existing_parent_class( $class ) {
-		$is_parent_extension = FALSE;
+		$is_parent_class = FALSE;
 		$original_extension = $class->extension;
-		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
-			if ( $is_parent_extension ) {
+		$original_full_class_name = $class->get_full_class_name( );
+		$name = $class->name;
+		do {
+			foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
 				$class->extension = \Supersoniq\format_to_namespace( $extension );
-				if ( $this->load_existing_explicit_class( $class ) ) {
-					class_alias( $class->get_full_class_name( ), $class->called_name );
-					return TRUE;
+				if ( $is_parent_class ) {
+					if ( $this->load_existing_explicit_class( $class ) ) {
+						class_alias( $class->get_full_class_name( ), $class->called_name );
+						return TRUE;
+					}
+				} else if ( $original_full_class_name == $class->get_full_class_name( ) ) {
+					$is_parent_class = TRUE;
 				}
-			} else if ( $original_extension == \Supersoniq\format_to_namespace( $extension ) ) {
-				$is_parent_extension = TRUE;
 			}
-		}
+			$class->name = \Supersoniq\substr_before_last( $class->name, '\\' );
+		} while ( $class->name );
 		$class->extension = $original_extension;
 		return FALSE;
 	}
@@ -107,13 +112,9 @@ class Autoloader {
 
 	private function load_existing_implicit_class( $class, $create_alias ) {
 		$name = $class->name;
-		$roots = \Supersoniq::$EXTENSIONS;
-		if ( $class->is_design_extension( ) ) {
-			$roots = \Supersoniq::$DESIGNS;
-		}
 		do {
-			foreach ( $roots as $root ) {
-				$class->extension = \Supersoniq\format_to_namespace( $root );
+			foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
+				$class->extension = \Supersoniq\format_to_namespace( $extension );
 				if ( $this->load_existing_explicit_class( $class ) ) {
 					if ( $create_alias ) {
 						$this->create_class( '\\' . $class->get_full_class_name( ), $class->called_name );
@@ -142,6 +143,7 @@ class Autoloader {
 		return TRUE;
 	}
 	private function load_existing_explicit_class( $class ) {
+		// echo '-- ' . $class->get_file_path( ) . HTML_EOL;
 		if ( is_file( $class->get_file_path( ) ) ) {
 			require_once( $class->get_file_path( ) );
 			$this->check_class_loaded( $class->get_full_class_name( ) );
@@ -171,14 +173,11 @@ class Autoloader {
 		return $this->create_magic( $class, 'magic_classes' );
 	}
 	private function create_magic( $class, $property ) {
-		if ( ! $class->is_object( ) && ! $class->is_base( ) ) {
+		if ( ! $class->is_object( ) ) {
 			$settings = ( new \Settings )->by_file( 'application' );
 			if ( $settings->has( $property, $class->type ) ) {
 				$base_name = $settings->get( $property, $class->type );
 				$base_class = '\\__Auto\\';
-				if ( $class->is_design_extension( ) ) {
-					$base_class = '\\__Design\\';
-				}
 				$base_class .= $class->type . '\\' . $base_name;
 				$this->create_class( $base_class, $class->called_name );
 				return TRUE;
@@ -194,9 +193,18 @@ class Autoloader {
 			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
 		}
 		$code .= 'class ' . $name . ' extends ' . $base_class . ' { }' . PHP_EOL;
+		// echo $code . HTML_EOL;
 		eval( $code );
 	}
 
 }
 
-class Empty_Class { }
+class Empty_Class { 
+
+
+	/*************************************************************************
+	  CONSTRUCTOR                   
+	 *************************************************************************/
+        public function __construct( ) {
+        }
+}

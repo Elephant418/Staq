@@ -155,9 +155,9 @@ class __Base {
 	 *************************************************************************/
 	protected function get_template_path( ) {
 		$name = \Supersoniq\format_to_path( strtolower( $this->_type ) );
-		foreach ( \Supersoniq::$DESIGNS as $design ) {
-			foreach ( $this->_extensions as $extension ) {
-				$template_path = $this->get_template_path_by_design_and_extension( $name, $design, $extension );
+		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
+			foreach ( $this->_extensions as $file_extension ) {
+				$template_path = $this->get_template_path_by_extension( $name, $extension, $file_extension );
 				if ( is_file( $template_path ) ) {
 					return $template_path;
 				}
@@ -166,7 +166,7 @@ class __Base {
 		return FALSE;
 	}
 
-	protected function get_template_path_by_design_and_extension( $name, $design, $extension ) {
-		return SUPERSONIQ_ROOT_PATH . $design . '/template/' . $name . '.' . $extension;
+	protected function get_template_path_by_extension( $name, $extension, $file_extension ) {
+		return SUPERSONIQ_ROOT_PATH . $extension . '/template/' . $name . '.tpl.' . $file_extension;
 	}
 }

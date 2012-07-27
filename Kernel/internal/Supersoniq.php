@@ -17,7 +17,6 @@ class Supersoniq {
 	static public $BASE_URL;
 	static public $EXTENSIONS = [ ];
 	static public $MODULES    = [ ];
-	static public $DESIGNS    = [ ];
 	private $applications     = [ ];
 	private $platforms        = [ ];
 
@@ -120,7 +119,6 @@ class Supersoniq {
 		self::$EXTENSIONS       = $this->get_extensions( );
 		$this->activate_autoload( );
 		self::$MODULES          = $this->get_modules( );
-		self::$DESIGNS          = $this->get_designs( );
 	}
 
 	private function format_request( &$request ) {
@@ -168,11 +166,6 @@ class Supersoniq {
 		return $modules;
 	}
 
-	private function get_designs( ) {
-		return ( new \Settings )
-			->by_file( 'application' )
-			->get_list( 'designs' );
-	}
 
 
 	/*************************************************************************
