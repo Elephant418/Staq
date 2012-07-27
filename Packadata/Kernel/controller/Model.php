@@ -102,9 +102,6 @@ abstract class Model extends \Controller\__Base {
 	  PROTECTED METHODS                   
 	 *************************************************************************/
 	public function action_method( $method = NULL ) {
-		if ( ! is_a( $this->model( ), 'Model\Defined' ) ) {
-			throw new \Exception\Redirect( '/error/view/404', 'Unknown controller "' . $this->type . '"' );
-		}
 		return parent::action_method( $method );
 	}
 	protected function model_class( ) {
