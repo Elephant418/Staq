@@ -183,6 +183,9 @@ function dirname( $path, $level = 1 ) {
 	}
 	return $path;
 }
+function file_extension( $path ) {
+	return substr_after_last( $path, '.' );
+}
 
 
 
