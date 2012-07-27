@@ -35,6 +35,15 @@ class __Base {
 		if ( ! $template->is_template_found( ) ) {
 			throw new \Exception( 'Template not found "' . $this->type . '"' );
 		}
+		return $this->fill( $template );
+	}
+
+
+
+	/*************************************************************************
+	  PRIVATE METHODS                   
+	 *************************************************************************/
+	protected function fill( $template ) {
 		return $template;
 	}
 }

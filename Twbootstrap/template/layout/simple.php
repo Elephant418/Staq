@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bootstrap, from Twitter</title>
+    <title><?= $this->application_name ?></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="/twbootstrap/bootstrap.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="#">Project name</a>
+				<a class="brand" href="#"><?= $this->application_name ?></a>
 				<div class="nav-collapse">
 					<ul class="nav">
 						<li class="active"><a href="#">Home</a></li>
