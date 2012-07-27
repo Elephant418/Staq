@@ -140,7 +140,10 @@ class Class_Name {
 	}
 
 	public function get_file_path( ) {
+		$name_path = \Supersoniq\format_to_path( $this->name );
+		$name_path = strtolower( \Supersoniq\substr_before_last( $name_path, '/' ) ) . '/' . \Supersoniq\substr_after_last( $name_path, '/' );
 		$file_path = SUPERSONIQ_ROOT_PATH . \Supersoniq\format_to_path( $this->extension ) . '/';
-		return $file_path . strtolower( $this->type ) . '/' . \Supersoniq\format_to_path( $this->name ) . '.php';
+		$file_path .= strtolower( $this->type ) . '/' . $name_path . '.php';
+		return $file_path;
 	}
 }
