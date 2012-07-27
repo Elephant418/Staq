@@ -50,7 +50,8 @@ class Error extends \Module\__Base {
 
 		$str  = '<h1>Error ' . $code . '</h1>';
 		$str .= '<p>We are sorry, but there is a problem.</p>';
-		if ( ! is_null( $exception ) && ( new \Settings )->by_file( 'application' )->get( 'errors', 'display_errors' ) ) {
+		$message = $exception->getMessage( );
+		if ( ! empty( $message ) && ( new \Settings )->by_file( 'application' )->get( 'errors', 'display_errors' ) ) {
 			$str .= '<p>Technical error : ' . $exception->getMessage( ) . '</p>';
 		}
 		return $str; 
