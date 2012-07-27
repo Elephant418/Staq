@@ -241,7 +241,18 @@ function module_page_route( $module, $page, $parameters = [ ] ) {
 }
 
 function class_type_name( $object ) {
-	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->name;;
+	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->name;
+}
+
+function class_type( $object ) {
+	if ( isset( $object->_type ) ) {
+		$name = $object->_type;
+	} else if ( isset( $object->type ) ) {
+		$name = $object->type;
+	} else {
+		return NULL;
+	}
+	return \Supersoniq\substr_after_last( \Supersoniq\substr_before_last( get_class( $object ), '\\' . $name ), '\\' );
 }
 
 

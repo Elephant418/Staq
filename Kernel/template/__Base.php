@@ -60,6 +60,7 @@ class __Base {
 		$this->_type = \Supersoniq\class_type_name( $this );
 		$this->_extensions = $this->get_extensions( );
 		$this->_path = $this->get_template_path( );
+		$this->content = '';
 	}
 
 	public function by_content( $content ) {
@@ -79,7 +80,7 @@ class __Base {
 
 	public function render( ) {
 		if ( ! $this->_path ) {
-			return $this->content;
+			return $this->display( $this->content );
 		}
 		$render_method = 'render_' . \Supersoniq\file_extension( $this->_path );
 		return $this->$render_method( );
@@ -105,6 +106,21 @@ class __Base {
 			}
 		}
 		return $extensions;
+	}
+	
+	protected function display( $var ) {
+		if ( is_string( $var ) ) {
+			return $var;
+		}
+		if ( is_object( $var ) ) {
+			$type = \supersoniq\class_type( $var );
+			if ( $type == 'Template' ) {
+				return $var;
+			}
+			if ( $type == 'Model' ) {
+				return ( new \Template )->by_model( $var )->render( );
+			}
+		}
 	}
 
 

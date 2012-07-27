@@ -30,4 +30,8 @@ class Template extends \Class_Type_Accessor {
 		}
 		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
 	}
+	public function by_model( $model ) {
+		return $this->by_name( 'Model\\' . $model->type )
+			->set( 'content', $model );
+	}
 }

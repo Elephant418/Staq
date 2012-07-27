@@ -35,7 +35,7 @@
 	</div>
 
 	<div class="container">
-		<?= $this->content ?>
+		<?= $this->display( $this->content ) ?>
 	</div>
 
 	<script src="/twbootstrap/jquery.js"></script>
