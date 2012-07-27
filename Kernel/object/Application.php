@@ -89,7 +89,7 @@ class Application {
 			$name = get_class( $exception );
 		}
 		if ( in_array( $name, $this->exceptions ) ) {
-			throw new \Exception( 'Uncatched exception "' . $name . '"' );
+			throw new \Exception( 'Uncatched exception "' . $exception->getMessage( ) . '"' );
 		}
 		$this->exceptions[ ] = $name;
 	}
