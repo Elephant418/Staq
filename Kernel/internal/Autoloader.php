@@ -70,7 +70,7 @@ class Autoloader {
 		if ( $this->create_magic_parent( $class ) ) {
 			return TRUE;
 		}
-		class_alias( 'Supersoniq\Kernel\Empty_Class', $class->called_name );
+		class_alias( 'Supersoniq\Kernel\Internal\Empty_Class', $class->called_name );
 		return TRUE;
 	}
 
