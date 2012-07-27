@@ -77,9 +77,10 @@ abstract class __Base {
 
 	public function call_page( $page, $parameters ) {
 		if ( ! is_callable( [ $this, $page ] ) ) {
-			return $this->get_page_view( $page )->get_template( );
+			$template =  $this->get_page_view( $page )->render( );
+		} else {
+			$template = call_user_func_array( [ $this, $page ], $parameters );
 		}
-		$template = call_user_func_array( [ $this, $page ], $parameters );
 		if ( is_string( $template ) ) {
 			$template = ( new \Template )
 				->by_module_page( $this, $page )

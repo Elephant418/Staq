@@ -30,11 +30,8 @@ class __Base {
 	/*************************************************************************
 	  PUBLIC METHODS                   
 	 *************************************************************************/
-	public function get_template( ) {
-		$template = ( new \Template )->by_name( $this->type );
-		if ( ! $template->is_template_found( ) ) {
-			throw new \Exception( 'Template not found "' . $this->type . '"' );
-		}
+	public function render( ) {
+		$template = $this->get_template( );
 		return $this->fill( $template );
 	}
 
@@ -44,6 +41,14 @@ class __Base {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	protected function fill( $template ) {
+		return $template;
+	}
+
+	protected function get_template( ) {
+		$template = ( new \Template )->by_name( $this->type );
+		if ( ! $template->is_template_found( ) ) {
+			throw new \Exception( 'Template not found "' . $this->type . '"' );
+		}
 		return $template;
 	}
 }

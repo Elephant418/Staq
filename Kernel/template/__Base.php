@@ -23,7 +23,7 @@ class __Base {
 
 
 	/*************************************************************************
-	  GETTER                   
+	  GETTER & SETTER               
 	 *************************************************************************/
 	public function is_template_found( ) {
 		return is_file( $this->_path );
@@ -119,7 +119,7 @@ class __Base {
 		return $this;
 	}
 	protected function set_parent( $parent ) {
-		$this->_parent = $parent->get_template( );
+		$this->_parent = $parent->render( );
 		$this->_parent->content = $this;
 	}
 
