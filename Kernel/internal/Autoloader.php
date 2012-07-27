@@ -106,8 +106,12 @@ class Autoloader {
         }
 
 	private function load_existing_implicit_class( $class, $create_alias ) {
-		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
-			$class->extension = \Supersoniq\format_to_namespace( $extension );
+		$roots = \Supersoniq::$EXTENSIONS;
+		if ( $class->is_design_extension( ) ) {
+			$roots = \Supersoniq::$DESIGNS;
+		}
+		foreach ( $roots as $root ) {
+			$class->extension = \Supersoniq\format_to_namespace( $root );
 			if ( $this->load_existing_explicit_class( $class ) ) {
 				if ( $create_alias ) {
 					class_alias( $class->get_full_class_name( ), $class->called_name );
@@ -166,7 +170,11 @@ class Autoloader {
 			$settings = ( new \Settings )->by_file( 'application' );
 			if ( $settings->has( $property, $class->type ) ) {
 				$base_name = $settings->get( $property, $class->type );
-				$base_class = '\\__Auto\\' . $class->type . '\\' . $base_name;
+				$base_class = '\\__Auto\\';
+				if ( $class->is_design_extension( ) ) {
+					$base_class = '\\__Design\\';
+				}
+				$base_class .= $class->type . '\\' . $base_name;
 				$this->create_class( $base_class, $class );
 				return TRUE;
 			}
@@ -174,15 +182,15 @@ class Autoloader {
 		return FALSE;
 	}
 	private function create_class( $base_class, $class ) {
+		$namespace = $class->get_namespace( );
+		$name = $class->get_name( );
 		if ( $class->is_parent() ) {
-			$namespace = $class->get_full_class_name( );
+			$namespace .= '\\' . $name;
 			$name = '__Parent';
 		} else if ( $class->is_auto_extension() ) {
-			$namespace = '__Auto\\' . $class->get_namespace( );
-			$name = $class->get_name( );
-		} else {
-			$namespace = $class->get_namespace( );
-			$name = $class->get_name( );
+			$namespace = '__Auto\\' . $namespace;
+		} else if ( $class->is_design_extension() ) {
+			$namespace = '__Design\\' . $namespace;
 		}
 		$code = 'namespace ' . $namespace . ';' . PHP_EOL;
 		$code .= 'class ' . $name . ' extends ' . $base_class . ' { }' . PHP_EOL;

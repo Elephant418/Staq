@@ -20,6 +20,7 @@ class Class_Name {
 	public $name;
 	public $is_parent = FALSE;
 	public $is_auto_extension = FALSE;
+	public $is_design_extension = FALSE;
 
 
 	/*************************************************************************
@@ -59,6 +60,10 @@ class Class_Name {
 		if ( count( $parts ) >= 3 ) {
 			if ( $parts[ 0 ] == '__Auto' ) {
 				$this->is_auto_extension = TRUE; 
+				$this->extension = NULL; 
+				$parts = array_slice( $parts, 1 );
+			} else if ( $parts[ 0 ] == '__Design' ) {
+				$this->is_design_extension = TRUE; 
 				$this->extension = NULL; 
 				$parts = array_slice( $parts, 1 );
 			} else {
@@ -109,6 +114,10 @@ class Class_Name {
 		return $this->is_auto_extension;
 	}
 
+	public function is_design_extension( ) {
+		return $this->is_design_extension;
+	}
+
 	public function is_base( ) {
 		return $this->name == '__Base';
 	}
@@ -132,6 +141,6 @@ class Class_Name {
 
 	public function get_file_path( ) {
 		$file_path = SUPERSONIQ_ROOT_PATH . \Supersoniq\format_to_path( $this->extension ) . '/';
-		return $file_path . strtolower( $this->type ) . '/' . $this->name . '.php';
+		return $file_path . strtolower( $this->type ) . '/' . \Supersoniq\format_to_path( $this->name ) . '.php';
 	}
 }

@@ -75,11 +75,11 @@ class Application {
 
 	private function call_module_page( $module_page ) {
 		\Supersoniq\must_be_array( $module_page[ 1 ] );
-		$view = call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
-		if ( is_object( $view ) ) {
-			return $view->render( );
+		$template = call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
+		if ( is_object( $template ) ) {
+			return $template->render( );
 		}
-		return $view;
+		return $template;
 	}
 	
 	private function prenvent_exception_boucle( $exception ) {

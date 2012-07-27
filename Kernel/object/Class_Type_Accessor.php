@@ -12,11 +12,18 @@ class Class_Type_Accessor {
 
 
 	/*************************************************************************
+	  ATTRIBUTES                 
+	 *************************************************************************/
+	public $root_type = '\\__Auto';
+
+
+
+	/*************************************************************************
 	  CONSTRUCTOR                 
 	 *************************************************************************/
 	public function by_name( $name ) {
 		$type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
-		$class_name = '\\__Auto\\' . $type . '\\' . $name ;
+		$class_name = $this->root_type . '\\' . $type . '\\' . $name ;
 		return new $class_name;
 	}
 }

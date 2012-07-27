@@ -223,17 +223,17 @@ function redirect( $url ) {
 	die( );
 }
 
-function redirect_to_module_side( $module, $side, $parameters = [ ] ) {
-	redirect( module_side_url( $module, $action, $parameters ) );
+function redirect_to_module_page( $module, $page, $parameters = [ ] ) {
+	redirect( module_page_url( $module, $action, $parameters ) );
 }
 
-function module_side_url( $module, $side, $parameters = [ ] ) {
-	return \Supersoniq::$BASE_URL . $this->module_side_route( $module, $side, $parameters );
+function module_page_url( $module, $page, $parameters = [ ] ) {
+	return \Supersoniq::$BASE_URL . $this->module_page_route( $module, $page, $parameters );
 }
 
-function module_side_route( $module, $side, $parameters = [ ] ) {
+function module_page_route( $module, $page, $parameters = [ ] ) {
 	$module = \Supersoniq::$MODULES[ $module ];
-	$route = $module->get_side_route( $side, $parameters );
+	$route = $module->get_page_route( $page, $parameters );
 	return $route;
 }
 

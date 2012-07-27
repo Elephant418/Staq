@@ -77,7 +77,7 @@ abstract class __Base {
 
 	public function call_page( $page, $parameters ) {
 		if ( ! is_callable( [ $this, $page ] ) ) {
-			return $this->get_page_view( $page );
+			return $this->get_page_view( $page )->get_template( );
 		}
 		return call_user_func_array( [ $this, $page ], $parameters );
 	}
