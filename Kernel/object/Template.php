@@ -24,4 +24,10 @@ class Template extends \Class_Type_Accessor {
 	public function by_name( $name ) {
 		return parent::by_name( $name );
 	}
+	public function by_module_page( $module, $page ) {
+		if ( is_object( $module ) ) {
+			$module = $module->type;
+		}
+		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
+	}
 }

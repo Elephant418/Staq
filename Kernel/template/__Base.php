@@ -62,6 +62,12 @@ class __Base {
 		$this->_path = $this->get_template_path( );
 	}
 
+	public function by_content( $content ) {
+		$this->_path = FALSE;
+		$this->content = $content;
+		return $this;
+	}
+
 
 
 	/*************************************************************************
@@ -72,6 +78,9 @@ class __Base {
 	}
 
 	public function render( ) {
+		if ( ! $this->_path ) {
+			return $this->content;
+		}
 		$render_method = 'render_' . \Supersoniq\file_extension( $this->_path );
 		return $this->$render_method( );
 	}
