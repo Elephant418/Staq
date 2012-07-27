@@ -106,19 +106,24 @@ class Autoloader {
         }
 
 	private function load_existing_implicit_class( $class, $create_alias ) {
+		$name = $class->name;
 		$roots = \Supersoniq::$EXTENSIONS;
 		if ( $class->is_design_extension( ) ) {
 			$roots = \Supersoniq::$DESIGNS;
 		}
-		foreach ( $roots as $root ) {
-			$class->extension = \Supersoniq\format_to_namespace( $root );
-			if ( $this->load_existing_explicit_class( $class ) ) {
-				if ( $create_alias ) {
-					class_alias( $class->get_full_class_name( ), $class->called_name );
+		do {
+			foreach ( $roots as $root ) {
+				$class->extension = \Supersoniq\format_to_namespace( $root );
+				if ( $this->load_existing_explicit_class( $class ) ) {
+					if ( $create_alias ) {
+						$this->create_class( '\\' . $class->get_full_class_name( ), $class->called_name );
+					}
+					return TRUE;
 				}
-				return TRUE;
 			}
-		}
+			$class->name = \Supersoniq\substr_before_last( $class->name, '\\' );
+		} while ( $class->name );
+		$class->name = $name;
 		$class->extension =  NULL;
 		return FALSE;
 	}
@@ -129,7 +134,7 @@ class Autoloader {
 	 *************************************************************************/
 	private function load_explicit_class( $class ) {
 		if ( ! in_array( \Supersoniq\format_to_path( $class->extension ), \Supersoniq::$EXTENSIONS ) ) {
-			throw new \Exception( 'Unknown extension "' . $class->extension . '"' );
+			throw new \Exception( 'Unknown extension "' . $class->extension . '" in "' . $class->called_name . '"' );
 		}
 		if ( ! $this->load_existing_explicit_class( $class ) ) {
 			throw new \Exception( 'Unknown class "' . $class->called_name . '"' );
@@ -175,24 +180,19 @@ class Autoloader {
 					$base_class = '\\__Design\\';
 				}
 				$base_class .= $class->type . '\\' . $base_name;
-				$this->create_class( $base_class, $class );
+				$this->create_class( $base_class, $class->called_name );
 				return TRUE;
 			}
 		}
 		return FALSE;
 	}
 	private function create_class( $base_class, $class ) {
-		$namespace = $class->get_namespace( );
-		$name = $class->get_name( );
-		if ( $class->is_parent() ) {
-			$namespace .= '\\' . $name;
-			$name = '__Parent';
-		} else if ( $class->is_auto_extension() ) {
-			$namespace = '__Auto\\' . $namespace;
-		} else if ( $class->is_design_extension() ) {
-			$namespace = '__Design\\' . $namespace;
+		$namespace = \Supersoniq\substr_before_last( $class, '\\' );
+		$name = \Supersoniq\substr_after_last( $class, '\\' );
+		$code = '';
+		if ( $namespace ) {
+			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
 		}
-		$code = 'namespace ' . $namespace . ';' . PHP_EOL;
 		$code .= 'class ' . $name . ' extends ' . $base_class . ' { }' . PHP_EOL;
 		eval( $code );
 	}

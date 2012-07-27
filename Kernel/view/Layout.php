@@ -5,9 +5,9 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Kernel\View\Layout;
+namespace Supersoniq\Kernel\View;
 
-class Simple extends Simple\__Parent {
+class Layout extends Layout\__Parent {
 
 
 
