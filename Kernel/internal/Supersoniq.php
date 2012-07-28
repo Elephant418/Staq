@@ -117,6 +117,7 @@ class Supersoniq {
 		self::$APPLICATION_NAME = \Supersoniq\format_to_namespace( $application[ 'path' ] );
 		self::$BASE_URL         = $this->base_url_by_request( $request, $platform, $application );
 		self::$EXTENSIONS       = $this->get_extensions( );
+		print_r( self::$EXTENSIONS );
 		$this->activate_autoload( );
 		self::$MODULES          = $this->get_modules( );
 	}
@@ -148,7 +149,7 @@ class Supersoniq {
 			$extensions = $settings
 				->extension( $extensions )
 				->by_file( 'application' )
-				->get_list( 'extensions' );
+				->get_list( 'extensions', TRUE );
 			array_unshift( $extensions, $application_path );	
 		} while ( $extensions != $old );
 		return $extensions;

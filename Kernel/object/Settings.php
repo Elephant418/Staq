@@ -55,22 +55,6 @@ class Settings {
 	/*************************************************************************
 	  ACCESSOR METHODS                   
 	 *************************************************************************/
-	public function get_list( $property ) {
-		$disabled = [ ];
-		$enabled = [ ];
-		foreach ( $this->settings as $data ) {
-			if ( isset( $data[ $property ][ 'disabled' ] ) ) {
-				$new = $data[ $property ][ 'disabled' ];
-				$disabled = \Supersoniq\array_merge_unique( $disabled, $new );
-			}
-			if ( isset( $data[ $property ][ 'enabled' ] ) ) {
-				$new = array_diff( $data[ $property ][ 'enabled' ], $disabled );
-				$enabled  = \Supersoniq\array_merge_unique( $enabled, $new );
-			}
-		}
-		return $enabled;
-	}
-
 	public function get( $section, $property, $default = NULL ) {
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $section ][ $property ] ) ) {
@@ -80,7 +64,23 @@ class Settings {
 		return $default;
 	}
 
-	public function get_array( $section ) {
+	public function get_list( $property, $order_from_bottom = FALSE  ) {
+		$disabled = [ ];
+		$enabled = [ ];
+		foreach ( $this->settings as $data ) {
+			if ( isset( $data[ $property ][ 'disabled' ] ) ) {
+				$new = $data[ $property ][ 'disabled' ];
+				$disabled = \Supersoniq\array_merge_unique( $disabled, $new );
+			}
+			if ( isset( $data[ $property ][ 'enabled' ] ) ) {
+				$new = array_diff( $data[ $property ][ 'enabled' ], $disabled );
+				$enabled  = \Supersoniq\array_merge_unique( $enabled, $new, $order_from_bottom );
+			}
+		}
+		return $enabled;
+	}
+
+	public function get_array( $section) {
 		$array = [ ];
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $section ] ) ) {
