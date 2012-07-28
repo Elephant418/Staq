@@ -142,6 +142,7 @@ class Supersoniq {
 	private function get_extensions( ) {
 		$settings = ( new \Supersoniq\Kernel\Object\Settings );
 		$application_path = \Supersoniq\format_to_path( self::$APPLICATION_NAME );
+		$extensions = [ ];
 		do {
 			$old = $extensions;
 			$extensions = $settings
