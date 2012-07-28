@@ -80,7 +80,14 @@ class Settings {
 		return $enabled;
 	}
 
-	public function get_array( $section) {
+	public function get_array( $section, $property = NULL ) {
+		if ( is_null(  ) ) {
+			return $this->get_section_property_array( $section, $property );
+		}
+		return $this->get_section( $section );
+	}
+
+	private function get_section( $section ) {
 		$array = [ ];
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $section ] ) ) {
@@ -94,17 +101,16 @@ class Settings {
 		return $array;
 	}
 
-
-	public function get_deep_array( $section, $property ) {
-		$deep_array = [ ];
+	private function get_section_property_array( $section, $property ) {
+		$array = [ ];
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $section ][ $property ] ) ) {
 				$elements = $data[ $section ][ $property ];
 				\Supersoniq\must_be_array( $elements );
-				$deep_array = array_merge( $deep_array, $elements );
+				$array = array_merge( $array, $elements );
 			}
 		}
-		return $deep_array;
+		return $array;
 	}
 
 	public function has( $section, $property ) {
