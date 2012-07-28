@@ -25,9 +25,32 @@
 				<a class="brand" href="/"><?= $this->application_name ?></a>
 				<div class="nav-collapse">
 					<ul class="nav">
-						<li class="active"><a href="/">Home</a></li>
-						<li><a href="#about">About</a></li>
-						<li><a href="#contact">Contact</a></li>
+					<?php
+					foreach ( $this->menu_main as $module => $menu ) {
+						if ( count( $menu ) == 1 ) {
+							foreach ( $menu as $page => $infos ) {
+					?>
+							<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></li>
+							<?php
+							}
+						} else {
+						?>
+						<li class="dropdown">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;"><?= $module ?> <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+							<?php
+							foreach ( $menu as $page => $infos ) {
+							?>
+								<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+							<?php
+							}
+							?>
+							</ul>
+						</li>
+						<?php
+						}
+					}
+					?>
 					</ul>
 				</div><!--/.nav-collapse -->
 			</div>

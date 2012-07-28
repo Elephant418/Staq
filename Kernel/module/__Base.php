@@ -71,10 +71,6 @@ abstract class __Base {
 		return FALSE;
 	}
 
-	public function get_page_route( $page, $parameters = [ ] ) {
-		return $this->routes[ $page ]->to_string( $parameters );
-	}
-
 	public function call_page( $page, $parameters ) {
 		if ( ! is_callable( [ $this, $page ] ) ) {
 			$template =  $this->get_page_view( $page )->render( );
@@ -89,8 +85,29 @@ abstract class __Base {
 		return $template;
 	}
 
-	public function get_page_view( $page ) {
+	private function get_page_view( $page ) {
 		return ( new \View )->by_module_page( $this, $page );
 	}
+
+
+
+	/*************************************************************************
+	  MENU METHODS                   
+	 *************************************************************************/
+	public function get_menu( $name ) {
+		$menu = $this->settings->get_array( 'menu_' . $name );
+		foreach ( $menu as $page => $infos ) {
+			if ( ! is_array( $infos ) ) {
+				$menu[ $page ] = [ 'label' => $infos, 'description' => $this->type . ' > ' . $infos ];
+			}
+			$menu[ $page ][ 'url' ] = $this->get_page_route( $page );
+		}
+		return $menu;
+	}
+
+	public function get_page_route( $page, $parameters = [ ] ) {
+		return $this->routes[ $page ]->to_string( $parameters );
+	}
+
 }
 

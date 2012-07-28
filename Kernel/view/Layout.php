@@ -16,6 +16,17 @@ class Layout extends Layout\__Parent {
 	 *************************************************************************/
 	protected function fill( $template ) {
 		$template->application_name = \Supersoniq::$APPLICATION_NAME;
+		
+		// Main Menu		
+		$menu_main = [ ];
+		foreach( \Supersoniq::$MODULES as $module ) {
+			$menu = $module->get_menu( 'main' );
+			if ( ! empty( $menu ) ) {
+				$menu_main[ $module->type ] = $menu;
+			}
+		}
+		$template->menu_main = $menu_main;
+		
 		return $template;
 	}
 }
