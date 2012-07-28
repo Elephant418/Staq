@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Twbootstrap\Template;
+namespace Supersoniq\Bootstrap\Template;
 
 class __Base extends __Base\__Parent {
 
