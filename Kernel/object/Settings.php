@@ -81,7 +81,7 @@ class Settings {
 	}
 
 	public function get_array( $section, $property = NULL ) {
-		if ( is_null(  ) ) {
+		if ( ! is_null( $property ) ) {
 			return $this->get_section_property_array( $section, $property );
 		}
 		return $this->get_section( $section );
