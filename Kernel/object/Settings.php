@@ -64,9 +64,9 @@ class Settings {
 		return $default;
 	}
 
-	public function get_list( $property, $order_from_bottom = FALSE  ) {
+	public function get_list( $property, $initial = [ ], $order_from_bottom = FALSE  ) {
 		$disabled = [ ];
-		$enabled = [ ];
+		$enabled = $initial;
 		foreach ( $this->settings as $data ) {
 			if ( isset( $data[ $property ][ 'disabled' ] ) ) {
 				$new = $data[ $property ][ 'disabled' ];
