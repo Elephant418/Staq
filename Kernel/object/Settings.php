@@ -21,18 +21,10 @@ class Settings {
 
 
 	/*************************************************************************
-	  SETTER                 
+	  CONSTRUCTOR                 
 	 *************************************************************************/
-	public function file_type( $file_type, $file_name ) {
-		$file_name = $file_type . '/' . $file_name;
-		return $this->file( $file_name );
-	}
-	public function file( $file_name ) {
-		if ( ! empty( $file_type ) ) {
-			$file_name = $file_type . '/' . $file_name;
-		}
-		$this->file_names[ ] = $file_name;
-		return $this;
+	public function name( ) {
+		return $this->type;
 	}
 
 
@@ -41,13 +33,18 @@ class Settings {
 	  CONSTRUCTOR                 
 	 *************************************************************************/
 	public function by_file_type( $file_type, $file_name ) {
-		$this->file_names = [ ];
-		$this->file_type( $file_type, $file_name );
+		$file_name = \Supersoniq\format_to_path( strtolower( $file_name ) );
+		$file_names = [ ];
+		do {
+			$file_names[ ] = $file_type . '/' . $file_name;
+			$file_name = \Supersoniq\substr_before_last( $file_name, '/' );
+		} while( ! empty( $file_name ) );
+		$this->by_file( $file_names );
 		return $this->load( );
 	}
-	public function by_file( $file_name ) {
-		$this->file_names = [ ];
-		$this->file( $file_name );
+	public function by_file( $file_names ) {
+		\Supersoniq\must_be_array( $file_names );
+		$this->file_names = $file_names;
 		return $this->load( );
 	}
 	public function load( ) {
