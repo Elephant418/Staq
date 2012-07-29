@@ -14,9 +14,26 @@ class Settings {
 	 ATTRIBUTES
 	 *************************************************************************/
 	private $extensions = [ ];
-	private $file_name;
+	private $file_names = [ ];
 	public $settings = [ ];
 	public static $file_parsed = [ ];
+
+
+
+	/*************************************************************************
+	  SETTER                 
+	 *************************************************************************/
+	public function file_type( $file_type, $file_name ) {
+		$file_name = $file_type . '/' . $file_name;
+		return $this->file( $file_name );
+	}
+	public function file( $file_name ) {
+		if ( ! empty( $file_type ) ) {
+			$file_name = $file_type . '/' . $file_name;
+		}
+		$this->file_names[ ] = $file_name;
+		return $this;
+	}
 
 
 
@@ -24,17 +41,19 @@ class Settings {
 	  CONSTRUCTOR                 
 	 *************************************************************************/
 	public function by_file_type( $file_type, $file_name ) {
-		$file_name = $file_type . '/' . $file_name;
-		return $this->by_file( $file_name );
+		$this->file_names = [ ];
+		$this->file_type( $file_type, $file_name );
+		return $this->load( );
 	}
 	public function by_file( $file_name ) {
-		if ( ! empty( $file_type ) ) {
-			$file_name = $file_type . '/' . $file_name;
-		}
+		$this->file_names = [ ];
+		$this->file( $file_name );
+		return $this->load( );
+	}
+	public function load( ) {
 		if ( empty( $this->extensions ) ) {
 			$this->extensions = \Supersoniq::$EXTENSIONS;
 		}
-		$this->file_name = $file_name;
 		$this->settings = $this->parse_files( );
 		return $this;
 	}
@@ -130,13 +149,14 @@ class Settings {
 	private function file_paths( ) {
 		$file_paths = [ ];
 		foreach ( $this->extensions as $extension ) {
-			$file_name = $this->file_name;
-			if ( \Supersoniq::$PLATFORM_NAME ) {
-				$file_name .= '.' . \Supersoniq::$PLATFORM_NAME;
-			}
-			while ( $file_name ) {
-				$file_paths[ ] = $extension . '/settings/' . $file_name . '.ini';
-				$file_name = \Supersoniq\substr_before_last( $file_name, '.' );
+			foreach( $this->file_names as $file_name ) {
+				if ( \Supersoniq::$PLATFORM_NAME ) {
+					$file_name .= '.' . \Supersoniq::$PLATFORM_NAME;
+				}
+				while ( $file_name ) {
+					$file_paths[ ] = $extension . '/settings/' . $file_name . '.ini';
+					$file_name = \Supersoniq\substr_before_last( $file_name, '.' );
+				}
 			}
 		}
 		return $file_paths;

@@ -177,8 +177,7 @@ class Autoloader {
 			$settings = ( new \Settings )->by_file( 'application' );
 			if ( $settings->has( $property, $class->type ) ) {
 				$base_name = $settings->get( $property, $class->type );
-				$base_class = '\\__Auto\\';
-				$base_class .= $class->type . '\\' . $base_name;
+				$base_class = '\\__Auto\\' . $class->type . '\\' . $base_name;
 				$this->create_class( $base_class, $class->called_name );
 				return TRUE;
 			}

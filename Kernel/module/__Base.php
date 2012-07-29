@@ -97,10 +97,12 @@ abstract class __Base {
 	public function get_menu( $name ) {
 		$menu = $this->settings->get_array( 'menu_' . $name );
 		foreach ( $menu as $page => $infos ) {
-			if ( ! is_array( $infos ) ) {
-				$menu[ $page ] = [ 'label' => $infos, 'description' => $this->type . ' > ' . $infos ];
+			if ( ! empty( $infos ) ) { 
+				if ( ! is_array( $infos ) ) {
+					$menu[ $page ] = [ 'label' => $infos, 'description' => $this->type . ' > ' . $infos ];
+				}
+				$menu[ $page ][ 'url' ] = $this->get_page_url( $page );
 			}
-			$menu[ $page ][ 'url' ] = $this->get_page_url( $page );
 		}
 		return [ $this->type => $menu ];
 	}
@@ -110,7 +112,9 @@ abstract class __Base {
 	}
 
 	public function get_page_url( $page, $parameters = [ ] ) {
-		return \Supersoniq::$BASE_URL . $this->routes[ $page ]->to_string( $parameters );
+		if ( isset( $this->routes[ $page ] ) ) {
+			return \Supersoniq::$BASE_URL . $this->routes[ $page ]->to_string( $parameters );
+		}
 	}
 
 }
