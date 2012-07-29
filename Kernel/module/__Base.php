@@ -102,7 +102,7 @@ abstract class __Base {
 			}
 			$menu[ $page ][ 'url' ] = $this->get_page_route( $page );
 		}
-		return $menu;
+		return [ $this->type => $menu ];
 	}
 
 	public function get_page_route( $page, $parameters = [ ] ) {

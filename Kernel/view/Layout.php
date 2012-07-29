@@ -20,12 +20,9 @@ class Layout extends Layout\__Parent {
 		// Main Menu		
 		$menu_main = [ ];
 		foreach( \Supersoniq::$MODULES as $module ) {
-			$menu = $module->get_menu( 'main' );
-			if ( ! empty( $menu ) ) {
-				$menu_main[ $module->type ] = $menu;
-			}
+			$menu_main = array_merge_recursive( $menu_main, $module->get_menu( 'main' ) );
 		}
-		$template->menu_main = $menu_main;
+		$template->menu_main = array_reverse( $menu_main );
 		
 		return $template;
 	}
