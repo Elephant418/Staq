@@ -27,10 +27,10 @@
 					<ul class="nav">
 					<?php
 					foreach ( $this->menu_main as $module => $menu ) {
-						if ( count( $menu ) == 1 ) {
+						if ( count( $menu ) < 2 ) {
 							foreach ( $menu as $page => $infos ) {
 					?>
-							<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></li>
+							<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
 							<?php
 							}
 						} else {
