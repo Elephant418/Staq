@@ -18,40 +18,26 @@ abstract class Model extends Model\__Parent {
 		$model = $this->model( );
 		return $model->all( ); 
 	}
-	public function get( $id ) {
+	public function get( $id = NULL ) {
 		$model = $this->model( );
+		if ( ! $id ) {
+			return $model;
+		}
 		if ( $model->init_by_id( $id ) ) {
 			return $model;
 		}
 		return FALSE;
 	}
-	public function create( ) {
-		$model = $this->model( );
-		if ( isset( $_POST[ 'model' ] ) ) {
-			foreach ( $_POST[ 'model' ] as $name => $value ) {
-				$model->$name = $value;
-			}
-			$model->save( );
-			if ( $model->exists( ) ) {
-				\Notification::push( $this->type . ' created with success ! ', \Notification::SUCCESS );
-				\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
-			}
-			\Notification::push( $this->type . ' not created !', \Notification::ERROR );
+	public function edit( &$model, $datas ) {
+		foreach ( $datas as $name => $value ) {
+			$model->$name = $value;
 		}
-		return $model; 
-	}
-	public function edit( $id, $datas ) {
-		$model = $this->model( );
-		if ( $model->init_by_id( $id ) ) {
-			foreach ( $datas as $name => $value ) {
-				$model->$name = $value;
-			}
-			if ( $model->save( ) ) {
-				\Notification::push( $this->type . ' updated with success ! ', \Notification::SUCCESS );
-			}
-			\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
+		if ( $model->save( ) ) {
+			\Notification::push( $this->type . ' updated with success ! ', \Notification::SUCCESS );
+			return TRUE;
 		}
-		return $model; 
+		\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
+		return FALSE;
 	}
 	public function delete( $id ) {
 		$model = $this->model( );
