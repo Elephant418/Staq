@@ -100,13 +100,17 @@ abstract class __Base {
 			if ( ! is_array( $infos ) ) {
 				$menu[ $page ] = [ 'label' => $infos, 'description' => $this->type . ' > ' . $infos ];
 			}
-			$menu[ $page ][ 'url' ] = $this->get_page_route( $page );
+			$menu[ $page ][ 'url' ] = $this->get_page_url( $page );
 		}
 		return [ $this->type => $menu ];
 	}
 
 	public function get_page_route( $page, $parameters = [ ] ) {
 		return $this->routes[ $page ]->to_string( $parameters );
+	}
+
+	public function get_page_url( $page, $parameters = [ ] ) {
+		return \Supersoniq::$BASE_URL . $this->routes[ $page ]->to_string( $parameters );
 	}
 
 }
