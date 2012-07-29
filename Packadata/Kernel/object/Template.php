@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Kernel\Object;
+namespace Supersoniq\Packadata\Kernel\Object;
 
 class Template extends \Class_Type_Accessor {
 
@@ -14,13 +14,12 @@ class Template extends \Class_Type_Accessor {
 	/*************************************************************************
 	  CONSTRUCTOR                 
 	 *************************************************************************/
-	public function by_name( $name ) {
-		return parent::by_name( $name );
+	public function by_model( $model ) {
+		return $this->by_name( 'Model\\' . $model->type )
+			->set( 'content', $model );
 	}
-	public function by_module_page( $module, $page ) {
-		if ( is_object( $module ) ) {
-			$module = $module->type;
-		}
-		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
+	public function by_data_type( $data_type ) {
+		return $this->by_name( 'Data_Type\\' . $data_type->type )
+			->set( 'content', $data_type );
 	}
 }

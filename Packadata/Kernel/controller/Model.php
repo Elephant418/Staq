@@ -18,10 +18,10 @@ abstract class Model extends Model\__Parent {
 		$model = $this->model( );
 		return $model->all( ); 
 	}
-	public function view( $id ) {
+	public function get( $id ) {
 		$model = $this->model( );
 		if ( $model->init_by_id( $id ) ) {
-			return $this->model( );
+			return $model;
 		}
 		return FALSE;
 	}

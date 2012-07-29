@@ -7,14 +7,14 @@
 
 namespace Supersoniq\Packadata\Kernel\View\Module\Model;
 
-abstract class All extends All\__Parent {
+abstract class View extends View\__Parent {
 
 
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
         public function fill( $template, $parameters = [ ] ) {
-		$template->models = $this->get_controller( )->all( );
+		$template->model = $this->get_controller( )->get( $parameters[ 'id' ] );
 		return $template;
 	}
 

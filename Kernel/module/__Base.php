@@ -89,7 +89,7 @@ abstract class __Base {
 
 	public function call_page( $page, $parameters ) {
 		if ( ! is_callable( [ $this, $page ] ) ) {
-			$template =  $this->get_page_view( $page )->render( );
+			$template =  $this->get_page_view( $page )->render( $parameters );
 		} else {
 			$template = call_user_func_array( [ $this, $page ], $parameters );
 		}
@@ -124,7 +124,9 @@ abstract class __Base {
 	}
 
 	public function get_page_route( $page, $parameters = [ ] ) {
-		return $this->routes[ $page ]->to_string( $parameters );
+		if ( isset( $this->routes[ $page ] ) ) {
+			return $this->routes[ $page ]->to_string( $parameters );
+		}
 	}
 
 	public function get_page_url( $page, $parameters = [ ] ) {

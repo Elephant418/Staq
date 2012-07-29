@@ -14,7 +14,7 @@ class Layout extends Layout\__Parent {
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	protected function fill( $template ) {
+	protected function fill( $template, $parameters = [ ] ) {
 		$template->application_name = \Supersoniq::$APPLICATION_NAME;
 		
 		// Main Menu		

@@ -30,9 +30,9 @@ class __Base {
 	/*************************************************************************
 	  PUBLIC METHODS                   
 	 *************************************************************************/
-	public function render( ) {
+	public function render( $parameters = [ ] ) {
 		$template = $this->get_template( );
-		return $this->fill( $template );
+		return $this->fill( $template, $parameters );
 	}
 
 
@@ -40,7 +40,7 @@ class __Base {
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	protected function fill( $template ) {
+	protected function fill( $template, $parameters = [ ] ) {
 		return $template;
 	}
 
