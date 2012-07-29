@@ -45,7 +45,7 @@ class Defined extends \Model\__Base {
 	public function add_attribute( $name, $data_type = NULL, $constraint = FALSE ) {
 		if ( ! is_object( $data_type ) ) {
 			$data_type = new \Data_Type\Varchar( );
-		} else if ( is_a( $data_type, 'Relation\__Base' ) ) {
+		} else if ( is_a( $data_type, '__Auto\Relation\__Base' ) ) {
 			$data_type = new \Data_Type\Relation( $data_type );
 		}
 		$data_type->name = $name;
