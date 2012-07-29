@@ -48,6 +48,7 @@ class Defined extends \Model\__Base {
 		} else if ( is_a( $data_type, 'Relation\__Base' ) ) {
 			$data_type = new \Data_Type\Relation( $data_type );
 		}
+		$data_type->name = $name;
 		// echo get_class( $data_type ) . PHP_EOL;
 		if ( $constraint ) {
 			$index = new \Model_Index( );

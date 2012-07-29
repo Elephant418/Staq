@@ -234,7 +234,11 @@ function redirect( $url ) {
 }
 
 function redirect_to_module_page( $module, $page, $parameters = [ ] ) {
-	redirect( module_page_url( $module, $action, $parameters ) );
+	redirect( module_page_url( $module, $page, $parameters ) );
+}
+
+function redirect_to_page( $page, $parameters = [ ] ) {
+	redirect_to_module_page( \Supersoniq::$MODULE_NAME, $page, $parameters );
 }
 
 function module_page_url( $module, $page, $parameters = [ ] ) {

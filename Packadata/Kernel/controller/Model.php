@@ -40,19 +40,16 @@ abstract class Model extends Model\__Parent {
 		}
 		return $model; 
 	}
-	public function edit( $id ) {
+	public function edit( $id, $datas ) {
 		$model = $this->model( );
 		if ( $model->init_by_id( $id ) ) {
-			if ( isset( $_POST[ 'model' ] ) ) {
-				foreach ( $_POST[ 'model' ] as $name => $value ) {
-					$model->$name = $value;
-				}
-				if ( $model->save( ) ) {
-					\Notification::push( $this->type . ' updated with success ! ', \Notification::SUCCESS );
-					\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
-				}
-				\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
+			foreach ( $datas as $name => $value ) {
+				$model->$name = $value;
 			}
+			if ( $model->save( ) ) {
+				\Notification::push( $this->type . ' updated with success ! ', \Notification::SUCCESS );
+			}
+			\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
 		}
 		return $model; 
 	}

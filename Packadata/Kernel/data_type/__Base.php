@@ -15,6 +15,7 @@ abstract class __Base {
 	 *************************************************************************/
 	public static $autoload_create_child = 'Data_Type\\__Base';
 	public $type;
+	public $name;
 	protected $value;
 
 

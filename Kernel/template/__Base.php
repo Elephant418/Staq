@@ -121,7 +121,7 @@ class __Base {
 		return $extensions;
 	}
 	
-	protected function display( $var ) {
+	protected function display( $var, $mode = 'view' ) {
 		if ( is_string( $var ) ) {
 			return $var;
 		}
@@ -131,10 +131,10 @@ class __Base {
 				return $var->render( );
 			}
 			if ( $type == 'Model' ) {
-				return ( new \Template )->by_model( $var );
+				return ( new \Template )->by_model( $var, $mode );
 			}
 			if ( $type == 'Data_Type' ) {
-				return ( new \Template )->by_data_type( $var );
+				return ( new \Template )->by_data_type( $var, $mode );
 			}
 		}
 	}

@@ -7,19 +7,19 @@
 
 namespace Supersoniq\Packadata\Kernel\Object;
 
-class Template extends \Class_Type_Accessor {
+class Template extends Template\__Parent {
 
 
 
 	/*************************************************************************
 	  CONSTRUCTOR                 
 	 *************************************************************************/
-	public function by_model( $model ) {
-		return $this->by_name( 'Model\\' . $model->type )
+	public function by_model( $model, $mode ) {
+		return $this->by_name( 'Model\\' . ucfirst( $mode ) . '\\' . $model->type )
 			->set( 'content', $model );
 	}
-	public function by_data_type( $data_type ) {
-		return $this->by_name( 'Data_Type\\' . $data_type->type )
+	public function by_data_type( $data_type, $mode ) {
+		return $this->by_name( 'Data_Type\\' . ucfirst( $mode ) . '\\' . $data_type->type )
 			->set( 'content', $data_type );
 	}
 }
