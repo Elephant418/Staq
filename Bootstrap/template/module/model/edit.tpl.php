@@ -10,6 +10,6 @@
 	}
 	?>
 
-	<button class="btn" type="submit">Validate</button>
-	<a class="btn" href="<?= $page_url( 'view', $this->model->id ) ?>">Cancel</a>
+	<button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Validate</button>
+	<a class="btn" href="<?= $page_url( 'view', $this->model->id ) ?>"><i class="icon-arrow-left"></i> Cancel</a>
 </form>

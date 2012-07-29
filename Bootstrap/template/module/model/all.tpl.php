@@ -20,8 +20,9 @@ if ( count( $this->models ) == 0 ) {
 		<tr>
 			<td><?= $model->name( ) ?></td>
 			<td>
-				<a class="btn" href="<?= $page_url( 'view', $model->id ) ?>">View</a>
-				<a class="btn" href="<?= $page_url( 'edit', $model->id ) ?>">Edit</a>
+				<a class="btn" href="<?= $page_url( 'view', $model->id ) ?>"><i class="icon-search"></i> View</a>
+				<a class="btn" href="<?= $page_url( 'edit', $model->id ) ?>"><i class="icon-pencil"></i> Edit</a>
+				<a class="btn btn-danger" href="<?= $page_url( 'delete', $model->id ) ?>"><i class="icon-remove"></i> Delete</a>
 			</td>
 		</tr>
 	<?
@@ -32,4 +33,4 @@ if ( count( $this->models ) == 0 ) {
 <?php
 }
 ?>
-<a class="btn" href="<?= $page_url( 'create' ) ?>">Create</a>
+<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>

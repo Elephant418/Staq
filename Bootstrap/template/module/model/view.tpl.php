@@ -9,6 +9,6 @@ foreach ( $this->model->get_attribute_fields( ) as $name ) {
 }
 ?>
 
-<a class="btn" href="<?= $page_url( 'all' ) ?>">List</a>
-<a class="btn" href="<?= $page_url( 'create' ) ?>">Create</a>
-<a class="btn" href="<?= $page_url( 'edit', $this->model->id ) ?>">Edit</a>
+<a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> List</a>
+<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
+<a class="btn" href="<?= $page_url( 'edit', $this->model->id ) ?>"><i class="icon-pencil"></i> Edit</a>
