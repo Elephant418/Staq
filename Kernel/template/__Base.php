@@ -95,7 +95,15 @@ class __Base {
 		return file_get_contents( $this->_path );
 	}
 
-	protected function render_php( ) {
+	protected function render_php( ) {	
+		$module_page_url = function( $module, $page, $parameter = NULL ) {
+			$parameters = array_slice( func_get_args( ), 2 );
+			return \Supersoniq\module_page_url( $module, $page, $parameters );
+		};
+		$page_url = function( $page, $parameter = NULL ) use ( $module_page_url ) {
+			$parameters = array_slice( func_get_args( ), 1 );
+			return \Supersoniq\module_page_url( \Supersoniq::$MODULE_NAME, $page, $parameters );
+		};
 		ob_start();		
 		require( $this->_path );
 		$html = ob_get_contents();
@@ -154,14 +162,17 @@ class __Base {
 	 *************************************************************************/
 	protected function get_template_path( ) {
 		$name = \Supersoniq\format_to_path( strtolower( $this->_type ) );
-		foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
-			foreach ( $this->_extensions as $file_extension ) {
-				$template_path = $this->get_template_path_by_extension( $name, $extension, $file_extension );
-				if ( is_file( $template_path ) ) {
-					return $template_path;
+		do {
+			foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
+				foreach ( $this->_extensions as $file_extension ) {
+					$template_path = $this->get_template_path_by_extension( $name, $extension, $file_extension );
+					if ( is_file( $template_path ) ) {
+						return $template_path;
+					}
 				}
 			}
-		}
+			$name = \Supersoniq\substr_before_last( $name, '/' );
+		} while ( $name );
 		return FALSE;
 	}
 

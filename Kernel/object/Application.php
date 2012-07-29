@@ -70,11 +70,12 @@ class Application {
 				return [ $module, $callable ];
 			}
 		}
-		throw new \Exception\Resource_Not_Found( );
+		throw new \Exception\Resource_Not_Found( 'Exception "' . get_class( $exception ) . '" not handled' );
 	}
 
 	private function call_module_page( $module_page ) {
 		\Supersoniq\must_be_array( $module_page[ 1 ] );
+		\Supersoniq::$MODULE_NAME = $module_page[ 0 ]->type;
 		$template = call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
 		if ( is_object( $template ) ) {
 			return $template->compile( )->render( );

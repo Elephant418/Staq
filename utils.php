@@ -238,7 +238,7 @@ function redirect_to_module_page( $module, $page, $parameters = [ ] ) {
 }
 
 function module_page_url( $module, $page, $parameters = [ ] ) {
-	return \Supersoniq::$BASE_URL . $this->module_page_route( $module, $page, $parameters );
+	return \Supersoniq::$BASE_URL . module_page_route( $module, $page, $parameters );
 }
 
 function module_page_route( $module, $page, $parameters = [ ] ) {

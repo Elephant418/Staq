@@ -14,6 +14,7 @@ class Supersoniq {
 	static public $application;
 	static public $APPLICATION_NAME;
 	static public $PLATFORM_NAME;
+	static public $MODULE_NAME;
 	static public $BASE_URL;
 	static public $EXTENSIONS = [ ];
 	static public $MODULES    = [ ];

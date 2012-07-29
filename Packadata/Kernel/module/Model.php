@@ -12,11 +12,27 @@ abstract class Model extends \__Auto\Module\__Base {
 
 
 	/*************************************************************************
-	  CONSTRUCTOR                   
+	  GETTER                 
 	 *************************************************************************/
-	public function __construct( ) {
-		parent::__construct( );
-		$this->settings->file_type( 'module', 'model' )->load( );
+	public function name( ) {
+		return basename( \Supersoniq\format_to_path( $this->type ) );
+	}
+
+
+
+	/*************************************************************************
+	  PRIVATE METHODS                   
+	 *************************************************************************/
+	protected function get_page_view( $page ) {
+		return ( new \View )->by_module_page( 'Model\\' . ucfirst( $page ),  $this->get_model_name( $page ) );
+	}
+
+	protected function get_model_name( ) {
+		return \Supersoniq\substr_after( $this->type, '\\' );
+	}
+
+	protected function get_route( $page ) {
+		return parent::get_route( $page )->add_prefix( strtolower( $this->get_model_name( ) ) );
 	}
 
 }

@@ -7,21 +7,8 @@
 
 namespace Supersoniq\Packadata\Kernel\Controller;
 
-abstract class Model extends \Controller\__Base {
+abstract class Model extends Model\__Parent {
 
-
-	/*************************************************************************
-	  CONSTRUCTOR                   
-	 *************************************************************************/
-	public function __construct( ) {
-		parent::__construct( );
-		$root = '/' . strtolower( $this->type );
-		$this->add_handled_route( 'all'   , $root);
-		$this->add_handled_route( 'view'  , $root . '/view/:id' );
-		$this->add_handled_route( 'create', $root . '/create' );
-		$this->add_handled_route( 'edit'  , $root . '/edit/:id' );
-		$this->add_handled_route( 'delete', $root . '/delete/:id' );
-	}
 
 
 	/*************************************************************************
@@ -29,25 +16,17 @@ abstract class Model extends \Controller\__Base {
 	 *************************************************************************/
 	public function all( ) {
 		$model = $this->model( );
-		$this->view->all     = $model->all( );
-		$this->view->title   = 'List of ' . $this->type;
-		$this->view->content = $this->view->render( \View\__Base::LIST_MODEL_TEMPLATE );
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+		return $model->all( ); 
 	}
 	public function view( $id ) {
 		$model = $this->model( );
-		$this->view->model = $model;
 		if ( $model->init_by_id( $id ) ) {
-			$this->view->title   = $this->type . ' ' . $id;
-			$this->view->content = $this->view->render( \View\__Base::VIEW_MODEL_TEMPLATE );
-		} else {
-			$this->view->title   = $this->type . ' not found';
+			return $this->model( );
 		}
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
+		return FALSE;
 	}
 	public function create( ) {
 		$model = $this->model( );
-		$this->view->model = $model;
 		if ( isset( $_POST[ 'model' ] ) ) {
 			foreach ( $_POST[ 'model' ] as $name => $value ) {
 				$model->$name = $value;
@@ -59,13 +38,10 @@ abstract class Model extends \Controller\__Base {
 			}
 			\Notification::push( $this->type . ' not created !', \Notification::ERROR );
 		}
-		$this->view->title   = 'New ' . $this->type;
-		$this->view->content = $this->view->render( \View\__Base::EDIT_MODEL_TEMPLATE );
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+		return $model; 
 	}
 	public function edit( $id ) {
 		$model = $this->model( );
-		$this->view->model = $model;
 		if ( $model->init_by_id( $id ) ) {
 			if ( isset( $_POST[ 'model' ] ) ) {
 				foreach ( $_POST[ 'model' ] as $name => $value ) {
@@ -77,38 +53,28 @@ abstract class Model extends \Controller\__Base {
 				}
 				\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
 			}
-			$this->view->title   = 'Edit ' . $this->type;
-			$this->view->content = $this->view->render( \View\__Base::EDIT_MODEL_TEMPLATE );
-		} else {
-			$this->view->title   = $this->type . ' not found';
 		}
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+		return $model; 
 	}
 	public function delete( $id ) {
 		$model = $this->model( );
-		$this->view->model = $model;
 		if ( $model->init_by_id( $id ) ) {
 			$model->delete( );
 			\Notification::push( $this->type . ' deleted with success ! ', \Notification::SUCCESS );
-			\Supersoniq\Application::redirect_to_action( $this->type, 'all' );
-		} else {
-			$this->view->title   = $this->type . ' not found';
-			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+			return TRUE;
 		}
+		return FALSE;
 	}
 
 
 	/*************************************************************************
 	  PROTECTED METHODS                   
 	 *************************************************************************/
-	public function action_method( $method = NULL ) {
-		return parent::action_method( $method );
+	protected function get_model_name( ) {
+		return \Supersoniq\substr_after( $this->type, '\\' );
 	}
-	protected function model_class( ) {
-		return '\\Model\\' . $this->type;
-	}
+
 	protected function model( ) {
-		$class = $this->model_class( );
-		return new $class;
+		return ( new \Model )->by_name( $this->get_model_name( ) );
 	}
 }

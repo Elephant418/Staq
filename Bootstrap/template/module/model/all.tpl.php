@@ -20,7 +20,8 @@ if ( count( $this->models ) == 0 ) {
 		<tr>
 			<td><?= $model->name( ) ?></td>
 			<td>
-				<a class="btn" href="">Editer</a>
+				<a class="btn" href="<?= $page_url( 'view', $model->id ) ?>">View</a>
+				<a class="btn" href="<?= $page_url( 'edit', $model->id ) ?>">Edit</a>
 			</td>
 		</tr>
 	<?

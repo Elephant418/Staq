@@ -47,7 +47,7 @@ class __Base {
 	protected function get_template( $must_exists = TRUE ) {
 		$template = ( new \Template )->by_name( $this->type );
 		if ( $must_exists && ! $template->is_template_found( ) ) {
-			throw new \Exception( 'Template not found "' . $this->type . '"' );
+			throw new \Exception\Resource_Not_Found( 'Template not found "' . $this->type . '"' );
 		}
 		return $template;
 	}

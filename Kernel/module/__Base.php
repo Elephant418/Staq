@@ -37,29 +37,36 @@ abstract class __Base {
 		$this->settings = $this->get_settings( );
 		$this->routes   = $this->get_routes( );
 	}
-	private function get_settings( ) {
+
+	protected function get_settings( ) {
 		return ( new \Settings )->by_file_type( 'module', $this->type );
 	}
-	private function get_pages( ) {
+
+	protected function get_pages( ) {
 		$pages = $this->settings->get_list( 'pages' );
 		if ( empty( $pages ) ) {
 			$pages = array_diff( get_class_methods( $this ), get_class_methods( get_class( ) ) );
 		}
 		return $pages;
 	}
-	private function get_routes( ) {
+
+	protected function get_routes( ) {
 		$pages = $this->get_pages( );
 		$routes = [ ];
 		foreach ( $pages as $page ) {
-			$route = $this->settings->get_array( 'routes_' . $page );
-			if ( empty( $route ) ) {
-				$route = ( new \Route )->from_string( '/' . \Supersoniq\format_to_path( strtolower( $this->type ) ) . '/' . $page );
-			} else {
-				$route = ( new \Route )->from_array( $route );
-			}
-			$routes[ $page ] = $route;
+			$routes[ $page ] = $this->get_route( $page );
 		}
 		return $routes;
+	}
+
+	protected function get_route( $page ) {
+		$route = $this->settings->get_array( 'routes_' . $page );
+		if ( empty( $route ) ) {
+			$route = ( new \Route )->from_string( '/' . \Supersoniq\format_to_path( strtolower( $this->type ) ) . '/' . $page );
+		} else {
+			$route = ( new \Route )->from_array( $route );
+		}
+		return $route;
 	}
 
 
@@ -94,10 +101,6 @@ abstract class __Base {
 		return $template;
 	}
 
-	private function get_page_view( $page ) {
-		return ( new \View )->by_module_page( $this, $page );
-	}
-
 
 
 	/*************************************************************************
@@ -128,6 +131,15 @@ abstract class __Base {
 		if ( isset( $this->routes[ $page ] ) ) {
 			return \Supersoniq::$BASE_URL . $this->routes[ $page ]->to_string( $parameters );
 		}
+	}
+
+
+
+	/*************************************************************************
+	  PRIVATE METHODS                   
+	 *************************************************************************/
+	protected function get_page_view( $page ) {
+		return ( new \View )->by_module_page( $this, $page );
 	}
 
 }

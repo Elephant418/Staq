@@ -30,6 +30,11 @@ class Route {
 		}
 		return $this;
 	}
+	public function add_prefix( $prefix ) {
+		\Supersoniq\must_starts_with( $prefix, '/' );
+		$this->main_route = $prefix . $this->main_route;
+		return $this;
+	}
 
 
 	/*************************************************************************
@@ -41,6 +46,9 @@ class Route {
 			return $parameters;
 		}
 		return FALSE;
+	}
+	public function __toString( ) {
+		return $this->to_string( );
 	}
 	public function to_string( $parameters = [ ] ) {
 		$route = $this->main_route;
