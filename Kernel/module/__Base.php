@@ -21,6 +21,15 @@ abstract class __Base {
 
 
 	/*************************************************************************
+	  GETTER                 
+	 *************************************************************************/
+	public function name( ) {
+		return $this->type;
+	}
+
+
+
+	/*************************************************************************
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( ) {
@@ -29,7 +38,7 @@ abstract class __Base {
 		$this->routes   = $this->get_routes( );
 	}
 	private function get_settings( ) {
-		return ( new \Settings )->by_file_type( 'module', strtolower( $this->type ) );
+		return ( new \Settings )->by_file_type( 'module', $this->type );
 	}
 	private function get_pages( ) {
 		$pages = $this->settings->get_list( 'pages' );
@@ -95,16 +104,20 @@ abstract class __Base {
 	  MENU METHODS                   
 	 *************************************************************************/
 	public function get_menu( $name ) {
-		$menu = $this->settings->get_array( 'menu_' . $name );
-		foreach ( $menu as $page => $infos ) {
-			if ( ! empty( $infos ) ) { 
+		$menu = [ ];
+		$settings = $this->settings->get_array( 'menu_' . $name );
+		foreach ( $settings as $page => $infos ) {
+			if ( isset( $this->routes[ $page ] ) && ! empty( $infos ) ) { 
 				if ( ! is_array( $infos ) ) {
-					$menu[ $page ] = [ 'label' => $infos, 'description' => $this->type . ' > ' . $infos ];
+					$menu[ $page ] = [ 'label' => $infos, 'description' => $this->name( ) . ' > ' . $infos ];
 				}
 				$menu[ $page ][ 'url' ] = $this->get_page_url( $page );
 			}
 		}
-		return [ $this->type => $menu ];
+		if ( ! empty( $menu ) ) {
+			return [ $this->name( ) => $menu ];
+		}
+		return [ ];
 	}
 
 	public function get_page_route( $page, $parameters = [ ] ) {
