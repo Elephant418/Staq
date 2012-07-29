@@ -7,18 +7,13 @@
 
 namespace Supersoniq\Bootstrap\Template;
 
-class __Base extends __Base\__Parent {
+class Module extends Module\__Parent {
 
 
 
 	/*************************************************************************
-	  CONSTRUCTOR                   
+	 ATTRIBUTES
 	 *************************************************************************/
-	public function __construct( ) {
-		parent::__construct( );
-		if ( $this->is_module_template( ) ) {
-			$this->set_parent( ( new \View )->by_layout( 'simple' ) );
-		}
-	}
+	public $_parent = 'simple';
 
 }

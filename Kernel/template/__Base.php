@@ -14,11 +14,11 @@ class __Base {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $_parent;
+	public $_type;
 	public $_extensions = [ ];
 	public $_attributes = [ ];
-	public $_type;
-	public $_path;
+	public $_parent;
+	public $_path = 'auto';
 
 
 
@@ -59,7 +59,12 @@ class __Base {
 	public function __construct( ) {
 		$this->_type = \Supersoniq\class_type_name( $this );
 		$this->_extensions = $this->get_extensions( );
-		$this->_path = $this->get_template_path( );
+		if ( $this->_path == 'auto' ) {
+			$this->_path = $this->get_template_path( );
+		}
+		if ( ! is_null( $this->_parent ) ) {
+			$this->set_parent( ( new \View )->by_layout( $this->_parent ) );
+		}
 		$this->content = '';
 	}
 
@@ -120,6 +125,9 @@ class __Base {
 			if ( $type == 'Model' ) {
 				return ( new \Template )->by_model( $var );
 			}
+			if ( $type == 'Data_Type' ) {
+				return ( new \Template )->by_data_type( $var );
+			}
 		}
 	}
 
@@ -137,15 +145,6 @@ class __Base {
 	protected function set_parent( $parent ) {
 		$this->_parent = $parent->render( );
 		$this->_parent->content = $this;
-	}
-
-
-
-	/*************************************************************************
-	  PRIVATE TYPE METHODS                   
-	 *************************************************************************/
-	protected function is_module_template( ) {
-		return \Supersoniq\starts_with( $this->_type, 'Module\\' );
 	}
 
 
