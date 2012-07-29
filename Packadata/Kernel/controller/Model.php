@@ -33,20 +33,16 @@ abstract class Model extends Model\__Parent {
 			$model->$name = $value;
 		}
 		if ( $model->save( ) ) {
-			\Notification::push( $this->type . ' updated with success ! ', \Notification::SUCCESS );
+			\Notification::push( $this->get_model_name( ) . ' updated with success ! ', \Notification::SUCCESS );
 			return TRUE;
 		}
-		\Notification::push( $this->type . ' not updated !', \Notification::ERROR );
+		\Notification::push( $this->get_model_name( ) . ' not updated !', \Notification::ERROR );
 		return FALSE;
 	}
-	public function delete( $id ) {
-		$model = $this->model( );
-		if ( $model->init_by_id( $id ) ) {
-			$model->delete( );
-			\Notification::push( $this->type . ' deleted with success ! ', \Notification::SUCCESS );
-			return TRUE;
-		}
-		return FALSE;
+	public function delete( $model ) {
+		$model->delete( );
+		\Notification::push( $this->get_model_name( ) . ' deleted with success ! ', \Notification::SUCCESS );
+		return TRUE;
 	}
 
 
