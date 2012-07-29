@@ -33,6 +33,7 @@ abstract class __Base extends \Database_Table {
 	}
 	public function set( $name, $value ) {
 		$this->_attributes[ $name ] = $value;
+		return $this;
 	}
 
 

@@ -30,6 +30,7 @@ class Defined extends \Model\__Base {
 			return $this;
 		}
 		$this->_attributes[ $name ]->set( $value );
+		return $this;
 	}
 	public function attribute( $name ) {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
