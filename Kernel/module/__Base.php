@@ -53,7 +53,7 @@ abstract class __Base {
 		foreach ( $pages as $page ) {
 			$route = $this->settings->get_array( 'routes_' . $page );
 			if ( empty( $route ) ) {
-				$route = ( new \Route )->from_string( '/' . strtolower( $this->type ) . '/' . $page );
+				$route = ( new \Route )->from_string( '/' . \Supersoniq\format_to_path( strtolower( $this->type ) ) . '/' . $page );
 			} else {
 				$route = ( new \Route )->from_array( $route );
 			}
