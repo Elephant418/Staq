@@ -6,28 +6,11 @@ class Versioned_Model extends \Controller\Model {
 
 
 	/*************************************************************************
-	 CONSTRUCTOR
-	*************************************************************************/
-	public function __construct( ) {
-		parent::__construct( );
-		$root = '/' . strtolower( $this->type );
-		$this->add_handled_route( 'archives', '/archives' );
-		$this->add_handled_route( 'archive', $root . '/archive/:id' );
-		$this->add_handled_route( 'see'    , $root . '/archive/see/:id/:versions' );
-		$this->add_handled_route( 'restore', $root . '/restore/:id/:versions' );
-		$this->add_handled_route( 'erase'  , $root . '/erase/:id(/:versions)' );
-	}
-
-
-	/*************************************************************************
 	 ACTION METHODS
 	*************************************************************************/
 	public function archives( $type = NULL ) {
-		$archives = ( new \Model_Archive( ) )->all( $type );
-		$this->view->archives = $archives;
-		$this->view->content = $this->view->render( \View\__Base::DELETED_MODELS_TEMPLATE );
-		$this->view->title = 'Archives of Deleted Models';
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
+		$archives = $this->model( );
+		return $archives->all( $type );
 	}
 	public function archive( $id ) {
 		$model = $this->model( );

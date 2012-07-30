@@ -10,7 +10,6 @@ namespace Supersoniq\Packadata\Kernel\Controller;
 abstract class Model extends Model\__Parent {
 
 
-
 	/*************************************************************************
 	  ACTION METHODS                   
 	 *************************************************************************/
