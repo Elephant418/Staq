@@ -9,24 +9,14 @@ class Versioned_Model extends \Controller\Model {
 	 ACTION METHODS
 	*************************************************************************/
 	public function archives( $type = NULL ) {
-		$archives = $this->model( );
-		return $archives->all( $type );
+		$archives = ( new \Model_Archive( ) )->all( $type );
+		return $archives;
 	}
 	public function archive( $id ) {
 		$model = $this->model( );
-		if ( $model->init_by_id( $id ) ) {
-			$this->view->title   = 'Versions of ';
-		} else {
-			$this->view->title   = 'Archives of ';
-		}
-		if ( $archives = ( new \Model_Archive( ) )->get_model_history( $id, $this->type ) ) {
-			$this->view->title .= $this->type . ' ' . $id;
-			$this->view->archives = $archives;
-			$this->view->content = $this->view->render( \View\__Base::LIST_ARCHIVE_TEMPLATE );
-		} else {
-			$this->view->title   = 'Archives of this ' . $this->type . ' not found';
-		}
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
+		$model->init_by_id( $id );
+		$archives = ( new \Model_Archive( ) )->get_model_history( $id, $this->type );
+		return $archives;
 	}
 	public function see( $id, $versions ) {
 		if ( $archive = ( new \Model_Archive( ) )->get_model_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
