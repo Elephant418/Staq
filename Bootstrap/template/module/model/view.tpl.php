@@ -1,13 +1,6 @@
 <h1>View</h1>
 
-<?php
-foreach ( $this->model->get_attribute_fields( ) as $name ) {
-	$attribute = $this->model->attribute( $name );
-?>
-	<p><b><?= $name ?></b> : <?= $this->display( $attribute ) ?></p>
-<?php
-}
-?>
+<?= $this->display( $this->model ); ?>
 
 <a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> List</a>
 <a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
