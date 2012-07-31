@@ -23,6 +23,9 @@ if ( count( $this->models ) == 0 ) {
 				<a class="btn" href="<?= $page_url( 'view', $model->id ) ?>"><i class="icon-search"></i> View</a>
 				<a class="btn" href="<?= $page_url( 'edit', $model->id ) ?>"><i class="icon-pencil"></i> Edit</a>
 				<a class="btn btn-danger" href="<?= $page_url( 'delete', $model->id ) ?>"><i class="icon-remove"></i> Delete</a>
+				<?php if ( $model->is_versioned ) { ?>
+					<a class="btn" href="<?= $page_url( 'archive', $model->id ) ?>"><i class="icon-th-list"></i> Archives</a>
+				<?php } ?>
 			</td>
 		</tr>
 	<?
