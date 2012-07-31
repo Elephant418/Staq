@@ -19,14 +19,8 @@ class Versioned_Model extends \Controller\Model {
 		return $archives;
 	}
 	public function see( $id, $versions ) {
-		if ( $archive = ( new \Model_Archive( ) )->get_model_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
-			$this->view->title = $this->type . ' ' . $id . ' version ' . $archive->model_attributes_version;
-			$this->view->archive = $archive;
-			$this->view->content = $this->view->render( \View\__Base::VIEW_ARCHIVE_TEMPLATE );
-		} else {
-			$this->view->title = 'Archive not found';
-		}
-		return $this->render( \View\__Base::LAYOUT_TEMPLATE );
+		$archive = ( new \Model_Archive( ) )->get_model_version( $id, $this->type, array( 'attributes' => $versions ) );
+		return $archive;
 	}
 	public function erase ( $id, $versions = NULL ) {
 		if ( isset( $versions ) ) {
@@ -40,16 +34,16 @@ class Versioned_Model extends \Controller\Model {
 					$archive->delete( );
 				}
 				\Notification::push( 'Archives of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
-				\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $id ) );
+				return TRUE;
 			} else {
 				$deleted_version = $archives->model_type_version . '.' . $archives->model_attributes_version;
 				$archives->delete( );
 				\Notification::push( 'Version ' . $deleted_version . ' of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
-				\Supersoniq\Application::redirect_to_action( $this->type, 'archive', array( 'id' => $id ) );
+				return TRUE;
 			}
 		} else {
-			$this->view->title   = 'Archives of this ' . $this->type . ' not found';
-			return $this->render( \View\__Base::LAYOUT_TEMPLATE ); 
+			\Notification::push( 'Archives not found !', \Notification::ERROR );
+			return FALSE;
 		}
 	}
 	public function restore ( $id, $versions ) {
@@ -71,12 +65,13 @@ class Versioned_Model extends \Controller\Model {
 			$restored_version = $archive->model_type_version . '.' . $archive->model_attributes_version;
 			if ( $model->save( $force_insert ) ) {
 				\Notification::push( $this->type . ' version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
-				\Supersoniq\Application::redirect_to_action( $this->type, 'view', array( 'id' => $model->id ) );
+				return TRUE;
 			}
 			\Notification::push( $this->type . ' not restored !', \Notification::ERROR );
+			return FALSE;
 		} else {
-			$this->view->title   = 'Archive not found';
-			return $this->render( \View\__Base::LAYOUT_TEMPLATE );
+			\Notification::push( 'Archive not found !', \Notification::ERROR );
+			return FALSE;
 		}
 	}
 }
