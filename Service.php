@@ -5,19 +5,21 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-class Supersoniq {
+namespace Supersoniq;
+
+class Service {
 
 
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	static public $application;
-	static public $APPLICATION_NAME;
-	static public $PLATFORM_NAME;
-	static public $MODULE_NAME;
-	static public $BASE_URL;
-	static public $EXTENSIONS = [ ];
-	static public $MODULES    = [ ];
+	public static $APPLICATION_NAME;
+	public static $PLATFORM_NAME;
+	public static $MODULE_NAME;
+	public static $BASE_URL;
+	public static $EXTENSIONS = [ ];
+	public static $MODULES    = [ ];
+	private $route;
 	private $applications     = [ ];
 	private $platforms        = [ ];
 
@@ -53,31 +55,23 @@ class Supersoniq {
 	  RUN METHODS                   
 	 *************************************************************************/
 	public function run( $request = NULL ) {
-		echo $this->render( $request );
+		$this->start( $request );
+		echo $this->render( );
 		return $this;
 	}
-	public function render( $request = NULL ) {
+	public function start( $request = NULL ) {
 		$this->format_request( $request );
 		$this->initialize_attributes( $request );
 		$this->initialize_settings( );
-		self::$application = $this->instanciate_application( $request );
-		return self::$application->render( );
+		$this->route = $this->route_by_request( $request );
 	}
-
-
-
-	/*************************************************************************
-	  APPLICATION METHODS                   
-	 *************************************************************************/
-	private function instanciate_application( $request ) {
-		$route = $this->route_by_request( $request );
+	public function render( ) {
+		\Supersoniq::$MODULES = $this->get_modules( );
 		return ( new \Application )
-			->route( $route );
+			->route( $this->route )
+			->render( );
 	}
 
-	private function route_by_request( $request ) {
-		return \Supersoniq\substr_after( $request->to_string( ), self::$BASE_URL );
-	}
 
 
 	/*************************************************************************
@@ -107,19 +101,22 @@ class Supersoniq {
 		( new \Supersoniq\Kernel\Internal\Autoloader )->init( );
 	}
 
+	private function route_by_request( $request ) {
+		return \Supersoniq\substr_after( $request->to_string( ), \Supersoniq::$BASE_URL );
+	}
+
 
 	/*************************************************************************
 	  ATTRIBUTES METHODS                   
 	 *************************************************************************/
 	private function initialize_attributes( $request ) {
-		$platform               = $this->platform_by_request( $request );
-		$application            = $this->application_by_request( $request, $platform );
-		self::$PLATFORM_NAME    = $platform[ 'name' ];
-		self::$APPLICATION_NAME = \Supersoniq\format_to_namespace( $application[ 'path' ] );
-		self::$BASE_URL         = $this->base_url_by_request( $request, $platform, $application );
-		self::$EXTENSIONS       = $this->get_extensions( );
+		$platform         = $this->platform_by_request( $request );
+		$application      = $this->application_by_request( $request, $platform );
+		\Supersoniq::$PLATFORM_NAME    = $platform[ 'name' ];
+		\Supersoniq::$APPLICATION_NAME = \Supersoniq\format_to_namespace( $application[ 'path' ] );
+		\Supersoniq::$BASE_URL         = $this->base_url_by_request( $request, $platform, $application );
+		\Supersoniq::$EXTENSIONS       = $this->get_extensions( );
 		$this->activate_autoload( );
-		self::$MODULES          = $this->get_modules( );
 	}
 
 	private function format_request( &$request ) {
@@ -142,7 +139,7 @@ class Supersoniq {
 
 	private function get_extensions( ) {
 		$settings = ( new \Supersoniq\Kernel\Object\Settings );
-		$application_path = \Supersoniq\format_to_path( self::$APPLICATION_NAME );
+		$application_path = \Supersoniq\format_to_path( \Supersoniq::$APPLICATION_NAME );
 		$extensions = [ ];
 		do {
 			$old = $extensions;

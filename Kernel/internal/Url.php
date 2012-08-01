@@ -31,6 +31,9 @@ class Url {
 		if ( is_string( $mixed ) ) {
 			return $this->from_string( $mixed );
 		}
+		if ( is_null( $mixed ) ) {
+			return $this->from_string( '/' );
+		}
 	}
 
 	public function from_array( $array ) {
