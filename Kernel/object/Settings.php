@@ -13,7 +13,7 @@ class Settings {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	private $extensions = [ ];
+	private $extensions;
 	private $file_names = [ ];
 	public $settings = [ ];
 	public static $file_parsed = [ ];
@@ -48,7 +48,7 @@ class Settings {
 		return $this->load( );
 	}
 	public function load( ) {
-		if ( empty( $this->extensions ) ) {
+		if ( is_null( $this->extensions ) ) {
 			$this->extensions = \Supersoniq::$EXTENSIONS;
 		}
 		$this->settings = $this->parse_files( );
