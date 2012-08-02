@@ -8,7 +8,7 @@ class Defined extends \Model\__Base {
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
-	protected $_attributes_alias = [ 'coco' ];
+	protected $_attributes_alias = [ ];
 	protected $_indexs = [ ];
 	protected $_uniqs = [ ];
 
