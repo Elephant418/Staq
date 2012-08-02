@@ -21,6 +21,15 @@ class Relation extends \Data_Type\__Base {
 	/*************************************************************************
 	  USER GETTER & SETTER             
 	 *************************************************************************/
+	public function get_ids( ) {
+		$ids = [ ];
+		$relateds = $this->get( );
+		foreach ( $relateds as $related ) {
+			$ids[ ] = $related->id;
+		}
+		return $ids;
+	}
+
 	public function get( ) {
 		if ( ! $this->initialized ) {
 			$this->relations = $this->definition->all( );
@@ -32,7 +41,9 @@ class Relation extends \Data_Type\__Base {
 		}
 		return $relateds;
 	}
+
 	public function set( $relateds ) {
+		$this->initialized = TRUE;
 		\Supersoniq\must_be_array( $relateds );
 		$this->relations = [ ];
 		foreach ( $relateds as $related ) {
