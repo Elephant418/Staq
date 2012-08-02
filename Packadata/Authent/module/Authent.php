@@ -15,7 +15,33 @@ class Authent extends \__Auto\Module\__Base {
 	  GETTER                 
 	 *************************************************************************/
 	public function name( ) {
-		return 'Votre compte';
+		return 'Account';
+	}
+
+
+
+	/*************************************************************************
+	  MENU METHODS                   
+	 *************************************************************************/
+	public function get_menu( $name ) {
+		$menu = [ ];
+		if ( $name == 'session' ) {
+			$controller = ( new \Controller )->by_type( 'Model\User' );
+			if ( $controller->is_logged( ) ) {
+				$menu[ 'Account' ][ 'logout' ] = [
+					'label'       => 'Logout',
+					'description' => 'Logout',
+					'url'         => $this->get_page_url( 'logout' )
+				];
+			} else {
+				$menu[ 'Account' ][ 'login' ] = [
+					'label'       => 'Login',
+					'description' => 'Login',
+					'url'         => $this->get_page_url( 'login' )
+				];
+			}
+		}
+		return $menu;
 	}
 
 }
