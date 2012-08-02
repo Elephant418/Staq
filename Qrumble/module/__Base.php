@@ -31,6 +31,28 @@ abstract class __Base extends __Base\__Parent {
 
 
 	/*************************************************************************
+	  MENU METHODS                   
+	 *************************************************************************/
+	public function get_menu( $name ) {
+		$menu = [ ];
+		$settings = $this->settings->get_array( 'menu_' . $name );
+		foreach ( $settings as $page => $infos ) {
+			if ( isset( $this->routes[ $page ] ) && ! empty( $infos ) ) { 
+				if ( ! is_array( $infos ) ) {
+					$menu[ $page ] = [ 'label' => $infos, 'description' => $this->name( ) . ' > ' . $infos ];
+				}
+				$menu[ $page ][ 'url' ] = $this->get_page_url( $page );
+			}
+		}
+		if ( ! empty( $menu ) ) {
+			return [ $this->name( ) => $menu ];
+		}
+		return [ ];
+	}
+
+
+
+	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	protected function get_page_view( $page ) {
