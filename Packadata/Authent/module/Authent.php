@@ -28,10 +28,18 @@ class Authent extends \__Auto\Module\__Base {
 		if ( $name == 'session' ) {
 			$controller = ( new \Controller )->by_type( 'Model\User' );
 			if ( $controller->is_logged( ) ) {
-				$menu[ 'Account' ][ 'logout' ] = [
-					'label'       => 'Logout',
-					'description' => 'Logout',
-					'url'         => $this->get_page_url( 'logout' )
+				$user = $controller->current_user( );
+				$menu[ $user->name( ) ] = [
+					'profile' => [
+						'label'       => 'Profile',
+						'description' => 'Profile',
+						'url'         => $this->get_page_url( 'profile' )
+					],
+					'logout' => [
+						'label'       => 'Logout',
+						'description' => 'Logout',
+						'url'         => $this->get_page_url( 'logout' )
+					],
 				];
 			} else {
 				$menu[ 'Account' ][ 'login' ] = [
