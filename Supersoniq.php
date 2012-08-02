@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-class Supersoniq {
+abstract class Supersoniq {
 
 
 	/*************************************************************************
