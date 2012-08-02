@@ -27,8 +27,13 @@ abstract class __Base {
 	}
 	public function set( $value ) {
 		$this->init( $value );
+		return $this;
 	}
-	public function get_data_type ( ) {
+	public function set_name( $name ) {
+		$this->name = $name;
+		return $this;
+	}
+	public function get_data_type( ) {
 		return $this->type;
 	}
 
@@ -41,6 +46,7 @@ abstract class __Base {
 	}
 	public function init( $value ) {
 		$this->value = $value;
+		return $this;
 	}
 
 
