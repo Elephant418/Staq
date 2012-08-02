@@ -8,7 +8,6 @@ abstract class __Base extends \Database_Table {
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
-	public static $autoload_create_child = 'Model\\__Base';
 	public $type;
 	public $type_version = 1;
 	protected $_attributes = array( );

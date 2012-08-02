@@ -8,7 +8,6 @@ abstract class __Base extends \Database_Table {
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
-	public static $autoload_create_child = 'Relation\\__Base';
 	const REVERSED = TRUE;
 	protected $model;
 	protected $related_model;
