@@ -63,6 +63,9 @@ abstract class __Base extends \Database_Table {
 	public function all( ) {
 		return parent::list_by_fields( array( 'type' => $this->type ) );
 	}
+	public function one( ) {
+		return $this;
+	}
 	public function get_archives( ) {
 		$archive = new \Model_Archive( );
 		return $archive->get_model_history( $this->id, $this->type );

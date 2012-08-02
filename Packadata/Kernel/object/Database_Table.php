@@ -38,8 +38,16 @@ abstract class Database_Table {
 	/*************************************************************************
 	  INITIALIZATION          
 	 *************************************************************************/
+	public function by_id( $id ) {
+		$this->init_by_id( $id );
+		return $this;
+	}
 	public function init_by_id( $id ) {
 		return $this->init_by_fields( array( $this->_database->id_field => $id ) );
+	}
+	public function by_fields( $fields ) {
+		$this->init_by_fields( $fields );
+		return $this;
 	}
 	public function init_by_fields( $fields ) {
 		$datas = $this->datas_by_fields( $fields );
