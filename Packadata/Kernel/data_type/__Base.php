@@ -21,6 +21,9 @@ abstract class __Base {
 	/*************************************************************************
 	  USER GETTER & SETTER             
 	 *************************************************************************/
+	public function __toString( ) {
+		return $this->get( );
+	}
 	public function get( ) {
 		return $this->value( );
 	}
