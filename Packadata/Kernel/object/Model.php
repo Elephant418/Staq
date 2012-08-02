@@ -9,4 +9,13 @@ namespace Supersoniq\Packadata\Kernel\Object;
 
 class Model extends \Class_Type_Accessor {
 
+
+
+	/*************************************************************************
+	  ACCESSOR                 
+	 *************************************************************************/
+	public function by_type( $name ) {
+		return parent::by_name( $name );
+	}
+
 }

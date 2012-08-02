@@ -53,6 +53,6 @@ abstract class Model extends Model\__Parent {
 	}
 
 	protected function model( ) {
-		return ( new \Model )->by_name( $this->get_model_name( ) );
+		return ( new \Model )->by_type( $this->get_model_name( ) );
 	}
 }
