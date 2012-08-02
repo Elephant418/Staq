@@ -12,7 +12,7 @@ class Class_Type_Accessor {
 
 
 	/*************************************************************************
-	  CONSTRUCTOR                 
+	  ACCESSOR                 
 	 *************************************************************************/
 	public function by_name( $name ) {
 		$type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
