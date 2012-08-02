@@ -94,7 +94,7 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 	public function get( $field ) {
 		$values = [ ];
 		foreach( $this->data as $item ) {
-			if ( $item->$field != NULL ) {
+			if ( ! is_null( $item->$field ) ) {
 				$values[ ] = $item->$field;
 			}
 		}
@@ -156,8 +156,10 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 
 	public function group( $field ) {
 		$groups = [ ];
-		foreach ( $this->data as $data ) {
-			$groups[ $data->$field ][ ] = $data;
+		foreach ( $this->data as $item ) {
+			if ( ! is_null( $item->$field ) && ! is_object( $item->$field ) ) {
+				$groups[ $item->$field ][ ] = $item;
+			}
 		}
 		foreach ( $groups as $key => $group ) {
 			$groups[ $key ] = new $this( $group );
