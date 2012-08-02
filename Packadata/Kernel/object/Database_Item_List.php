@@ -111,6 +111,18 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 		}
 		return $this;
 	}
+
+
+
+	/*************************************************************************
+	 SPECIFIC GETTER & SETTER
+	*************************************************************************/
+	public function __call( $name, $arguments ) {
+		foreach( $this->data as $item ) {
+			call_user_func_array( [ $item, $name ], $arguments );
+		}
+		return $this;
+	}
 	
 
 
