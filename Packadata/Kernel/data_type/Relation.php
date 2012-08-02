@@ -39,7 +39,7 @@ class Relation extends \Data_Type\__Base {
 		foreach ( $this->relations as $relation ) {
 			$relateds[ ] = $relation->get( );
 		}
-		return $relateds;
+		return new \Database_Item_List( $relateds );
 	}
 
 	public function set( $relateds ) {
