@@ -52,6 +52,36 @@
 					}
 					?>
 					</ul>
+
+					<ul class="nav pull-right">
+					<?php
+					foreach ( $this->menu_session as $module => $menu ) {
+						if ( count( $menu ) < 2 ) {
+							foreach ( $menu as $page => $infos ) {
+					?>
+							<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+							<?php
+							}
+						} else {
+						?>
+						<li class="dropdown">
+							<a data-toggle="dropdown" class="dropdown-toggle" href="javascript:;"><?= $module ?> <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+							<?php
+							foreach ( $menu as $page => $infos ) {
+							?>
+								<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+							<?php
+							}
+							?>
+							</ul>
+						</li>
+						<?php
+						}
+					}
+					?>
+					</ul>
+
 				</div><!--/.nav-collapse -->
 			</div>
 		</div>

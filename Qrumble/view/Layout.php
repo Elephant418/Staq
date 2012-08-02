@@ -24,6 +24,13 @@ class Layout extends Layout\__Parent {
 		}
 		$template->menu_main = array_reverse( $menu_main );
 		
+		// Session Menu		
+		$menu_session = [ ];
+		foreach( \Supersoniq::$MODULES as $module ) {
+			$menu_session = array_merge_recursive( $menu_session, $module->get_menu( 'session' ) );
+		}
+		$template->menu_session = array_reverse( $menu_session );
+		
 		return $template;
 	}
 }
