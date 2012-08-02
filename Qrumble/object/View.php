@@ -5,22 +5,24 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Kernel\Object;
+namespace Supersoniq\Qrumble\Object;
 
-class Template extends \Class_Type_Accessor {
+class View extends \Class_Type_Accessor {
 
 
 
 	/*************************************************************************
-	  CONSTRUCTOR                 
+	  ACCESSOR                 
 	 *************************************************************************/
-	public function by_name( $name ) {
-		return parent::by_name( $name );
-	}
 	public function by_module_page( $module, $page ) {
 		if ( is_object( $module ) ) {
 			$module = $module->type;
 		}
 		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
 	}
+
+	public function by_layout( $layout ) {
+		return $this->by_name( 'Layout\\' . ucfirst( $layout ) );
+	}
+
 }
