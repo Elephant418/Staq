@@ -93,12 +93,27 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 
 	public function get( $field ) {
 		$values = [ ];
+		$is_database_item_list = TRUE;
 		foreach( $this->data as $item ) {
-			if ( ! is_null( $item->$field ) ) {
-				$values[ ] = $item->$field;
+			$value = $item->$field;
+			if ( ! is_null( $value ) ) {
+				if ( is_a( $value, 'Database_Item_List' ) ) {
+					$value = $value->to_array( );
+				} else if ( ! is_object( $value ) ) {
+					$is_database_item_list = FALSE;
+				}
+				if ( is_array( $value ) ) {
+					$values = \Supersoniq\array_merge_unique( $values, $value );
+				} else {
+					$values[ ] = $value;
+				}
 			}
 		}
-		return array_values( array_unique(  $values ) );
+		$values = array_values( array_unique(  $values ) );
+		if ( $is_database_item_list ) {
+			$values = new $this( $values );
+		}
+		return $values;
 	}
 
 	public function __set( $field, $value ) {
