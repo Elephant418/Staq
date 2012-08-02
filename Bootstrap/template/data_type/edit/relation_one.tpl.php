@@ -1,9 +1,6 @@
 <select name="model[<?= $this->content->name ?>]">
 <?php
-	$current = $this->content->get( );
-	if ( $current ) {
-		$current_id = $current->id;
-	}
+	$current_id = $this->content->get_id( );
 	foreach ( $this->content->get_related_model( ) as $related ) {
 	?>
 		<option 

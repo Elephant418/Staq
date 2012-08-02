@@ -14,15 +14,16 @@ class Relation_One extends \Data_Type\Relation {
 	  USER GETTER & SETTER             
 	 *************************************************************************/
 	public function get_id( ) {
-		if ( ! empty( $this->relations ) ) {
-			return $this->relations[ 0 ]->get( )->id;
+		$related = $this->get( );
+		if ( $related ) {
+			return $related->id;
 		}
 	}
 
 	public function get( ) {
 		if ( ! $this->initialized ) {
 			$relations = $this->definition->all( );
-			if ( $relations->is_empty( ) ) {
+			if ( ! $relations ) {
 				$this->relations = [ ];
 			} else {
 				$this->relations = array_slice( $relations->to_array( ), 0, 1 );
