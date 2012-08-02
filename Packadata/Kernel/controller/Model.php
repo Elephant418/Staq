@@ -31,11 +31,22 @@ abstract class Model extends Model\__Parent {
 		foreach ( $datas as $name => $value ) {
 			$model->$name = $value;
 		}
+		$exists = $model->exists( );
 		if ( $model->save( ) ) {
-			\Notification::push( $this->get_model_name( ) . ' updated with success ! ', \Notification::SUCCESS );
+			if ( $exists ) {
+				$message = $this->get_model_name( ) . ' updated with success ! ';
+			} else {
+				$message = $this->get_model_name( ) . ' created with success ! ';
+			}
+			\Notification::push( $message, \Notification::SUCCESS );
 			return TRUE;
 		}
-		\Notification::push( $this->get_model_name( ) . ' not updated !', \Notification::ERROR );
+		if ( $exists ) {
+			$message = $this->get_model_name( ) . ' not updated ! ';
+		} else {
+			$message = $this->get_model_name( ) . ' not created ! ';
+		}
+		\Notification::push( $message, \Notification::ERROR );
 		return FALSE;
 	}
 	public function delete( $model ) {
