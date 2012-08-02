@@ -21,6 +21,10 @@ abstract class __Base extends \Database_Table {
 	public function name( ) {
 		return $this->id;
 	}
+	// Warning: __toString() is used for sorting
+	public function __toString( ) {
+		return $this->type . ':' . $this->id;
+	}
 	public function __get( $name ) {
 		return $this->get( $name );
 	}
