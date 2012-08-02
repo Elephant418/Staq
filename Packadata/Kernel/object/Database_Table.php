@@ -167,7 +167,7 @@ abstract class Database_Table {
 			$entity->init_by_data( $data );
 			$entities[ $entity->id ] = $entity;
 		}
-		return $entities;
+		return new \Database_Item_List( $entities );
 	}
 	private function get_set_request( ) {
 		$request = '';
