@@ -11,6 +11,7 @@ abstract class __Base extends \Database_Table {
 	const REVERSED = TRUE;
 	protected $model;
 	protected $related_model;
+	public $related_model_type;
 	protected $type;
 	protected $_number;
 	protected $_related_number;
@@ -23,6 +24,11 @@ abstract class __Base extends \Database_Table {
 		return $this->related_model;
 	}
 	public function set( $related_model ) {
+		if ( ! is_null( $this->related_model_type ) ) {
+			if ( $related_model->type != $this->related_model_type ) {
+				throw new \Exception\Wrong_Model_Type_For_Relation( 'Model of type "' . $this->related_model_type . '" expected for the "' . $this->type . '" Relation, but "' . $related_model->type . '" found' );
+			}
+		}
 		$this->related_model = $related_model;
 	}
 
@@ -30,9 +36,10 @@ abstract class __Base extends \Database_Table {
 	/*************************************************************************
 	  CONSTRUCTOR
 	 *************************************************************************/
-	public function __construct( $is_reverse = FALSE ) {
+	public function __construct( $related_model_type = NULL, $is_reverse = FALSE ) {
 		parent::__construct( );
 		$this->set_is_reverse( $is_reverse );
+		$this->related_model_type = $related_model_type;
 		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
 		$this->_database->table_fields = array( 'id', 'model_id_1', 'model_type_1', 'model_id_2', 'model_type_2', 'type' );
 		$this->_database->table_name = 'relations';
@@ -105,8 +112,7 @@ abstract class __Base extends \Database_Table {
 		return parent::table_fields_value( $field_name ); 
 	}
 	protected function new_entity( ) {
-		$class = get_class( $this );
-		$relation = new $class( $this->is_reverse( ) );
+		$relation = new $this( $this->related_model_type, $this->is_reverse( ) );
 		$relation->set_model( $this->model );
 		return $relation;
 	}

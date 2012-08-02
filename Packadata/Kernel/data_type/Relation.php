@@ -33,14 +33,25 @@ class Relation extends \Data_Type\__Base {
 		return $relateds;
 	}
 	public function set( $relateds ) {
-		if ( ! is_array( $relateds ) ) {
-			$relateds = array( $relateds );
-		}
-		$this->relations = array( );
+		\Supersoniq\must_be_array( $relateds );
+		$this->relations = [ ];
 		foreach ( $relateds as $related ) {
+			if ( ! is_object( $related ) ) {
+				$related = ( new \Model )
+					->by_type( $this->definition->related_model_type )
+					->by_id( $related );
+				if ( ! $related->exists( ) ) {
+					throw new Exception( 'Relation setted with an unexisting model' );
+				}
+			}
 			$this->definition->set( $related );
 			$this->relations[ ] = clone $this->definition;
 		}
+	}
+	public function get_related_model( ) {
+		return ( new \Model )
+			->by_type( $this->definition->related_model_type )
+			->all( );
 	}
 
 
@@ -62,15 +73,14 @@ class Relation extends \Data_Type\__Base {
 	}
 	public function model_saved( $model ) {
 		$this->definition->set_model( $model );
-		// TODO: delete removed relateds
+		$this->definition->all( )->delete( );
 		foreach ( $this->relations as $relation ) {
+			$relation->set_model( $model );
 			$relation->save( );
 		}
 	}
 	public function model_deleted( $model ) {
-		foreach ( $this->relations as $relation ) {
-			$relation->delete( );
-		}
+		$this->definition->all( )->delete( );
 	}
 
 
