@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Kernel\View;
+namespace Supersoniq\Qrumble\View;
 
 class Layout extends Layout\__Parent {
 

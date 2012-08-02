@@ -5,7 +5,7 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Kernel\Template;
+namespace Supersoniq\Qrumble\Template;
 
 class __Base {
 

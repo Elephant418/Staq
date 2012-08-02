@@ -89,16 +89,9 @@ abstract class __Base {
 
 	public function call_page( $page, $parameters ) {
 		if ( ! is_callable( [ $this, $page ] ) ) {
-			$template =  $this->get_page_view( $page )->render( $parameters );
-		} else {
-			$template = call_user_func_array( [ $this, $page ], $parameters );
+			throw new \Exception\Resource_Not_Found( 'Page "' . $this->type . ' > ' . $page . '" not defined' );
 		}
-		if ( \Supersoniq\class_type( $template ) != 'Template' ) {
-			$template = ( new \Template )
-				->by_module_page( $this, $page )
-				->by_content( $template );
-		}
-		return $template;
+		return call_user_func_array( [ $this, $page ], $parameters );
 	}
 
 
@@ -134,15 +127,5 @@ abstract class __Base {
 			return \Supersoniq::$BASE_URL . $this->routes[ $page ]->to_string( $parameters );
 		}
 	}
-
-
-
-	/*************************************************************************
-	  PRIVATE METHODS                   
-	 *************************************************************************/
-	protected function get_page_view( $page ) {
-		return ( new \View )->by_module_page( $this, $page );
-	}
-
 }
 

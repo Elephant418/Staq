@@ -10,6 +10,7 @@ namespace Supersoniq\Kernel\Object;
 class Application {
 
 
+
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
@@ -23,12 +24,14 @@ class Application {
 	private $routes     = [ ];
 
 
+
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
 	public function current_route( ) {
 		return end( $this->routes );
 	}
+
 
 
 	/*************************************************************************
@@ -41,6 +44,7 @@ class Application {
 		$this->routes[ ] = $route;
 		return $this;
 	}
+
 
 
 	/*************************************************************************
@@ -61,7 +65,12 @@ class Application {
 		}
 	}
 
-	private function get_module_page_by_route( $route ) {
+
+
+	/*************************************************************************
+	  PRIVATE METHODS          
+	 *************************************************************************/
+	protected function get_module_page_by_route( $route ) {
 		foreach ( \Supersoniq::$MODULES as $module ) {
 			if ( $callable = $module->handle_route( $route ) ) {
 				return [ $module, $callable ];
@@ -70,7 +79,7 @@ class Application {
 		throw new \Exception\Resource_Not_Found( );
 	}
 
-	private function get_module_page_by_exception( $exception ) {
+	protected function get_module_page_by_exception( $exception ) {
 		foreach ( \Supersoniq::$MODULES as $module ) {
 			if ( $callable = $module->handle_exception( $exception ) ) {
 				return [ $module, $callable ];
@@ -79,17 +88,13 @@ class Application {
 		throw new \Exception\Resource_Not_Found( 'Exception "' . get_class( $exception ) . '" not handled' );
 	}
 
-	private function call_module_page( $module_page ) {
+	protected function call_module_page( $module_page ) {
 		\Supersoniq\must_be_array( $module_page[ 1 ] );
 		\Supersoniq::$MODULE_NAME = $module_page[ 0 ]->type;
-		$template = call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
-		if ( is_object( $template ) ) {
-			return $template->compile( )->render( );
-		}
-		return $template;
+		return call_user_func_array( [ $module_page[ 0 ], 'call_page' ], $module_page[ 1 ] );
 	}
 	
-	private function prenvent_exception_boucle( $exception ) {
+	protected function prenvent_exception_boucle( $exception ) {
 		if ( isset( $exception->type ) ) {			
 			$name = $exception->type;
 		} else {
