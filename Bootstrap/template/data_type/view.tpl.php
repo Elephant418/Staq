@@ -1,1 +1,1 @@
-<?= $this->content->value( ) ?>
+<?= $this->content->get( ) ?>
