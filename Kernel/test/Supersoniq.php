@@ -16,89 +16,89 @@ class Supersoniq extends __Base {
 	  TESTS
 	 *************************************************************************/
 	public function test_default_route( ) {
-		$sq = $this->default_supersoniq_request( );
-		return $this->assert_equals( $sq::$application->current_route( ), '/path' );
+		$service = $this->default_supersoniq_request( );
+		return $this->assert_equals( $service->route, '/path' );
 	}
 
 	public function test_default_base_url( ) {
-		$sq = $this->default_supersoniq_request( );
-		return $this->assert_equals( $sq::$BASE_URL, 'http://hostname' );
+		$service = $this->default_supersoniq_request( );
+		return $this->assert_equals( \Supersoniq::$BASE_URL, 'http://hostname' );
 	}
 
 	public function test_default_platform( ) {
-		$sq = $this->default_supersoniq_request( );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'prod' );
+		$service = $this->default_supersoniq_request( );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'prod' );
 	}
 
 	public function test_default_application( ) {
 		$document_root = $_SERVER[ 'DOCUMENT_ROOT' ];
 		$_SERVER[ 'DOCUMENT_ROOT' ] = dirname( __FILE__ );
-		$sq = $this->default_supersoniq_request( );
+		$service = $this->default_supersoniq_request( );
 		$_SERVER[ 'DOCUMENT_ROOT' ] = $document_root;
-		return $this->assert_equals( $sq::$APPLICATION_NAME, 'Supersoniq\Starter' );
+		return $this->assert_equals( \Supersoniq::$APPLICATION_NAME, 'Supersoniq\Starter' );
 	}
 
 	public function test_default_application_guessed( ) {
 		$document_root = $_SERVER[ 'DOCUMENT_ROOT' ];
 		$_SERVER[ 'DOCUMENT_ROOT' ] = SUPERSONIQ_ROOT_PATH . 'Project_Example/Sub_Project/public';
-		$sq = $this->default_supersoniq_request( );
+		$service = $this->default_supersoniq_request( );
 		$_SERVER[ 'DOCUMENT_ROOT' ] = $document_root;
-		return $this->assert_equals( $sq::$APPLICATION_NAME, 'Project_Example\Sub_Project' );
+		return $this->assert_equals( \Supersoniq::$APPLICATION_NAME, 'Project_Example\Sub_Project' );
 	}
 
 	public function test_base_url_path( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/tralalala' );
-		return $this->assert_equals( $sq::$BASE_URL, 'http://localhost:5000/path' );
+		$service = $this->complex_supersoniq( 'http://localhost:5000/path/tralalala' );
+		return $this->assert_equals( \Supersoniq::$BASE_URL, 'http://localhost:5000/path' );
 	}
 
 	public function test_base_url_double_path( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/bou/tralalala' );
-		return $this->assert_equals( $sq::$BASE_URL, 'http://localhost:5000/path/bou' );
+		$service = $this->complex_supersoniq( 'http://localhost:5000/path/bou/tralalala' );
+		return $this->assert_equals( \Supersoniq::$BASE_URL, 'http://localhost:5000/path/bou' );
 	}
 
 	public function test_route_path( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/tralalala' );
-		return $this->assert_equals( $sq::$application->current_route( ), '/tralalala' );
+		$service = $this->complex_supersoniq( 'http://localhost:5000/path/tralalala' );
+		return $this->assert_equals( $service->route, '/tralalala' );
 	}
 
 	public function test_route_double_path( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost:5000/path/bou/tralalala' );
-		return $this->assert_equals( $sq::$application->current_route( ), '/tralalala' );
+		$service = $this->complex_supersoniq( 'http://localhost:5000/path/bou/tralalala' );
+		return $this->assert_equals( $service->route, '/tralalala' );
 	}
 
 	public function test_complex_platform_full( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost:5000/path' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'full' );
+		$service = $this->complex_supersoniq( 'http://localhost:5000/path' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'full' );
 	}
 
 	public function test_complex_platform_hostport( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost:5000/tralalala' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'hostport' );
+		$service = $this->complex_supersoniq( 'http://localhost:5000/tralalala' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'hostport' );
 	}
 
 	public function test_complex_platform_host( ) {
-		$sq = $this->complex_supersoniq( 'http://localhost/great/power' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'host' );
+		$service = $this->complex_supersoniq( 'http://localhost/great/power' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'host' );
 	}
 
 	public function test_complex_platform_portpath( ) {
-		$sq = $this->complex_supersoniq( 'http://hostname:5000/path/tralalala' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'portpath' );
+		$service = $this->complex_supersoniq( 'http://hostname:5000/path/tralalala' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'portpath' );
 	}
 
 	public function test_complex_platform_port( ) {
-		$sq = $this->complex_supersoniq( 'http://hostname:5000/tralalala' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'port' );
+		$service = $this->complex_supersoniq( 'http://hostname:5000/tralalala' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'port' );
 	}
 
 	public function test_complex_platform_path( ) {
-		$sq = $this->complex_supersoniq( 'http://hostname/path/tralalala' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'path' );
+		$service = $this->complex_supersoniq( 'http://hostname/path/tralalala' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'path' );
 	}
 
 	public function test_complex_platform_default( ) {
-		$sq = $this->complex_supersoniq( 'http://hostname/great/power' );
-		return $this->assert_equals( $sq::$PLATFORM_NAME, 'prod' );
+		$service = $this->complex_supersoniq( 'http://hostname/great/power' );
+		return $this->assert_equals( \Supersoniq::$PLATFORM_NAME, 'prod' );
 	}
 
 
@@ -108,13 +108,13 @@ class Supersoniq extends __Base {
 	 *************************************************************************/
 	public function default_supersoniq_request( ) {
 		try {
-			$sq = new \Supersoniq;
-			$sq->render( 'http://hostname/path' );
+			$service = new \Supersoniq\Service;
+			$service->start( 'http://hostname/path' );
 		} catch ( \Exception $exception ) { }
-		return $sq;
+		return $service;
 	}
 	public function complex_supersoniq( $request ) {
-		$sq = ( new \Supersoniq )
+		$service = ( new \Supersoniq\Service )
 			->application( 'coco', '/bou' )
 			->platform( 'full'     , 'http://localhost:5000/path')
 			->platform( 'hostport' , 'http://localhost:5000/')
@@ -124,9 +124,9 @@ class Supersoniq extends __Base {
 			->platform( 'port'     , ':5000')
 			->platform( 'path'     , '/path');
 		try {
-			$sq->render( $request );
+			$service->start( $request );
 		} catch ( \Exception $exception ) { }
-		return $sq;
+		return $service;
 	}
 
 }

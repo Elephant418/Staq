@@ -19,7 +19,7 @@ class Service {
 	public static $BASE_URL;
 	public static $EXTENSIONS = [ ];
 	public static $MODULES    = [ ];
-	private $route;
+	public $route;
 	private $applications     = [ ];
 	private $platforms        = [ ];
 
