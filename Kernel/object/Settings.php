@@ -62,6 +62,9 @@ class Settings {
 	 *************************************************************************/
 	public function extension( $extensions ) {
 		\Supersoniq\must_be_array( $extensions );
+		foreach ( $extensions as $key => $extension ) {
+			$extensions[ $key ] = \Supersoniq\format_to_path( $extension );
+		}
 		$this->extensions = $extensions;
 		return $this;
 	}
