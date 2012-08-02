@@ -15,15 +15,6 @@ class Defined extends \Model\__Base {
 	/*************************************************************************
 	  GETTER & SETTER             
 	 *************************************************************************/
-	public function name( ) {
-		return $this->id;
-	}
-	public function get( $name ) {
-		if ( ! isset( $this->_attributes[ $name ] ) ) {
-			return NULL;
-		}
-		return $this->_attributes[ $name ]->get( );
-	}
 	public function set( $name, $value ) {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
 			throw new \Exception( 'Unexisting attribute "' . $name . '"' );
@@ -31,12 +22,6 @@ class Defined extends \Model\__Base {
 		}
 		$this->_attributes[ $name ]->set( $value );
 		return $this;
-	}
-	public function attribute( $name ) {
-		if ( ! isset( $this->_attributes[ $name ] ) ) {
-			return NULL;
-		}
-		return $this->_attributes[ $name ];
 	}
 
 

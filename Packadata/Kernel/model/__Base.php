@@ -19,6 +19,9 @@ abstract class __Base extends \Database_Table {
 	/*************************************************************************
 	  GETTER & SETTER             
 	 *************************************************************************/
+	public function name( ) {
+		return $this->id;
+	}
 	public function __get( $name ) {
 		return $this->get( $name );
 	}
@@ -26,14 +29,22 @@ abstract class __Base extends \Database_Table {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
 			return NULL;
 		}
-		return $this->_attributes[ $name ];
+		return $this->_attributes[ $name ]->get( );
 	}
 	public function __set( $name, $value ) {
 		return $this->set( $name, $value );
 	}
 	public function set( $name, $value ) {
-		$this->_attributes[ $name ] = $value;
+		$this->_attributes[ $name ] = ( new \Data_Type\Varchar )
+			->set_name( $name )
+			->set( $value );
 		return $this;
+	}
+	public function attribute( $name ) {
+		if ( ! isset( $this->_attributes[ $name ] ) ) {
+			return NULL;
+		}
+		return $this->_attributes[ $name ];
 	}
 
 
@@ -98,8 +109,15 @@ abstract class __Base extends \Database_Table {
 		return parent::init_by_data( $data );
 	}
 	protected function init_attributes_by_data( $data ) {
-		$this->_attributes = unserialize( $data[ 'attributes' ] );
-		return $data[ 'attributes' ];
+		$attributes = unserialize( $data[ 'attributes' ] );
+		if ( is_array( $attributes ) ) {
+			foreach ( $attributes as $name => $value ) {
+				$this->_attributes[ $name ] = ( new \Data_Type\Varchar )
+					->set_name( $name )
+					->init( $value );
+			}
+		}
+		return serialize( $attributes );
 	}
 	protected function table_fields_value( $field_name, $field_value = NULL ) {
 		if ( $field_name == 'type' || $field_name == 'type_version' || $field_name == 'attributes_version' ) {
