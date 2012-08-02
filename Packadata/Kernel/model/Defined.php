@@ -8,13 +8,22 @@ class Defined extends \Model\__Base {
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
-	protected $_indexs = array( );
-	protected $_uniqs = array( );
+	protected $_attributes_alias = [ 'coco' ];
+	protected $_indexs = [ ];
+	protected $_uniqs = [ ];
 
 
 	/*************************************************************************
 	  GETTER & SETTER             
 	 *************************************************************************/
+	public function get( $name ) {
+		if ( isset( $this->_attributes[ $name ] ) ) {
+			return $this->_attributes[ $name ]->get( );
+		} 
+		if ( isset( $this->_attributes_alias[ $name ] ) ) {
+			return $this->_attributes_alias[ $name ]( $this );
+		} 
+	}
 	public function set( $name, $value ) {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
 			throw new \Exception( 'Unexisting attribute "' . $name . '"' );
@@ -28,7 +37,7 @@ class Defined extends \Model\__Base {
 	/*************************************************************************
 	  ATTRIBUTES DEFINITION METHODS
 	 *************************************************************************/
-	public function add_attribute( $name, $data_type = NULL, $constraint = FALSE ) {
+	protected function add_attribute( $name, $data_type = NULL, $constraint = FALSE ) {
 		if ( ! is_object( $data_type ) ) {
 			$data_type = new \Data_Type\Varchar( );
 		} else if ( is_a( $data_type, '__Auto\Relation\__Base' ) ) {
@@ -46,7 +55,10 @@ class Defined extends \Model\__Base {
 		}
 		$this->_attributes[ $name ] = $data_type;
 	}
-	public function remove_attribute( $name ) {
+	protected function add_attribute_alias( $name, $alias ) {
+		$this->_attributes_alias[ $name ] = $alias;
+	}
+	protected function remove_attribute( $name ) {
 		unset( $this->_attributes[ $name ] );
 	}
 
@@ -154,10 +166,10 @@ class Defined extends \Model\__Base {
 	 * @param integer $current_type_version the version of the attributes given as parameters
 	 * @return Array $attributes the array of attributes updated to the current model
 	 */
-	protected function upgrade( $attributes, $current_type_version ) {
+	protected function upgrade( $attributes, $attributes_type_version ) {
 		return $attributes;
 	}
-	protected function downgrade( $attributes, $current_type_version ) {
+	protected function downgrade( $attributes, $attributes_type_version ) {
 		return $attributes;
 	}
 }
