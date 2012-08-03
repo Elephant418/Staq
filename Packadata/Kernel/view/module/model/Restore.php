@@ -7,22 +7,18 @@
 
 namespace Supersoniq\Packadata\Kernel\View\Module\Model;
 
-abstract class Edit extends Edit\__Parent {
+abstract class Restore extends Restore\__Parent {
 
 
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
-	public function fill( $template, $parameters = [ ] ) {
+	public function render( $parameters = [ ] ) {
 		$controller = $this->get_controller( );
-		$model = $controller->get( $parameters[ 'id' ] );
-		if ( isset( $_POST[ 'model' ] ) ) {
-			if ( $controller->edit( $model, $_POST[ 'model' ] ) ) {
-				\Supersoniq\redirect_to_page( 'view', array( 'id' => $model->id ) );
-			}
+		if ( isset( $parameters[ 'versions' ] ) ) {
+			$model = $controller->restore( $parameters[ 'id' ], $parameters[ 'versions' ] );
 		}
-		$template->model = $model;
-		return $template;
+		\Supersoniq\redirect_to_page( 'all' );
 	}
 
 }

@@ -48,6 +48,7 @@ if ( count( $this->archives ) == 0 ) {
 }
 ?>
 <a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> List</a>
+<a class="btn" href="<?= $page_url( 'view', $archive->model_id ) ?>"><i class="icon-search"></i> View</a>
 <?php
 	if ( count( $this->models ) != 0 ) {
 		?>
