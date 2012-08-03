@@ -15,7 +15,7 @@ class Model extends \Controller\Model_Unversioned {
 	public function archive( $id ) {
 		$model = $this->model( );
 		$model->init_by_id( $id );
-		$archives = ( new \Model_Archive( ) )->get_model_history( $id, $this->type );
+		$archives = ( new \Model_Archive( ) )->get_model_history( $id, $model->type );
 		return $archives;
 	}
 	public function see( $id, $versions ) {

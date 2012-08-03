@@ -13,7 +13,7 @@ abstract class All extends All\__Parent {
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
-        public function fill( $template, $parameters = [ ] ) {
+	public function fill( $template, $parameters = [ ] ) {
 		$template->models = $this->get_controller( )->all( );
 		return $template;
 	}

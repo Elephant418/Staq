@@ -13,7 +13,7 @@ abstract class View extends View\__Parent {
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
-        public function fill( $template, $parameters = [ ] ) {
+    public function fill( $template, $parameters = [ ] ) {
 		$template->model = $this->get_controller( )->get( $parameters[ 'id' ] );
 		return $template;
 	}

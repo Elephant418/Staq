@@ -7,21 +7,14 @@
 
 namespace Supersoniq\Packadata\Kernel\View\Module\Model;
 
-abstract class Edit extends Edit\__Parent {
+abstract class Archive extends Archive\__Parent {
 
 
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
-	public function fill( $template, $parameters = [ ] ) {
-		$controller = $this->get_controller( );
-		$model = $controller->get( $parameters[ 'id' ] );
-		if ( isset( $_POST[ 'model' ] ) ) {
-			if ( $controller->edit( $model, $_POST[ 'model' ] ) ) {
-				\Supersoniq\redirect_to_page( 'view', array( 'id' => $model->id ) );
-			}
-		}
-		$template->model = $model;
+    public function fill( $template, $parameters = [ ] ) {
+		$template->archives = $this->get_controller( )->archive( $parameters[ 'id' ] );
 		return $template;
 	}
 

@@ -13,7 +13,7 @@ abstract class Delete extends Delete\__Parent {
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
-        public function render( $parameters = [ ] ) {
+	public function render( $parameters = [ ] ) {
 		$controller = $this->get_controller( );
 		$model = $controller->get( $parameters[ 'id' ] );
 		$controller->delete( $model );
