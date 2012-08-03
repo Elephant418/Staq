@@ -65,7 +65,7 @@ abstract class Model_Archive extends \Database_Table {
 		}
 		$results = parent::list_by_fields( $fields );
 		if ( sizeof( $results ) == 1 ) {
-			$result = array_values( $results );
+			$result = array_values( $results->to_array( ) );
 			return $result[ 0 ];
 		} else {
 			return $results;
