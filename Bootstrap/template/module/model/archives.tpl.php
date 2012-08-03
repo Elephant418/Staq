@@ -5,9 +5,11 @@
 $model_id = '';
 
 foreach ( $this->archives as $archive ) {
-
+	
 	$attributes = $archive->model_attributes;
 	$model_id = $archive->model_id;
+	
+	?><h2><?= $archive->model_type . ' ' . $model_id ?></h2><?php
 	
 	if ( $archive == $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 		?><h3>Last model</h3><?php
