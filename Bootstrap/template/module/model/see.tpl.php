@@ -30,4 +30,4 @@
 <br/>
 <a class="btn" href="<?= $page_url( 'archive', $archive->model_id ) ?>"><i class="icon-th-list"></i> List</a>
 <a class="btn" href="<?= $page_url( 'restore', $archive->model_id, $archive->model_attributes_version ) ?>"><i class="icon-pencil"></i> Restore</a>
-<a class="btn btn-danger" href="<?= $page_url( 'erase', $archive->model_id ) ?>"><i class="icon-remove"></i> Erase</a>
+<a class="btn btn-danger" href="<?= $page_url( 'erase', $archive->model_id, $archive->model_attributes_version ) ?>"><i class="icon-remove"></i> Erase</a>

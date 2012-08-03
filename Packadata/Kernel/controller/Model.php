@@ -30,7 +30,10 @@ class Model extends \Controller\Model_Unversioned {
 		if ( isset( $versions ) ) {
 			$archives = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions  ) );
 		} else {
-			$archives = ( new \Model_Archive( ) )->get_model_history( $id, $model->type);
+			$archives = ( new \Model_Archive( ) )->get_model_history( $id, $model->type );
+			if ( $archives ) {
+				$archives = $archives->to_array( );
+			}
 		}
 		if ( $archives ) {
 			if ( is_array( $archives ) ) {

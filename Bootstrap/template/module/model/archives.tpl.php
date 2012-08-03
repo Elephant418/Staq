@@ -1,6 +1,11 @@
 <h1>Deleted Models</h1>
 
+<?php 
+if ( count( $this->archives ) == 0 ) {
+?>
+	<p><em>There is no elements to display</em></p>
 <?php
+} else {
 	
 	$ignore = array( );
 	$model_id = '';
@@ -18,9 +23,9 @@
 				<?php
 				foreach ( $versions as $version ) {
 				?>
-					<?php //TODO fix the following link (doesn't work with action_url) ?>
-					<a href="<?= $page_url( $version->model_type, 'see', $version->model_id, $version->model_attributes_version ) ?>" >
-					Version : <?= $version->model_type_version ?>.<?= $version->model_attributes_version ?></a><br/>
+					<a href="<?= $page_url( 'see', $version->model_id, $version->model_attributes_version ) ?>" >
+						Version : <?= $version->model_type_version ?>.<?= $version->model_attributes_version ?>
+					</a><br/>
 					Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $version->date_version ), 'd/m/Y - G:i' ); ?><br/>
 					Changed by the IP : <?= $version->ip_version ?><br/><br/>
 				<?php
@@ -33,7 +38,14 @@
 			}
 		}
 	}
+}
 ?>
 <a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> List</a>
-<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
-<a class="btn btn-danger" href="<?= $page_url( 'erase', $model_id ) ?>"><i class="icon-remove"></i> Erase All Archives</a>
+<?php
+	if ( count( $this->archives ) != 0 ) {
+		?>
+		<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
+		<a class="btn btn-danger" href="<?= $page_url( 'erase', $model_id ) ?>"><i class="icon-remove"></i> Erase All Archives</a>
+		<?php 
+	}
+?>

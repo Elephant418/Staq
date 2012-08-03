@@ -5,6 +5,7 @@ if ( count( $this->models ) == 0 ) {
 	<p><em>There is no elements to display</em></p>
 <?php
 } else {
+$model_type = '';
 ?>
 <table class="table table-bordered table-striped">
 	<thead>
@@ -16,6 +17,7 @@ if ( count( $this->models ) == 0 ) {
 	<tbody>
 <?php
 	foreach ( $this->models as $model ) {
+		$model_type = $model->type;
 	?>
 		<tr>
 			<td><?= $model->name( ) ?></td>
@@ -37,4 +39,10 @@ if ( count( $this->models ) == 0 ) {
 }
 ?>
 <a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
-<a class="btn" href="<?= $page_url( 'archives', $model->type ) ?>"><i class="icon-th-list"></i> Deleted Models</a>
+<?php
+	if ( count( $this->models ) != 0 ) {
+		?>
+		<a class="btn" href="<?= $page_url( 'archives', $model_type ) ?>"><i class="icon-th-list"></i> Deleted Models</a>
+	<?php
+	}
+?>
