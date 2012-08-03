@@ -1,69 +1,77 @@
 <?php
 
-/* This file is part of the Supersoniq project.
- * Supersoniq is a free and unencumbered software released into the public domain.
- * For more information, please refer to <http://unlicense.org/>
- */
-
 namespace Supersoniq\Packadata\Kernel\Controller;
 
-abstract class Model extends Model\__Parent {
+class Model extends \Controller\Model_Unversioned {
 
 
 	/*************************************************************************
-	  ACTION METHODS                   
-	 *************************************************************************/
-	public function all( ) {
-		$model = $this->model( );
-		return $model->all( ); 
+	 ACTION METHODS
+	*************************************************************************/
+	public function archives( $type = NULL ) {
+		$archives = ( new \Model_Archive( ) )->all( $type );
+		return $archives;
 	}
-	public function get( $id = NULL ) {
+	public function archive( $id ) {
 		$model = $this->model( );
-		if ( ! $id ) {
-			return $model;
-		}
-		if ( $model->init_by_id( $id ) ) {
-			return $model;
-		}
-		return FALSE;
+		$model->init_by_id( $id );
+		$archives = ( new \Model_Archive( ) )->get_model_history( $id, $this->type );
+		return $archives;
 	}
-	public function edit( &$model, $datas ) {
-		foreach ( $datas as $name => $value ) {
-			$model->$name = $value;
-		}
-		$exists = $model->exists( );
-		if ( $model->save( ) ) {
-			if ( $exists ) {
-				$message = $this->get_model_name( ) . ' updated with success ! ';
-			} else {
-				$message = $this->get_model_name( ) . ' created with success ! ';
-			}
-			\Notification::push( $message, \Notification::SUCCESS );
-			return TRUE;
-		}
-		if ( $exists ) {
-			$message = $this->get_model_name( ) . ' not updated ! ';
+	public function see( $id, $versions ) {
+		$archive = ( new \Model_Archive( ) )->get_model_version( $id, $this->type, array( 'attributes' => $versions ) );
+		return $archive;
+	}
+	public function erase ( $id, $versions = NULL ) {
+		if ( isset( $versions ) ) {
+			$archives = ( new \Model_Archive( ) )->get_model_version( $id, $this->type, array( 'attributes' => $versions  ) );
 		} else {
-			$message = $this->get_model_name( ) . ' not created ! ';
+			$archives = ( new \Model_Archive( ) )->get_model_history( $id, $this->type);
 		}
-		\Notification::push( $message, \Notification::ERROR );
-		return FALSE;
+		if ( $archives ) {
+			if ( is_array( $archives ) ) {
+				foreach ( $archives as $archive ) {
+					$archive->delete( );
+				}
+				\Notification::push( 'Archives of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
+				return TRUE;
+			} else {
+				$deleted_version = $archives->model_type_version . '.' . $archives->model_attributes_version;
+				$archives->delete( );
+				\Notification::push( 'Version ' . $deleted_version . ' of this ' . $this->type . ' deleted with success ! ', \Notification::SUCCESS );
+				return TRUE;
+			}
+		} else {
+			\Notification::push( 'Archives not found !', \Notification::ERROR );
+			return FALSE;
+		}
 	}
-	public function delete( $model ) {
-		$model->delete( );
-		\Notification::push( $this->get_model_name( ) . ' deleted with success ! ', \Notification::SUCCESS );
-		return TRUE;
-	}
-
-
-	/*************************************************************************
-	  PROTECTED METHODS                   
-	 *************************************************************************/
-	protected function get_model_name( ) {
-		return \Supersoniq\substr_after( $this->type, '\\' );
-	}
-
-	protected function model( ) {
-		return ( new \Model )->by_type( $this->get_model_name( ) );
+	public function restore ( $id, $versions ) {
+		$force_insert = FALSE;
+		if ( $archive = ( new \Model_Archive( ) )->get_model_version( $id, $this->type, array( 'attributes' => $versions ) ) ) {
+			$model_restore = 'Model\\' . $this->type;
+			$model = new $model_restore;
+			if ( ! $model->init_by_id( $archive->model_id ) ) {
+				$model->id = $archive->model_id;
+				$model->type_version = $archive->model_type_version;
+				$archive = $archive->last_version( $archive->model_id, $this->type );
+				$model->attributes_version = $archive->model_attributes_version;
+				$force_insert = TRUE;
+			}
+			foreach ( $archive->model_attributes as $attribute => $value ) {
+				$model->set( $attribute, $value );
+			}
+			//TODO Decide if we keep the archives or not and what to do with the versions of the restored model
+			$restored_version = $archive->model_type_version . '.' . $archive->model_attributes_version;
+			if ( $model->save( $force_insert ) ) {
+				\Notification::push( $this->type . ' version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
+				return TRUE;
+			}
+			\Notification::push( $this->type . ' not restored !', \Notification::ERROR );
+			return FALSE;
+		} else {
+			\Notification::push( 'Archive not found !', \Notification::ERROR );
+			return FALSE;
+		}
 	}
 }
