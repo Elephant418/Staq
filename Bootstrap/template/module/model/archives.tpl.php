@@ -1,45 +1,38 @@
-<h1>Archives</h1>
+<h1>Deleted Models</h1>
 
 <?php
-
-$model_id = '';
-
-foreach ( $this->archives as $archive ) {
 	
-	$attributes = $archive->model_attributes;
-	$model_id = $archive->model_id;
+	$ignore = array( );
+	$model_id = '';
 	
-	?><h2><?= $archive->model_type . ' ' . $model_id ?></h2><?php
-	
-	if ( $archive == $archive->last_version( $archive->model_id, $archive->model_type ) ) {
-		?><h3>Last model</h3><?php
-		if ( $archive->current_version( $archive->model_id, $archive->model_type ) ) {
-		?>
-			<a href="<?= $page_url( 'view', $archive->model_id ) ?>" >
-				Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?>
-			</a> (Current) 
-			<a class="btn" href="<?= $page_url( 'edit', $archive->model_id ) ?>"><i class="icon-pencil"></i> Edit</a>
-		<?php
-		} else {
-		?>
-			<a href="<?= $page_url( 'see', $archive->model_id, $archive->model_attributes_version ) ?>" >
-			Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br/>
-			Warning: has been deleted (no current version)<?php
-		}
-		?>
-		<br/>
-	<?php
-	} else {
-		if ( $archive != $archive->last_version( $archive->model_id, $archive->model_type ) ) {
-		?>
-			<a href="<?= $page_url( 'see', $archive->model_id, $archive->model_attributes_version ) ?>" >Version : <?= $archive->model_type_version ?>.<?= $archive->model_attributes_version ?></a><br>
-		<?php
+	foreach ( $this->archives as $archive ) {
+		
+		$model_id = $archive->model_id;
+		
+		if ( ! in_array( $archive->model_id, $ignore ) ) {
+			if ( ! $archive->current_version( $archive->model_id, $archive->model_type ) ) {
+				$iterator = new \Model_Archive( );
+				$versions = $iterator->get_model_history( $archive->model_id, $archive->model_type );
+				?>
+				<h3><?= $archive->model_type ?> number <?= $archive->model_id ?> : </h3>
+				<?php
+				foreach ( $versions as $version ) {
+				?>
+					<?php //TODO fix the following link (doesn't work with action_url) ?>
+					<a href="<?= $page_url( $version->model_type, 'see', $version->model_id, $version->model_attributes_version ) ?>" >
+					Version : <?= $version->model_type_version ?>.<?= $version->model_attributes_version ?></a><br/>
+					Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $version->date_version ), 'd/m/Y - G:i' ); ?><br/>
+					Changed by the IP : <?= $version->ip_version ?><br/><br/>
+				<?php
+				}
+				$ignore[] = $archive->model_id; 
+			} else {
+			?>
+				
+			<?php
+			}
 		}
 	}
-	?>
-	Modification : <?= date_format( \DateTime::createFromFormat( 'Y-m-d G:i:s', $archive->date_version ), 'd/m/Y - G:i' ); ?><br/>
-	Changed by the IP : <?= $archive->ip_version ?><br/><br/><?php
-}
 ?>
 <a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> List</a>
 <a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>

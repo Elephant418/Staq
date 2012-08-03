@@ -7,18 +7,14 @@
 
 namespace Supersoniq\Packadata\Kernel\View\Module\Model;
 
-abstract class Archives extends Archives\__Parent {
+abstract class See extends See\__Parent {
 
 
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
-	public function fill( $template, $parameters = [ ] ) {
-		if ( isset( $parameters[ 'type' ] ) ) {
-			$template->archives = $this->get_controller( )->archives( $parameters[ 'type' ] );
-		} else {
-			$template->archives = $this->get_controller( )->archives( );
-		}
+    public function fill( $template, $parameters = [ ] ) {
+		$template->archive = $this->get_controller( )->see( $parameters[ 'id' ],  $parameters[ 'versions' ] );
 		return $template;
 	}
 
