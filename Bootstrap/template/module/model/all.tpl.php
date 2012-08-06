@@ -39,3 +39,4 @@ $model_type = '';
 }
 ?>
 <a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
+<a class="btn" href="<?= $page_url( 'archives', $model_type ) ?>"><i class="icon-th-list"></i> Deleted Models</a>

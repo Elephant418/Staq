@@ -1,6 +1,7 @@
 <h1>Deleted Models</h1>
 
-<?php 
+<?php
+//TODO You should not be able to reach this page without a model in parameter (or it becomes weirder than a psychotic moose-faced duck)
 if ( count( $this->archives ) == 0 ) {
 ?>
 	<p><em>There is no elements to display</em></p>
@@ -30,11 +31,10 @@ if ( count( $this->archives ) == 0 ) {
 					Changed by the IP : <?= $version->ip_version ?><br/><br/>
 				<?php
 				}
-				$ignore[] = $archive->model_id; 
-			} else {
-			?>
-				
-			<?php
+				$ignore[] = $archive->model_id;
+				?>
+					<a class="btn btn-danger" href="<?= $page_url( 'erase', $archive->model_id ) ?>"><i class="icon-remove"></i> Erase all</a><br/><br/>
+				<?php
 			}
 		}
 	}
@@ -45,7 +45,6 @@ if ( count( $this->archives ) == 0 ) {
 	if ( count( $this->archives ) != 0 ) {
 		?>
 		<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
-		<a class="btn btn-danger" href="<?= $page_url( 'erase', $model_id ) ?>"><i class="icon-remove"></i> Erase All Archives</a>
 		<?php 
 	}
 ?>

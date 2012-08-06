@@ -1,12 +1,14 @@
 <h1>Archives</h1>
 
 <?php
+
+$model_id = '';
+
 if ( count( $this->archives ) == 0 ) {
 	?>
 	<p><em>There is no elements to display</em></p>
 <?php
 } else {
-	$model_id = '';
 	
 	foreach ( $this->archives as $archive ) {
 		
@@ -48,7 +50,7 @@ if ( count( $this->archives ) == 0 ) {
 }
 ?>
 <a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> List</a>
-<a class="btn" href="<?= $page_url( 'view', $archive->model_id ) ?>"><i class="icon-search"></i> View</a>
+<a class="btn" href="<?= $page_url( 'view', $model_id ) ?>"><i class="icon-search"></i> View</a>
 <?php
 	if ( count( $this->models ) != 0 ) {
 		?>
