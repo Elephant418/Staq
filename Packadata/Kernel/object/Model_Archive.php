@@ -78,7 +78,7 @@ abstract class Model_Archive extends \Database_Table {
 	 * @return the current version of the object if there is one, else return FALSE
 	 */
 	public function current_version( $id, $type ) {
-		$model_create = '\Model\\' . $type;
+		$model_create = '\__Auto\Model\\' . $type;
 		$search = new $model_create;
 		$result = $search->init_by_id( $id );
 		
