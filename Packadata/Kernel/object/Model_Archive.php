@@ -130,16 +130,13 @@ abstract class Model_Archive extends \Database_Table {
 	/*************************************************************************
 	 EXTENDED METHODS
 	*************************************************************************/
-	protected function init_by_data( $data ) {
-		$this->model_id = $data[ 'model_id' ];
-		$this->model_type = $data[ 'model_type' ];
-		$this->model_type_version = $data[ 'model_type_version' ];		
+	protected function init_by_data( $data ) {		
 		if ( isset( $data[ 'model_attributes' ] ) ) {
 			$data[ 'model_attributes' ] = $this->init_attributes_by_data( $data );
 		}
-		$this->model_attributes_version = $data[ 'model_attributes_version' ];
-		$this->ip_version = $data[ 'ip_version' ];
-		$this->date_version = $data[ 'date_version' ];
+		foreach ( $data as $field_name => $field_value ) {
+			$this->$field_name = $field_value;
+		}
 		return parent::init_by_data( $data );
 	}
 	protected function init_attributes_by_data( $data ) {
