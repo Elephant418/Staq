@@ -15,6 +15,7 @@ abstract class See extends See\__Parent {
 	 *************************************************************************/
     public function fill( $template, $parameters = [ ] ) {
 		$template->archive = $this->get_controller( )->see( $parameters[ 'id' ],  $parameters[ 'versions' ] );
+		$template->model = $template->archive->get_model( );
 		return $template;
 	}
 

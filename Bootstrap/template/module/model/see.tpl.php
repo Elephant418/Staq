@@ -1,11 +1,16 @@
 <h1>See</h1>
 
 <?php
-
 	$archive = $this->archive;
-	$attributes = $archive->model_attributes;
+	$attributes = unserialize( $archive->model_attributes[ 'attributes' ] );
 	
-	?><h2><?= $archive->model_type . ' ' . $archive->model_id . ' version ' . $archive->model_attributes_version; ?></h2><?php
+	?><h2><?= $archive->model_type . ' ' . $archive->model_id . ' version ' . $archive->model_attributes_version; ?></h2>
+	
+	<h3>Model</h3><?php
+	
+	echo $this->display( $this->model );
+	
+	?><h3>Details</h3><?php
 	
 	if ( $archive == $archive->last_version( $archive->model_id, $archive->model_type ) ) {
 		?><h4>Last model</h4><?php

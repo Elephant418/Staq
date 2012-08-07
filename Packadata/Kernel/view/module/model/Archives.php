@@ -14,11 +14,7 @@ abstract class Archives extends Archives\__Parent {
 	  RENDER METHODS                   
 	 *************************************************************************/
 	public function fill( $template, $parameters = [ ] ) {
-		if ( isset( $parameters[ 'type' ] ) ) {
-			$template->archives = $this->get_controller( )->archives( $parameters[ 'type' ] );
-		} else {
-			$template->archives = $this->get_controller( )->archives( );
-		}
+		$template->archives = $this->get_controller( )->archives( $this->get_model_name( ) );
 		return $template;
 	}
 

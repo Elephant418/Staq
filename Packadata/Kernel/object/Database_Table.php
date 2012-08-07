@@ -58,6 +58,10 @@ abstract class Database_Table {
 			return FALSE;
 		}
 	}
+	public function by_data( $fields ) {
+		$this->init_by_data( $fields );
+		return $this;
+	}
 	public function list_by_fields( $fields ) {
 		$datas = $this->datas_by_fields( $fields );
 		return $this->get_list_by_data( $datas );
@@ -99,6 +103,13 @@ abstract class Database_Table {
 			$this->saved_handler( );
 		}		
 		return TRUE;
+	}
+	public function get_current_data( ) {
+		$data = array( );
+		foreach ( $this->_database->table_fields as $field_name ) {
+			$data[ $field_name ] = $this->table_fields_value( $field_name );
+		}
+		return $data;
 	}
 
 	
@@ -175,13 +186,6 @@ abstract class Database_Table {
 			$request .= '`' . $field_name . '` = :' . $field_name . ', ';
 		}
 		return substr( $request, 0, -2 );
-	}
-	private function get_current_data( ) {
-		$data = array( );
-		foreach ( $this->_database->table_fields as $field_name ) {
-			$data[ $field_name ] = $this->table_fields_value( $field_name );
-		}
-		return $data;
 	}
 	private function bind_params( $fields ) {
 		$bind_params = array( );

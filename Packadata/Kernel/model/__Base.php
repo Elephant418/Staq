@@ -84,6 +84,11 @@ abstract class __Base extends \Database_Table {
 		$archive = new \Model_Archive( );
 		return $archive->get_model_history( $this->id, $this->type );
 	}
+	public function by_archive( $archive ) {
+		$this->init_by_data( $archive->model_attributes );
+		$this->loaded_data = array( );
+		return $this;
+	}
 	
 	
 	/*************************************************************************

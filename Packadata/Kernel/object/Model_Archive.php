@@ -40,6 +40,12 @@ abstract class Model_Archive extends \Database_Table {
 	 GETTER & SETTER
 	*************************************************************************/
 	/*
+	 * Gets the model from the archive
+	 */
+	public function get_model( ) {
+		return ( new \Model )->by_type( $this->model_attributes[ 'type' ] )->by_archive( $this );
+	}
+	/*
 	 * Gets the previous versions of an object
 	 * @param $id the id of the concerned object
 	 * @param $type the specific type of model to search for
@@ -120,7 +126,7 @@ abstract class Model_Archive extends \Database_Table {
 		$this->model_id = $model->id;
 		$this->model_type = $model->type;
 		$this->model_type_version = $model->type_version;
-		$this->model_attributes = $model->table_attributes_value( );
+		$this->model_attributes = $model->get_current_data( );
 		$this->model_attributes_version = $model->attributes_version;
 		$this->ip_version = $_SERVER[ 'REMOTE_ADDR' ];
 		$this->date_version = date( 'Y-m-d H:i:s' );
@@ -131,20 +137,18 @@ abstract class Model_Archive extends \Database_Table {
 	 EXTENDED METHODS
 	*************************************************************************/
 	protected function init_by_data( $data ) {		
-		if ( isset( $data[ 'model_attributes' ] ) ) {
-			$data[ 'model_attributes' ] = $this->init_attributes_by_data( $data );
+		if ( isset( $data[ 'model_attributes' ] ) && ! is_array( $data[ 'model_attributes' ] ) ) {
+			$data[ 'model_attributes' ] = unserialize( $data[ 'model_attributes' ] );
 		}
 		foreach ( $data as $field_name => $field_value ) {
 			$this->$field_name = $field_value;
 		}
 		return parent::init_by_data( $data );
 	}
-	protected function init_attributes_by_data( $data ) {
-		$this->model_attributes = unserialize( $data[ 'model_attributes' ] );
-		return $data[ 'model_attributes' ];
-	}
 	protected function table_fields_value( $field_name, $field_value = NULL ) {
-		if ( $field_name != 'id' ) {
+		if ( $field_name == 'model_attributes' ) {
+			return serialize( $this->model_attributes );
+		} else if ( $field_name != 'id' ) {
 			return $this->$field_name;
 		}
 		return parent::table_fields_value( $field_name );

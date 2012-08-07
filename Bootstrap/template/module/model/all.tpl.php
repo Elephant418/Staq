@@ -1,5 +1,8 @@
 <h1>List</h1>
-<?php 
+<?php
+
+$test_version = FALSE;
+
 if ( count( $this->models ) == 0 ) {
 ?>
 	<p><em>There is no elements to display</em></p>
@@ -25,7 +28,8 @@ $model_type = '';
 				<a class="btn" href="<?= $page_url( 'view', $model->id ) ?>"><i class="icon-search"></i> View</a>
 				<a class="btn" href="<?= $page_url( 'edit', $model->id ) ?>"><i class="icon-pencil"></i> Edit</a>
 				<a class="btn btn-danger" href="<?= $page_url( 'delete', $model->id ) ?>"><i class="icon-remove"></i> Delete</a>
-				<?php if ( $model->is_versioned ) { ?>
+				<?php if ( $model->is_versioned ) {
+					$test_version = TRUE; ?>
 					<a class="btn" href="<?= $page_url( 'archive', $model->id ) ?>"><i class="icon-th-list"></i> Archives</a>
 				<?php } ?>
 			</td>
@@ -39,4 +43,6 @@ $model_type = '';
 }
 ?>
 <a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
-<a class="btn" href="<?= $page_url( 'archives', $model_type ) ?>"><i class="icon-th-list"></i> Deleted Models</a>
+<?php if ( $test_version ) { ?>
+	<a class="btn" href="<?= $page_url( 'archives' ) ?>"><i class="icon-th-list"></i> Deleted Models</a>
+<?php } ?>

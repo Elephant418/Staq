@@ -56,31 +56,12 @@ class Model extends \Controller\Model_Unversioned {
 	public function restore ( $id, $versions ) {
 		$force_insert = FALSE;
 		$model = $this->model( );
-		$model->init_by_id( $id );
-		if ( $archive = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions ) ) ) {
-			$model_restore = 'Model\\' . $model->type;
-			$model = new $model_restore;
-			if ( ! $model->init_by_id( $archive->model_id ) ) {
-				$model->id = $archive->model_id;
-				$model->type_version = $archive->model_type_version;
-				$archive = $archive->last_version( $archive->model_id, $model->type );
-				$model->attributes_version = $archive->model_attributes_version;
-				$force_insert = TRUE;
-			}
-			foreach ( $archive->model_attributes as $attribute => $value ) {
-				$model->set( $attribute, $value );
-			}
-			//TODO Decide if we keep the archives or not and what to do with the versions of the restored model
-			$restored_version = $archive->model_type_version . '.' . $archive->model_attributes_version;
-			if ( $model->save( $force_insert ) ) {
-				\Notification::push( $model->type . ' version ' . $restored_version . ' restored with success ! ', \Notification::SUCCESS );
-				return TRUE;
-			}
-			\Notification::push( $model->type . ' not restored !', \Notification::ERROR );
-			return FALSE;
-		} else {
-			\Notification::push( 'Archive not found !', \Notification::ERROR );
-			return FALSE;
+		if ( ! $model->init_by_id( $id ) ) {
+			$force_insert = TRUE;
 		}
+		$archive = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions ) );
+		$model = $archive->get_model( );
+		$model->attributes_version = $archive->last_version( $id, $model->type )->model_attributes_version;
+		$model->save( $force_insert );
 	}
 }
