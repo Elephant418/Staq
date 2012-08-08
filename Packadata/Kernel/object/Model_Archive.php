@@ -120,14 +120,15 @@ abstract class Model_Archive extends \Database_Table {
 	}
 	public function previous_version( ) {
 		$version = $this->model_attributes_versions - 1;
-		while ( ! $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+		while ( ! $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) && $version >= 1) {
 			$version--;
 		}
 		return $previous;
 	}
 	public function next_version( ) {
 		$version = $this->model_attributes_versions + 1;
-		while ( ! $next = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+		$last_version = $this->last_version( $this->model_id, $this->model_type );
+		while ( ! $next = $this->get_model_version( $this->model_id, $this->model_type, $version ) && $version <= $last_version->model_attributes_version ) {
 			$version++;
 		}
 		return $next;
