@@ -22,6 +22,14 @@ class Class_Name {
 	protected $subtype;
 	protected $is_parent = FALSE;
 	protected $is_auto_extension = FALSE;
+	
+	// Calculated Attributes
+	protected $is_object;
+	protected $is_base;
+	protected $name;
+	protected $namespace;
+	protected $full_class_name;
+	protected $file_path;
 
 
 
