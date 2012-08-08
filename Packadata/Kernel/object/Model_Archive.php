@@ -76,6 +76,7 @@ abstract class Model_Archive extends \Database_Table {
 		} else {
 			return $results;
 		}
+		return FALSE;
 	}
 	/*
 	 * Checks whether there is a current version of an item and gets it if there is one
@@ -116,6 +117,20 @@ abstract class Model_Archive extends \Database_Table {
 			}
 			return $max;
 		}
+	}
+	public function previous_version( ) {
+		$version = $this->model_attributes_versions - 1;
+		while ( ! $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+			$version--;
+		}
+		return $previous;
+	}
+	public function next_version( ) {
+		$version = $this->model_attributes_versions + 1;
+		while ( ! $next = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+			$version++;
+		}
+		return $next;
 	}
 
 
