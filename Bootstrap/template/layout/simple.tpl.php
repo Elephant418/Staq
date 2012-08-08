@@ -1,17 +1,19 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title><?= $this->application_name ?></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<title><?= $this->application_name ?></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="/twbootstrap/bootstrap.css" rel="stylesheet">
-    <style>
-      body {
-        padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-    <link href="/twbootstrap/bootstrap-responsive.css" rel="stylesheet">
+	<link href="/twbootstrap/bootstrap.css" rel="stylesheet">
+	<style>
+		body {
+			padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */
+		}
+	</style>
+	<link href="/twbootstrap/bootstrap-responsive.css" rel="stylesheet">
+	<link href="/favicon.ico" rel="icon" type="image/x-icon" />
 </head>
 <body>
 	<div class="navbar navbar-fixed-top">
