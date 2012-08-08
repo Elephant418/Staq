@@ -22,7 +22,10 @@ trait Supersoniq_Getter {
 		if ( in_array( 'get_' . $name, get_class_methods( $this ) ) ) {
 			return call_user_func( [ $this, 'get_' . $name ] );
 		}
-		if ( in_array( $name, array_keys( get_object_vars( $this ) ) ) ) {
+		if ( 
+			in_array( $name, array_keys( get_object_vars( $this ) ) ) &&
+			! \Supersoniq\starts_with( $name, '_' )
+		) {
 			return $this->$name;
 		}
 		throw new \Exception( 'Attribute not found "' . get_class( $this ) . '::' . $name . '"' );
@@ -42,7 +45,10 @@ trait Supersoniq_Getter {
 			call_user_func( [ $this, 'set_' . $name ], $value );
 			return $this;
 		}
-		if ( in_array( $name, array_keys( get_object_vars( $this ) ) ) ) {
+		if ( 
+			in_array( $name, array_keys( get_object_vars( $this ) ) ) &&
+			! \Supersoniq\starts_with( $name, '_' )
+		) {
 			$this->$name = $value;
 			return $this;
 		}
