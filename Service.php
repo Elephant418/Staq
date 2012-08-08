@@ -59,12 +59,14 @@ class Service {
 		echo $this->render( );
 		return $this;
 	}
+
 	public function start( $request = NULL ) {
 		$this->format_request( $request );
 		$this->initialize_attributes( $request );
 		$this->initialize_settings( );
 		$this->route = $this->route_by_request( $request );
 	}
+
 	public function render( ) {
 		\Supersoniq::$MODULES = $this->get_modules( );
 		return ( new \Application )
