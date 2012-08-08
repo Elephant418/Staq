@@ -252,7 +252,7 @@ function module_page_route( $module, $page, $parameters = [ ] ) {
 }
 
 function class_type_name( $object ) {
-	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->name;
+	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->subtype;
 }
 
 function class_type( $object ) {

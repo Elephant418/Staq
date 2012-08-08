@@ -10,10 +10,12 @@ namespace Supersoniq\Kernel\Internal;
 class Autoloader {
 
 
+
 	/*************************************************************************
 	  ATTRIBUTES                   
 	 *************************************************************************/
         private $library;
+
 
 
 	/*************************************************************************
@@ -21,19 +23,21 @@ class Autoloader {
 	 *************************************************************************/
         public function init( ) {
 		spl_autoload_register( [ $this, 'autoloader' ] );
-		$settings = ( new \Settings )->by_file( 'application' );
-		$this->library  = $settings->get_array( 'library' );
+		$settings      = ( new \Settings )->by_file( 'application' );
+		$this->library = $settings->get_array( 'library' );
         }
+
 
 
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function autoloader( $class_name ) {
+		// echo HTML_EOL . $class . HTML_EOL;
 		$class = ( new Class_Name )->by_name( $class_name );
 		if ( $this->load_library_class( $class_name ) ) {
 			return TRUE;
-		} else if ( $class->is_parent( ) ) {
+		} else if ( $class->is_parent ) {
 			return $this->load_parent_class( $class );
 		} else if ( ! is_null( $class->extension ) ) {
 			return $this->load_explicit_class( $class );
@@ -42,6 +46,7 @@ class Autoloader {
 		}
 		throw new \Exception( 'Unknown class "' . $class->called_name . '"' );
 	}
+
 
 
 	/*************************************************************************
@@ -58,6 +63,7 @@ class Autoloader {
 		}
 		return FALSE;
 	}
+
 
 
 	/*************************************************************************
@@ -77,25 +83,27 @@ class Autoloader {
 	private function load_existing_parent_class( $class ) {
 		$is_parent_class = FALSE;
 		$original_extension = $class->extension;
-		$original_full_class_name = $class->get_full_class_name( );
-		$name = $class->name;
+		$original_full_class_name = $class->full_class_name;
+		$subtype = $class->subtype;
 		do {
 			foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
 				$class->extension = \Supersoniq\format_to_namespace( $extension );
 				if ( $is_parent_class ) {
 					if ( $this->load_existing_explicit_class( $class ) ) {
-						class_alias( $class->get_full_class_name( ), $class->called_name );
+						class_alias( $class->full_class_name, $class->called_name );
 						return TRUE;
 					}
-				} else if ( $original_full_class_name == $class->get_full_class_name( ) ) {
+				} else if ( $original_full_class_name == $class->full_class_name ) {
 					$is_parent_class = TRUE;
 				}
 			}
-			$class->name = \Supersoniq\substr_before_last( $class->name, '\\' );
-		} while ( $class->name );
+			$class->subtype = \Supersoniq\substr_before_last( $class->subtype, '\\' );
+		} while ( $class->subtype );
+		$class->subtype = $subtype;
 		$class->extension = $original_extension;
 		return FALSE;
 	}
+
 
 
 	/*************************************************************************
@@ -111,23 +119,24 @@ class Autoloader {
         }
 
 	private function load_existing_implicit_class( $class, $create_alias ) {
-		$name = $class->name;
+		$subtype = $class->subtype;
 		do {
 			foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
 				$class->extension = \Supersoniq\format_to_namespace( $extension );
 				if ( $this->load_existing_explicit_class( $class ) ) {
 					if ( $create_alias ) {
-						$this->create_class( '\\' . $class->get_full_class_name( ), $class->called_name );
+						$this->create_class( '\\' . $class->full_class_name, $class->called_name );
 					}
 					return TRUE;
 				}
 			}
-			$class->name = \Supersoniq\substr_before_last( $class->name, '\\' );
-		} while ( $class->name );
-		$class->name = $name;
+			$class->subtype = \Supersoniq\substr_before_last( $class->subtype, '\\' );
+		} while ( $class->subtype );
+		$class->subtype = $subtype;
 		$class->extension =  NULL;
 		return FALSE;
 	}
+
 
 
 	/*************************************************************************
@@ -142,15 +151,17 @@ class Autoloader {
 		}
 		return TRUE;
 	}
+
 	private function load_existing_explicit_class( $class ) {
-		// echo '-- ' . $class->get_file_path( ) . HTML_EOL;
-		if ( is_file( $class->get_file_path( ) ) ) {
-			require_once( $class->get_file_path( ) );
-			$this->check_class_loaded( $class->get_full_class_name( ) );
+		// echo '-- ' . $class->file_path . HTML_EOL;
+		if ( is_file( $class->file_path ) ) {
+			require_once( $class->file_path );
+			$this->check_class_loaded( $class->full_class_name );
 			return TRUE;
 		}
 		return FALSE;
 	}
+
 	private function check_class_loaded( $class_name ) {
 		if ( ! class_exists( $class_name ) ) {
 			$classes = get_declared_classes( );
@@ -158,6 +169,7 @@ class Autoloader {
 			throw new \Exception\Wrong_Class_Definition( 'Wrong class definition: "' . $loaded_class . '" definition, but "' . $class_name . '" expected.' ); 
 		}
 	}
+
 
 
 	/*************************************************************************
@@ -169,11 +181,13 @@ class Autoloader {
 		}
 		return $this->create_magic_class( $class );
 	}
+
 	private function create_magic_class( $class ) {
 		return $this->create_magic( $class, 'magic_classes' );
 	}
+
 	private function create_magic( $class, $property ) {
-		if ( ! $class->is_object( ) ) {
+		if ( ! $class->is_object ) {
 			$settings = ( new \Settings )->by_file( 'application' );
 			if ( $settings->has( $property, $class->type ) ) {
 				$base_name = $settings->get( $property, $class->type );
@@ -184,6 +198,7 @@ class Autoloader {
 		}
 		return FALSE;
 	}
+
 	private function create_class( $base_class, $class ) {
 		$namespace = \Supersoniq\substr_before_last( $class, '\\' );
 		$name = \Supersoniq\substr_after_last( $class, '\\' );
