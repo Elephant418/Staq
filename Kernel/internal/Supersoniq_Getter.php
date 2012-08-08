@@ -19,8 +19,8 @@ trait Supersoniq_Getter {
 	}
 
 	public function get( $name ) {
-		if ( $this->is_there_a_getter_method( $name ) ) {
-			return call_user_func( [ $this, 'get_' . $name ] );
+		if ( $method_name = $this->is_there_a_getter_method( $name ) ) {
+			return call_user_func( [ $this, $method_name ] );
 		}
 		if ( $this->is_there_a_public_attribute( $name ) ) {
 			return $this->$name;
@@ -43,8 +43,8 @@ trait Supersoniq_Getter {
 	}
 
 	public function set( $name, $value ) {
-		if ( $this->is_there_a_setter_method( $name ) ) {
-			call_user_func( [ $this, 'set_' . $name ], $value );
+		if ( $method_name = $this->is_there_a_setter_method( $name ) ) {
+			call_user_func( [ $this, $method_name ], $value );
 			return $this;
 		}
 		if ( $this->is_there_a_public_attribute( $name ) ) {
@@ -94,7 +94,10 @@ trait Supersoniq_Getter {
 	}
 
 	private function is_there_a_getter_method( $name ) {
-		return in_array( 'get_' . $name, get_class_methods( $this ) );
+		if ( in_array( 'get_' . $name, get_class_methods( $this ) ) ) {
+			return 'get_' . $name;
+		}
+		return FALSE;
 	}
 
 	private function is_a_setter_method( $method_name ) {
@@ -105,7 +108,10 @@ trait Supersoniq_Getter {
 	}
 
 	private function is_there_a_setter_method( $name ) {
-		return in_array( 'set_' . $name, get_class_methods( $this ) );
+		if ( in_array( 'set_' . $name, get_class_methods( $this ) ) ) {
+			return 'set_' . $name;
+		}
+		return FALSE;
 	}
 
 	private function is_there_an_attribute( $name ) {
