@@ -19,14 +19,16 @@ trait Supersoniq_Getter {
 	}
 
 	public function get( $name ) {
-		if ( in_array( 'get_' . $name, get_class_methods( $this ) ) ) {
+		if ( $this->is_there_a_getter_method( $name ) ) {
 			return call_user_func( [ $this, 'get_' . $name ] );
 		}
-		if ( 
-			in_array( $name, array_keys( get_object_vars( $this ) ) ) &&
-			! \Supersoniq\starts_with( $name, '_' )
-		) {
+		if ( $this->is_there_a_public_attribute( $name ) ) {
 			return $this->$name;
+		}
+
+		// Error cases
+		if ( $this->is_there_an_attribute( $name ) ) {
+			throw new \Exception( 'Attribute is private "' . get_class( $this ) . '::' . $name . '"' );
 		}
 		throw new \Exception( 'Attribute not found "' . get_class( $this ) . '::' . $name . '"' );
 	}
@@ -41,16 +43,21 @@ trait Supersoniq_Getter {
 	}
 
 	public function set( $name, $value ) {
-		if ( in_array( 'set_' . $name, get_class_methods( $this ) ) ) {
+		if ( $this->is_there_a_setter_method( $name ) ) {
 			call_user_func( [ $this, 'set_' . $name ], $value );
 			return $this;
 		}
-		if ( 
-			in_array( $name, array_keys( get_object_vars( $this ) ) ) &&
-			! \Supersoniq\starts_with( $name, '_' )
-		) {
+		if ( $this->is_there_a_public_attribute( $name ) ) {
 			$this->$name = $value;
 			return $this;
+		}
+
+		// Error cases
+		if ( $this->is_there_an_attribute( $name ) ) {
+			throw new \Exception( 'Attribute is private "' . get_class( $this ) . '::' . $name . '"' );
+		}
+		if ( $this->is_there_a_getter_method( $name ) ) {
+			throw new \Exception( 'Attribute not writable "' . get_class( $this ) . '::' . $name . '"' );
 		}
 		throw new \Exception( 'Attribute not found "' . get_class( $this ) . '::' . $name . '"' );
 	}
@@ -60,17 +67,55 @@ trait Supersoniq_Getter {
 	/*************************************************************************
 	  GETTER & SETTER
 	 *************************************************************************/
-	public function __call( $name, $arguments ) {
-		if ( \Supersoniq\starts_with( $name, 'get_' ) ) {
-			return $this->get( substr( $name, 4 ) );
+	public function __call( $method_name, $arguments ) {
+		if ( $name = $this->is_a_getter_method( $method_name ) ) {
+			return $this->get( $name );
 		}
-		if ( \Supersoniq\starts_with( $name, 'set_' ) ) {
-			$value = NULL;
-			if ( ! empty( $arguments ) ) {
-				$value = $arguments[ 0 ];
+		if ( $name = $this->is_a_setter_method( $method_name ) ) {
+			if ( empty( $arguments ) ) {
+				throw new \Exception( 'One argument expected for "' . get_class( $this ) . '::' . $method_name . '( )"' );
 			}
-			return $this->set( substr( $name, 4 ), $value );
+			$value = $arguments[ 0 ];
+			return $this->set( $name, $value );
 		}
-		throw new \Exception( 'Method not found "' . get_class( $this ) . '::' . $name . '( )"' );
+		throw new \Exception( 'Method not found "' . get_class( $this ) . '::' . $method_name . '( )"' );
+	}
+
+
+
+	/*************************************************************************
+	  PRIVATE METHODS
+	 *************************************************************************/
+	private function is_a_getter_method( $method_name ) {
+		if ( \Supersoniq\starts_with( $method_name, 'get_' ) ) {
+			return $this->get( substr( $method_name, 4 ) );
+		}
+		return FALSE;
+	}
+
+	private function is_there_a_getter_method( $name ) {
+		return in_array( 'get_' . $name, get_class_methods( $this ) );
+	}
+
+	private function is_a_setter_method( $method_name ) {
+		if ( \Supersoniq\starts_with( $method_name, 'set_' ) ) {
+			return $this->get( substr( $method_name, 4 ) );
+		}
+		return FALSE;
+	}
+
+	private function is_there_a_setter_method( $name ) {
+		return in_array( 'set_' . $name, get_class_methods( $this ) );
+	}
+
+	private function is_there_an_attribute( $name ) {
+		return in_array( $name, array_keys( get_object_vars( $this ) ) );
+	}
+
+	private function is_there_a_public_attribute( $name ) {
+		return ( 
+			$this->is_there_an_attribute( $name ) &&
+			! \Supersoniq\starts_with( $name, '_' )
+		);
 	}
 }
