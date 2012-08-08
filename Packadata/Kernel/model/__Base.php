@@ -5,6 +5,7 @@ namespace Supersoniq\Packadata\Kernel\Model;
 abstract class __Base extends \Database_Table {
 
 
+
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
@@ -15,34 +16,41 @@ abstract class __Base extends \Database_Table {
 	public $is_versioned = FALSE;
 
 
+
 	/*************************************************************************
 	  GETTER & SETTER             
 	 *************************************************************************/
 	public function name( ) {
 		return $this->id;
 	}
+
 	// Warning: __toString() is used for sorting
 	public function __toString( ) {
 		return $this->type . ':' . $this->id;
 	}
+
 	public function __get( $name ) {
 		return $this->get( $name );
 	}
+
 	public function get( $name ) {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
 			return NULL;
 		}
 		return $this->_attributes[ $name ]->get( );
 	}
+
 	public function __set( $name, $value ) {
 		return $this->set( $name, $value );
 	}
+
 	public function set( $name, $value ) {
 		$this->_attributes[ $name ] = ( new \Data_Type\Varchar )
 			->set_name( $name )
 			->set( $value );
 		return $this;
 	}
+
 	public function attribute( $name ) {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
 			return NULL;
@@ -51,12 +59,14 @@ abstract class __Base extends \Database_Table {
 	}
 
 
+
 	/*************************************************************************
 	  ATTRIBUTES DEFINITION METHODS
 	 *************************************************************************/
 	public function get_attribute_fields( ) {
 		return array_keys( $this->_attributes );
 	}
+
 
 
 	/*************************************************************************
@@ -70,6 +80,7 @@ abstract class __Base extends \Database_Table {
 		$this->_database->table_name = 'models';
 	}
 
+
 	
 	/*************************************************************************
 	  PUBLIC LIST METHODS
@@ -77,13 +88,16 @@ abstract class __Base extends \Database_Table {
 	public function all( ) {
 		return parent::list_by_fields( array( 'type' => $this->type ) );
 	}
+
 	public function one( ) {
 		return $this;
 	}
+
 	public function get_archives( ) {
 		$archive = new \Model_Archive( );
 		return $archive->get_model_history( $this->id, $this->type );
 	}
+
 	public function by_archive( $archive ) {
 		$this->init_by_data( $archive->model_attributes );
 		$this->loaded_data = array( );
@@ -91,6 +105,7 @@ abstract class __Base extends \Database_Table {
 	}
 	
 	
+
 	/*************************************************************************
 	 PUBLIC DATABASE REQUEST
 	*************************************************************************/
@@ -102,6 +117,7 @@ abstract class __Base extends \Database_Table {
 			$archive->save( );
 		}
 	}
+
 
 	
 	/*************************************************************************
@@ -116,6 +132,7 @@ abstract class __Base extends \Database_Table {
 		}
 		return parent::init_by_data( $data );
 	}
+
 	protected function init_attributes_by_data( $data ) {
 		$attributes = unserialize( $data[ 'attributes' ] );
 		if ( is_array( $attributes ) ) {
@@ -127,6 +144,7 @@ abstract class __Base extends \Database_Table {
 		}
 		return serialize( $attributes );
 	}
+
 	protected function table_fields_value( $field_name, $field_value = NULL ) {
 		if ( $field_name == 'type' || $field_name == 'type_version' || $field_name == 'attributes_version' ) {
 			return $this->$field_name;
@@ -135,9 +153,18 @@ abstract class __Base extends \Database_Table {
 		}
 		return parent::table_fields_value( $field_name );
 	}
+
 	public function table_attributes_value( ) {
-		return serialize( $this->_attributes );
+		$attributes = array( );
+		foreach( $this->get_attribute_fields( ) as $name ) {
+			$value = $this->attribute( $name )->value( );
+			if ( ! is_null( $value ) ) {
+				$attributes[ $name ] = $value;
+			}
+		}
+		return serialize( $attributes );
 	}
+
 	protected function has_data_changed( $current_data ) {
 		$loaded_data = $this->loaded_data;
 		foreach ( $current_data as $field_name => $field__value ) {

@@ -5,12 +5,14 @@ namespace Supersoniq\Packadata\Kernel\Model;
 class Defined extends \Model\__Base {
 
 
+
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
 	protected $_attributes_alias = [ ];
 	protected $_indexs = [ ];
 	protected $_uniqs = [ ];
+
 
 
 	/*************************************************************************
@@ -24,6 +26,7 @@ class Defined extends \Model\__Base {
 			return $this->_attributes_alias[ $name ]( $this );
 		} 
 	}
+
 	public function set( $name, $value ) {
 		if ( ! isset( $this->_attributes[ $name ] ) ) {
 			throw new \Exception( 'Unexisting attribute "' . $name . '"' );
@@ -32,6 +35,7 @@ class Defined extends \Model\__Base {
 		$this->_attributes[ $name ]->set( $value );
 		return $this;
 	}
+
 
 
 	/*************************************************************************
@@ -55,12 +59,15 @@ class Defined extends \Model\__Base {
 		}
 		$this->_attributes[ $name ] = $data_type;
 	}
+
 	protected function add_attribute_alias( $name, $alias ) {
 		$this->_attributes_alias[ $name ] = $alias;
 	}
+
 	protected function remove_attribute( $name ) {
 		unset( $this->_attributes[ $name ] );
 	}
+
 
 
 	/*************************************************************************
@@ -75,12 +82,14 @@ class Defined extends \Model\__Base {
 	}
 
 	
+
 	/*************************************************************************
 	  METHODS TO EXTEND
 	 *************************************************************************/
 	protected function simplify_index( $index ) {
 		return preg_replace( '/[ -]+/', '-', preg_replace( '/[^a-zA-Z0-9- ]/', '', strtolower( $index ) ) );
 	}
+
 
 
 	/*************************************************************************
@@ -95,6 +104,7 @@ class Defined extends \Model\__Base {
 		}
 		return parent::delete( );
 	}
+
 	public function save( $force_insert = FALSE ) {
 		foreach ( $this->_uniqs as $name => $index ) {
 			if ( ! $index->is_uniq( $this ) ) {
@@ -128,6 +138,7 @@ class Defined extends \Model\__Base {
 		}
 		return $init;
 	}
+
 	protected function init_attributes_by_data( $data ) {
 		$attributes = unserialize( $data[ 'attributes' ] );
 		if ( $data[ 'type_version' ] < $this->type_version ) {
@@ -145,16 +156,7 @@ class Defined extends \Model\__Base {
 		}
 		return serialize( $attributes );
 	}
-	public function table_attributes_value( ) {
-		$attributes = array( );
-		foreach( $this->get_attribute_fields( ) as $name ) {
-			$value = $this->attribute( $name )->value( );
-			if ( ! is_null( $value ) ) {
-				$attributes[ $name ] = $this->attribute( $name )->value( );
-			}
-		}
-		return serialize( $attributes );
-	}
+
 
 
 	/*************************************************************************
@@ -169,6 +171,7 @@ class Defined extends \Model\__Base {
 	protected function upgrade( $attributes, $attributes_type_version ) {
 		return $attributes;
 	}
+
 	protected function downgrade( $attributes, $attributes_type_version ) {
 		return $attributes;
 	}
