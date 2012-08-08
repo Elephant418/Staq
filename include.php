@@ -19,6 +19,7 @@ require_once( $require_path . 'Supersoniq.php' );
 
 // REQUIRE KERNEL CLASSES
 $require_path .= 'Kernel/internal/';
+require_once( $require_path . 'Supersoniq_Getter.php' );
 require_once( $require_path . 'Class_Name.php' );
 require_once( $require_path . 'Autoloader.php' );
 require_once( $require_path . 'Url.php' );
