@@ -76,7 +76,7 @@ class User extends  User\__Parent {
 		    return $current_user;
 		} else {
 			\Notification::push( 'You must be connected to see this page.', \Notification::ERROR );
-			\Supersoniq\Application::redirect_to_action( 'User', 'login', $error );
+			\Supersoniq\redirect_to_module_page( 'Authent', 'login' );
 		}
 	}
 
