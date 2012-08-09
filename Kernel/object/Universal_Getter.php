@@ -5,9 +5,9 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Kernel\Internal;
+namespace Supersoniq\Kernel\Object;
 
-trait Supersoniq_Getter {
+trait Universal_Getter {
 
 
 

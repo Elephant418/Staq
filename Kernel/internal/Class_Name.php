@@ -8,7 +8,7 @@
 namespace Supersoniq\Kernel\Internal;
 
 class Class_Name {
-	use \Supersoniq\Kernel\Internal\Supersoniq_Getter;
+	use \Supersoniq\Kernel\Object\Universal_Getter;
 
 
 

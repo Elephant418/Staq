@@ -17,13 +17,13 @@ require_once( $require_path . 'utils.php' );
 require_once( $require_path . 'Service.php' );
 require_once( $require_path . 'Supersoniq.php' );
 
-// REQUIRE KERNEL CLASSES
-$require_path .= 'Kernel/internal/';
-require_once( $require_path . 'Supersoniq_Getter.php' );
-require_once( $require_path . 'Class_Name.php' );
-require_once( $require_path . 'Autoloader.php' );
-require_once( $require_path . 'Url.php' );
-
 // REQUIRE KERNEL OVERRIDABLE OBJECT
 $require_path = SUPERSONIQ_ROOT_PATH . 'Supersoniq/Kernel/object/';
 require_once( $require_path . 'Settings.php' );
+require_once( $require_path . 'Universal_Getter.php' );
+
+// REQUIRE KERNEL CLASSES
+$require_path = SUPERSONIQ_ROOT_PATH . 'Supersoniq/Kernel/internal/';
+require_once( $require_path . 'Class_Name.php' );
+require_once( $require_path . 'Autoloader.php' );
+require_once( $require_path . 'Url.php' );
