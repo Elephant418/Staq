@@ -62,7 +62,7 @@ abstract class Database_Table {
 		$this->init_by_data( $fields );
 		return $this;
 	}
-	public function list_by_fields( $fields ) {
+	public function list_by_fields( $fields = [ ] ) {
 		$datas = $this->datas_by_fields( $fields );
 		return $this->get_list_by_data( $datas );
 	}
@@ -167,7 +167,10 @@ abstract class Database_Table {
 			$where[ ] = $fields_name . $operation . ':' . $fields_name;
 			$parameters[ ':' . $fields_name ] = $field_value;
 		}
-		$sql = 'SELECT * FROM ' . $this->_database->table_name . ' WHERE ' . implode ( ' AND ', $where ) . ';';
+		$sql = 'SELECT * FROM ' . $this->_database->table_name;
+        if ( ! empty( $where ) ) {
+            $sql .= ' WHERE ' . implode ( ' AND ', $where ) . ';';
+        }
 		$request = new Database_Request( $sql );
 		return $request->execute( $parameters );
 	}
