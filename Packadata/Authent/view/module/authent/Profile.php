@@ -14,7 +14,7 @@ class Profile extends  Profile\__Parent {
 	/*************************************************************************
 	  LOGIN ACTION                   
 	 *************************************************************************/
-	public function render( $parameters = [ ] ) {
+	public function fill( $template, $parameters = [ ] ) {
 		return 'Todo';
 	}
 }
