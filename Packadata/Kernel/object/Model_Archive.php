@@ -118,20 +118,42 @@ abstract class Model_Archive extends \Database_Table {
 			return $max;
 		}
 	}
+	/*
+	 * No one of the three following functions has been totally tested! Use at your own risk... It's a TODO !
+	 */
 	public function previous_version( ) {
-		$version = $this->model_attributes_versions - 1;
-		while ( ! $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) && $version >= 1) {
-			$version--;
+		$version = $this->model_attributes_version - 1;
+		while ( $version >= 1) {
+			if ( $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+				return $previous;
+			} else {
+				$version--;
+			}
 		}
-		return $previous;
+		return FALSE;
 	}
 	public function next_version( ) {
-		$version = $this->model_attributes_versions + 1;
+		$version = $this->model_attributes_version + 1;
 		$last_version = $this->last_version( $this->model_id, $this->model_type );
-		while ( ! $next = $this->get_model_version( $this->model_id, $this->model_type, $version ) && $version <= $last_version->model_attributes_version ) {
-			$version++;
+		while ( $version <= $last_version->model_attributes_version ) {
+			if ( $next = $this->get_model_version( $this->model_id, $this->model_type, $version ) ) {
+				return $next;
+			} else {
+				$version++;
+			}
 		}
-		return $next;
+		return FALSE;
+	}
+	public function last_occurence_of( $id, $type, $attribute ) {
+		$version = $this->last_version( $id, $type );
+		while( $version->model_attributes_version >= 1 ) {
+			if ( isset( $version->model_attributes[ $attribute ] ) ) {
+				return $version;
+			} else {
+				$version->previous_version( );
+			}
+		}
+		return FALSE;
 	}
 
 
