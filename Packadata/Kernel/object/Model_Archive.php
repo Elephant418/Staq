@@ -147,8 +147,8 @@ abstract class Model_Archive extends \Database_Table {
 	public function last_occurence_of( $id, $type, $attribute ) {
 		$version = $this->last_version( $id, $type );
 		while( $version->model_attributes_version >= 1 ) {
-			if ( isset( $version->model_attributes[ $attribute ] ) ) {
-				return $version;
+			if ( isset( $version->model_attributes[ $attribute ] ) && $version->model_attributes[ $attribute ] != '' ) {
+				return $version->model_attributes[ $attribute ];
 			} else {
 				$version->previous_version( );
 			}
