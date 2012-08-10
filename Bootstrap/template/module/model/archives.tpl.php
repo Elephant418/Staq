@@ -1,7 +1,6 @@
 <h1>Deleted Models</h1>
 
 <?php
-//TODO You should not be able to reach this page without a model in parameter (or it becomes weirder than a psychotic moose-faced duck)
 if ( count( $this->archives ) == 0 ) {
 ?>
 	<p><em>There is no elements to display</em></p>
