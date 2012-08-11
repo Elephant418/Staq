@@ -57,9 +57,9 @@ class Public_File {
 		$content_type = $this->get_content_type( $file_path );
 		$resource     = fopen( $file_path, 'rb' );
 		$cache_time   = $this->get_public_file_cache_time( );
-		header( 'Content-Type: ' . $content_type );
-		header( 'Content-Length: ' . filesize( $file_path ) );
-		header('Cache-Control: private, max-age=' . ( $cache_time - time( ) ) . ', pre-check=' . ( $cache_time - time( ) ), true );
+		header( 'Content-type: ' . $content_type . '; charset: UTF-8' );
+		header( 'Content-length: ' . filesize( $file_path ) );
+		header( 'Cache-control: private, max-age=' . ( $cache_time - time( ) ) . ', pre-check=' . ( $cache_time - time( ) ), true );
 		header( 'Expires: ' . gmdate( 'D, d M Y H:i:s \G\M\T', $cache_time ), true );
 		fpassthru( $resource );
 	}
@@ -70,9 +70,11 @@ class Public_File {
 	  UTILS					 
 	 *************************************************************************/
 	private function get_content_type( $file_path ) {
-		$extension = \Supersoniq\substr_after( $file_path, '.' );
+		$extension = \Supersoniq\substr_after_last( $file_path, '.' );
 		if ( in_array( $extension, [ 'html', 'css' ] ) ) {
 			$content_type = 'text/' . $extension;
+		} else if ( $extension == 'js' ) {
+			$content_type = 'text/javascript';
 		} else if ( $extension == 'ico' ) {
 			$content_type = 'image/png';
 		} else {
