@@ -124,7 +124,7 @@ abstract class Model_Archive extends \Database_Table {
 	public function previous_version( ) {
 		$version = $this->model_attributes_version - 1;
 		while ( $version >= 1) {
-			if ( $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+			if ( $previous = $this->get_model_version($this->model_id, $this->model_type, array ( 'attributes' => $version ) ) ) {
 				return $previous;
 			} else {
 				$version--;
@@ -136,7 +136,7 @@ abstract class Model_Archive extends \Database_Table {
 		$version = $this->model_attributes_version + 1;
 		$last_version = $this->last_version( $this->model_id, $this->model_type );
 		while ( $version <= $last_version->model_attributes_version ) {
-			if ( $next = $this->get_model_version( $this->model_id, $this->model_type, $version ) ) {
+			if ( $next = $this->get_model_version( $this->model_id, $this->model_type, array ( 'attributes' => $version ) ) ) {
 				return $next;
 			} else {
 				$version++;
