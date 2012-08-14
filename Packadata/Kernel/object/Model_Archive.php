@@ -70,11 +70,13 @@ abstract class Model_Archive extends \Database_Table {
 			$fields[ 'model_attributes_version' ] = $versions[ 'attributes' ];
 		}
 		$results = parent::list_by_fields( $fields );
-		if ( sizeof( $results ) == 1 ) {
-			$result = array_values( $results->to_array( ) );
-			return $result[ 0 ];
-		} else {
-			return $results;
+		if ( sizeof ( $results ) != 0 ) {
+			if ( sizeof( $results ) == 1 ) {
+				$result = array_values( $results->to_array( ) );
+				return $result[ 0 ];
+			} else {
+				return $results;
+			}
 		}
 		return FALSE;
 	}
@@ -150,7 +152,7 @@ abstract class Model_Archive extends \Database_Table {
 			if ( isset( $version->model_attributes[ $attribute ] ) && $version->model_attributes[ $attribute ] != '' ) {
 				return $version->model_attributes[ $attribute ];
 			} else {
-				$version->previous_version( );
+				$version = $version->previous_version( );
 			}
 		}
 		return FALSE;
