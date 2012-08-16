@@ -148,12 +148,21 @@ abstract class Model_Archive extends \Database_Table {
 	}
 	public function last_occurence_of( $id, $type, $attribute ) {
 		$version = $this->last_version( $id, $type );
-		while( $version->model_attributes_version >= 1 ) {
-			if ( isset( $version->model_attributes[ $attribute ] ) && $version->model_attributes[ $attribute ] != '' ) {
-				return $version->model_attributes[ $attribute ];
+		while( $version ) {
+			$model = $version->get_model( );
+			$find = $model->$attribute;
+			if ( isset( $find ) && ! empty( $find ) ) {
+				return $model->attributes_version;
 			} else {
 				$version = $version->previous_version( );
 			}
+		}
+		return FALSE;
+	}
+	public function last_version_with( $id, $type, $attribute ) {
+		$version = $this->last_occurence_of( $id, $type, $attribute );
+		if ( $version ) {
+			return $this->get_model_version($id, $type, array ( 'attributes' => $version ) );
 		}
 		return FALSE;
 	}
