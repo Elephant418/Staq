@@ -120,8 +120,13 @@ abstract class Model_Archive extends \Database_Table {
 			return $max;
 		}
 	}
+	
+	
+	/*************************************************************************
+	 ITERATIVE ACCESSORS
+	*************************************************************************/
 	/*
-	 * No one of the three following functions has been totally tested! Use at your own risk... It's a TODO !
+	 * Gets the previous version of this archive
 	 */
 	public function previous_version( ) {
 		$version = $this->model_attributes_version - 1;
@@ -134,6 +139,9 @@ abstract class Model_Archive extends \Database_Table {
 		}
 		return FALSE;
 	}
+	/*
+	 * Gets the next version of this archive
+	*/
 	public function next_version( ) {
 		$version = $this->model_attributes_version + 1;
 		$last_version = $this->last_version( $this->model_id, $this->model_type );
@@ -146,6 +154,13 @@ abstract class Model_Archive extends \Database_Table {
 		}
 		return FALSE;
 	}
+	/*
+	 * Search for the last appearence of an attribute in the object history
+	 * @param $id the id of the concerned object
+	 * @param $type the type of the object
+	 * @param $attribute the attribute to search for
+	 * @retrun the version number of the version, FALSE if there is nothing
+	 */
 	public function last_occurence_of( $id, $type, $attribute ) {
 		$version = $this->last_version( $id, $type );
 		while( $version ) {
@@ -159,6 +174,13 @@ abstract class Model_Archive extends \Database_Table {
 		}
 		return FALSE;
 	}
+	/*
+	 * Search for the last appearence of an attribute in the object history
+	* @param $id the id of the concerned object
+	* @param $type the type of the object
+	* @param $attribute the attribute to search for
+	* @retrun the version corresponding to the criterias, FALSE if there is nothing
+	*/
 	public function last_version_with( $id, $type, $attribute ) {
 		$version = $this->last_occurence_of( $id, $type, $attribute );
 		if ( $version ) {
