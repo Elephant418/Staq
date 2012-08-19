@@ -63,8 +63,8 @@ abstract class __Base extends \Database_Table {
 	/*************************************************************************
 	  ATTRIBUTES DEFINITION METHODS
 	 *************************************************************************/
-	public function get_attribute_fields( ) {
-		return array_keys( $this->_attributes );
+	public function get_attribute_fields( $scope = 'set' ) {
+		return $this->_attributes->filter( 'scope', $scope )->keys( );
 	}
 
 
@@ -75,7 +75,7 @@ abstract class __Base extends \Database_Table {
 	public function __construct( ) {
 		parent::__construct( );
 		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
-		$this->_attributes = array( );
+		$this->_attributes = new \Database_Item_List;
 		$this->_database->table_fields = array( 'id', 'type', 'type_version', 'attributes', 'attributes_version' );
 		$this->_database->table_name = 'models';
 	}
