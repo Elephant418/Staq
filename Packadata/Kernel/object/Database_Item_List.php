@@ -87,6 +87,10 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 	/*************************************************************************
 	 SPECIFIC GETTER & SETTER
 	*************************************************************************/
+	public function keys( ) {
+		return array_keys( $this->data );
+	}
+
 	public function __get( $field ) {
 		return $this->get( $field );
 	}
@@ -152,9 +156,9 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 			};
 		}
 		$filtered_data = [ ];
-		foreach( $this->data as $item ) {
+		foreach( $this->data as $key => $item ) {
 			if ( $condition( $item ) ) {
-				$filtered_data[ ] = $item;
+				$filtered_data[ $key ] = $item;
 			}
 		}
 		return new $this( $filtered_data );
@@ -171,9 +175,9 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 
 	public function group( $field ) {
 		$groups = [ ];
-		foreach ( $this->data as $item ) {
+		foreach ( $this->data as $key => $item ) {
 			if ( ! is_null( $item->$field ) && ! is_object( $item->$field ) ) {
-				$groups[ $item->$field ][ ] = $item;
+				$groups[ $item->$field ][ $key ] = $item;
 			}
 		}
 		foreach ( $groups as $key => $group ) {
