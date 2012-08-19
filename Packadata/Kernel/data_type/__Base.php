@@ -15,6 +15,7 @@ abstract class __Base {
 	 *************************************************************************/
 	public $type;
 	public $name;
+	public $scope = 'set';
 	protected $value;
 
 
