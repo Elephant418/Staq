@@ -151,13 +151,12 @@ abstract class Database_Table {
 		$parameters = array( );
 		foreach ( $fields as $fields_name => $field_value ) {
 			if ( is_array( $field_value ) ) {
-				$operation = $field_value[ 0 ];
-				$field_value = $field_value[ 1 ];
+				$where[ ] = '( ' . $field_value[ 'where' ] . ' )';
+				$parameters = array_merge( $parameters, $field_value[ 'parameters' ] );
 			} else {
-				$operation = '=';
+				$where[ ] = $fields_name . '=:' . $fields_name;
+				$parameters[ ':' . $fields_name ] = $field_value;
 			}
-			$where[ ] = $fields_name . $operation . ':' . $fields_name;
-			$parameters[ ':' . $fields_name ] = $field_value;
 		}
 		$sql = 'SELECT * FROM ' . $this->_database->table_name;
 		if ( ! empty( $where ) ) {
