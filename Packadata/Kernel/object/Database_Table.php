@@ -146,12 +146,17 @@ abstract class Database_Table {
 	  PRIVATE METHODS
 	 *************************************************************************/
 	protected function datas_by_fields( $fields ) {
-		$where = array( );
-		$parameters = array( );
+		$where = [ ];
+		$parameters = [ ];
 		foreach ( $fields as $fields_name => $field_value ) {
 			if ( is_array( $field_value ) ) {
-				$where[ ] = '( ' . $field_value[ 'where' ] . ' )';
-				$parameters = array_merge( $parameters, $field_value[ 'parameters' ] );
+				if ( isset( $field_value[ 'where' ] ) && isset( $field_value[ 'parameters' ] ) ) {
+					$where[ ] = '( ' . $field_value[ 'where' ] . ' )';
+					$parameters = array_merge( $parameters, $field_value[ 'parameters' ] );
+				} else if ( isset( $field_value[ 0 ] ) && isset( $field_value[ 1 ] ) ) {
+					$where[ ] = $fields_name . $field_value[ 0 ] . ':' . $fields_name;
+					$parameters[ ':' . $fields_name ] = $field_value[ 1 ];
+				}
 			} else {
 				$where[ ] = $fields_name . '=:' . $fields_name;
 				$parameters[ ':' . $fields_name ] = $field_value;
