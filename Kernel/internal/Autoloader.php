@@ -33,7 +33,7 @@ class Autoloader {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	private function autoloader( $class_name ) {
-		// echo HTML_EOL . $class . HTML_EOL;
+		// echo HTML_EOL . $class_name . HTML_EOL;
 		$class = ( new Class_Name )->by_name( $class_name );
 		if ( $this->load_library_class( $class_name ) ) {
 			return TRUE;
