@@ -32,7 +32,7 @@
 						if ( count( $menu ) < 2 ) {
 							foreach ( $menu as $page => $infos ) {
 					?>
-							<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+							<li><a href="<?= $infos[ 'url' ] ?>" title="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
 							<?php
 							}
 						} else {
@@ -43,7 +43,7 @@
 							<?php
 							foreach ( $menu as $page => $infos ) {
 							?>
-								<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+								<li><a href="<?= $infos[ 'url' ] ?>" title="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
 							<?php
 							}
 							?>
@@ -61,7 +61,7 @@
 						if ( count( $menu ) < 2 ) {
 							foreach ( $menu as $page => $infos ) {
 					?>
-							<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+							<li><a href="<?= $infos[ 'url' ] ?>" title="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
 							<?php
 							}
 						} else {
@@ -72,7 +72,7 @@
 							<?php
 							foreach ( $menu as $page => $infos ) {
 							?>
-								<li><a href="<?= $infos[ 'url' ] ?>" alt="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+								<li><a href="<?= $infos[ 'url' ] ?>" title="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
 							<?php
 							}
 							?>
