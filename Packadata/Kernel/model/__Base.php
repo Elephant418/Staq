@@ -58,6 +58,13 @@ abstract class __Base extends \Database_Table {
 		return $this->_attributes[ $name ];
 	}
 
+	public function is_a( $type ) {
+		return (
+			$type == $this->type || 
+			\Supersoniq\starts_with( $type, $this->type . '\\' )
+		);
+	}
+
 
 
 	/*************************************************************************
@@ -134,10 +141,7 @@ abstract class __Base extends \Database_Table {
 	  EXTENDED METHODS
 	 *************************************************************************/
 	protected function init_by_data( $data ) {
-		if ( isset( $data[ 'type' ] ) && (
-			$data[ 'type' ] != $this->type || 
-			\Supersoniq\starts_with( $data[ 'type' ], $this->type . '\\' )
-		) ) {
+		if ( isset( $data[ 'type' ] ) && $data[ 'type' ] != $this->type ) {
 			throw new \Exception( 'Try to initialize a "' . $this->type . '" model with "' . $data[ 'type' ] . '" data.' );
 		}
 		if ( isset( $data[ 'attributes' ] ) ) {
@@ -178,10 +182,23 @@ abstract class __Base extends \Database_Table {
 		return serialize( $attributes );
 	}
 
+	public function by_fields( $fields ) {
+		$datas = $this->datas_by_fields( $fields );
+		if ( 
+			! isset( $datas[ 0 ][ 'type' ] ) ||
+			! $this->is_a( $datas[ 0 ][ 'type' ] )
+		) {
+			throw new \Exception\Resource_Not_Found( 'Can retrieve model data' );
+		}
+		return ( new \Model )
+			->by_type( $datas[ 0 ][ 'type' ] )
+			->by_data( $datas[ 0 ] );
+	}
+
 	protected function get_list_by_data( $datas ) {
 		$entities = array( );
 		foreach ( $datas as $data ) {
-			if ( isset( $data[ 'type' ] ) ) {
+			if ( isset( $data[ 'type' ] ) && $this->is_a( $data[ 'type' ] ) ) {
 				$entity = ( new \Model )->by_type( $data[ 'type' ] );
 				$entity->init_by_data( $data );
 				$entities[ $entity->id ] = $entity;

@@ -43,9 +43,8 @@ abstract class Database_Table {
 	}
 	public function by_fields( $fields ) {
 		$datas = $this->datas_by_fields( $fields );
-		if ( isset( $datas[ 0 ] ) && isset( $datas[ 0 ][ 'type' ] ) ) {
-			return ( new \Model )->by_type( $datas[ 0 ][ 'type' ] )
-				->by_data( $datas[ 0 ] );
+		if ( isset( $datas[ 0 ] ) ) {
+			return $this->by_data( $datas[ 0 ] );
 		} else {
 			return $this;
 		}
