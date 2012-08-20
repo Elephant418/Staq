@@ -29,10 +29,9 @@ class User extends \Model\Defined {
 	 *************************************************************************/
 	public function __construct( ) {
 		parent::__construct( );
-		$this->add_attribute( 'login', new \Data_Type\Varchar( ), \Model_Index::UNIQUE );
-		$this->add_attribute( 'email', new \Data_Type\Varchar( ), \Model_Index::UNIQUE );
-		$this->add_attribute( 'password' );
-		$this->attribute( 'password' )->scope = \Data_Type\__Base::SCOPE_NONE;
+		$this->add_attribute( 'login'   , new \Data_Type\Varchar, \Model_Index::UNIQUE );
+		$this->add_attribute( 'email'   , new \Data_Type\Varchar, \Model_Index::UNIQUE );
+		$this->add_attribute( 'password', new \Data_Type\Password );
 		$this->add_attribute( 'name' );
 		$this->add_attribute( 'lastname' );
 	}
@@ -64,7 +63,7 @@ class User extends \Model\Defined {
 	  PULIC METHODS          
 	 *************************************************************************/
 	public function check_password( $password ) {
-		return ( $this->password === $this->encrypt_password( $password ) );
+		return ( $this->attribute( 'password' )->value( ) === $this->encrypt_password( $password ) );
 	}
 
 	public function encrypt_password( $password ) {
