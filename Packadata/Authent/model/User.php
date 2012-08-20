@@ -34,6 +34,10 @@ class User extends \Model\Defined {
 		$this->add_attribute( 'password', new \Data_Type\Password );
 		$this->add_attribute( 'name' );
 		$this->add_attribute( 'lastname' );
+		$this->add_attribute( 'right'  , new \Data_Type\Selection( [
+			10 => 'visitor',
+			20 => 'admin'
+		] ) );
 	}
 
 
