@@ -27,7 +27,7 @@ class Database_Request {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( $request = '' ) {
-		// \Notification::push( $request . '<br>' );
+		// echo $request . '<br>';
 		$this->request = $request;
 	}
 	
