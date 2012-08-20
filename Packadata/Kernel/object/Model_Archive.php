@@ -70,11 +70,13 @@ abstract class Model_Archive extends \Database_Table {
 			$fields[ 'model_attributes_version' ] = $versions[ 'attributes' ];
 		}
 		$results = parent::list_by_fields( $fields );
-		if ( sizeof( $results ) == 1 ) {
-			$result = array_values( $results->to_array( ) );
-			return $result[ 0 ];
-		} else {
-			return $results;
+		if ( sizeof ( $results ) != 0 ) {
+			if ( sizeof( $results ) == 1 ) {
+				$result = array_values( $results->to_array( ) );
+				return $result[ 0 ];
+			} else {
+				return $results;
+			}
 		}
 		return FALSE;
 	}
@@ -118,13 +120,18 @@ abstract class Model_Archive extends \Database_Table {
 			return $max;
 		}
 	}
+	
+	
+	/*************************************************************************
+	 ITERATIVE ACCESSORS
+	*************************************************************************/
 	/*
-	 * No one of the three following functions has been totally tested! Use at your own risk... It's a TODO !
+	 * Gets the previous version of this archive
 	 */
 	public function previous_version( ) {
 		$version = $this->model_attributes_version - 1;
 		while ( $version >= 1) {
-			if ( $previous = $this->get_model_version($this->model_id, $this->model_type, $version ) ) {
+			if ( $previous = $this->get_model_version($this->model_id, $this->model_type, array ( 'attributes' => $version ) ) ) {
 				return $previous;
 			} else {
 				$version--;
@@ -132,11 +139,14 @@ abstract class Model_Archive extends \Database_Table {
 		}
 		return FALSE;
 	}
+	/*
+	 * Gets the next version of this archive
+	*/
 	public function next_version( ) {
 		$version = $this->model_attributes_version + 1;
 		$last_version = $this->last_version( $this->model_id, $this->model_type );
 		while ( $version <= $last_version->model_attributes_version ) {
-			if ( $next = $this->get_model_version( $this->model_id, $this->model_type, $version ) ) {
+			if ( $next = $this->get_model_version( $this->model_id, $this->model_type, array ( 'attributes' => $version ) ) ) {
 				return $next;
 			} else {
 				$version++;
@@ -144,14 +154,37 @@ abstract class Model_Archive extends \Database_Table {
 		}
 		return FALSE;
 	}
+	/*
+	 * Search for the last appearence of an attribute in the object history
+	 * @param $id the id of the concerned object
+	 * @param $type the type of the object
+	 * @param $attribute the attribute to search for
+	 * @retrun the version number of the version, FALSE if there is nothing
+	 */
 	public function last_occurence_of( $id, $type, $attribute ) {
 		$version = $this->last_version( $id, $type );
-		while( $version->model_attributes_version >= 1 ) {
-			if ( isset( $version->model_attributes[ $attribute ] ) && $version->model_attributes[ $attribute ] != '' ) {
-				return $version->model_attributes[ $attribute ];
+		while( $version ) {
+			$model = $version->get_model( );
+			$find = $model->$attribute;
+			if ( isset( $find ) && ! empty( $find ) ) {
+				return $model->attributes_version;
 			} else {
-				$version->previous_version( );
+				$version = $version->previous_version( );
 			}
+		}
+		return FALSE;
+	}
+	/*
+	 * Search for the last appearence of an attribute in the object history
+	* @param $id the id of the concerned object
+	* @param $type the type of the object
+	* @param $attribute the attribute to search for
+	* @retrun the version corresponding to the criterias, FALSE if there is nothing
+	*/
+	public function last_version_with( $id, $type, $attribute ) {
+		$version = $this->last_occurence_of( $id, $type, $attribute );
+		if ( $version ) {
+			return $this->get_model_version($id, $type, array ( 'attributes' => $version ) );
 		}
 		return FALSE;
 	}
