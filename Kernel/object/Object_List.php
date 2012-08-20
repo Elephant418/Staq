@@ -166,9 +166,13 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 
 	public function sort( $field ) {
 		$data = $this->data;
-		$comp = function ( $a, $b ) use ( $field ) {
-			return strcasecmp ( $a->$field, $b->$field );
-		};
+		if ( is_callable( $field ) ) {
+			$comp = $field;
+		} else {
+			$comp = function ( $a, $b ) use ( $field ) {
+				return strcasecmp( $a->$field, $b->$field );
+			};
+		}
 		usort( $data, $comp );
 		return new $this( $data );
 	}
