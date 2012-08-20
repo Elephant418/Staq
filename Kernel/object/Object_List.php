@@ -5,9 +5,9 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Packadata\Kernel\Object;
+namespace Supersoniq\Kernel\Object;
 
-abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable {
+abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 
 
 
@@ -101,7 +101,7 @@ abstract class Database_Item_List implements \ArrayAccess, \Iterator, \Countable
 		foreach( $this->data as $item ) {
 			$value = $item->$field;
 			if ( ! is_null( $value ) ) {
-				if ( is_a( $value, 'Database_Item_List' ) ) {
+				if ( is_a( $value, 'Object_List' ) ) {
 					$value = $value->to_array( );
 				} else if ( ! is_object( $value ) ) {
 					$is_database_item_list = FALSE;
