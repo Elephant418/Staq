@@ -24,7 +24,12 @@ abstract class Model extends \__Auto\Module\__Base {
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	protected function get_page_view( $page ) {
-		return ( new \View )->by_module_page( 'Model\\' . ucfirst( $page ),  $this->get_model_name( $page ) );
+		$module = 'Model\\';
+		foreach ( explode( '_', $page ) as $part ) {
+			$module .= ucfirst( $part ) . '_';
+		}
+		$module = substr( $module, 0, -1 );
+		return ( new \View )->by_module_page( $module, $this->get_model_name( ) );
 	}
 
 	protected function get_model_name( ) {
