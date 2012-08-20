@@ -24,7 +24,7 @@ class Model extends \Controller\Model_Unversioned {
 		$archive = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions ) );
 		return $archive;
 	}
-	public function erase ( $id, $versions = NULL ) {
+	public function erase( $id, $versions = NULL ) {
 		$model = $this->model( );
 		$model->init_by_id( $id );
 		if ( isset( $versions ) ) {
