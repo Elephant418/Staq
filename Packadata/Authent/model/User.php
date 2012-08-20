@@ -32,6 +32,7 @@ class User extends \Model\Defined {
 		$this->add_attribute( 'login', new \Data_Type\Varchar( ), \Model_Index::UNIQUE );
 		$this->add_attribute( 'email', new \Data_Type\Varchar( ), \Model_Index::UNIQUE );
 		$this->add_attribute( 'password' );
+		$this->attribute( 'password' )->scope = \Data_Type\__Base::SCOPE_NONE;
 		$this->add_attribute( 'name' );
 		$this->add_attribute( 'lastname' );
 	}
