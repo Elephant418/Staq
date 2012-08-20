@@ -126,15 +126,15 @@ class __Base {
 			return $var;
 		}
 		if ( is_object( $var ) ) {
-			$type = \supersoniq\class_type( $var );
+			$type = \Supersoniq\class_type( $var );
 			if ( $type == 'Template' ) {
 				return $var->render( );
 			}
 			if ( $type == 'Model' ) {
-				return ( new \Template )->by_model( $var, $mode );
+				return ( new \Template )->by_model( $var, $mode )->render( );
 			}
 			if ( $type == 'Data_Type' ) {
-				return ( new \Template )->by_data_type( $var, $mode );
+				return ( new \Template )->by_data_type( $var, $mode )->render( );
 			}
 		}
 	}
