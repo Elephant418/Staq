@@ -163,7 +163,7 @@ abstract class __Base extends \Database_Table {
 
 	public function table_attributes_value( ) {
 		$attributes = array( );
-		foreach( $this->get_attribute_fields( ) as $name ) {
+		foreach( $this->get_attribute_fields( 'none' ) as $name ) {
 			$value = $this->attribute( $name )->value( );
 			if ( ! is_null( $value ) ) {
 				$attributes[ $name ] = $value;
