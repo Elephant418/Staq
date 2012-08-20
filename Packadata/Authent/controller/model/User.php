@@ -11,10 +11,11 @@ namespace Supersoniq\Packadata\Authent\Controller\Model;
 class User extends  User\__Parent {
 
 
+
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $current_user;
+	static public $current_user;
 
 
 
@@ -41,8 +42,8 @@ class User extends  User\__Parent {
 	public function current_user( ) {
 
 		// Already initialized
-		if ( ! is_null( $this->current_user ) ) {
-		    return $this->current_user;
+		if ( ! is_null( self::$current_user ) ) {
+		    return self::$current_user;
 		}
 
 		// Find the current user
@@ -50,12 +51,12 @@ class User extends  User\__Parent {
 		    $user = FALSE;
 		} else {
 			$user = new \Model\User( );
-		    if ( ! $user->init_by_id( $_SESSION['Supersoniq'][ 'user' ] ) ) {
+			if ( ! $user->init_by_id( $_SESSION['Supersoniq'][ 'user' ] ) ) {
 				$user = FALSE;
-		    }
+			}
 		}
-		$this->current_user = $user;
-		return $this->current_user;
+		self::$current_user = $user;
+		return self::$current_user;
 	}
 
 	public function must_logged( ) {
