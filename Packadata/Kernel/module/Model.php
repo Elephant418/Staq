@@ -12,6 +12,13 @@ abstract class Model extends \__Auto\Module\__Base {
 
 
 	/*************************************************************************
+	 ATTRIBUTES
+	*************************************************************************/
+	private $subtypes;
+
+
+
+	/*************************************************************************
 	  GETTER                 
 	 *************************************************************************/
 	public function name( ) {
@@ -39,7 +46,7 @@ abstract class Model extends \__Auto\Module\__Base {
 	protected function get_route( $page ) {
 		$route = parent::get_route( $page );
 		if ( $route ) {
-			$route->add_prefix( strtolower( $this->get_model_name( ) ) );
+			$route->add_prefix( \Supersoniq\format_to_path( strtolower( $this->get_model_name( ) ) ) );
 		}
 		return $route;
 	}

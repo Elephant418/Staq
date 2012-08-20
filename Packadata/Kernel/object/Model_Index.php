@@ -89,7 +89,7 @@ abstract class Model_Index extends \Database_Table {
 		$this->model_type = $model->type;
 		$this->model_id = $model->id;
 		$this->value = $model->{$this->type};
-		return $this->init_by_fields( array( 
+		return $this->by_fields( array( 
 			'model_type' => $this->model_type,
 			'model_id' => $this->model_id,
 			'type' => $this->type,

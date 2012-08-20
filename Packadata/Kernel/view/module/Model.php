@@ -14,8 +14,12 @@ abstract class Model extends Model\__Parent {
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	protected function get_controller( ) {
-		return ( new \Controller )->by_name( 'Model\\' . $this->get_model_name( ) );
+	protected function get_controller( $subtype = '' ) {
+		$name = $this->get_model_name( );
+		if ( $subtype ) {
+			$name .= '\\' . ucfirst( $subtype );
+		}
+		return ( new \Controller )->by_name( 'Model\\' . $name );
 	}
 	protected function get_model_name( ) {
 		return \Supersoniq\substr_after( \Supersoniq\substr_after( \Supersoniq\substr_after( $this->type, '\\' ), '\\' ), '\\' );

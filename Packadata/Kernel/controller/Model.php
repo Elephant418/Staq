@@ -13,20 +13,17 @@ class Model extends \Controller\Model_Unversioned {
 		return $archives;
 	}
 	public function archive( $id ) {
-		$model = $this->model( );
-		$model->init_by_id( $id );
+		$model = $this->model( )->by_id( $id );
 		$archives = ( new \Model_Archive( ) )->get_model_history( $id, $model->type );
 		return $archives;
 	}
 	public function see( $id, $versions ) {
-		$model = $this->model( );
-		$model->init_by_id( $id );
+		$model = $this->model( )->by_id( $id );
 		$archive = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions ) );
 		return $archive;
 	}
 	public function erase( $id, $versions = NULL ) {
-		$model = $this->model( );
-		$model->init_by_id( $id );
+		$model = $this->model( )->by_id( $id );
 		if ( isset( $versions ) ) {
 			$archives = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions  ) );
 		} else {
@@ -55,8 +52,8 @@ class Model extends \Controller\Model_Unversioned {
 	}
 	public function restore( $id, $versions ) {
 		$force_insert = FALSE;
-		$model = $this->model( );
-		if ( ! $model->init_by_id( $id ) ) {
+		$model = $this->model( )->by_id( $id );
+		if ( ! $model->exists( ) ) {
 			$force_insert = TRUE;
 		}
 		$archive = ( new \Model_Archive( ) )->get_model_version( $id, $model->type, array( 'attributes' => $versions ) );

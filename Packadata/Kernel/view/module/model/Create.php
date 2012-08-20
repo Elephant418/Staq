@@ -14,7 +14,11 @@ abstract class Create extends Create\__Parent {
 	  RENDER METHODS                   
 	 *************************************************************************/
 	public function fill( $template, $parameters = [ ] ) {
-		$controller = $this->get_controller( );
+		$subtype = '';
+		if ( isset( $parameters[ 'subtype' ] ) ) {
+			$subtype = $parameters[ 'subtype' ];
+		}
+		$controller = $this->get_controller( $subtype );
 		$model = $controller->get( );
 		if ( isset( $_POST[ 'model' ] ) ) {
 			if ( $controller->edit( $model, $_POST[ 'model' ] ) ) {

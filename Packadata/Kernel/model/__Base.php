@@ -81,7 +81,7 @@ abstract class __Base extends \Database_Table {
 	 *************************************************************************/
 	public function __construct( ) {
 		parent::__construct( );
-		$this->type = \Supersoniq\substr_after_last( get_class( $this ), '\\' );
+		$this->type = \Supersoniq\class_type_name( $this );
 		$this->_attributes = new \Object_List;
 		$this->_database->table_fields = array( 'id', 'type', 'type_version', 'attributes', 'attributes_version' );
 		$this->_database->table_name = 'models';
@@ -93,7 +93,12 @@ abstract class __Base extends \Database_Table {
 	  PUBLIC LIST METHODS
 	 *************************************************************************/
 	public function all( ) {
-		return parent::list_by_fields( array( 'type' => $this->type ) );
+		$sql = 'SELECT * FROM ' . $this->_database->table_name
+			. ' WHERE type=:type'
+			. ' OR type LIKE :type_like';
+		$request = new \Database_Request( $sql );
+		$datas = $request->execute( [ 'type' => $this->type, 'type_like' => $this->type . '\\\%' ] );
+		return $this->get_list_by_data( $datas );
 	}
 
 	public function one( ) {
@@ -114,7 +119,7 @@ abstract class __Base extends \Database_Table {
 	
 
 	/*************************************************************************
-	 PUBLIC DATABASE REQUEST
+	 PROTECTED HANDLER
 	*************************************************************************/
 	protected function saved_handler( ) {
 		parent::saved_handler( );
@@ -131,7 +136,10 @@ abstract class __Base extends \Database_Table {
 	  EXTENDED METHODS
 	 *************************************************************************/
 	protected function init_by_data( $data ) {
-		if ( isset( $data[ 'type' ] ) && $data[ 'type' ] != $this->type ) {
+		if ( isset( $data[ 'type' ] ) && (
+			$data[ 'type' ] != $this->type || 
+			\Supersoniq\starts_with( $data[ 'type' ], $this->type . '\\' )
+		) ) {
 			throw new \Exception( 'Try to initialize a "' . $this->type . '" model with "' . $data[ 'type' ] . '" data.' );
 		}
 		if ( isset( $data[ 'attributes' ] ) ) {
@@ -170,6 +178,18 @@ abstract class __Base extends \Database_Table {
 			}
 		}
 		return serialize( $attributes );
+	}
+
+	protected function get_list_by_data( $datas ) {
+		$entities = array( );
+		foreach ( $datas as $data ) {
+			if ( isset( $data[ 'type' ] ) ) {
+				$entity = ( new \Model )->by_type( $data[ 'type' ] );
+				$entity->init_by_data( $data );
+				$entities[ $entity->id ] = $entity;
+			}
+		}
+		return new \Object_List( $entities );
 	}
 
 	protected function has_data_changed( $current_data ) {

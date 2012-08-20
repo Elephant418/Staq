@@ -50,8 +50,8 @@ class User extends  User\__Parent {
 		if ( ! isset( $_SESSION['Supersoniq'][ 'user' ] ) ) {
 		    $user = FALSE;
 		} else {
-			$user = new \Model\User( );
-			if ( ! $user->init_by_id( $_SESSION['Supersoniq'][ 'user' ] ) ) {
+			$user = ( new \Model\User )->by_id( $_SESSION['Supersoniq'][ 'user' ] );
+			if ( ! $user->exists( ) ) {
 				$user = FALSE;
 			}
 		}

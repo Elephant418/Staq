@@ -88,8 +88,7 @@ abstract class Model_Archive extends \Database_Table {
 	 */
 	public function current_version( $id, $type ) {
 		$model_create = '\__Auto\Model\\' . $type;
-		$search = new $model_create;
-		$result = $search->init_by_id( $id );
+		$search = ( new $model_create )->by_id( $id );
 		
 		$versions =  array( "attributes" => $search->attributes_version );
 		if ( $result ) {

@@ -39,23 +39,15 @@ abstract class Database_Table {
 	  INITIALIZATION          
 	 *************************************************************************/
 	public function by_id( $id ) {
-		$this->init_by_id( $id );
-		return $this;
-	}
-	public function init_by_id( $id ) {
-		return $this->init_by_fields( array( $this->_database->id_field => $id ) );
+		return $this->by_fields( array( $this->_database->id_field => $id ) );
 	}
 	public function by_fields( $fields ) {
-		$this->init_by_fields( $fields );
-		return $this;
-	}
-	public function init_by_fields( $fields ) {
 		$datas = $this->datas_by_fields( $fields );
-		if ( ! empty( $datas ) ) {
-			$this->init_by_data( $datas[ 0 ] );
-			return TRUE;
+		if ( isset( $datas[ 0 ] ) && isset( $datas[ 0 ][ 'type' ] ) ) {
+			return ( new \Model )->by_type( $datas[ 0 ][ 'type' ] )
+				->by_data( $datas[ 0 ] );
 		} else {
-			return FALSE;
+			return $this;
 		}
 	}
 	public function by_data( $fields ) {
@@ -168,13 +160,13 @@ abstract class Database_Table {
 			$parameters[ ':' . $fields_name ] = $field_value;
 		}
 		$sql = 'SELECT * FROM ' . $this->_database->table_name;
-        if ( ! empty( $where ) ) {
-            $sql .= ' WHERE ' . implode ( ' AND ', $where ) . ';';
-        }
+		if ( ! empty( $where ) ) {
+			$sql .= ' WHERE ' . implode ( ' AND ', $where ) . ';';
+		}
 		$request = new Database_Request( $sql );
 		return $request->execute( $parameters );
 	}
-	private function get_list_by_data( $datas ) {
+	protected function get_list_by_data( $datas ) {
 		$entities = array( );
 		foreach ( $datas as $data ) {
 			$entity = $this->new_entity( );

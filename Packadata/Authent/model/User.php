@@ -45,21 +45,11 @@ class User extends \Model\Defined {
 	  INITIALIZATION          
 	 *************************************************************************/
 	public function by_login( $login ) {
-		$this->init_by_login( $login );
-		return $this;
-	}
-
-	public function init_by_login( $login ) {
-		return $this->init_by_index( 'login', $login );
+		return $this->by_index( 'login', $login );
 	}
 
 	public function by_email( $email ) {
-		$this->init_by_email( $email );
-		return $this;
-	}
-
-	public function init_by_email( $email ) {
-		return $this->init_by_index( 'email', $email );
+		return $this->by_index( 'email', $email );
 	}
 
 

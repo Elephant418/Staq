@@ -36,12 +36,32 @@ abstract class __Base extends __Base\__Parent {
 	public function get_menu( $name ) {
 		$menu = [ ];
 		$settings = $this->settings->get_array( 'menu_' . $name );
-		foreach ( $settings as $page => $infos ) {
-			if ( isset( $this->routes[ $page ] ) && ! empty( $infos ) ) { 
+		foreach ( $settings as $key => $infos ) {
+			if ( isset( $infos[ 'page' ] ) ) {
+				$page = $infos[ 'page' ];
+			} else {
+				$page = $key;
+			}
+			if ( isset( $this->routes[ $page ] ) && ! empty( $infos ) ) {
+				$menu[ $key ] = [ ]; 
 				if ( ! is_array( $infos ) ) {
-					$menu[ $page ] = [ 'label' => $infos, 'description' => $this->name( ) . ' > ' . $infos ];
+					$menu[ $key ][ 'label' ] = $infos;
+				} else if ( isset( $infos[ 'label' ] ) ) {
+					$menu[ $key ][ 'label' ] = $infos[ 'label' ];
+				} else {
+					$menu[ $key ][ 'label' ] = $key;
 				}
-				$menu[ $page ][ 'url' ] = $this->get_page_url( $page );
+				if ( isset( $infos[ 'description' ] ) ) {
+					$menu[ $key ][ 'description' ] = $infos[ 'description' ];
+				} else {
+					$menu[ $key ][ 'description' ] = $this->name( ) . ' > ' . $menu[ $key ][ 'label' ];
+				}
+				if ( isset( $infos[ 'parameters' ] ) ) {
+					$parameters = explode( ',', $infos[ 'parameters' ] );
+				} else {
+					$parameters = [ ];
+				}
+				$menu[ $key ][ 'url' ] = $this->get_page_url( $page, $parameters );
 			}
 		}
 		if ( ! empty( $menu ) ) {

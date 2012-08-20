@@ -92,8 +92,8 @@ abstract class __Base extends \Database_Table {
 		}
 		if ( isset( $data[ 'model_id_' . $this->_related_number ] ) && isset( $data[ 'model_type_' . $this->_related_number ] ) ) {
 			$related_class_name = '\\Model\\' . $data[ 'model_type_' . $this->_related_number ];
-			$this->related_model = new $related_class_name( );
-			$this->related_model->init_by_id( $data[ 'model_id_' . $this->_related_number ] );
+			$this->related_model = ( new $related_class_name )
+				->by_id( $data[ 'model_id_' . $this->_related_number ] );
 		}
 		return parent::init_by_data( $data );
 	}

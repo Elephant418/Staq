@@ -91,8 +91,7 @@ class __Base {
 	 */
 	public function get_object( $type, $id ) {
 		$model_type = '\Model\\' . $type;
-		$object = new $model_type;
-		$object->init_by_id( $id );
+		$object = ( new $model_type )->by_id( $id );
 		return $object;
 	}
 	/*

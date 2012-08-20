@@ -73,12 +73,12 @@ class Defined extends \Model\__Base {
 	/*************************************************************************
 	  INITIALIZATION          
 	 *************************************************************************/
-	public function init_by_index( $type, $value ) {
+	public function by_index( $type, $value ) {
 		$index = new \Model_Index( );
 		if ( $id = $index->model_id_by_value( $this->type, $type, $value ) ) {
-			return $this->init_by_id( $id );
+			return $this->by_id( $id );
 		}
-		return FALSE;
+		return $this;
 	}
 
 	

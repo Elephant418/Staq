@@ -22,7 +22,8 @@ abstract class Model_Unversioned extends Model\__Parent {
 		if ( ! $id ) {
 			return $model;
 		}
-		if ( $model->init_by_id( $id ) ) {
+		$model = $model->by_id( $id );
+		if ( $model->exists( ) ) {
 			return $model;
 		}
 		return FALSE;
