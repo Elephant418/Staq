@@ -9,13 +9,17 @@ namespace Supersoniq\Packadata\Kernel\Data_Type;
 
 abstract class __Base {
 
+	const SCOPE_SET  = 3;
+	const SCOPE_GET  = 2;
+	const SCOPE_NONE = 1;
+
 
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
 	public $type;
 	public $name;
-	public $scope = 'set';
+	public $scope = self::SCOPE_SET;
 	protected $value;
 
 
