@@ -19,7 +19,7 @@ class User extends  User\__Parent {
 
 
 	/*************************************************************************
-	  LOGIN ACTION				   
+	  LOGIN METHODS				   
 	 *************************************************************************/
 	public function login( $login, $password ) {
 		$user = ( new \Model )->by_type( 'User' )->by_login( $login );
@@ -38,19 +38,6 @@ class User extends  User\__Parent {
 		return FALSE;
 	}
 
-
-
-	/*************************************************************************
-	  LOGOUT ACTION				   
-	 *************************************************************************/
-	public function logout( ) {
-		unset( $_SESSION[ 'Supersoniq' ][ 'user' ] );
-	}
-
-
-	/*************************************************************************
-	  EDITION ACTION				   
-	 *************************************************************************/
 	public function current_user( ) {
 
 		// Already initialized
@@ -82,5 +69,23 @@ class User extends  User\__Parent {
 
 	public function is_logged( ) {
 		return ( $this->current_user( ) !== FALSE );
+	}
+
+
+
+	/*************************************************************************
+	  LOGOUT METHODS				   
+	 *************************************************************************/
+	public function logout( ) {
+		unset( $_SESSION[ 'Supersoniq' ][ 'user' ] );
+	}
+
+
+	/*************************************************************************
+	  EDITION MEHODS				   
+	 *************************************************************************/
+	public function edit_password( $user, $password ) {
+		$data = [ 'password' => $user->encrypt_password( $password ) ];
+		return $this->edit( $user, $data );
 	}
 }
