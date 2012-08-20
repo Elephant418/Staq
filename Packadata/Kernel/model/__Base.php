@@ -93,12 +93,10 @@ abstract class __Base extends \Database_Table {
 	  PUBLIC LIST METHODS
 	 *************************************************************************/
 	public function all( ) {
-		$sql = 'SELECT * FROM ' . $this->_database->table_name
-			. ' WHERE type=:type'
-			. ' OR type LIKE :type_like';
-		$request = new \Database_Request( $sql );
-		$datas = $request->execute( [ 'type' => $this->type, 'type_like' => $this->type . '\\\%' ] );
-		return $this->get_list_by_data( $datas );
+		return $this->list_by_fields( [ [
+			'where' => 'type=:type OR type LIKE :type_like',
+			'parameters' => [ 'type' => $this->type, 'type_like' => $this->type . '\\\%' ]
+		] ] );
 	}
 
 	public function one( ) {
