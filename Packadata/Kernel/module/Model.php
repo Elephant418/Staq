@@ -37,7 +37,11 @@ abstract class Model extends \__Auto\Module\__Base {
 	}
 
 	protected function get_route( $page ) {
-		return parent::get_route( $page )->add_prefix( strtolower( $this->get_model_name( ) ) );
+		$route = parent::get_route( $page );
+		if ( $route ) {
+			$route->add_prefix( strtolower( $this->get_model_name( ) ) );
+		}
+		return $route;
 	}
 
 }

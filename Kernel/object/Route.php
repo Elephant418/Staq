@@ -25,6 +25,17 @@ class Route {
 		return $this;
 	}
 	public function from_array( $route ) {
+		if ( isset( $route[ 'restrictions' ] ) ) {
+			foreach ( $route[ 'restrictions' ] as $restriction ) {
+				$arguments = explode( ':', $restriction );
+				$method = 'restriction_' . array_shift( $arguments );
+				if ( is_callable( [ $this, $method ] ) ) {
+					if ( ! call_user_func_array( [ $this, $method ], $arguments ) ) {
+						return FALSE;
+					}
+				}
+			}
+		}
 		if ( isset( $route[ 'main' ] ) ) {
 			$this->main_route = $route[ 'main' ];
 		}

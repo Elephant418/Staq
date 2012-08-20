@@ -54,13 +54,16 @@ abstract class __Base {
 		$pages = $this->get_pages( );
 		$routes = [ ];
 		foreach ( $pages as $page ) {
-			$routes[ $page ] = $this->get_route( $page );
+			$route = $this->get_route( $page );
+			if ( $route ) {
+				$routes[ $page ] = $route;
+			}
 		}
 		return $routes;
 	}
 
 	protected function get_route( $page ) {
-		$route = $this->settings->get_array( 'routes_' . $page );
+		$route = $this->settings->get_array( [ 'routes_' . $page, 'routes' ] );
 		if ( empty( $route ) ) {
 			$route = ( new \Route )->from_string( '/' . \Supersoniq\format_to_path( strtolower( $this->type ) ) . '/' . $page );
 		} else {
