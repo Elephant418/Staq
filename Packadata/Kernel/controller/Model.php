@@ -53,7 +53,7 @@ class Model extends \Controller\Model_Unversioned {
 			return FALSE;
 		}
 	}
-	public function restore ( $id, $versions ) {
+	public function restore( $id, $versions ) {
 		$force_insert = FALSE;
 		$model = $this->model( );
 		if ( ! $model->init_by_id( $id ) ) {
