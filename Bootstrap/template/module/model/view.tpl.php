@@ -1,4 +1,4 @@
-<h1>View</h1>
+<h1>View <?= $this->model->type ?></h1>
 
 <?= $this->display( $this->model ); ?>
 
