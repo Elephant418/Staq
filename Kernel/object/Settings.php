@@ -106,13 +106,16 @@ class Settings {
 		return $this->get_section( $section );
 	}
 
-	private function get_section( $section ) {
+	private function get_section( $sections ) {
 		$array = [ ];
-		foreach ( $this->settings as $data ) {
-			if ( isset( $data[ $section ] ) ) {
-				foreach ( $data[ $section ] as $name => $value ) {
-					if ( ! isset( $array[ $name ] ) ) {
-						$array[ $name ] = $value;
+		\Supersoniq\must_be_array( $sections );
+		foreach( $sections as $section ) {
+			foreach ( $this->settings as $data ) {
+				if ( isset( $data[ $section ] ) ) {
+					foreach ( $data[ $section ] as $name => $value ) {
+						if ( ! isset( $array[ $name ] ) ) {
+							$array[ $name ] = $value;
+						}
 					}
 				}
 			}
