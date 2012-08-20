@@ -25,7 +25,10 @@ abstract class __Base extends \Database_Table {
 	}
 	public function set( $related_model ) {
 		if ( ! is_null( $this->related_model_type ) ) {
-			if ( $related_model->type != $this->related_model_type ) {
+			if ( 
+				$related_model->type != $this->related_model_type && 
+				! \Supersoniq\starts_with( $related_model->type, $this->related_model_type . '\\' )
+			) {
 				throw new \Exception\Wrong_Model_Type_For_Relation( 'Model of type "' . $this->related_model_type . '" expected for the "' . $this->type . '" Relation, but "' . $related_model->type . '" found' );
 			}
 		}
@@ -91,8 +94,8 @@ abstract class __Base extends \Database_Table {
 			throw new \Exception( 'Try to initialize a relation from "' . $this->model->type . ':' . $this->model->id . '" with "' . $data[ 'model_type_' . $this->_number ] . ':' . $data[ 'model_id_'   . $this->_number ] . '" data.' );
 		}
 		if ( isset( $data[ 'model_id_' . $this->_related_number ] ) && isset( $data[ 'model_type_' . $this->_related_number ] ) ) {
-			$related_class_name = '\\Model\\' . $data[ 'model_type_' . $this->_related_number ];
-			$this->related_model = ( new $related_class_name )
+			$this->related_model = ( new \Model )
+				->by_type( $data[ 'model_type_' . $this->_related_number ] )
 				->by_id( $data[ 'model_id_' . $this->_related_number ] );
 		}
 		return parent::init_by_data( $data );
