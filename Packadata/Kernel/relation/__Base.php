@@ -70,7 +70,7 @@ abstract class __Base extends \Database_Table {
 	 *************************************************************************/
 	public function all( ) {
 		if ( ! is_object( $this->model ) ) {
-			return array( );
+			return new \Object_List;
 		}
 		return $this->list_by_fields( array( 
 			'type' => $this->type, 
