@@ -33,7 +33,7 @@
 						if ( count( $menu ) < 2 ) {
 							foreach ( $menu as $page => $infos ) {
 					?>
-							<li><a href="<?= $infos[ 'url' ] ?>" title="<?= $infos[ 'description' ] ?>"><?= $infos[ 'label' ] ?></a></li>
+							<li><a href="<?= $infos[ 'url' ] ?>" title="<?= $infos[ 'description' ] ?>"><?= $module ?></a></li>
 							<?php
 							}
 						} else {
