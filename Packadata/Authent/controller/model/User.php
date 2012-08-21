@@ -83,8 +83,20 @@ class User extends  User\__Parent {
 
 
 	/*************************************************************************
-	  EDITION MEHODS				   
+	  EDITION METHODS				   
 	 *************************************************************************/
+	public function has_admin_user( ) {
+		return ( $this->all( )->filter( 'right', 'admin' )->count( ) > 0 );
+	}
+	public function create_admin_user( ) {
+		$user = $this->get( );
+		$data = [ 
+			'login' => 'admin',
+			'right' => $user::RIGHT_ADMIN,
+			'password' => $user->encrypt_password( 'admin' )
+		];
+		return $this->edit( $user, $data );
+	}
 	public function edit_password( $user, $password ) {
 		$data = [ 'password' => $user->encrypt_password( $password ) ];
 		return $this->edit( $user, $data );

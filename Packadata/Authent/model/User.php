@@ -14,6 +14,7 @@ class User extends \Model\Defined {
 	 ATTRIBUTES
 	 *************************************************************************/
 	const CRYPT_SEED = 'dacz:;,aafapojn';
+	const RIGHT_ADMIN = 20;
 
 
 	/*************************************************************************
@@ -36,7 +37,7 @@ class User extends \Model\Defined {
 		$this->add_attribute( 'lastname' );
 		$this->add_attribute( 'right'  , new \Data_Type\Selection( [
 			10 => 'visitor',
-			20 => 'admin'
+			self::RIGHT_ADMIN => 'admin'
 		] ) );
 	}
 
