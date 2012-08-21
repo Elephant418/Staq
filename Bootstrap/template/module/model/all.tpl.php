@@ -9,7 +9,7 @@ if ( count( $this->models ) == 0 ) {
 <?php
 } else {
 ?>
-<table class="table table-bordered table-striped">
+<table class="table table-bordered table-striped table-data">
 
 	<?= $this->display( $this->models, 'table' ); ?>
 

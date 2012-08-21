@@ -2,3 +2,13 @@ h1,
 .action {
 	margin-bottom: 18px;
 }
+
+label b {
+    float: left;
+    padding-top: 5px;
+    text-align: right;
+    width: 140px;
+    display: block;
+    margin-bottom: 5px;
+    margin-right: 20px;
+}

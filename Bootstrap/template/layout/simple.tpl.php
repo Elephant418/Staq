@@ -6,8 +6,10 @@
 	<title><?= $this->application_name ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link href="/twbootstrap/bootstrap.css" rel="stylesheet">
-	<link href="/bootstrap.css" rel="stylesheet">
+	<link rel="stylesheet" href="/twbootstrap/bootstrap.css">
+	<link rel="stylesheet" href="/dataTables/DT_bootstrap.css">
+	<link rel="stylesheet" href="/chosen/chosen.css">
+	<link rel="stylesheet" href="/bootstrap.css">
 	<style>
 		body {
 			padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -104,17 +106,11 @@
 	</div>
 
 	<script src="/twbootstrap/jquery.js"></script>
-	<script src="/twbootstrap/bootstrap-transition.js"></script>
-	<script src="/twbootstrap/bootstrap-alert.js"></script>
-	<script src="/twbootstrap/bootstrap-modal.js"></script>
-	<script src="/twbootstrap/bootstrap-dropdown.js"></script>
-	<script src="/twbootstrap/bootstrap-scrollspy.js"></script>
-	<script src="/twbootstrap/bootstrap-tab.js"></script>
-	<script src="/twbootstrap/bootstrap-tooltip.js"></script>
-	<script src="/twbootstrap/bootstrap-popover.js"></script>
-	<script src="/twbootstrap/bootstrap-button.js"></script>
-	<script src="/twbootstrap/bootstrap-collapse.js"></script>
-	<script src="/twbootstrap/bootstrap-carousel.js"></script>
-	<script src="/twbootstrap/bootstrap-typeahead.js"></script>
+	<script src="/dataTables/jquery.dataTables.min.js"></script>
+	<script src="/dataTables/DT_bootstrap.js"></script>
+	<script src="/chosen/chosen.jquery.min.js"></script>
+	<script>
+		$(".attribute select").chosen();
+	</script>
 </body>
 </html>
