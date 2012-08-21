@@ -18,11 +18,11 @@ class View extends \Class_Type_Accessor {
 		if ( is_object( $module ) ) {
 			$module = $module->type;
 		}
-		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
+		return $this->by_name( 'Module\\' . $module . '\\' . \Supersoniq\uc_class( $page ) );
 	}
 
 	public function by_layout( $layout ) {
-		return $this->by_name( 'Layout\\' . ucfirst( $layout ) );
+		return $this->by_name( 'Layout\\' . \Supersoniq\uc_class( $layout ) );
 	}
 
 }

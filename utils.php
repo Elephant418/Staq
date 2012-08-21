@@ -222,6 +222,14 @@ function format_to_path( $namespace ) {
 	return str_replace( '\\', '/', $namespace );
 }
 
+function uc_class( $class_name ) {
+	$parts = explode( '_', $class_name );
+	$parts = array_map( function( $part ) {
+		return ucfirst( $part );
+	}, $parts );
+	return implode( '_', $parts );
+}
+
 
 
 /*************************************************************************

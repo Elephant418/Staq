@@ -18,6 +18,6 @@ class Template extends \Class_Type_Accessor {
 		if ( is_object( $module ) ) {
 			$module = $module->type;
 		}
-		return $this->by_name( 'Module\\' . $module . '\\' . ucfirst( $page ) );
+		return $this->by_name( 'Module\\' . $module . '\\' . \Supersoniq\uc_class( $page ) );
 	}
 }
