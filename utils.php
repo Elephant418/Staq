@@ -270,6 +270,19 @@ function module_page_route( $module, $page, $parameters = [ ] ) {
 	return $route;
 }
 
+function object_is_a( $subtype, $ref_subtype ) {
+	if ( is_object( $subtype ) ) {
+		$subtype = \Supersoniq\class_subtype( $subtype );
+	}
+	if ( is_object( $ref_subtype ) ) {
+		$ref_subtype = \Supersoniq\class_subtype( $ref_subtype );
+	}
+	return (
+		$subtype == $ref_subtype || 
+		\Supersoniq\starts_with( $subtype, $ref_subtype . '\\' )
+	);
+}
+
 function class_type_name( $object ) {
 	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->subtype;
 }

@@ -21,7 +21,7 @@ class Template extends Template\__Parent {
 	}
 
 	public function by_data_type( $data_type, $mode ) {
-		return $this->by_name( 'Data_Type\\' . ucfirst( $mode ) . '\\' . $data_type->type )
+		return $this->by_name( 'Data_Type\\' . ucfirst( $mode ) . '\\' . $data_type->get_data_type( ) )
 			->set( 'content', $data_type );
 	}
 }

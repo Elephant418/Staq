@@ -7,49 +7,41 @@
 
 namespace Supersoniq\Packadata\Kernel\Data_Type;
 
-abstract class __Base {
+class Alias extends \Data_Type\__Base {
 
 
 
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
-	public $type;
-	public $name;
-	protected $value;
+	public $model;
+	public $alias_type;
+	protected $provider;
 
 
 	/*************************************************************************
 	  USER GETTER & SETTER             
 	 *************************************************************************/
-	public function __toString( ) {
-		return $this->get( );
-	}
 	public function get( ) {
-		return $this->value( );
-	}
-	public function set( $value ) {
-		$this->init( $value );
-		return $this;
-	}
-	public function set_name( $name ) {
-		$this->name = $name;
-		return $this;
+		$provider = $this->provider;
+		return $provider( $this->model );
 	}
 	public function get_data_type( ) {
-		return $this->type;
+		return $this->alias_type;
 	}
 
 
 	/*************************************************************************
-	  DATABASE GETTER & SETTER             
+	  NOT AUTHORIZED METHOD             
 	 *************************************************************************/
 	public function value( ) {
-		return $this->value;
+		throw new \Exception( 'No database value for data_type alias' );
 	}
 	public function init( $value ) {
-		$this->value = $value;
-		return $this;
+		throw new \Exception( 'No setter for data_type alias' );
+	}
+	public function set( $value ) {
+		throw new \Exception( 'No setter for data_type alias' );
 	}
 
 
@@ -57,10 +49,7 @@ abstract class __Base {
 	  MODEL EVENT METHODS             
 	 *************************************************************************/
 	public function model_initialized( $model ) {
-	}
-	public function model_saved( $model ) {
-	}
-	public function model_deleted( $model ) {
+		$this->model = $model;
 	}
 
 
@@ -68,7 +57,9 @@ abstract class __Base {
 	/*************************************************************************
 	  CONSTRUCTOR
 	 *************************************************************************/
-	public function __construct( ) {
-		$this->type = \Supersoniq\class_type_name( $this );
+	public function __construct( $provider, $data_type = 'Varchar' ) {
+		$this->provider = $provider;
+		$this->alias_type = $data_type;
+		parent::__construct( );
 	}
 }

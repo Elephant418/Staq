@@ -62,6 +62,7 @@ abstract class __Base extends \Database_Table {
 	 *************************************************************************/
 	public function set_model( $model ) {
 		$this->model = $model;
+		return $this;
 	}
 
 	
@@ -115,8 +116,7 @@ abstract class __Base extends \Database_Table {
 		return parent::table_fields_value( $field_name ); 
 	}
 	protected function new_entity( ) {
-		$relation = new $this( $this->related_model_type, $this->is_reverse( ) );
-		$relation->set_model( $this->model );
-		return $relation;
+		return ( new $this( $this->related_model_type, $this->is_reverse( ) ) )
+			->set_model( $this->model );
 	}
 }
