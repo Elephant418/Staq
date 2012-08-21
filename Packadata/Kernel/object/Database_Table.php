@@ -170,7 +170,7 @@ abstract class Database_Table {
 		return $request->execute( $parameters );
 	}
 	protected function get_list_by_data( $datas ) {
-		$entities = array( );
+		$entities = [ ];
 		foreach ( $datas as $data ) {
 			$entity = $this->new_entity( );
 			$entity->init_by_data( $data );
