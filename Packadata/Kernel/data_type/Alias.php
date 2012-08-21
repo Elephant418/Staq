@@ -35,13 +35,13 @@ class Alias extends \Data_Type\__Base {
 	  NOT AUTHORIZED METHOD             
 	 *************************************************************************/
 	public function value( ) {
-		throw new \Exception( 'No database value for data_type alias' );
+		throw new \Exception( 'No database value for data_type alias "' . $this->name . '"' );
 	}
 	public function init( $value ) {
-		throw new \Exception( 'No setter for data_type alias' );
+		throw new \Exception( 'No setter for data_type alias "' . $this->name . '"' );
 	}
 	public function set( $value ) {
-		throw new \Exception( 'No setter for data_type alias' );
+		throw new \Exception( 'No setter for data_type alias "' . $this->name . '"' );
 	}
 
 
