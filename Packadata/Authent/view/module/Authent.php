@@ -5,18 +5,16 @@
  * For more information, please refer to <http://unlicense.org/>
  */
 
-namespace Supersoniq\Packadata\Authent\View\Module\Authent;
+namespace Supersoniq\Packadata\Authent\View\Module;
 
-class Logout extends  Logout\__Parent {
+class Authent extends  Authent\__Parent {
 
 
 
 	/*************************************************************************
-	  LOGIN ACTION                   
+	  PROTECTED METHOD                   
 	 *************************************************************************/
-	public function render( $parameters = [ ] ) {
-		$this->get_controller( )->logout( );
-		header( 'Location: /' );
-		die;
+	protected function get_controller( ) {
+		return ( new \Controller )->by_type( 'Model\User' );
 	}
 }

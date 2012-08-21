@@ -15,6 +15,7 @@ class Profile extends  Profile\__Parent {
 	  LOGIN ACTION                   
 	 *************************************************************************/
 	public function fill( $template, $parameters = [ ] ) {
+		$controller = $this->get_controller( );
 		return 'Todo';
 	}
 }

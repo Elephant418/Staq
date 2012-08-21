@@ -15,7 +15,7 @@ class Login extends  Login\__Parent {
 	  LOGIN ACTION                   
 	 *************************************************************************/
 	public function render( $parameters = [ ] ) {
-		$controller = ( new \Controller )->by_type( 'Model\User' );
+		$controller = $this->get_controller( );
 		
 		// User already connected
 		if ( $controller->is_logged( ) ) {
