@@ -1,4 +1,4 @@
-<h1>Create <?= $this->model->type ?></h1>
+<h1>Create <?= $this->model_type ?></h1>
 
 <form method="post">
 	<?= $this->display( $this->model, 'edit' ); ?>

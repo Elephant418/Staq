@@ -1,4 +1,4 @@
-<h1>Edit <?= $this->model->type ?></h1>
+<h1>Edit <?= $this->model_type ?></h1>
 
 <form method="post">
 

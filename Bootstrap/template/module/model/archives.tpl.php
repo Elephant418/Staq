@@ -1,4 +1,4 @@
-<h1>Deleted Models <?= $this->model->type ?></h1>
+<h1>Deleted Models <?= $this->model_type ?></h1>
 
 <?php
 if ( count( $this->archives ) == 0 ) {

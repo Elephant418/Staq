@@ -12,6 +12,17 @@ abstract class Model extends Model\__Parent {
 
 
 	/*************************************************************************
+	  PUBLIC METHODS                   
+	 *************************************************************************/
+	public function render( $parameters = [ ] ) {
+		$template = $this->get_template( );
+		$template->model_type = $this->get_model_name( );
+		return $this->fill( $template, $parameters );
+	}
+
+
+
+	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
 	protected function get_controller( $subtype = '' ) {
