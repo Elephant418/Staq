@@ -88,12 +88,12 @@ abstract class Model_Index extends \Database_Table {
 	private function init_by_model( $model ) {
 		$this->model_type = $model->type;
 		$this->model_id = $model->id;
-		$index = $this->by_fields( [ 
+		$this->by_fields( [ 
 			'model_type' => $this->model_type,
 			'model_id' => $this->model_id,
 			'type' => $this->type,
 		] );
-		$index->value = $model->{$this->type};
+		$this->value = $model->{$this->type};
 		return $index;
 	}
 
