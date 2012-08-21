@@ -94,7 +94,6 @@ abstract class Model_Index extends \Database_Table {
 			'type' => $this->type,
 		] );
 		$this->value = $model->{$this->type};
-		return $index;
 	}
 
 	
