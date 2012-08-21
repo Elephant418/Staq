@@ -27,7 +27,7 @@ class Database_Request {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( $request = '' ) {
-		// echo $request . '<br>';
+		// echo $request . HTML_EOL;
 		$this->request = $request;
 	}
 	
@@ -44,6 +44,7 @@ class Database_Request {
 		return $result;
 	}
 	public function execute( $arguments = array( ) ) {
+		// echo $this->request . print_r( $arguments, TRUE ) . HTML_EOL;
 		if ( empty( $this->request ) ) {
 			throw new \Exception\Database( 'The SQL request is empty.' );
 		}
