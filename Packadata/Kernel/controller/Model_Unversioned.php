@@ -11,12 +11,13 @@ abstract class Model_Unversioned extends Model\__Parent {
 
 
 	/*************************************************************************
-	  ACTION METHODS                   
+	  GETTER METHODS                   
 	 *************************************************************************/
 	public function all( ) {
 		$model = $this->model( );
 		return $model->all( ); 
 	}
+
 	public function get( $id = NULL ) {
 		$model = $this->model( );
 		if ( ! $id ) {
@@ -28,6 +29,17 @@ abstract class Model_Unversioned extends Model\__Parent {
 		}
 		return FALSE;
 	}
+
+	public function get_subtype( $id = NULL ) {
+		return ( new \Settings )
+			->by_type( $this->type )
+			->get_list( 'subtypes' );
+	}
+
+
+	/*************************************************************************
+	  ACTION METHODS                   
+	 *************************************************************************/
 	public function edit( &$model, $datas ) {
 		foreach ( $datas as $name => $value ) {
 			$model->$name = $value;
@@ -50,6 +62,7 @@ abstract class Model_Unversioned extends Model\__Parent {
 		\Notification::push( $message, \Notification::ERROR );
 		return FALSE;
 	}
+
 	public function delete( $model ) {
 		$model->delete( );
 		\Notification::push( $this->get_model_name( ) . ' deleted with success ! ', \Notification::SUCCESS );

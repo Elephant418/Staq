@@ -1,10 +1,7 @@
 <h1>List <?= $this->model_type ?> (<?= count( $this->models ) ?>)</h1>
-
-<div class="action">
-	<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
-</div>
-
 <?php
+
+include( __DIR__ . '/all-action.tpl.php' );
 
 if ( count( $this->models ) == 0 ) {
 ?>
@@ -21,10 +18,6 @@ if ( count( $this->models ) == 0 ) {
 }
 
 if ( count( $this->models ) > 10 ) {
-?>
-<div class="action">
-	<a class="btn" href="<?= $page_url( 'create' ) ?>"><i class="icon-plus-sign"></i> Create</a>
-</div>
-<?php
+	include( __DIR__ . '/all-action.tpl.php' );
 }
 ?>

@@ -15,6 +15,7 @@ abstract class All extends All\__Parent {
 	 *************************************************************************/
 	public function fill( $template, $parameters = [ ] ) {
 		$template->models = $this->get_controller( )->all( );
+		$template->model_subtypes = $this->get_controller( )->get_subtype( );
 		return $template;
 	}
 

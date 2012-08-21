@@ -32,6 +32,9 @@ class Settings {
 	/*************************************************************************
 	  CONSTRUCTOR                 
 	 *************************************************************************/
+	public function by_type( $file_type ) {
+		return $this->by_file_type( '', $file_type );
+	}
 	public function by_file_type( $file_type, $file_name ) {
 		$file_name = \Supersoniq\format_to_path( strtolower( $file_name ) );
 		$file_names = [ ];
