@@ -13,7 +13,7 @@ foreach ( $this->content as $model ) {
 ?>
 	<tr>
 		<td>
-			<a href="<?= $module_page_url( 'Model\\' . $model->type, 'view', $model->id ) ?>">
+			<a href="<?= \Supersoniq\module_model_url( $model ) ?>">
 				<?= $name ?>
 			</a>
 		</td>

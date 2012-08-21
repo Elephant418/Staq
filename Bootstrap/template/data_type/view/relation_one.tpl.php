@@ -2,7 +2,9 @@
 $related = $this->content->get( );
 if ( is_object( $related ) ) {
 ?>
-	<?= $related->name( ) ?> (<?= $related->id ?>)
+	<a href="<?= \Supersoniq\module_model_url( $related ) ?>">
+		<?= $related->name( ) ?>
+	</a>
 <?php
 }
 ?>

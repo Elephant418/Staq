@@ -3,7 +3,11 @@
 $relateds = $this->content->get( );
 foreach ( $relateds as $related ) {
 ?>
-	<li><?= $related->name( ) ?> (<?= $related->id ?>)</li>
+	<li>
+		<a href="<?= \Supersoniq\module_model_url( $related ) ?>">
+			<?= $related->name( ) ?>
+		</a>
+	</li>
 <?php
 }
 ?>

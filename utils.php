@@ -249,6 +249,17 @@ function redirect_to_page( $page, $parameters = [ ] ) {
 	redirect_to_module_page( \Supersoniq::$MODULE_NAME, $page, $parameters );
 }
 
+function module_model_url( $model, $mode = 'view' ) {
+	$type = $model->type;
+	while ( $type ) {
+		if ( isset( \Supersoniq::$MODULES[ 'Model\\' . $type ] ) ) {
+			return module_page_url( 'Model\\' . $type, $mode, [ 'id' => $model->id ] );
+		}
+		$type = \Supersoniq\substr_before_last( $model, '\\' );
+	}
+	return '#';
+}
+
 function module_page_url( $module, $page, $parameters = [ ] ) {
 	return \Supersoniq::$BASE_URL . module_page_route( $module, $page, $parameters );
 }
