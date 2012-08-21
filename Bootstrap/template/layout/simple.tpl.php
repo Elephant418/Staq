@@ -7,6 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="/twbootstrap/bootstrap.css" rel="stylesheet">
+	<link href="/bootstrap.css" rel="stylesheet">
 	<style>
 		body {
 			padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */

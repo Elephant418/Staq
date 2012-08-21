@@ -22,7 +22,7 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 	/*************************************************************************
 	 CONSTRUCTOR
 	*************************************************************************/
-	public function __construct( $data = NULL ) {
+	public function __construct( $data = [ ] ) {
 		$this->position = 0;
 		$this->data = $data;
 	}
@@ -96,28 +96,44 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	public function get( $field ) {
-		$values = [ ];
+		$result = new $this;
 		$is_database_item_list = TRUE;
+		if ( is_callable( $field ) ) {
+			$getter = $field;
+		} else {
+			$getter = function ( $item, $result ) use ( $field ) {
+				$value = $item->$field;
+				if ( ! is_null( $value ) ) {
+					if ( is_a( $value, 'Object_List' ) ) {
+						$value = $value->to_array( );
+					}
+					if ( is_array( $value ) ) {
+						$result->merge_unique( $value );
+					} else {
+						$result->add_unique( $value );
+					}
+				}
+				return $result;
+			};
+		}
 		foreach( $this->data as $item ) {
-			$value = $item->$field;
-			if ( ! is_null( $value ) ) {
-				if ( is_a( $value, 'Object_List' ) ) {
-					$value = $value->to_array( );
-				} else if ( ! is_object( $value ) ) {
-					$is_database_item_list = FALSE;
-				}
-				if ( is_array( $value ) ) {
-					$values = \Supersoniq\array_merge_unique( $values, $value );
-				} else {
-					$values[ ] = $value;
-				}
-			}
+			$result = $getter( $item, $result );
 		}
-		$values = array_values( array_unique(  $values ) );
-		if ( $is_database_item_list ) {
-			$values = new $this( $values );
+		return $result;
+	}
+
+	public function get_object_type( ) {
+		if ( $this->count( ) > 0 ) {
+			return \Supersoniq\class_type( $this->current( ) );
 		}
-		return $values;
+		return NULL;
+	}
+
+	public function get_object_subtype( ) {
+		return $this->get( function( $item, $subtype ) {
+			$item_subtype = \Supersoniq\class_subtype( $item );
+			return $item_subtype;
+		} );
 	}
 
 	public function __set( $field, $value ) {
@@ -128,6 +144,15 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 		foreach( $this->data as $item ) {
 			$item->$field = $value;
 		}
+		return $this;
+	}
+
+	public function add_unique( $value ) {
+		return $this->merge_unique( [ $value ] );
+	}
+
+	public function merge_unique( $values ) {
+		$this->data = \Supersoniq\array_merge_unique( $this->data, $values );
 		return $this;
 	}
 

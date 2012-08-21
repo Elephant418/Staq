@@ -15,7 +15,8 @@ class Template extends Template\__Parent {
 	  ACCESSOR                 
 	 *************************************************************************/
 	public function by_model( $model, $mode ) {
-		return $this->by_name( 'Model\\' . ucfirst( $mode ) . '\\' . $model->type )
+		$type = \Supersoniq\class_subtype( $model );
+		return $this->by_name( 'Model\\' . ucfirst( $mode ) . '\\' . $type )
 			->set( 'content', $model );
 	}
 

@@ -263,17 +263,26 @@ function class_type_name( $object ) {
 	return ( new \Supersoniq\Kernel\Internal\Class_Name )->by_object( $object )->subtype;
 }
 
+function class_subtype( $object ) {
+	if ( ! is_object( $object ) ) {
+		return NULL;
+	} else if ( get_class( $object ) == 'Object_List' ) {
+		return $object->get_object_subtype( );
+	} else if ( isset( $object->_type ) ) {
+		return $object->_type;
+	} else if ( isset( $object->type ) ) {
+		return $object->type;
+	}
+}
+
 function class_type( $object ) {
 	if ( ! is_object( $object ) ) {
 		return NULL;
-	} else if ( isset( $object->_type ) ) {
-		$name = $object->_type;
-	} else if ( isset( $object->type ) ) {
-		$name = $object->type;
-	} else {
-		return NULL;
+	} else if ( get_class( $object ) == 'Object_List' ) {
+		return $object->get_object_type( );
 	}
-	return \Supersoniq\substr_after_last( \Supersoniq\substr_before_last( get_class( $object ), '\\' . $name ), '\\' );
+	$subtype = \Supersoniq\class_subtype( $object );
+	return \Supersoniq\substr_after_last( \Supersoniq\substr_before_last( get_class( $object ), '\\' . $subtype ), '\\' );
 }
 
 
