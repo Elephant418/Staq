@@ -1,4 +1,4 @@
-<h1>Archives</h1>
+<h1>Archives <?= $this->model->type ?></h1>
 
 <?php
 

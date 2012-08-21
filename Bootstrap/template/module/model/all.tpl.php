@@ -1,4 +1,4 @@
-<h1>List</h1>
+<h1>List <?= $this->model->type ?></h1>
 <?php
 
 $test_version = FALSE;

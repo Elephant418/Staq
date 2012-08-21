@@ -1,4 +1,4 @@
-<h1>See</h1>
+<h1>See <?= $this->model->type ?></h1>
 
 <?php
 	$archive = $this->archive;
