@@ -50,9 +50,15 @@ class User extends  User\__Parent {
 		if ( ! isset( $_SESSION['Supersoniq'][ 'user' ] ) ) {
 		    $user = FALSE;
 		} else {
-			$user = ( new \Model\User )->by_id( $_SESSION['Supersoniq'][ 'user' ] );
-			if ( ! $user->exists( ) ) {
-				$user = FALSE;
+			try {
+				$user = ( new \Model\User )->by_id( $_SESSION['Supersoniq'][ 'user' ] );
+				if ( ! $user->exists( ) ) {
+					$user = FALSE;
+				}
+			} catch( \Exception $e ) {
+				\Notification::push( 'Session expired', \Notification::ERROR );
+				$this->logout( );
+				\Supersoniq\redirect( '/' );
 			}
 		}
 		self::$current_user = $user;
