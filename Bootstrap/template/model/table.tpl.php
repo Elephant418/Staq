@@ -13,7 +13,7 @@ foreach ( $this->content as $model ) {
 ?>
 	<tr>
 		<td>
-			<a href="<?= $module_page_url( 'Model\\' . $model->type, 'all' ) ?>">
+			<a href="<?= $module_page_url( 'Model\\' . $model->type, 'view', $model->id ) ?>">
 				<?= $name ?>
 			</a>
 		</td>
