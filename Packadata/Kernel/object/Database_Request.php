@@ -21,6 +21,7 @@ class Database_Request {
 	public $request;
 	private $PDObject;
 	private $last_insert_id = false;
+	public static $count = 0;
 
 
 	/*************************************************************************
@@ -44,7 +45,8 @@ class Database_Request {
 		return $result;
 	}
 	public function execute( $arguments = array( ) ) {
-		// echo $this->request . print_r( $arguments, TRUE ) . HTML_EOL;
+		// self::$count++;
+		// echo 'Request ' . self::$count . ': ' . $this->request . print_r( $arguments, TRUE ) . HTML_EOL;
 		if ( empty( $this->request ) ) {
 			throw new \Exception\Database( 'The SQL request is empty.' );
 		}
