@@ -31,7 +31,7 @@ class User extends \Model\Defined {
 	public function __construct( ) {
 		parent::__construct( );
 		$this->add_attribute( 'login'   , new \Data_Type\Varchar, \Model_Index::UNIQUE );
-		$this->add_attribute( 'email'   , new \Data_Type\Varchar, \Model_Index::UNIQUE );
+		$this->add_attribute( 'email'   , new \Data_Type\MailAddress, \Model_Index::UNIQUE );
 		$this->add_attribute( 'password', new \Data_Type\Password );
 		$this->add_attribute( 'name' );
 		$this->add_attribute( 'lastname' );
