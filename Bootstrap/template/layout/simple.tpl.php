@@ -107,8 +107,6 @@
 
 	<script src="/twbootstrap/jquery.js"></script>
 	<script src="/twbootstrap/bootstrap-dropdown.js"></script>
-	<script src="/dataTables/jquery.dataTables.min.js"></script>
-	<script src="/dataTables/DT_bootstrap.js"></script>
 	<script src="/chosen/chosen.jquery.min.js"></script>
 	<script>
 		$(".attribute select").chosen();

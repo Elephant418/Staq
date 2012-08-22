@@ -188,6 +188,11 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 		}
 		return new $this( $filtered_data );
 	}
+	public function filter_name_contains( $value ) {
+		return $this->filter( function( $item ) use ( $value ) {
+			return ( \Supersoniq\i_contains( $item->name( ), $value ) );
+		} );
+	}
 
 	public function sort( $field ) {
 		$data = $this->data;
@@ -225,11 +230,11 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 
 	public function slice( $start, $end = NULL ) {
 		if ( is_null( $end ) ) {
-			$this->data = array_slice( $this->data, $start );
+			$data = array_slice( $this->data, $start );
 		} else {
-			$this->data = array_slice( $this->data, $start, $end );
+			$data = array_slice( $this->data, $start, $end );
 		}
-		return $this;
+		return new $this( $data );
 	}
 
 	public function is_empty( ) {

@@ -1,6 +1,6 @@
 <div class="action">
 	<?php
-	if ( $this->from ) {
+	if ( $this->from || $this->filter ) {
 	?>
 		<a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> See all</a>
 	<?php

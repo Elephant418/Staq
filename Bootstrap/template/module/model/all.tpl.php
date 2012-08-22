@@ -2,10 +2,12 @@
 	List <?= $this->model_type ?> 
 <?php
 	if ( $this->from ) {
-		echo 'From ' . $this->from->type . ' "' . $this->from->name( ) . '"';
+		echo 'from ' . $this->from->type . ' "' . $this->from->name( ) . '"';
+	} else if ( $this->filter ) {
+		echo 'filtered "' . $this->filter . '"';
 	}
 ?>
-	(<?= count( $this->models ) ?>)
+	(<?= $this->pagination->count ?>)
 </h1>
 <?php
 
@@ -16,6 +18,8 @@ if ( count( $this->models ) == 0 ) {
 	<p><em>There is no elements to display</em></p>
 <?php
 } else {
+	$pagination_text = 'search';
+	include( __DIR__ . '/all-pagination.tpl.php' );
 ?>
 <table class="table table-bordered table-striped table-data">
 
@@ -23,6 +27,8 @@ if ( count( $this->models ) == 0 ) {
 
 </table>
 <?php
+	$pagination_text = 'position';
+	include( __DIR__ . '/all-pagination.tpl.php' );
 }
 
 if ( count( $this->models ) > 10 ) {

@@ -8,8 +8,12 @@ div.dataTables_length select {
 	width: 75px;
 }
 
+div.dataTables_filter form {
+	margin: 0;
+}
+
 div.dataTables_filter label {
-	float: right;
+	float: left;
 }
 
 div.dataTables_info {
@@ -18,7 +22,7 @@ div.dataTables_info {
 
 div.dataTables_paginate {
 	float: right;
-	margin: 0;
+	margin: 0 0 6px;
 }
 
 table.table {

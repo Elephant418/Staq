@@ -46,7 +46,7 @@ class Database_Request {
 	}
 	public function execute( $arguments = array( ) ) {
 		// self::$count++;
-		// echo 'Request ' . self::$count . ': ' . $this->request . print_r( $arguments, TRUE ) . HTML_EOL;
+		// echo 'Request ' . self::$count . HTML_EOL;
 		if ( empty( $this->request ) ) {
 			throw new \Exception\Database( 'The SQL request is empty.' );
 		}
