@@ -62,6 +62,8 @@ abstract class __Base {
 	}
 	public function model_deleted( $model ) {
 	}
+	public function model_deleted_all( $model ) {
+	}
 
 
 

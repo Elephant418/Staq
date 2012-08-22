@@ -76,7 +76,22 @@ abstract class __Base extends \Database_Table {
 		return $this->list_by_fields( array( 
 			'type' => $this->type, 
 			'model_id_' . $this->_number => $this->model->id,
-			'model_type_' . $this->_number => $this->model->type,
+			'model_type_' . $this->_number => $this->related_model_type,
+		) );
+	}
+	public function delete_all( ) {
+		if ( is_object( $this->model ) ) {
+			return $this->delete_by_fields( array( 
+				'type' => $this->type, 
+				'model_id_' . $this->_number => $this->model->id,
+				'model_type_' . $this->_number => $this->related_model_type,
+			) );
+		}
+	}
+	public function model_deleted_all( ) {
+		return $this->delete_by_fields( array( 
+			'type' => $this->type, 
+			'model_type_' . $this->_number => $this->related_model_type,
 		) );
 	}
 

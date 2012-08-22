@@ -43,6 +43,13 @@ abstract class Model_Index extends \Database_Table {
 		}
 		return $this->list_by_fields( $fields );
 	}
+	public function model_deleted_all( ) {
+		$fields = array( 
+			'type' => $this->type, 
+			'model_type' => $this->model_type,
+		);
+		return $this->delete_by_fields( $fields );
+	}
 	public function model_id_by_value( $model_type, $type, $value ) {
 		$datas = $this->datas_by_fields( array(
 			'model_type' => $model_type,

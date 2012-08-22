@@ -41,6 +41,7 @@ abstract class Database_Table {
 	public function by_id( $id ) {
 		return $this->by_fields( array( $this->_database->id_field => $id ) );
 	}
+
 	public function by_fields( $fields ) {
 		$datas = $this->datas_by_fields( $fields );
 		if ( isset( $datas[ 0 ] ) ) {
@@ -49,13 +50,22 @@ abstract class Database_Table {
 			return $this;
 		}
 	}
+
 	public function by_data( $fields ) {
 		$this->init_by_data( $fields );
 		return $this;
 	}
+
 	public function list_by_fields( $fields = [ ] ) {
 		$datas = $this->datas_by_fields( $fields );
 		return $this->get_list_by_data( $datas );
+	}
+
+	protected function delete_by_fields( $fields ) {
+		$parameters = [ ];
+		$sql = 'DELETE FROM ' . $this->_database->table_name . $this->where_clause_by_fields( $fields, $parameters );
+		$request = new Database_Request( $sql );
+		return $request->execute( $parameters );
 	}
 
 
@@ -70,6 +80,7 @@ abstract class Database_Table {
 			$this->deleted_handler( );
 		}
 	}
+
 	public function save( $force_insert = FALSE ) {
 		$current_data = $this->get_current_data( );
 		if ( $this->has_data_changed( $current_data ) ) {
@@ -95,6 +106,7 @@ abstract class Database_Table {
 		}		
 		return TRUE;
 	}
+
 	public function get_current_data( ) {
 		$data = array( );
 		foreach ( $this->_database->table_fields as $field_name ) {
@@ -109,6 +121,7 @@ abstract class Database_Table {
 	 *************************************************************************/
 	protected function saved_handler( ) {
 	}
+
 	protected function deleted_handler( ) {
 		$this->id = NULL;
 		$this->loaded_data = array( );
@@ -124,6 +137,7 @@ abstract class Database_Table {
 		}
 		$this->loaded_data = $data;
 	}
+
 	protected function table_fields_value( $field_name, $field_value = NULL ) {
 		if ( $field_name == $this->_database->id_field ) {
 			if ( func_num_args( ) == 1 ) {
@@ -133,9 +147,11 @@ abstract class Database_Table {
 		}
 		throw new \Exception( 'Unknow table field "' . $field_name . '"' ); 
 	}
+
 	protected function has_data_changed( $current_data ) {
 		return ( ! ( $current_data == $this->loaded_data ) );
 	}
+
 	protected function new_entity( ) {
 		$class = get_class( $this );
 		return new $class( );
@@ -146,8 +162,14 @@ abstract class Database_Table {
 	  PRIVATE METHODS
 	 *************************************************************************/
 	protected function datas_by_fields( $fields ) {
-		$where = [ ];
 		$parameters = [ ];
+		$sql = 'SELECT * FROM ' . $this->_database->table_name . $this->where_clause_by_fields( $fields, $parameters );
+		$request = new Database_Request( $sql );
+		return $request->execute( $parameters );
+	}
+
+	protected function where_clause_by_fields( $fields, &$parameters ) {
+		$where = [ ];
 		foreach ( $fields as $fields_name => $field_value ) {
 			if ( is_array( $field_value ) ) {
 				if ( isset( $field_value[ 'where' ] ) && isset( $field_value[ 'parameters' ] ) ) {
@@ -162,13 +184,13 @@ abstract class Database_Table {
 				$parameters[ ':' . $fields_name ] = $field_value;
 			}
 		}
-		$sql = 'SELECT * FROM ' . $this->_database->table_name;
+		$sql = '';
 		if ( ! empty( $where ) ) {
 			$sql .= ' WHERE ' . implode ( ' AND ', $where ) . ';';
 		}
-		$request = new Database_Request( $sql );
-		return $request->execute( $parameters );
+		return $sql;
 	}
+
 	protected function get_list_by_data( $datas ) {
 		$entities = [ ];
 		foreach ( $datas as $data ) {
@@ -178,6 +200,7 @@ abstract class Database_Table {
 		}
 		return new \Object_List( $entities );
 	}
+
 	private function get_set_request( ) {
 		$request = '';
 		foreach ( $this->_database->table_fields as $field_name ) {
@@ -185,6 +208,7 @@ abstract class Database_Table {
 		}
 		return substr( $request, 0, -2 );
 	}
+
 	private function bind_params( $fields ) {
 		$bind_params = array( );
 		foreach ( $fields as $field_name => $field_value) {

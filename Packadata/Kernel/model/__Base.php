@@ -97,6 +97,13 @@ abstract class __Base extends \Database_Table {
 		] ] );
 	}
 
+	public function delete_all( ) {
+		return $this->delete_by_fields( [ [
+			'where' => 'type=:type OR type LIKE :type_like',
+			'parameters' => [ 'type' => $this->type, 'type_like' => $this->type . '\\\%' ]
+		] ] );
+	}
+
 	public function one( ) {
 		return $this;
 	}

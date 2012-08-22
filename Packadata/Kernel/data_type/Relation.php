@@ -83,17 +83,19 @@ class Relation extends \Data_Type\__Base {
 		$this->definition->set_model( $model );
 	}
 	public function model_saved( $model ) {
-		$this->definition
-			->set_model( $model )
-			->all( )
-			->delete( );
 		foreach ( $this->relations as $relation ) {
 			$relation->set_model( $model );
 			$relation->save( );
 		}
 	}
 	public function model_deleted( $model ) {
-		$this->definition->all( )->delete( );
+		$this->definition
+			->set_model( $model )
+			->delete_all( );
+	}
+	public function model_deleted_all( $model ) {
+		$this->definition->set_model( $model )
+			->model_deleted_all( $model );
 	}
 
 

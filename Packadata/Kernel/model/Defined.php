@@ -105,6 +105,16 @@ class Defined extends \Model\__Base {
 		return parent::delete( );
 	}
 
+	public function delete_all( ) {
+		foreach ( $this->get_attribute_fields( 'set' ) as $name ) {
+			$this->_attributes[ $name ]->model_deleted_all( $this );
+		}
+		foreach ( $this->_indexs as $index ) {
+			$index->model_deleted_all( $this );
+		}
+		return parent::delete_all( );
+	}
+
 	public function save( $force_insert = FALSE ) {
 		foreach ( $this->_uniqs as $name => $index ) {
 			if ( ! $index->is_uniq( $this ) ) {
