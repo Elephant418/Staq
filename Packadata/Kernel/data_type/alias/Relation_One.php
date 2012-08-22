@@ -7,7 +7,7 @@
 
 namespace Supersoniq\Packadata\Kernel\Data_Type\Alias;
 
-class Relation extends Relation\__Parent {
+class Relation_One extends Relation_One\__Parent {
 
 
 
@@ -27,12 +27,12 @@ class Relation extends Relation\__Parent {
 			$provider = function( $model ) {
 				$relateds = new \Object_List;
 				$relations = $this->definition->set_model( $model )->all( );
-				foreach ( $relations as $relation ) {
-					$relateds[ ] = $relation->get( );
+				if ( count( $relations ) > 0 ) {
+					return $relations[ 0 ]->get( );
 				}
-				return $relateds;
+				return NULL;
 			};
 		}
-		parent::__construct( $provider, 'Relation' );
+		parent::__construct( $provider, 'Relation_One' );
 	}
 }

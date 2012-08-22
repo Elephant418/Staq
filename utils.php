@@ -250,12 +250,18 @@ function redirect_to_page( $page, $parameters = [ ] ) {
 }
 
 function module_model_url( $model, $mode = 'view' ) {
-	$type = $model->type;
+	if ( is_object( $model ) ) {
+		$type = $model->type;
+		$parameters = [ 'id' => $model->id ];
+	} else {
+		$type = $model;
+		$parameters = [ ];
+	}
 	while ( $type ) {
 		if ( isset( \Supersoniq::$MODULES[ 'Model\\' . $type ] ) ) {
-			return module_page_url( 'Model\\' . $type, $mode, [ 'id' => $model->id ] );
+			return module_page_url( 'Model\\' . $type, $mode, $parameters );
 		}
-		$type = \Supersoniq\substr_before_last( $model, '\\' );
+		$type = \Supersoniq\substr_before_last( $type, '\\' );
 	}
 	return '#';
 }

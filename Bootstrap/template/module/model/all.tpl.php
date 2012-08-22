@@ -1,4 +1,12 @@
-<h1>List <?= $this->model_type ?> (<?= count( $this->models ) ?>)</h1>
+<h1>
+	List <?= $this->model_type ?> 
+<?php
+	if ( $this->from ) {
+		echo 'From ' . $this->from->type . ' "' . $this->from->name( ) . '"';
+	}
+?>
+	(<?= count( $this->models ) ?>)
+</h1>
 <?php
 
 include( __DIR__ . '/all-action.tpl.php' );

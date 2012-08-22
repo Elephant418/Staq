@@ -14,7 +14,20 @@ abstract class All extends All\__Parent {
 	  RENDER METHODS                   
 	 *************************************************************************/
 	public function fill( $template, $parameters = [ ] ) {
-		$template->models = $this->get_controller( )->all( );
+		$models = [ ];
+		if ( 
+			isset( $_GET[ 'from' ][ 'type' ] ) &&
+			isset( $_GET[ 'from' ][ 'id'   ] ) &&
+			isset( $_GET[ 'from' ][ 'attribute' ] ) 
+		) {
+			$template->from = ( new \Model )
+				->by_type( $_GET[ 'from' ][ 'type' ] )
+				->by_id( $_GET[ 'from' ][ 'id'   ] );
+			$models = $template->from->get( $_GET[ 'from' ][ 'attribute' ] );
+		} else {
+			$models = $this->get_controller( )->all( );
+		}
+		$template->models = $models;
 		$template->model_subtypes = $this->get_controller( )->get_subtype( );
 		return $template;
 	}

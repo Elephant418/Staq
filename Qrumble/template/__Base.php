@@ -63,7 +63,7 @@ class __Base {
 			$this->_path = $this->get_template_path( );
 		}
 		if ( ! is_null( $this->_parent ) ) {
-			$this->set_parent( ( new \View )->by_layout( $this->_parent ) );
+			$this->set_parent_view( ( new \View )->by_layout( $this->_parent ) );
 		}
 		$this->content = '';
 	}
@@ -131,10 +131,16 @@ class __Base {
 				return $var->render( );
 			}
 			if ( $type == 'Model' ) {
-				return ( new \Template )->by_model( $var, $mode )->render( );
+				return ( new \Template )
+					->by_model( $var, $mode )
+					->set_parent( $this )
+					->render( );
 			}
 			if ( $type == 'Data_Type' ) {
-				return ( new \Template )->by_data_type( $var, $mode )->render( );
+				return ( new \Template )
+					->by_data_type( $var, $mode )
+					->set_parent( $this )
+					->render( );
 			}
 		}
 	}
@@ -150,9 +156,16 @@ class __Base {
 		}
 		return $this;
 	}
-	protected function set_parent( $parent ) {
-		$this->_parent = $parent->render( );
+
+	protected function set_parent_view( $parent ) {
+		$this->set_parent( $parent->render( ) );
 		$this->_parent->content = $this;
+		return $this;
+	}
+
+	protected function set_parent( $parent ) {
+		$this->_parent = $parent;
+		return $this;
 	}
 
 
