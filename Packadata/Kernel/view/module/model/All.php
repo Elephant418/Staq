@@ -31,8 +31,13 @@ abstract class All extends All\__Parent {
 		}
 		$template->filter = '';
 		if ( isset( $_GET[ 'filter' ] ) ) {
-			$template->filter = $_GET[ 'filter' ];
-			$models = $models->filter_name_contains( $_GET[ 'filter' ] );
+			\Supersoniq\must_be_array( $_GET[ 'filter' ] );
+			$template->filter = implode( ', ', $_GET[ 'filter' ] );
+			foreach( $_GET[ 'filter' ] as $filter ) {
+				foreach ( explode( ' ', $filter ) as $part ) {
+					$models = $models->filter_name_contains( $part );
+				}
+			}
 		}
 		$template->models = $models;
 
@@ -59,6 +64,7 @@ abstract class All extends All\__Parent {
 		$template->models = $template->models->slice( $template->pagination->start, $template->pagination->size );
 
 		// Done!
+		$template->base_get_parameter = '?' . http_build_query( $_GET );
 		$template->model_subtypes = $this->get_controller( )->get_subtype( );
 		return $template;
 	}
