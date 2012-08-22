@@ -223,6 +223,15 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 		return $this->data;
 	}
 
+	public function slice( $start, $end = NULL ) {
+		if ( is_null( $end ) ) {
+			$this->data = array_slice( $this->data, $start );
+		} else {
+			$this->data = array_slice( $this->data, $start, $end );
+		}
+		return $this;
+	}
+
 	public function is_empty( ) {
 		return empty( $this->data );
 	}
