@@ -46,9 +46,8 @@ abstract class Database_Table {
 		$datas = $this->datas_by_fields( $fields );
 		if ( isset( $datas[ 0 ] ) ) {
 			return $this->by_data( $datas[ 0 ] );
-		} else {
-			return $this;
 		}
+		return $this;
 	}
 
 	public function by_data( $fields ) {
