@@ -9,6 +9,7 @@ abstract class __Base extends \Database_Table {
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
+	static public $cached_datas;
 	public $type;
 	public $type_version = 1;
 	protected $_attributes = array( );
@@ -88,8 +89,21 @@ abstract class __Base extends \Database_Table {
 
 	
 	/*************************************************************************
-	  PUBLIC LIST METHODS
+	  ACCESSOR METHODS
 	 *************************************************************************/
+	public function by_id( $id ) {
+		if ( ! isset( self::$cached_datas[ $this->type ][ $id ] ) ) {
+			$datas = $this->datas_by_fields( array( $this->_database->id_field => $id ) );
+			self::$cached_datas[ $this->type ][ $id ] = $datas;
+		} else {
+			$datas = self::$cached_datas[ $this->type ][ $id ];
+		}
+		if ( isset( $datas[ 0 ] ) ) {
+			return $this->by_data( $datas[ 0 ] );
+		}
+		return $this;
+	}
+
 	public function all( ) {
 		return $this->list_by_fields( [ [
 			'where' => 'type=:type OR type LIKE :type_like',
@@ -180,17 +194,16 @@ abstract class __Base extends \Database_Table {
 		return serialize( $attributes );
 	}
 
-	public function by_fields( $fields ) {
-		$datas = $this->datas_by_fields( $fields );
+	public function by_data( $datas ) {
 		if ( 
-			! isset( $datas[ 0 ][ 'type' ] ) ||
-			! \Supersoniq\object_is_a( $datas[ 0 ][ 'type' ], $this )
+			! isset( $datas[ 'type' ] ) ||
+			! \Supersoniq\object_is_a( $datas[ 'type' ], $this )
 		) {
-			throw new \Exception\Resource_Not_Found( 'Can retrieve model data' );
+			throw new \Exception\Resource_Not_Found( 'Can not retrieve model data' );
 		}
-		return ( new \Model )
-			->by_type( $datas[ 0 ][ 'type' ] )
-			->by_data( $datas[ 0 ] );
+		$model = ( new \Model )->by_type( $datas[ 'type' ] );
+		$model->init_by_data( $datas );
+		return $model;
 	}
 
 	protected function get_list_by_data( $datas ) {
