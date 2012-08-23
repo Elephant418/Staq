@@ -6,8 +6,7 @@
 		<option 
 			value="<?= $related->id ?>" 
 			<?= ( $current_id == $related->id ) ? 'selected="selected"' : '' ?>
-		>
-		<?= $related->name( ) ?>
+		> <?= $related->name( ) ?>
 		</option>
 	<?php
 	}

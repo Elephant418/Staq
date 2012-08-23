@@ -6,8 +6,7 @@
 		<option 
 			value="<?= $related->id ?>" 
 			<?= ( in_array( $related->id, $current_ids ) ) ? 'selected="selected"' : '' ?>
-		>
-		<?= $related->name( ) ?>
+		> <?= $related->name( ) ?>
 		</option>
 	<?php
 	}

@@ -5,8 +5,7 @@
 		<option 
 			value="<?= $value ?>" 
 			<?= ( $this->content->value() == $value ) ? 'selected="selected"' : '' ?>
-		>
-		<?= $name ?>
+		> <?= $name ?>
 		</option>
 	<?php
 	}
