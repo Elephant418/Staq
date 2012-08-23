@@ -11,5 +11,10 @@
 		<?php
 		}
 	}
+	if ( $this->from ) {
+	?>
+		<a class="btn" href="<?= \Supersoniq\module_model_url( $this->from ) ?>"><i class="icon-search"></i> Back to <?= $this->from->name( ) ?></a>
+	<?php
+	}
 	?>
 </div>

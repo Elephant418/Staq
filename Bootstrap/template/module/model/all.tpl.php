@@ -2,7 +2,7 @@
 	List <?= $this->model_type ?> 
 <?php
 	if ( $this->from ) {
-		echo 'from ' . $this->from->type . ' "' . $this->from->name( ) . '"';
+		echo 'associated to ' . $this->from->type . ' "' . $this->from->name( ) . '"';
 	} else if ( $this->filter ) {
 		echo 'filtered "' . $this->filter . '"';
 	}

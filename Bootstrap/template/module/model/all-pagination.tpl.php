@@ -1,6 +1,6 @@
 <?php
 	$pagination = $this->pagination;
-	if ( $pagination->page_last > 1 ) {
+	if ( $pagination->page_last > 0 ) {
 ?>
 <div class="row">
 	<div class="span6">
@@ -52,6 +52,10 @@
 				<li>
 					<a href="<?= $this->base_get_parameter ?>&offset=0">1</a>
 				</li>
+			<?php
+			}
+			if ( $pagination->page_start > 1 ) {
+			?>
 				<li>
 					<span>...</span>
 				</li>
@@ -68,11 +72,15 @@
 			}
 			?>
 			<?php
-			if ( $pagination->page_end < $pagination->page_last ) {
+			if ( $pagination->page_end < $pagination->page_last - 1 ) {
 			?>
 				<li>
 					<span>...</span>
 				</li>
+			<?php
+			}
+			if ( $pagination->page_end < $pagination->page_last ) {
+			?>
 				<li>
 					<a href="<?= $this->base_get_parameter ?>&offset=<?= $pagination->page_last ?>"><?= $pagination->page_last + 1 ?></a>
 				</li>
