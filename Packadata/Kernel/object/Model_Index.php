@@ -36,7 +36,10 @@ abstract class Model_Index extends \Database_Table {
 	public function all( ) {
 		$fields = array( 
 			'type' => $this->type, 
-			'model_type' => $this->model_type,
+			[
+				'where' => 'model_type=:model_type OR model_type LIKE :model_type_like',
+				'parameters' => [ 'model_type' => $this->model_type, 'model_type_like' => $this->model_type . '\\\%' ]
+			]
 		);
 		if ( ! is_null( $this->model_id ) ) {
 			$fields[ 'model_id' ] = $this->model_id;
@@ -54,11 +57,14 @@ abstract class Model_Index extends \Database_Table {
 		return $this->delete_by_fields( $fields );
 	}
 	public function model_id_by_value( $model_type, $type, $value ) {
-		$datas = $this->datas_by_fields( array(
-			'model_type' => $model_type,
+		$datas = $this->datas_by_fields( [
+			[
+				'where' => 'model_type=:model_type OR model_type LIKE :model_type_like',
+				'parameters' => [ 'model_type' => $model_type, 'model_type_like' => $model_type . '\\\%' ]
+			],
 			'type' => $type,
 			'value' => $value,
-		) );
+		] );
 		if ( count( $datas ) > 0 && isset( $datas[ 0 ][ 'model_id' ] ) ) {
 			return $datas[ 0 ][ 'model_id' ];
 		}
@@ -71,11 +77,14 @@ abstract class Model_Index extends \Database_Table {
 	 *************************************************************************/
 	public function is_uniq( $model ) {
 		$this->init_by_model( $model );
-		$fields = array(
-			'model_type' => $this->model_type,
+		$fields = [ 
+			[
+				'where' => 'model_type=:model_type OR model_type LIKE :model_type_like',
+				'parameters' => [ 'model_type' => $model->type, 'model_type_like' => $model->type . '\\\%' ]
+			],
 			'type' => $this->type,
 			'value' => $this->value,
-		);
+		];
 		if ( ! is_null( $this->model_id ) ) {
 			$fields[ 'model_id' ] = array( '<>', $this->model_id );
 		}
@@ -98,8 +107,11 @@ abstract class Model_Index extends \Database_Table {
 	private function init_by_model( $model ) {
 		$this->model_type = $model->type;
 		$this->model_id = $model->id;
-		$this->by_fields( [ 
-			'model_type' => $this->model_type,
+		$this->by_fields( [
+			[
+				'where' => 'model_type=:model_type OR model_type LIKE :model_type_like',
+				'parameters' => [ 'model_type' => $this->model_type, 'model_type_like' => $this->model_type . '\\\%' ]
+			],
 			'model_id' => $this->model_id,
 			'type' => $this->type,
 		] );
