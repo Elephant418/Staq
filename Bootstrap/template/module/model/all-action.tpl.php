@@ -2,7 +2,7 @@
 	<?php
 	if ( $this->from || $this->filter ) {
 	?>
-		<a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> See all</a>
+		<a class="btn" href="<?= $page_url( 'all' ) ?>"><i class="icon-th-list"></i> See all <?= $this->model_type ?></a>
 	<?php
 	} else {
 		foreach ( $this->model_subtypes as $subtype ) {
