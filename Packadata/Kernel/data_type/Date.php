@@ -55,14 +55,19 @@ class Date extends \Data_Type\__Base {
 	 * @param the wanted type of format
 	 * @return the value on the wanted format
 	 */
-	public function format( $type = NULL, $value = NULL ) {
-		if ( is_null( $value ) ) {
-			$value = $this->value;
-		}
-		else if ( $type == 'Year' ) $formater = 'Y';
+	public function format( $type = NULL ) {
+		if ( $type == 'Year' ) $formater = 'Y';
 		else if ( $type == 'Month' ) $formater = 'Y-m';
 		else if ( $type == 'Day' || is_null( $type ) ) $formater = 'Y-m-d';
 		else $formater = $type;
-		return date_format( \DateTime::createFromFormat( 'd/m/Y', $value ), $formater );
+		return $this->date( )->format( $formater );
+	}
+
+	public function date( ) {
+		return \DateTime::createFromFormat( 'd-m-Y', $this->value );
+	}
+
+	public function time( ) {
+		return $this->date( )->getTimestamp( );
 	}
 }
