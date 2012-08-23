@@ -15,7 +15,7 @@ class Relation extends \Data_Type\__Base {
 	 *************************************************************************/
 	protected $initialized = FALSE;
 	protected $definition;
-	protected $relations = array( );
+	protected $relations = [ ];
 
 
 	/*************************************************************************
@@ -31,11 +31,8 @@ class Relation extends \Data_Type\__Base {
 	}
 
 	public function get( ) {
-		if ( ! $this->initialized ) {
-			$this->relations = $this->definition->all( );
-			$this->initialized = TRUE;
-		}
-		$relateds = array( );
+		$this->check_initialized( );
+		$relateds = [ ];
 		foreach ( $this->relations as $relation ) {
 			$relateds[ ] = $relation->get( );
 		}
@@ -47,17 +44,22 @@ class Relation extends \Data_Type\__Base {
 		\Supersoniq\must_be_array( $relateds );
 		$this->relations = [ ];
 		foreach ( $relateds as $related ) {
-			if ( ! is_object( $related ) ) {
-				$related = ( new \Model )
-					->by_type( $this->definition->related_model_type )
-					->by_id( $related );
-				if ( ! $related->exists( ) ) {
-					throw new Exception( 'Relation setted with an unexisting model' );
-				}
-			}
-			$this->definition->set( $related );
-			$this->relations[ ] = clone $this->definition;
+			$this->add( $related );
 		}
+	}
+
+	public function add( $related ) {
+		$this->check_initialized( );
+		if ( ! is_object( $related ) ) {
+			$related = ( new \Model )
+				->by_type( $this->definition->related_model_type )
+				->by_id( $related );
+			if ( ! $related->exists( ) ) {
+				throw new Exception( 'Relation setted with an unexisting model' );
+			}
+		}
+		$this->definition->set( $related );
+		$this->relations[ ] = clone $this->definition;
 	}
 	public function get_related_model( ) {
 		return ( new \Model )
@@ -106,4 +108,16 @@ class Relation extends \Data_Type\__Base {
 		parent::__construct( );
 		$this->definition = $definition;
 	}
+
+
+	/*************************************************************************
+	  PROTECTED METHODS  
+	 *************************************************************************/
+	protected function check_initialized( ) {
+		if ( ! $this->initialized ) {
+			$this->relations = $this->definition->all( );
+			$this->initialized = TRUE;
+		}
+	}
+
 }
