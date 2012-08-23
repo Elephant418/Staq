@@ -10,6 +10,15 @@ namespace Supersoniq\Packadata\Kernel\View\Module\Model;
 abstract class All extends All\__Parent {
 
 
+
+	/*************************************************************************
+	  ATTRIBUTES                   
+	 *************************************************************************/
+	public $pagination_size = 15;
+	public $pagination_max_page_displayed = 7;
+
+
+
 	/*************************************************************************
 	  RENDER METHODS                   
 	 *************************************************************************/
@@ -43,7 +52,7 @@ abstract class All extends All\__Parent {
 
 		// Pagination
 		$template->pagination = new \StdClass;
-		$template->pagination->size = 15;
+		$template->pagination->size = $this->pagination_size;
 		$template->pagination->count = $models->count( );
 		$template->pagination->page_last = ceil( $template->pagination->count / $template->pagination->size ) - 1;
 		$offset = 0;
@@ -55,8 +64,8 @@ abstract class All extends All\__Parent {
 			$offset = $_GET[ 'offset' ];
 		}
 		$template->pagination->offset = $offset;
-		$template->pagination->page_displayed = 7;
-		$side_page_displayed = round( ( $template->pagination->page_displayed - 1 ) / 2 );
+		$template->pagination->max_page_displayed = $this->pagination_max_page_displayed;
+		$side_page_displayed = round( ( $template->pagination->max_page_displayed - 1 ) / 2 );
 		$template->pagination->page_start = ( $template->pagination->offset >= $side_page_displayed ) ? $template->pagination->offset - $side_page_displayed:0;
 		$template->pagination->page_end = ( $template->pagination->page_last >= $side_page_displayed + $template->pagination->offset ) ? $template->pagination->offset + $side_page_displayed:$template->pagination->page_last;
 		$template->pagination->start = $template->pagination->offset * $template->pagination->size;
