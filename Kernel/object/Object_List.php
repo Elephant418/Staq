@@ -228,6 +228,14 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 		return $this->data;
 	}
 
+	public function debug( ) {
+		$elements = [ ];
+		foreach ( $this->data as $data ) {
+			$elements[ ] = $data->debug( );
+		}
+		return 'Object_List[ ' . implode( ', ', $elements ) . ' ]';
+	}
+
 	public function slice( $start, $end = NULL ) {
 		if ( is_null( $end ) ) {
 			$data = array_slice( $this->data, $start );
