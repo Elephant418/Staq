@@ -61,7 +61,6 @@ abstract class All extends All\__Parent {
 		$template->pagination->page_end = ( $template->pagination->page_last >= $side_page_displayed + $template->pagination->offset ) ? $template->pagination->offset + $side_page_displayed:$template->pagination->page_last;
 		$template->pagination->start = $template->pagination->offset * $template->pagination->size;
 		$template->pagination->end = $template->pagination->start + $template->pagination->size;
-		$template->models = $template->models->slice( $template->pagination->start, $template->pagination->size );
 
 		// Done!
 		$template->base_get_parameter = '?' . http_build_query( $_GET );

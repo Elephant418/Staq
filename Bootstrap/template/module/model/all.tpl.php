@@ -20,6 +20,7 @@ if ( count( $this->models ) == 0 ) {
 } else {
 	$pagination_text = 'search';
 	include( __DIR__ . '/all-pagination.tpl.php' );
+	$this->models = $this->models->slice( $this->pagination->start, $this->pagination->size );
 ?>
 <table class="table table-bordered table-striped table-data">
 
