@@ -85,6 +85,9 @@ class Relation extends \Data_Type\__Base {
 		$this->definition->set_model( $model );
 	}
 	public function model_saved( $model ) {
+		$this->definition
+			->set_model( $model )
+			->delete_all( );
 		foreach ( $this->relations as $relation ) {
 			$relation->set_model( $model );
 			$relation->save( );
