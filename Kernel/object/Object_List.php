@@ -67,7 +67,10 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 		return next( $this->data );
 	}
 	public function rewind( ) {
-		reset( $this->data );
+		return reset( $this->data );
+	}
+	public function end( ) {
+		return end( $this->data );
 	}
 	public function valid( ) {
 		return $this->current( ) !== FALSE;
