@@ -55,7 +55,7 @@ class Relation extends \Data_Type\__Base {
 				->by_type( $this->definition->related_model_type )
 				->by_id( $related );
 			if ( ! $related->exists( ) ) {
-				throw new Exception( 'Relation setted with an unexisting model' );
+				throw new \Exception( 'Relation setted with an unexisting model' );
 			}
 		}
 		$this->definition->set( $related );
