@@ -277,6 +277,9 @@ function module_page_route( $module, $page, $parameters = [ ] ) {
 }
 
 function is_object_list( $object ) {
+	if ( ! is_object( $object ) ) {
+		return FALSE;
+	}
 	return \Supersoniq\substr_after_last( get_class( $object ), '\\' ) == 'Object_List';
 }
 
