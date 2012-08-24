@@ -40,11 +40,13 @@ class Relation extends \Data_Type\__Base {
 	}
 
 	public function set( $relateds ) {
-		$this->initialized = TRUE;
-		\Supersoniq\must_be_array( $relateds );
-		$this->relations = [ ];
-		foreach ( $relateds as $related ) {
-			$this->add( $related );
+		if ( ! empty( $relateds ) ) {
+			$this->initialized = TRUE;
+			\Supersoniq\must_be_array( $relateds );
+			$this->relations = [ ];
+			foreach ( $relateds as $related ) {
+				$this->add( $related );
+			}
 		}
 	}
 
