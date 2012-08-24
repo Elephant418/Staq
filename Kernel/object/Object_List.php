@@ -104,10 +104,9 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 			$getter = function ( $item, $result ) use ( $field ) {
 				$value = $item->$field;
 				if ( ! is_null( $value ) ) {
-					if ( is_a( $value, 'Object_List' ) ) {
-						$value = $value->to_array( );
-					}
-					if ( is_array( $value ) ) {
+					if ( \Supersoniq\is_object_list( $value ) ) {
+						$result->merge_unique_object( $value );
+					} else if ( is_array( $value ) ) {
 						$result->merge_unique( $value );
 					} else {
 						$result->add_unique( $value );
@@ -153,6 +152,15 @@ abstract class Object_List implements \ArrayAccess, \Iterator, \Countable {
 
 	public function merge_unique( $values ) {
 		$this->data = \Supersoniq\array_merge_unique( $this->data, $values );
+		return $this;
+	}
+
+	public function merge_unique_object( $values ) {
+		$data = [ ];
+		foreach ( array_merge( $this->data, $values->to_array( ) ) as $object ) {
+			$data[ $object->id ] = $object;
+		}
+		$this->data = $data;
 		return $this;
 	}
 

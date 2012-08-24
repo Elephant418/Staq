@@ -276,6 +276,10 @@ function module_page_route( $module, $page, $parameters = [ ] ) {
 	return $route;
 }
 
+function is_object_list( $object ) {
+	return \Supersoniq\substr_after_last( get_class( $object ), '\\' ) == 'Object_List';
+}
+
 function object_is_a( $subtype, $ref_subtype ) {
 	if ( is_object( $subtype ) ) {
 		$subtype = \Supersoniq\class_subtype( $subtype );
@@ -296,7 +300,7 @@ function class_type_name( $object ) {
 function class_subtype( $object ) {
 	if ( ! is_object( $object ) ) {
 		return NULL;
-	} else if ( get_class( $object ) == 'Object_List' ) {
+	} else if ( \Supersoniq\is_object_list( $object ) ) {
 		return $object->get_object_subtype( );
 	} else if ( isset( $object->_type ) ) {
 		return $object->_type;
@@ -308,7 +312,7 @@ function class_subtype( $object ) {
 function class_type( $object ) {
 	if ( ! is_object( $object ) ) {
 		return NULL;
-	} else if ( get_class( $object ) == 'Object_List' ) {
+	} else if ( \Supersoniq\is_object_list( $object ) ) {
 		return $object->get_object_type( );
 	}
 	$subtype = \Supersoniq\class_subtype( $object );
