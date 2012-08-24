@@ -51,6 +51,9 @@ class Alias extends \Data_Type\__Base {
 	public function model_initialized( $model ) {
 		$this->model = $model;
 	}
+	public function model_saved( $model ) {
+		$this->model = $model;
+	}
 
 
 
