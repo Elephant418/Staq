@@ -63,10 +63,22 @@ class Url {
 	}
 
 	public function by_server( ) {
-		$return = new $this;		
-		$return->host = $_SERVER[ 'SERVER_NAME' ];
-		$return->port = intval( $_SERVER[ 'SERVER_PORT'] );
-		$return->uri = \Supersoniq\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+		$return = new $this;
+		if ( isset( $_SERVER[ 'SERVER_NAME' ] ) ) {
+			$return->host = $_SERVER[ 'SERVER_NAME' ];
+		} else {
+			$return->host = 'localhost';
+		}
+		if ( isset( $_SERVER[ 'SERVER_PORT' ] ) ) {
+			$return->port = intval( $_SERVER[ 'SERVER_PORT'] );
+		} else {
+			$return->port = '80';
+		}
+		if ( isset( $_SERVER[ 'SERVER_URI' ] ) ) {
+			$return->uri = \Supersoniq\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+		} else {
+			$return->uri = '/';
+		}
 		return $return;
 	}
 
