@@ -74,7 +74,7 @@ class Url {
 		} else {
 			$return->port = '80';
 		}
-		if ( isset( $_SERVER[ 'SERVER_URI' ] ) ) {
+		if ( isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
 			$return->uri = \Supersoniq\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 		} else {
 			$return->uri = '/';
