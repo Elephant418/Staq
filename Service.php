@@ -148,7 +148,7 @@ class Service {
 			$extensions = $settings
 				->extension( $extensions )
 				->by_file( 'application' )
-				->get_list( 'extensions', [ $application_path ], TRUE );
+				->get_list( 'extensions', [ $application_path, 'Supersoniq/Kernel' ], TRUE );
 		} while ( $extensions != $old );
 		return $extensions;
 	}
