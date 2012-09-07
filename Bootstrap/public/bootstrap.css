@@ -20,9 +20,27 @@ label b {
     margin-right: 20px;
 }
 
+.print-only {
+	display: none;
+}
+
 @media print {
 	.action,
 	.navbar {
 		display: none;
+	}
+	a,
+	a:hover,
+	a:focus,
+	a:active {
+		color: #333333;
+	}
+	.print-only {
+		display: block;
+	}
+	.table td {
+	    border-top: 1px solid #DDDDDD;
+	    line-height: 18px;
+	    padding: 4px;
 	}
 }

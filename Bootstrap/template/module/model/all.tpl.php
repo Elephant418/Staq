@@ -1,13 +1,16 @@
 <h1>
-	List <?= $this->model_type ?> 
 <?php
 	if ( $this->from ) {
-		echo 'associated to ' . $this->from->type . ' "' . $this->from->name( ) . '"';
-	} else if ( $this->filter ) {
-		echo 'filtered "' . $this->filter . '"';
+		echo '<small>' . $this->from->name( ) . '</small><br>';
 	}
 ?>
+	List <?= $this->model_type ?> 
 	(<?= $this->pagination->count ?>)
+<?php
+	if ( $this->filter ) {
+		echo '<br><small>Filtered "' . $this->filter . '"</small>';
+	}
+?>
 </h1>
 <?php
 

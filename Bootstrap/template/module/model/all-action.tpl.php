@@ -17,4 +17,5 @@
 	<?php
 	}
 	?>
+	<a class="btn pull-right" href="javascript:window.print( );"><i class="icon-print"></i> Print</a>
 </div>

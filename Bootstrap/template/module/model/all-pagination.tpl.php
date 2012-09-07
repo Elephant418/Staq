@@ -3,7 +3,7 @@
 	if ( $pagination->page_last > 0 ) {
 ?>
 <div class="row action action-table">
-	<div class="span6">
+	<div class="span5">
 	<?php
 		if ( $pagination_text == 'position' ) {
 	?>
@@ -40,7 +40,7 @@
 		}
 	?>
 	</div>
-	<div class="span6">
+	<div class="span7">
 		<div class="dataTables_paginate paging_bootstrap pagination">
 			<ul>
 				<li class="prev <?= ( $pagination->offset == 0 )?'disabled':'' ?>">
@@ -94,5 +94,12 @@
 		</div>
 	</div>
 </div>
-<?php
+	<?php
+		if ( $pagination_text == 'position' ) {
+	?>
+	<div class="print-only pull-right">
+		Page <?= ( $pagination->offset + 1 ) . ' / ' . ( $pagination->page_last + 1 ) ?>
+	</div>
+	<?php
 	}
+}

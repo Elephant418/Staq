@@ -14,7 +14,7 @@ abstract class All extends All\__Parent {
 	/*************************************************************************
 	  ATTRIBUTES                   
 	 *************************************************************************/
-	public $pagination_size = 15;
+	public $pagination_size = 25;
 	public $pagination_max_page_displayed = 7;
 
 
@@ -53,6 +53,9 @@ abstract class All extends All\__Parent {
 		// Pagination
 		$template->pagination = new \StdClass;
 		$template->pagination->size = $this->pagination_size;
+		if ( isset( $_GET[ 'no_pagination' ] ) ) {
+			$template->pagination->size = $template->models->count( );
+		}
 		$template->pagination->count = $models->count( );
 		$template->pagination->page_last = ceil( $template->pagination->count / $template->pagination->size ) - 1;
 		$offset = 0;
