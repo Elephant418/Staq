@@ -51,6 +51,11 @@ class __Base {
 		return $this;
 	}
 
+	public function set_attributes( $attributes ) {
+		$this->_attributes = $attributes;
+		return $this;
+	}
+
 
 
 	/*************************************************************************
@@ -144,6 +149,14 @@ class __Base {
 			}
 		}
 	}
+	
+	protected function include_template( $template_name ) {
+		$template_name = \Supersoniq\format_to_namespace( \Supersoniq\uc_class( $template_name ) );
+		return ( new \Template )
+			->by_name( $template_name )
+			->set_attributes( $this->_attributes )
+			->render( );
+	}
 
 
 
@@ -175,6 +188,10 @@ class __Base {
 	 *************************************************************************/
 	protected function get_template_path( ) {
 		$name = \Supersoniq\format_to_path( strtolower( $this->_type ) );
+		return $this->get_template_path_by_name( $name );
+	}
+
+	protected function get_template_path_by_name( $name ) {
 		do {
 			foreach ( \Supersoniq::$EXTENSIONS as $extension ) {
 				foreach ( $this->_extensions as $file_extension ) {

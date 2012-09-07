@@ -88,16 +88,7 @@
 	</div>
 
 	<div class="container">
-		<?php
-		foreach( \Notification::pull(  ) as $notification ) {
-		?>
-			<div class="alert alert-<?= $notification->level ?>">
-				<?= $notification ?>
-			</div>
-		<?php
-		}
-		?>
-		<?= $this->display( $this->content ) ?>
+		<?= $this->include_template( 'part/content' ) ?>
 	</div>
 
 	<script src="/twbootstrap/jquery.js"></script>
