@@ -1,7 +1,7 @@
 <h1>
 <?php
 	if ( $this->from ) {
-		echo '<small>' . $this->from->name( ) . '</small><br>';
+		echo '<small><a href="' . \Supersoniq\module_model_url( $this->from ) . '">' . $this->from->name( ) . '</a></small><br>';
 	}
 ?>
 	List <?= $this->model_type ?> 

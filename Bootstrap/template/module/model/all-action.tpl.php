@@ -11,11 +11,6 @@
 		<?php
 		}
 	}
-	if ( $this->from ) {
-	?>
-		<a class="btn" href="<?= \Supersoniq\module_model_url( $this->from ) ?>"><i class="icon-search"></i> Back to <?= $this->from->name( ) ?></a>
-	<?php
-	}
 	?>
 	<a class="btn pull-right" href="javascript:window.print( );"><i class="icon-print"></i> Print</a>
 </div>
