@@ -2,7 +2,7 @@
 	$pagination = $this->pagination;
 	if ( $pagination->page_last > 0 ) {
 ?>
-<div class="row">
+<div class="row action action-table">
 	<div class="span6">
 	<?php
 		if ( $pagination_text == 'position' ) {
@@ -44,13 +44,13 @@
 		<div class="dataTables_paginate paging_bootstrap pagination">
 			<ul>
 				<li class="prev <?= ( $pagination->offset == 0 )?'disabled':'' ?>">
-					<a href="<?= $this->base_get_parameter ?>&offset=<?= $pagination->offset - 1 ?>">← Previous</a>
+					<a href="<?= $this->base_get_parameter ?>&amp;offset=<?= $pagination->offset - 1 ?>">← Previous</a>
 				</li>
 			<?php
 			if ( $pagination->page_start > 0 ) {
 			?>
 				<li>
-					<a href="<?= $this->base_get_parameter ?>&offset=0">1</a>
+					<a href="<?= $this->base_get_parameter ?>&amp;offset=0">1</a>
 				</li>
 			<?php
 			}
@@ -66,7 +66,7 @@
 			for ( $page=$pagination->page_start; $page <= $pagination->page_end; $page++ ) {
 			?>
 				<li class="<?= ( $pagination->offset == $page )?'active':'' ?>">
-					<a href="<?= $this->base_get_parameter ?>&offset=<?= $page ?>"><?= $page + 1 ?></a>
+					<a href="<?= $this->base_get_parameter ?>&amp;offset=<?= $page ?>"><?= $page + 1 ?></a>
 				</li>
 			<?php
 			}
@@ -82,13 +82,13 @@
 			if ( $pagination->page_end < $pagination->page_last ) {
 			?>
 				<li>
-					<a href="<?= $this->base_get_parameter ?>&offset=<?= $pagination->page_last ?>"><?= $pagination->page_last + 1 ?></a>
+					<a href="<?= $this->base_get_parameter ?>&amp;offset=<?= $pagination->page_last ?>"><?= $pagination->page_last + 1 ?></a>
 				</li>
 			<?php
 			}
 			?>
 				<li class="next <?= ( $pagination->offset == $pagination->page_last )?'disabled':'' ?>">
-					<a href="<?= $this->base_get_parameter ?>&offset=<?= $pagination->offset + 1 ?>">Next → </a>
+					<a href="<?= $this->base_get_parameter ?>&amp;offset=<?= $pagination->offset + 1 ?>">Next → </a>
 				</li>
 			</ul>
 		</div>

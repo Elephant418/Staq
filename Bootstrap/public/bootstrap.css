@@ -1,6 +1,13 @@
+body {
+	padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
 h1,
 .action {
 	margin-bottom: 18px;
+}
+.action.action-table {
+	margin-bottom: 0;
 }
 
 label b {
@@ -11,4 +18,11 @@ label b {
     display: block;
     margin-bottom: 5px;
     margin-right: 20px;
+}
+
+@media print {
+	.action,
+	.navbar {
+		display: none;
+	}
 }

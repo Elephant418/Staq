@@ -10,12 +10,7 @@
 	<link rel="stylesheet" href="/dataTables/DT_bootstrap.css">
 	<link rel="stylesheet" href="/chosen/chosen.css">
 	<link rel="stylesheet" href="/bootstrap.css">
-	<style>
-		body {
-			padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */
-		}
-	</style>
-	<link href="/twbootstrap/bootstrap-responsive.css" rel="stylesheet">
+	<link rel="stylesheet" href="/twbootstrap/bootstrap-responsive.css">
 	<link href="/favicon.ico" rel="icon" type="image/x-icon" />
 </head>
 <body>
@@ -107,6 +102,8 @@
 
 	<script src="/twbootstrap/jquery.js"></script>
 	<script src="/twbootstrap/bootstrap-dropdown.js"></script>
+    <script src="/twbootstrap/bootstrap-transition.js"></script>
+    <script src="/twbootstrap/bootstrap-collapse.js"></script>
 	<script src="/chosen/chosen.jquery.min.js"></script>
 	<script>
 		$(".attribute select").chosen();
