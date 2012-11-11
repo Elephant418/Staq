@@ -40,26 +40,32 @@ abstract class Model_Unversioned extends Model\__Parent {
 	/*************************************************************************
 	  ACTION METHODS                   
 	 *************************************************************************/
-	public function edit( &$model, $datas ) {
+	public function edit( &$model, $datas, $message = TRUE ) {
 		foreach ( $datas as $name => $value ) {
-			$model->$name = $value;
+			if ( $model->has_attribute( $name ) ) {
+				$model->$name = $value;
+			}
 		}
 		$exists = $model->exists( );
 		if ( $model->save( ) ) {
-			if ( $exists ) {
-				$message = $this->get_model_name( ) . ' updated with success ! ';
-			} else {
-				$message = $this->get_model_name( ) . ' created with success ! ';
+			if ( $message ) {
+				if ( $exists ) {
+					$message = $this->get_model_name( ) . ' updated with success ! ';
+				} else {
+					$message = $this->get_model_name( ) . ' created with success ! ';
+				}
+				\Notification::push( $message, \Notification::SUCCESS );
 			}
-			\Notification::push( $message, \Notification::SUCCESS );
 			return TRUE;
 		}
-		if ( $exists ) {
-			$message = $this->get_model_name( ) . ' not updated ! ';
-		} else {
-			$message = $this->get_model_name( ) . ' not created ! ';
+		if ( $message ) {
+			if ( $exists ) {
+				$message = $this->get_model_name( ) . ' not updated ! ';
+			} else {
+				$message = $this->get_model_name( ) . ' not created ! ';
+			}
+			\Notification::push( $message, \Notification::ERROR );
 		}
-		\Notification::push( $message, \Notification::ERROR );
 		return FALSE;
 	}
 
