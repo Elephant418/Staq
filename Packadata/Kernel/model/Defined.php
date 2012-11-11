@@ -60,6 +60,10 @@ class Defined extends \Model\__Base {
 		$this->_attributes[ $name ] = $data_type;
 	}
 
+	public function has_attribute( $name ) {
+		return ( isset( $this->_attributes[ $name ] ) );
+	}
+
 	protected function add_attribute_alias( $name, $alias ) {
 		$this->_attributes_alias[ $name ] = $alias;
 	}
