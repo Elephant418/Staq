@@ -183,6 +183,11 @@ function string_dirname( $path, $level = 1 ) {
 	return $path;
 }
 
+function string_basename( $path, $level = 1 ) {
+	$dirpath = string_dirname( $path, $level );
+	return substr( $path, strlen( $dirpath ) + 1 );
+}
+
 function file_extension( $path ) {
 	return substr_after_last( $path, '.' );
 }
