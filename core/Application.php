@@ -74,11 +74,14 @@ class Application {
 	private function find_extensions( ) {
 		$extensions = [ $this->path ];
 		$this->find_extensions_recursive( $this->path, $extensions );
+		if ( count( $extensions ) == 1 ) {
+			$extensions = [ $this->path, 'Staq/ground' ];
+			$this->find_extensions_recursive( 'Staq/ground', $extensions );
+		}
 		return $extensions;
 	}
 
 	private function find_extensions_recursive( $extension, &$extensions ) {
-		echo 'FIND EXTENSION "' . $extension . '" ' . HTML_EOL;
 		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
 		if ( is_file( $setting_file_path ) ) {
 			$settings = parse_ini_file( $setting_file_path, TRUE );
