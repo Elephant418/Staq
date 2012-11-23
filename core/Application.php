@@ -78,13 +78,19 @@ class Application {
 		return $extensions;
 	}
 
-	private function find_extensions_recursive( $extension, &$extensions ) {
+	private function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
 		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
 		$added_extensions = [ ];
 		if ( is_file( $setting_file_path ) ) {
 			$settings = parse_ini_file( $setting_file_path, TRUE );
-			if ( isset( $settings[ 'extensions' ][ 'enabled' ] ) && is_array( $settings[ 'extensions' ][ 'enabled' ] ) ) {
-				$added_extensions = $settings[ 'extensions' ][ 'enabled' ];
+			if ( isset( $settings[ 'extensions' ] ) ) {
+				$ext = $settings[ 'extensions' ];
+				if ( isset( $ext[ 'enabled' ] ) && is_array( $ext[ 'enabled' ] ) ) {
+					$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
+				}
+				if ( isset( $ext[ 'disabled' ] ) && is_array( $ext[ 'disabled' ] ) ) {
+					$disabled = \Staq\util\array_merge_unique( $disabled, $ext[ 'disabled' ] );
+				}
 			}
 		} else {
 			// Default value for extension without configuration 
@@ -92,8 +98,14 @@ class Application {
 		}
 		$old_extensions = $extensions;
 		$extensions = \Staq\util\array_reverse_merge_unique( $extensions, $added_extensions );
+		/*
+		echo '>>> ' . $extension . HTML_EOL;
+		echo 'old_extensions:   ' . print_r( $old_extensions, true ) . HTML_EOL;
+		echo 'added_extensions: ' . print_r( $added_extensions, true ) . HTML_EOL;
+		echo 'new_extensions:   ' . print_r( array_diff( $added_extensions, $old_extensions ), true ) . HTML_EOL;
+		*/
 		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
-			$this->find_extensions_recursive( $added_extension, $extensions );
+			$this->find_extensions_recursive( $added_extension, $extensions, $disabled );
 		}
 	}
 
