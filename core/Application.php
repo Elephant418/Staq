@@ -74,27 +74,26 @@ class Application {
 	private function find_extensions( ) {
 		$extensions = [ $this->path ];
 		$this->find_extensions_recursive( $this->path, $extensions );
-		if ( count( $extensions ) == 1 ) {
-			$extensions = [ $this->path, 'Staq/ground' ];
-			$this->find_extensions_recursive( 'Staq/ground', $extensions );
-		}
+		var_dump( $extensions );
 		return $extensions;
 	}
 
 	private function find_extensions_recursive( $extension, &$extensions ) {
 		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
+		$added_extensions = [ ];
 		if ( is_file( $setting_file_path ) ) {
 			$settings = parse_ini_file( $setting_file_path, TRUE );
-			if ( isset( $settings[ 'extensions' ][ 'enabled' ] ) ) {
+			if ( isset( $settings[ 'extensions' ][ 'enabled' ] ) && is_array( $settings[ 'extensions' ][ 'enabled' ] ) ) {
 				$added_extensions = $settings[ 'extensions' ][ 'enabled' ];
-				$old_extensions = $extensions;
-				$extensions = \Staq\util\array_reverse_merge_unique( $extensions, $added_extensions );
-				foreach ( $added_extensions as $added_extension ) {
-					if ( ! in_array( $added_extension, $old_extensions ) ) {
-						$this->find_extensions_recursive( $added_extension, $extensions );
-					}
-				}
 			}
+		} else {
+			// Default value for extension without configuration 
+			$added_extensions = [ 'Staq/ground' ];
+		}
+		$old_extensions = $extensions;
+		$extensions = \Staq\util\array_reverse_merge_unique( $extensions, $added_extensions );
+		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
+			$this->find_extensions_recursive( $added_extension, $extensions );
 		}
 	}
 
