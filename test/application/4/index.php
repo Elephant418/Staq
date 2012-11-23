@@ -12,7 +12,7 @@ $app->run( );
 // TEST COLLECTION
 $case = new \Staq\util\Test_Case( 'Extends project without configuration', [
 	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( ) == [ $path, 'Staq/starter', 'Staq/view', 'Staq/ground' ] );
+		return ( $app->get_extensions( ) == [ $path, 'Staq/unexisting', 'Staq/starter', 'Staq/view', 'Staq/ground' ] );
 	}
 ] );
 
