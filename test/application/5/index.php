@@ -10,7 +10,7 @@ $app = new \Staq\Application( $path );
 $app->run( );
 
 // TEST COLLECTION
-$case = new \Staq\util\Test_Case( 'Extends project without configuration', [
+$case = new \Staq\util\Test_Case( 'With the starter disabled', [
 	'Extensions' => function( ) use ( $app, $path ) {
 		return ( $app->get_extensions( ) == [ $path, 'Staq/view', 'Staq/ground' ] );
 	}
