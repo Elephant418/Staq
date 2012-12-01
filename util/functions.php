@@ -74,7 +74,7 @@ function string_contains( $hay, $needle ) {
 }
 
 function string_i_contains( $hay, $needle ) {
-	return contains( strtolower( $hay ), strtolower( $needle ) );
+	return string_contains( strtolower( $hay ), strtolower( $needle ) );
 }
 
 
@@ -90,7 +90,7 @@ function string_substr_before( $hay, $needles ) {
 	must_be_array( $needles );
 	$return = $hay;
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, 0, strpos( $hay, $needle ) );
 			if ( strlen( $cut ) < strlen ( $return ) ) {
 				$return = $cut;
@@ -111,7 +111,7 @@ function string_substr_before_last( $hay, $needles ) {
 	must_be_array( $needles );
 	$return = '';
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, 0, strrpos( $hay, $needle ) );
 			if ( strlen( $cut ) > strlen ( $return ) ) {
 				$return = $cut;
@@ -132,7 +132,7 @@ function string_substr_after( $hay, $needles ) {
 	must_be_array( $needles );
 	$return = '';
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, strpos( $hay, $needle ) + strlen( $needle ) );
 			if ( strlen( $cut ) > strlen ( $return ) ) {
 				$return = $cut;
@@ -152,7 +152,7 @@ function string_substr_after_last( $hay, $needles ) {
 	must_be_array( $needles );
 	$return = $hay;
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, strrpos( $hay, $needle ) + strlen( $needle ) );
 			if ( strlen( $cut ) < strlen ( $return ) ) {
 				$return = $cut;
