@@ -5,7 +5,7 @@ require_once( $staq_path . '/util/tests.php' );
 
 // DEFINITION
 $name  = 'Application';
-$test_cases = [ 1, 2, 3, 4, 5, 6 ];
+$test_cases = [ 1, 2, 3, 4, 5 ];
 
 // COLLECTION
 $collection = new \Staq\util\Test_Collection( $name, $test_cases, __DIR__ );

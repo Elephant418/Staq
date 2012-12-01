@@ -8,12 +8,15 @@ include_once( $staq_path . '/include.php' );
 $path = \Staq\util\string_basename( __DIR__, 4 );
 $app = new \Staq\Application( $path );
 $app->start( );
-new \Stack\Coco;
 
 // TEST COLLECTION
-$case = new \Staq\util\Test_Case( 'With the starter disabled', [
-	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( ) == [ $path, 'Staq/view', 'Staq/ground' ] );
+$case = new \Staq\util\Test_Case( 'Autoload of unexisting class', [
+	'Unexisting' => function( ) {
+		$stack = NULL;
+		try {
+			$stack = new \Stack\Coco;
+		} catch( Exception $e ) { }
+		return ( get_class( $stack ) == 'Stack\\Coco' );
 	}
 ] );
 

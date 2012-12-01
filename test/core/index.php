@@ -4,8 +4,8 @@ $staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 );
 require_once( $staq_path . '/util/tests.php' );
 
 // DEFINITION
-$name  = 'Staq';
-$test_cases = [ 'core' ];
+$name  = 'Core';
+$test_cases = [ 'application', 'autoloader' ];
 
 // COLLECTION
 $collection = new \Staq\util\Test_Collection( $name, $test_cases, __DIR__ );
