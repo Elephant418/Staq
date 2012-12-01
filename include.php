@@ -12,3 +12,4 @@ if ( ! defined( 'STAQ_ROOT_PATH' ) ) {
 
 include_once( __DIR__ . '/util/functions.php' );
 include_once( __DIR__ . '/core/Application.php' );
+include_once( __DIR__ . '/core/Autoloader.php' );

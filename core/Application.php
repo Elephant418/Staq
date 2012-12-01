@@ -51,7 +51,8 @@ class Application {
 	  PUBLIC METHODS             
 	 *************************************************************************/
 	public function start( ) {
-
+		$extensions = self::$extensions;
+		spl_autoload_register( array( '\Staq\Autoloader', 'autoload' ) );
 	}
 
 	public function add_controller( $controller ) {
@@ -74,13 +75,21 @@ class Application {
 	private function find_extensions( ) {
 		$extensions = [ $this->path ];
 		$this->find_extensions_recursive( $this->path, $extensions );
-		var_dump( $extensions );
 		return $extensions;
 	}
 
 	private function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
-		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
+		$added_extensions = $this->find_extensions_parse_settings_file( $extension, $disabled );
+		$old_extensions = $extensions;
+		$extensions = \Staq\util\array_reverse_merge_unique( $extensions, $added_extensions );
+		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
+			$this->find_extensions_recursive( $added_extension, $extensions, $disabled );
+		}
+	}
+
+	private function find_extensions_parse_settings_file( $extension, &$disabled ) {
 		$added_extensions = [ ];
+		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
 		if ( is_file( $setting_file_path ) ) {
 			$settings = parse_ini_file( $setting_file_path, TRUE );
 			if ( isset( $settings[ 'extensions' ] ) ) {
@@ -96,17 +105,7 @@ class Application {
 			// Default value for extension without configuration 
 			$added_extensions = [ 'Staq/ground' ];
 		}
-		$old_extensions = $extensions;
-		$extensions = \Staq\util\array_reverse_merge_unique( $extensions, $added_extensions );
-		/*
-		echo '>>> ' . $extension . HTML_EOL;
-		echo 'old_extensions:   ' . print_r( $old_extensions, true ) . HTML_EOL;
-		echo 'added_extensions: ' . print_r( $added_extensions, true ) . HTML_EOL;
-		echo 'new_extensions:   ' . print_r( array_diff( $added_extensions, $old_extensions ), true ) . HTML_EOL;
-		*/
-		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
-			$this->find_extensions_recursive( $added_extension, $extensions, $disabled );
-		}
+		return $added_extensions;
 	}
 
 }
