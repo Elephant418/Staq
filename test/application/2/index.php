@@ -7,7 +7,6 @@ include_once( $staq_path . '/include.php' );
 // CONTEXT
 $path = \Staq\util\string_basename( __DIR__, 4 );
 $app = new \Staq\Application( $path );
-$app->run( );
 
 // TEST COLLECTION
 $case = new \Staq\util\Test_Case( 'Without configuration', [

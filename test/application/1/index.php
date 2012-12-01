@@ -6,7 +6,6 @@ include_once( $staq_path . '/include.php' );
 
 // CONTEXT
 $app = new \Staq\Application( );
-$app->run( );
 
 // TEST COLLECTION
 $case = new \Staq\util\Test_Case( 'Without custom application', [
