@@ -8,15 +8,19 @@ include_once( $staq_path . '/include.php' );
 $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
 $app = new \Staq\Application( $path );
 $app->start( );
+$stack = NULL;
+try {
+	$stack = new \Stack\Model\Coco;
+} catch( Exception $e ) { }
+print_r( $stack );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Autoload of unexisting class', [
-	'Unexisting' => function( ) {
-		$stack = NULL;
-		try {
-			$stack = new \Stack\Coco\Des\Bois;
-		} catch( Exception $e ) { }
-		return ( get_class( $stack ) == 'Stack\\Coco' );
+$case = new \Staq\Util\Test_Case( 'Autoload of existing class', [
+	'Object' => function( ) {
+		return ( get_class( $stack ) == 'Stack\\Model\\Coco' );
+	},
+	'Attribute' => function( ) {
+		return ( $stack->attribute == 'ok' );
 	}
 ] );
 

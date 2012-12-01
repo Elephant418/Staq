@@ -11,12 +11,19 @@ $app->start( );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Autoload of unexisting class', [
-	'Unexisting' => function( ) {
+	'Single part' => function( ) {
+		$stack = NULL;
+		try {
+			$stack = new \Stack\Coco;
+		} catch( Exception $e ) { }
+		return ( get_class( $stack ) == 'Stack\\Coco' );
+	},
+	'Multiple parts' => function( ) {
 		$stack = NULL;
 		try {
 			$stack = new \Stack\Coco\Des\Bois;
 		} catch( Exception $e ) { }
-		return ( get_class( $stack ) == 'Stack\\Coco' );
+		return ( get_class( $stack ) == 'Stack\\Coco\\Des\\Bois' );
 	}
 ] );
 
