@@ -48,8 +48,7 @@ class Test_Case extends Test {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $name;
-	public $result = FALSE;
+	public $folder = '.';
 	public $tests = [ ];
 
 
@@ -73,10 +72,11 @@ class Test_Case extends Test {
 	/*************************************************************************
 	  OUPUT METHOD
 	 *************************************************************************/
-	public function to_html( ) {
-		$html = parent::to_html( ) . '<ul>';
+	public function to_html( $path = '' ) {
+		$path .= $this->folder . '/';
+		$html = '<a href="' . $path . '">' . parent::to_html( ) . '</a><ul>';
 		foreach ( $this->tests as $test ) {
-			$html .=  '<li>' . $test->to_html( ) . '</li>';
+			$html .=  '<li>' . $test->to_html( $path ) . '</li>';
 		}
 		return $html . '</ul>';
 	}
@@ -87,14 +87,24 @@ class Test_Collection extends Test_Case {
 
 
 	/*************************************************************************
+	 ATTRIBUTES
+	 *************************************************************************/
+	public $tests = [ ];
+
+
+
+	/*************************************************************************
 	  CONSTRUCTOR
 	 *************************************************************************/
-	public function __construct( $name, $test_cases ) {
+	public function __construct( $name, $test_cases, $dir ) {
 		$this->name = $name;
 		foreach ( $test_cases as $test_case ) {
 			ob_start();		
-			$result = ( include( $test_case ) );
+			$result = ( include( $dir . '/' . $test_case . '/index.php' ) );
 			ob_end_clean();
+			if ( is_a( $result, 'Staq\\util\\Test_Case' ) ) {
+				$result->folder = $test_case;
+			}
 			$this->tests[ ] = $result;
 		}
 		$this->compute( );

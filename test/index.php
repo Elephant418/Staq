@@ -8,8 +8,7 @@ $name  = 'Staq';
 $test_cases = [ 'application' ];
 
 // COLLECTION
-$files = array_map( function( $item ) { return __DIR__ . '/' . $item . '/index.php'; }, $test_cases );
-$collection = new \Staq\util\Test_Collection( $name, $files );
+$collection = new \Staq\util\Test_Collection( $name, $test_cases, __DIR__ );
 
 // RESULT
 echo $collection->to_html( );
