@@ -8,7 +8,7 @@ include_once( $staq_path . '/include.php' );
 $app = new \Staq\Application( );
 
 // TEST COLLECTION
-$case = new \Staq\util\Test_Case( 'Without custom application', [
+$case = new \Staq\Util\Test_Case( 'Without custom application', [
 	'Extensions' => function( ) use ( $app ) {
 		return ( $app->get_extensions( ) == [ 'Staq/starter', 'Staq/view', 'Staq/ground' ] );
 	},

@@ -7,14 +7,16 @@ include_once( $staq_path . '/include.php' );
 // CONTEXT
 $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
 $app = new \Staq\Application( $path );
+$app->start( );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Without configuration', [
-	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( ) == [ $path, 'Staq/starter', 'Staq/view', 'Staq/ground' ] );
-	},
-	'Platform'   => function( ) use ( $app ) {
-		return ( $app->get_platform( ) == 'prod' );
+$case = new \Staq\Util\Test_Case( 'Autoload of unexisting class', [
+	'Unexisting' => function( ) {
+		$stack = NULL;
+		try {
+			$stack = new \Stack\Coco\Des\Bois;
+		} catch( Exception $e ) { }
+		return ( get_class( $stack ) == 'Stack\\Coco' );
 	}
 ] );
 

@@ -3,7 +3,7 @@
 /* Todo MIT license
  */
 
-namespace Staq\util;
+namespace Staq\Util;
 require_once( __DIR__ . '/functions.php' );
 
 class Test {
@@ -59,7 +59,7 @@ class Test_Case extends Test {
 	public function __construct( $name, $tests ) {
 		$this->name = $name;
 		foreach ( $tests as $name => $test ) {
-			$this->tests[ ] = new \Staq\util\Test( $name, $test );
+			$this->tests[ ] = new \Staq\Util\Test( $name, $test );
 		}
 		$this->compute( );
 	}
@@ -102,7 +102,7 @@ class Test_Collection extends Test_Case {
 			ob_start();		
 			$result = ( include( $dir . '/' . $test_case . '/index.php' ) );
 			ob_end_clean();
-			if ( is_a( $result, 'Staq\\util\\Test_Case' ) ) {
+			if ( is_a( $result, 'Staq\\Util\\Test_Case' ) ) {
 				$result->folder = $test_case;
 			}
 			$this->tests[ ] = $result;

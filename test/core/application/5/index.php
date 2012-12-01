@@ -5,11 +5,11 @@ require_once( $staq_path . '/util/tests.php' );
 include_once( $staq_path . '/include.php' );
 
 // CONTEXT
-$path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) );
+$path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
 $app = new \Staq\Application( $path );
 
 // TEST COLLECTION
-$case = new \Staq\util\Test_Case( 'With the starter disabled', [
+$case = new \Staq\Util\Test_Case( 'With the starter disabled', [
 	'Extensions' => function( ) use ( $app, $path ) {
 		return ( $app->get_extensions( ) == [ $path, 'Staq/view', 'Staq/ground' ] );
 	}

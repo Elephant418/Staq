@@ -3,7 +3,7 @@
 /* Todo MIT license
  */
 
-namespace Staq\util;
+namespace Staq\Util;
 
 
 /*************************************************************************
