@@ -5,7 +5,7 @@ require_once( $staq_path . '/util/tests.php' );
 
 // DEFINITION
 $name  = 'Autoloader';
-$test_cases = [ 'undefined' ];
+$test_cases = [ 'unexisting', 'existing' ];
 
 // COLLECTION
 $collection = new \Staq\Util\Test_Collection( $name, $test_cases, __DIR__ );

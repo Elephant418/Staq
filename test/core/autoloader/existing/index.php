@@ -9,18 +9,22 @@ $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
 $app = new \Staq\Application( $path );
 $app->start( );
 $stack = NULL;
+$stack2 = NULL;
 try {
 	$stack = new \Stack\Model\Coco;
+	$stack2 = new \Stack\Model\Coco\Des\Bois;
 } catch( Exception $e ) { }
-print_r( $stack );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Autoload of existing class', [
-	'Object' => function( ) {
+	'Object' => function( ) use ( $stack ) {
 		return ( get_class( $stack ) == 'Stack\\Model\\Coco' );
 	},
-	'Attribute' => function( ) {
+	'Attribute' => function( ) use ( $stack ) {
 		return ( $stack->attribute == 'ok' );
+	},
+	'Complex' => function( ) use ( $stack2 ) {
+		return ( is_a( $stack2, 'Staq\Test\Core\Autoloader\Existing\Model\Coco' ) );
 	}
 ] );
 

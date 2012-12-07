@@ -19,7 +19,7 @@ abstract class Autoloader {
 					if ( is_file( $absolute_path ) ) {
 						include_once( $absolute_path );
 						$namespace = self::string_path_to_namespace( $extension . '/' . $relative_path );
-						self::create_class( $class, $namespace );
+						self::create_class( $original_class, $namespace );
 						return TRUE;
 					}
 				}
@@ -46,7 +46,7 @@ abstract class Autoloader {
 			$code .= 'extends ' . $base_class . ' ';
 		}
 		$code .= '{ }' . PHP_EOL;
-		echo $code . HTML_EOL;
+		// echo $code . HTML_EOL;
 		eval( $code );
 	}
 
