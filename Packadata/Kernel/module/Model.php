@@ -41,10 +41,15 @@ abstract class Model extends \__Auto\Module\__Base {
 
 	protected function get_route( $page ) {
 		$route = parent::get_route( $page );
-		if ( $route ) {
-			$route->add_prefix( \Supersoniq\format_to_path( strtolower( $this->get_model_name( ) ) ) );
+		$prefix = $this->get_route_prefix( $page );
+		if ( $route && $prefix ) {
+			$route->add_prefix( $prefix );
 		}
 		return $route;
+	}
+
+	protected function get_route_prefix( $page ) {
+		return \Supersoniq\format_to_path( strtolower( $this->get_model_name( ) ) );
 	}
 
 }
