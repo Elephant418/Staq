@@ -98,15 +98,19 @@ abstract class __Base {
 	}
 
 	public function get_page_route( $page, $parameters = [ ] ) {
-		if ( isset( $this->routes[ $page ] ) ) {
+		if ( $this->is_route_page( $page ) ) {
 			return $this->routes[ $page ]->to_string( $parameters );
 		}
 	}
 
 	public function get_page_url( $page, $parameters = [ ] ) {
-		if ( isset( $this->routes[ $page ] ) ) {
+		if ( $this->is_route_page( $page ) ) {
 			return \Supersoniq::$BASE_URL . $this->routes[ $page ]->to_string( $parameters );
 		}
+	}
+
+	protected function is_route_page( $page ) {
+		return ( isset( $this->routes[ $page ] ) && $this->routes[ $page ]->is_up( ) );
 	}
 }
 

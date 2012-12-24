@@ -15,8 +15,8 @@ class Route extends Route\__Parent {
 	 *************************************************************************/
 	protected function restriction_user_right( $right ) {
 		$user = ( new \Controller )->by_type( 'Model\User' )->current_user( );
-		if ( $user ) {
-			return ( $user->right == $right );
+		if ( ! $user || ! $user->right == $right ) {
+			return 'Resource_Forbidden';
 		}
 	}
 }

@@ -14,6 +14,7 @@ class Route {
 	 ATTRIBUTES
 	 *************************************************************************/
 	private $main_route;
+	private $error = FALSE;
 
 
 
@@ -29,8 +30,8 @@ class Route {
 			$arguments = explode( ':', $route[ 'restriction' ] );
 			$method = 'restriction_' . array_shift( $arguments );
 			if ( is_callable( [ $this, $method ] ) ) {
-				if ( ! call_user_func_array( [ $this, $method ], $arguments ) ) {
-					return FALSE;
+				if ( $error = call_user_func_array( [ $this, $method ], $arguments ) ) {
+					$this->error = $error;
 				}
 			}
 		}
@@ -49,10 +50,17 @@ class Route {
 	/*************************************************************************
 	  GETTER METHODS                   
 	 *************************************************************************/
+	public function is_up( ) {
+		return ( ! $this->error );
+	}
 	public function handle( $route ) {
 		$parameters = [ ];
 		if ( $this->match( $this->main_route, $route, $parameters ) ) {
-			return $parameters;
+			if ( $this->is_up( ) ) {
+				return $parameters;
+			}
+			$exception = '\\Exception\\' . $this->error;
+			throw new $exception( );
 		}
 		return FALSE;
 	}

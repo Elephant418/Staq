@@ -42,7 +42,7 @@ abstract class __Base extends __Base\__Parent {
 			} else {
 				$page = $key;
 			}
-			if ( isset( $this->routes[ $page ] ) && ! empty( $infos ) ) {
+			if ( $this->is_route_page( $page ) && ! empty( $infos ) ) {
 				$menu[ $key ] = [ ]; 
 				if ( ! is_array( $infos ) ) {
 					$menu[ $key ][ 'label' ] = $infos;
