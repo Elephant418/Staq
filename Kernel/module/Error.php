@@ -39,7 +39,7 @@ class Error extends \Module\__Base {
 	/*************************************************************************
 	  SIDE METHODS                   
 	 *************************************************************************/
-        public function view( $code = '500', $exception = NULL ) {
+    public function view( $code = '500', $exception = NULL ) {
 		if ( $code == '403' ) {
 			header( 'HTTP/1.1 403 Forbidden' );
 		} else if ( $code == '404' ) {
