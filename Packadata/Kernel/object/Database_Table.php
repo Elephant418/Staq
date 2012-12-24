@@ -162,18 +162,23 @@ abstract class Database_Table {
 	 *************************************************************************/
 	protected function datas_by_fields( $fields ) {
 		$parameters = [ ];
-		$sql = 'SELECT * FROM ' . $this->_database->table_name . $this->where_clause_by_fields( $fields, $parameters );
+		$sql = 'SELECT * FROM ' . $this->_database->table_name . $this->clause_by_fields( $fields, $parameters );
 		$request = new Database_Request( $sql );
 		return $request->execute( $parameters );
 	}
 
-	protected function where_clause_by_fields( $fields, &$parameters ) {
+	protected function clause_by_fields( $fields, &$parameters ) {
 		$where = [ ];
+		$limit = NULL;
 		foreach ( $fields as $fields_name => $field_value ) {
 			if ( is_array( $field_value ) ) {
-				if ( isset( $field_value[ 'where' ] ) && isset( $field_value[ 'parameters' ] ) ) {
-					$where[ ] = '( ' . $field_value[ 'where' ] . ' )';
+				if ( isset( $field_value[ 'parameters' ] ) ) {
 					$parameters = array_merge( $parameters, $field_value[ 'parameters' ] );
+				}
+				if ( isset( $field_value[ 'limit' ] ) ) {
+					$limit = $field_value[ 'limit' ];
+				} else if ( isset( $field_value[ 'where' ] ) ) {
+					$where[ ] = '( ' . $field_value[ 'where' ] . ' )';
 				} else if ( isset( $field_value[ 0 ] ) && isset( $field_value[ 1 ] ) ) {
 					$where[ ] = $fields_name . $field_value[ 0 ] . ':' . $fields_name;
 					$parameters[ ':' . $fields_name ] = $field_value[ 1 ];
@@ -185,9 +190,12 @@ abstract class Database_Table {
 		}
 		$sql = '';
 		if ( ! empty( $where ) ) {
-			$sql .= ' WHERE ' . implode ( ' AND ', $where ) . ';';
+			$sql .= ' WHERE ' . implode ( ' AND ', $where );
 		}
-		return $sql;
+		if ( ! is_null( $limit ) ) {
+			$sql .= ' LIMIT ' . $limit;
+		}
+		return $sql . ';';
 	}
 
 	protected function get_list_by_data( $datas ) {
