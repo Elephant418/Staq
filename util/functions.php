@@ -68,9 +68,7 @@ function string_must_not_ends_with( &$hay, $needle ) {
 
 // CONTAINS FUNCTIONS
 function string_contains( $hay, $needle ) {
-	// if ( ! empty( $needle ) ) {
-		return ( strpos( $hay, $needle ) !== false );
-	// }
+	return ( strpos( $hay, $needle ) !== false );
 }
 
 function string_i_contains( $hay, $needle ) {
@@ -217,17 +215,54 @@ function array_reverse_merge_unique( $array1, $array2 ) {
 /*************************************************************************
   STAQ METHODS                   
  *************************************************************************/
+
+// STACK CLASS
 function is_stack_class( $class ) {
 	return ( \Staq\Util\string_starts_with( $class, 'Stack\\' ) );
 }
 function is_parent_stack_class( $class ) {
-	return ( stack_pop( $class ) == '__Parent' );
+	return ( \Staq\Util\string_ends_with( $class, '\\__Parent' ) );
 }
-function stack_pop( &$stack ) {
-	$pop = \Staq\Util\string_substr_after_last( $stack, '\\' );
-	$stack = substr( $stack, 0, -strlen( $pop ) - 1 );
-	return $pop;
+
+// STACK NAME
+function stack_name_pop( $string ) {
+	if ( \Staq\Util\stack_name_popable( $string ) ) {
+		$string = \Staq\Util\string_substr_before_last( $string, '\\' );
+		if ( ! \Staq\Util\string_contains( $string, '\\' ) ) {
+			$string = $string . '\\' . \Staq\Autoloader::DEFAULT_CLASS;
+		}
+	} else {
+		$string = NULL;
+	}
+	return $string;
 }
-function stack_popable( $stack ) {
-	return ( \Staq\Util\string_contains( $stack, '\\' ) );
+function stack_name_popable( $string ) {
+	return ( \Staq\Util\string_contains( $string, '\\' ) && ! \Staq\Util\is_default_stack_name( $string ) );
+}
+function is_default_stack_name( $string ) {
+	return \Staq\Util\string_ends_with( $string, '\\' . \Staq\Autoloader::DEFAULT_CLASS );
+}
+
+// OBJECT
+function is_stack( $stack ) {
+	if ( is_object( $stack ) ) {
+		$stack = get_class( $stack );
+	}
+	return \Staq\Util\string_starts_with( $stack, 'Stack\\');
+}
+function get_stack_name( $stack ) {
+	if ( \Staq\Util\is_stack( $stack ) ) {
+		return substr( get_class( $stack ), strlen( 'Stack\\' ) );
+	}
+}
+function get_stack_definition_classes( $stack ) {
+	if ( \Staq\Util\is_stack( $stack ) ) {
+		$parents = [ ];
+		while ( $stack = get_parent_class( $stack ) ) {
+			if ( ! \Staq\Util\is_parent_stack_class( $stack ) ) {
+				$parents[ ] = $stack;
+			}
+		}
+	}
+	return $parents;
 }

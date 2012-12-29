@@ -7,6 +7,8 @@ namespace Staq;
 
 class Autoloader {
 
+	const DEFAULT_CLASS = '__Default';
+
 
 
 	/*************************************************************************
@@ -25,15 +27,15 @@ class Autoloader {
 	  FILE CLASS MANAGEMENT             
 	 *************************************************************************/
 	protected function load_stack_class( $class ) {
-		$stack = \Staq\Util\string_substr_after( $class, 'Stack\\' );
-		while( \Staq\Util\stack_popable( $stack ) ) {
+		$stack_class = \Staq\Util\string_substr_after( $class, 'Stack\\' );
+		while( $stack_class ) {
 			foreach( Application::$extensions as $extension ) {
-				if ( $real_class = $this->load_stack_extension_file( $stack, $extension ) ) {
+				if ( $real_class = $this->load_stack_extension_file( $stack_class, $extension ) ) {
 					$this->create_alias_class( $class, $real_class );
 					return TRUE;
 				}
 			}
-			\Staq\Util\stack_pop( $stack );
+			$stack_class = \Staq\Util\stack_name_pop( $stack_class );
 		}
 
 		// Empty class
