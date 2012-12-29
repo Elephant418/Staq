@@ -51,8 +51,8 @@ class Application {
 	  PUBLIC METHODS             
 	 *************************************************************************/
 	public function start( ) {
-		$extensions = self::$extensions;
-		spl_autoload_register( array( '\Staq\Autoloader', 'autoload' ) );
+		$autoloader = new \Staq\Autoloader;
+		spl_autoload_register( array( $autoloader, 'autoload' ) );
 	}
 
 	public function add_controller( $controller ) {

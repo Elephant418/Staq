@@ -5,36 +5,64 @@
 
 namespace Staq;
 
-abstract class Autoloader {
+class Autoloader {
 
-	public static function autoload( $original_class ) {
-		// Stack
-		if ( \Staq\Util\string_starts_with( $original_class, 'Stack\\' ) ) {
-			$stack = \Staq\Util\string_substr_after( $original_class, 'Stack\\' );
-			// Defined class
-			while( \Staq\Util\string_contains( $stack, '\\' ) ) {
-				foreach( Application::$extensions as $extension ) {
-					$relative_path = self::string_namespace_to_path( $stack );
-					$absolute_path = STAQ_ROOT_PATH . $extension . '/' . $relative_path . '.php';
-					if ( is_file( $absolute_path ) ) {
-						include_once( $absolute_path );
-						$namespace = self::string_path_to_namespace( $extension . '/' . $relative_path );
-						self::create_class( $original_class, $namespace );
-						return TRUE;
-					}
-				}
-				$stack = \Staq\Util\string_substr_before_last( $stack, '\\' );
-			}
-			// Anonymous class
 
-			// Empty class
-			self::create_class( $original_class );
+
+	/*************************************************************************
+	  TOP-LEVEL AUTOLOAD
+	 *************************************************************************/
+	public function autoload( $class ) {
+		if ( \Staq\Util\is_stack_class( $class ) ) {
+			$this->load_stack_class( $class );
+		} else if ( \Staq\Util\is_parent_stack_class( $class ) ) {
+			$this->load_stack_parent_class( $class );
 		}
-		// __Parent
+	}
+
+
+	/*************************************************************************
+	  FILE CLASS MANAGEMENT             
+	 *************************************************************************/
+	protected function load_stack_class( $class ) {
+		$stack = \Staq\Util\string_substr_after( $class, 'Stack\\' );
+		while( \Staq\Util\stack_popable( $stack ) ) {
+			foreach( Application::$extensions as $extension ) {
+				if ( $real_class = $this->load_stack_extension_file( $stack, $extension ) ) {
+					$this->create_alias_class( $class, $real_class );
+					return TRUE;
+				}
+			}
+			\Staq\Util\stack_pop( $stack );
+		}
+
+		// Empty class
+		$this->create_class( $class );
+	}
+	protected function load_stack_extension_file( $stack, $extension ) {
+		$relative_path = $this->string_namespace_to_path( $stack );
+		$absolute_path = STAQ_ROOT_PATH . $extension . '/' . $relative_path . '.php';
+		if ( is_file( $absolute_path ) ) {
+			include_once( $absolute_path );
+			$real_class = $this->string_path_to_namespace( $extension . '/' . $relative_path );
+			return $real_class;
+		}
 	}
 	
 
-	public static function create_class( $class, $base_class = NULL ) {
+	protected function load_stack_parent_class( $class ) {
+		// TODO
+	}
+
+
+
+	/*************************************************************************
+	  CLASS DECLARATION             
+	 *************************************************************************/
+	protected function create_alias_class( $alias, $class ) {
+		return $this->create_class( $alias, $class );
+	}
+	protected function create_class( $class, $base_class = NULL ) {
 		$namespace = \Staq\Util\string_substr_before_last( $class, '\\' );
 		$name = \Staq\Util\string_substr_after_last( $class, '\\' );
 		$code = '';
@@ -50,15 +78,19 @@ abstract class Autoloader {
 		eval( $code );
 	}
 
-	public static function string_path_to_namespace( $path, $absolute = TRUE ) {
+
+
+	/*************************************************************************
+	  NAMESPACE FORMAT             
+	 *************************************************************************/
+	protected function string_path_to_namespace( $path, $absolute = TRUE ) {
 		$namespace = implode( '\\', array_map( function( $a ) {
 			return ucfirst( $a );
 		}, explode( '/', $path ) ) );
 		if ( $absolute ) $namespace = '\\' . $namespace;
 		return $namespace;
 	}
-
-	public static function string_namespace_to_path( $namespace, $file = TRUE ) {
+	protected static function string_namespace_to_path( $namespace, $file = TRUE ) {
 		if ( $file ) {
 			$parts = explode( '\\', $namespace );
 			$class = array_pop( $parts );

@@ -212,3 +212,22 @@ function array_merge_unique( $array1, $array2 ) {
 function array_reverse_merge_unique( $array1, $array2 ) {
 	return array_reverse( array_values( array_unique( array_reverse( array_merge( $array1, $array2 ) ) ) ) );
 }
+
+
+/*************************************************************************
+  STAQ METHODS                   
+ *************************************************************************/
+function is_stack_class( $class ) {
+	return ( \Staq\Util\string_starts_with( $class, 'Stack\\' ) );
+}
+function is_parent_stack_class( $class ) {
+	return ( stack_pop( $class ) == '__Parent' );
+}
+function stack_pop( &$stack ) {
+	$pop = \Staq\Util\string_substr_after_last( $stack, '\\' );
+	$stack = substr( $stack, 0, -strlen( $pop ) - 1 );
+	return $pop;
+}
+function stack_popable( $stack ) {
+	return ( \Staq\Util\string_contains( $stack, '\\' ) );
+}
