@@ -263,6 +263,6 @@ function get_stack_definition_classes( $stack ) {
 				$parents[ ] = $stack;
 			}
 		}
+		return $parents;
 	}
-	return $parents;
 }
