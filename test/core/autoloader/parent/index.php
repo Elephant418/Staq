@@ -12,17 +12,11 @@ $app->start( );
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Autoload of unexisting class', [
 	'No parent' => function( ) {
-		$stack = NULL;
-		try {
-			$stack = new \Stack\Machin\Coco;
-		} catch( Exception $e ) { }
+		$stack = new \Stack\Machin\Coco;
 		return ( \Staq\Util\get_stack_definition_classes( $stack ) == [ ] );
 	},
 	'With parent' => function( ) {
-		$stack = NULL;
-		try {
-			$stack = new \Stack\Controller\Coco;
-		} catch( Exception $e ) { }
+		$stack = new \Stack\Controller\Coco;
 		return ( \Staq\Util\get_stack_definition_classes( $stack ) == [ 'Staq\Ground\Controller\__Default' ] );
 	}
 ] );
