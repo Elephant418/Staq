@@ -11,6 +11,7 @@ $app = new \Staq\Application( $path );
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'With the starter disabled', [
 	'Extensions' => function( ) use ( $app, $path ) {
+		var_dump( $app->get_extensions( ) );
 		return ( $app->get_extensions( ) == [ $path, 'Staq/view', 'Staq/ground' ] );
 	}
 ] );
