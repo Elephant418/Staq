@@ -26,7 +26,7 @@ class Test {
 		$this->name = $name;
 		try {
 			$this->result = ( $test( ) == TRUE );
-		} catch ( Exception $e ) {
+		} catch ( \Exception $e ) {
 			$this->exception = $e;
 		}
 	}
@@ -37,7 +37,16 @@ class Test {
 	  OUPUT METHOD
 	 *************************************************************************/
 	public function to_html( ) {
-		return $this->name .': ' . ( $this->result ? 'OK' : 'ERROR' );
+		$str = $this->name .': ';
+		if ( $this->result ) {
+			$str .= 'OK';
+		} else {
+			$str .= 'ERROR';
+			if ( is_object( $this->exception ) ) {
+				$str .= ' (' . $this->exception->get_message( ) . ')';
+			}
+		}
+		return $str;
 	}
 }
 
