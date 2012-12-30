@@ -1,7 +1,7 @@
-<?php 
+<?php
 
-/* Todo MIT license
- */
+/* This file is part of the Staq project, which is under MIT license */
+
 
 if ( ! defined( 'HTML_EOL' ) ) {
 	define( 'HTML_EOL', '<br>' . PHP_EOL );

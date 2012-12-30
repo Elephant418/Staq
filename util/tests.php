@@ -1,7 +1,7 @@
 <?php
 
-/* Todo MIT license
- */
+/* This file is part of the Staq project, which is under MIT license */
+
 
 namespace Staq\Util;
 require_once( __DIR__ . '/functions.php' );
