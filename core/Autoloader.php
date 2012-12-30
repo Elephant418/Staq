@@ -45,8 +45,9 @@ class Autoloader {
 		$relative_path = $this->string_namespace_to_path( $stack );
 		$absolute_path = STAQ_ROOT_PATH . $extension . '/' . $relative_path . '.php';
 		if ( is_file( $absolute_path ) ) {
-			include_once( $absolute_path );
+			require_once( $absolute_path );
 			$real_class = $this->string_path_to_namespace( $extension . '/' . $relative_path );
+			$this->check_class_loaded( $real_class );
 			return $real_class;
 		}
 	}
@@ -78,6 +79,13 @@ class Autoloader {
 		$code .= '{ }' . PHP_EOL;
 		// echo $code . HTML_EOL;
 		eval( $code );
+	}
+	protected function check_class_loaded( $class ) {
+		if ( ! class_exists( $class ) ) {
+			$classes = get_declared_classes( );
+			$loaded_class = end( $classes );
+			throw new \Stack\Exception\Wrong_Class_Definition( 'Wrong class definition: "' . $loaded_class . '" definition, but "' . $class . '" expected.' ); 
+		}
 	}
 
 
