@@ -24,7 +24,7 @@ $case = new \Staq\Util\Test_Case( 'Autoload of existing class', [
 		return ( $stack->attribute == 'ok' );
 	},
 	'Complex' => function( ) use ( $stack2 ) {
-		return ( is_a( $stack2, 'Staq\Test\Core\Autoloader\Existing\Model\Coco' ) );
+		return ( is_a( $stack2, 'Staq\Test\Core\Autoloader\Existing\Stack\Model\Coco' ) );
 	}
 ] );
 

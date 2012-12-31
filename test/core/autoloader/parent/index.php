@@ -10,14 +10,14 @@ $app = new \Staq\Application( $path );
 $app->start( );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Autoload of unexisting class', [
-	'No parent' => function( ) {
+$case = new \Staq\Util\Test_Case( 'Stack queries', [
+	'An unknown stack query give an empty stack' => function( ) {
 		$stack = new \Stack\Machin\Coco;
 		return ( \Staq\Util\get_stack_definition_classes( $stack ) == [ ] );
 	},
-	'With parent' => function( ) {
+	'An unknown controller stack query give a stack with the default controller' => function( ) {
 		$stack = new \Stack\Controller\Coco;
-		return ( \Staq\Util\get_stack_definition_classes( $stack ) == [ 'Staq\Ground\Controller\__Default' ] );
+		return ( \Staq\Util\get_stack_definition_classes( $stack ) == [ 'Staq\Ground\Stack\Controller\__Default' ] );
 	}
 ] );
 

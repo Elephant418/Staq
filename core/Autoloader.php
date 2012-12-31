@@ -42,11 +42,11 @@ class Autoloader {
 		$this->create_class( $class );
 	}
 	protected function load_stack_extension_file( $stack, $extension ) {
-		$relative_path = $this->string_namespace_to_path( $stack );
-		$absolute_path = STAQ_ROOT_PATH . $extension . '/' . $relative_path . '.php';
+		$relative_path = $extension . '/stack/' . $this->string_namespace_to_path( $stack );
+		$absolute_path = STAQ_ROOT_PATH . $relative_path . '.php';
 		if ( is_file( $absolute_path ) ) {
 			require_once( $absolute_path );
-			$real_class = $this->string_path_to_namespace( $extension . '/' . $relative_path );
+			$real_class = $this->string_path_to_namespace( $relative_path );
 			$this->check_class_loaded( $real_class );
 			return $real_class;
 		}
