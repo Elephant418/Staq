@@ -41,6 +41,11 @@ class Autoloader {
 		// Empty class
 		$this->create_class( $class );
 	}
+	/* "stack" is part a the namespace to : 
+	 *   1. Separate stackable class files with others
+	 *   2. Separate the extension namespace with the query namespace
+	 *   3. There is no more burgers at my bakery 
+	 */
 	protected function load_stack_extension_file( $stack, $extension ) {
 		$relative_path = $extension . '/stack/' . $this->string_namespace_to_path( $stack );
 		$absolute_path = STAQ_ROOT_PATH . $relative_path . '.php';
