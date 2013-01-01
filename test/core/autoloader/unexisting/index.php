@@ -10,20 +10,14 @@ $app = new \Staq\Application( $path );
 $app->start( );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Autoload of unexisting class', [
-	'Single part' => function( ) {
-		$stack = NULL;
-		try {
-			$stack = new \Stack\Coco;
-		} catch( Exception $e ) { }
-		return ( get_class( $stack ) == 'Stack\\Coco' );
+$case = new \Staq\Util\Test_Case( 'Stack autoloading without existing class', [
+	'You can instanciate an empty simple stack' => function( ) {
+		$stack = new \Stack\Coco;
+		return ( get_class( $stack ) == 'Stack\\Coco' && \Staq\Util\stack_height( $stack ) == 0 );
 	},
-	'Multiple parts' => function( ) {
-		$stack = NULL;
-		try {
-			$stack = new \Stack\Coco\Des\Bois;
-		} catch( Exception $e ) { }
-		return ( get_class( $stack ) == 'Stack\\Coco\\Des\\Bois' );
+	'You can instanciate an empty complex stack' => function( ) {
+		$stack = new \Stack\Coco\Des\Bois;
+		return ( get_class( $stack ) == 'Stack\\Coco\\Des\\Bois' && \Staq\Util\stack_height( $stack ) == 0 );
 	}
 ] );
 

@@ -35,7 +35,7 @@ class Autoloader {
 					return TRUE;
 				}
 			}
-			$stack_class = \Staq\Util\stack_name_pop( $stack_class );
+			$stack_class = \Staq\Util\stack_query_pop( $stack_class );
 		}
 
 		// Empty class

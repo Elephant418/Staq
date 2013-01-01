@@ -225,8 +225,8 @@ function is_parent_stack_class( $class ) {
 }
 
 // STACK NAME
-function stack_name_pop( $string ) {
-	if ( \Staq\Util\stack_name_popable( $string ) ) {
+function stack_query_pop( $string ) {
+	if ( \Staq\Util\is_stack_query_popable( $string ) ) {
 		$string = \Staq\Util\string_substr_before_last( $string, '\\' );
 		if ( ! \Staq\Util\string_contains( $string, '\\' ) ) {
 			$string = $string . '\\' . \Staq\Autoloader::DEFAULT_CLASS;
@@ -236,10 +236,10 @@ function stack_name_pop( $string ) {
 	}
 	return $string;
 }
-function stack_name_popable( $string ) {
-	return ( \Staq\Util\string_contains( $string, '\\' ) && ! \Staq\Util\is_default_stack_name( $string ) );
+function is_stack_query_popable( $string ) {
+	return ( \Staq\Util\string_contains( $string, '\\' ) && ! \Staq\Util\is_default_stack_query( $string ) );
 }
-function is_default_stack_name( $string ) {
+function is_default_stack_query( $string ) {
 	return \Staq\Util\string_ends_with( $string, '\\' . \Staq\Autoloader::DEFAULT_CLASS );
 }
 
@@ -250,12 +250,12 @@ function is_stack( $stack ) {
 	}
 	return \Staq\Util\string_starts_with( $stack, 'Stack\\');
 }
-function get_stack_name( $stack ) {
+function stack_query( $stack ) {
 	if ( \Staq\Util\is_stack( $stack ) ) {
 		return substr( get_class( $stack ), strlen( 'Stack\\' ) );
 	}
 }
-function get_stack_definition_classes( $stack ) {
+function stack_definition( $stack ) {
 	if ( \Staq\Util\is_stack( $stack ) ) {
 		$parents = [ ];
 		while ( $stack = get_parent_class( $stack ) ) {
@@ -265,4 +265,10 @@ function get_stack_definition_classes( $stack ) {
 		}
 		return $parents;
 	}
+}
+function stack_height( $stack ) {
+	return count( stack_definition( $stack ) ); 
+}
+function stack_definition_contains( $stack, $class ) {
+	return is_a( $stack, $class ); 
 }

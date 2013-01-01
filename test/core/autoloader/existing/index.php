@@ -8,23 +8,20 @@ include_once( $staq_path . '/include.php' );
 $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
 $app = new \Staq\Application( $path );
 $app->start( );
-$stack = NULL;
-$stack2 = NULL;
-try {
-	$stack = new \Stack\Model\Coco;
-	$stack2 = new \Stack\Model\Coco\Des\Bois;
-} catch( Exception $e ) { }
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Autoload of existing class', [
-	'Object' => function( ) use ( $stack ) {
-		return ( get_class( $stack ) == 'Stack\\Model\\Coco' );
+$case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing class', [
+	'A defined stackable class is stacked when we have a perfect matching query' => function( ) {
+		$stack = new \Stack\Model\Coco;
+		return ( \Staq\Util\stack_definition_contains( $stack, 'Staq\Test\Core\Autoloader\Existing\Stack\Model\Coco' ) );
 	},
-	'Attribute' => function( ) use ( $stack ) {
+	'A defined stackable class is stacked when we have a more specific query' => function( ) {
+		$stack = new \Stack\Model\Coco\Des\Bois;
+		return ( \Staq\Util\stack_definition_contains( $stack, 'Staq\Test\Core\Autoloader\Existing\Stack\Model\Coco' ) );
+	},
+	'You can access to an attribute of a stacked class' => function( ) {
+		$stack = new \Stack\Model\Coco;
 		return ( $stack->attribute == 'ok' );
-	},
-	'Complex' => function( ) use ( $stack2 ) {
-		return ( is_a( $stack2, 'Staq\Test\Core\Autoloader\Existing\Stack\Model\Coco' ) );
 	}
 ] );
 
