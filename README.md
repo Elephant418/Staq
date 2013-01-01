@@ -1,13 +1,9 @@
 Staq
 ======
-Staq is a mini PHP framework for maintainable website.
-
-
-Overview
---------
+Staq is a mini PHP framework for maintainable website.<br>
 Staq means "Stack query", it allow you to instanciate a stack of class.
 
-Instead of directly instantiate: <code>new \Model\User</code> or <code>new \My_Software\Model\User</code>)<br>
+Instead of directly instantiate: <code>new \Model\User</code> or <code>new \My_Software\Model\User</code>,<br>
 You can instantiate a stack: <code>new \Stack\Model\User</code>.
 
 It's great because :
