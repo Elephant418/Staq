@@ -212,19 +212,23 @@ function array_reverse_merge_unique( $array1, $array2 ) {
 }
 
 
+
+/*************************************************************************
+  OBJECT METHODS                   
+ *************************************************************************/
+function must_be_class( &$object ) {
+	if ( is_object( $object ) ) {
+		$object = get_class( $object );
+	}
+}
+
+
+
 /*************************************************************************
   STAQ METHODS                   
  *************************************************************************/
 
-// STACK CLASS
-function is_stack_class( $class ) {
-	return ( \Staq\Util\string_starts_with( $class, 'Stack\\' ) );
-}
-function is_parent_stack_class( $class ) {
-	return ( \Staq\Util\string_ends_with( $class, '\\__Parent' ) );
-}
-
-// STACK NAME
+// STACK QUERY
 function stack_query_pop( $string ) {
 	if ( \Staq\Util\is_stack_query_popable( $string ) ) {
 		$string = \Staq\Util\string_substr_before_last( $string, '\\' );
@@ -243,23 +247,25 @@ function is_default_stack_query( $string ) {
 	return \Staq\Util\string_ends_with( $string, '\\' . \Staq\Autoloader::DEFAULT_CLASS );
 }
 
-// OBJECT
+// STACK OBJECT
 function is_stack( $stack ) {
-	if ( is_object( $stack ) ) {
-		$stack = get_class( $stack );
-	}
+	\Staq\Util\must_be_class( $stack );
 	return \Staq\Util\string_starts_with( $stack, 'Stack\\');
 }
 function stack_query( $stack ) {
+	\Staq\Util\must_be_class( $stack );
 	if ( \Staq\Util\is_stack( $stack ) ) {
-		return substr( get_class( $stack ), strlen( 'Stack\\' ) );
+		return substr( $stack, strlen( 'Stack\\' ) );
 	}
 }
 function stack_definition( $stack ) {
 	if ( \Staq\Util\is_stack( $stack ) ) {
 		$parents = [ ];
 		while ( $stack = get_parent_class( $stack ) ) {
-			if ( ! \Staq\Util\is_parent_stack_class( $stack ) ) {
+			if ( 
+				\Staq\Util\is_stackable_class( $stack ) && 
+				! \Staq\Util\is_parent_stack( $stack )
+			) {
 				$parents[ ] = $stack;
 			}
 		}
@@ -271,4 +277,35 @@ function stack_height( $stack ) {
 }
 function stack_definition_contains( $stack, $class ) {
 	return is_a( $stack, $class ); 
+}
+function stack_debug( $stack ) {
+	$str = 'Debug of ' . get_class( $stack ) . '<ol>';
+	foreach ( \Staq\Util\stack_definition( $stack ) as $key => $stackable ) {
+		$str .= '<li>' . stackable_query( $stackable ) . ' from extension ' . stackable_extension( $stackable ) . '</li>';
+	}
+	$str .= '</ol>';
+	echo $str;
+}
+
+// STACKABLE CLASS
+function is_stackable_class( $stackable ) {
+	\Staq\Util\must_be_class( $stackable );
+	return ( \Staq\Util\string_contains( $stackable, '\\Stack\\' ) );
+}
+function stackable_extension( $stackable ) {
+	\Staq\Util\must_be_class( $stackable );
+	return ( \Staq\Util\string_substr_before( $stackable, '\\Stack\\' ) );
+}
+function stackable_query( $stackable ) {
+	\Staq\Util\must_be_class( $stackable );
+	return ( \Staq\Util\string_substr_after( $stackable, '\\Stack\\' ) );
+}
+function is_parent_stack( $stackable ) {
+	\Staq\Util\must_be_class( $stackable );
+	return ( \Staq\Util\string_ends_with( $stackable, '\\__Parent' ) );
+}
+function parent_stack_query( $stackable ) {
+	\Staq\Util\must_be_class( $stackable );
+	$query = \Staq\Util\stackable_query( $stackable );
+	return ( \Staq\Util\string_substr_before( $query, '\\__Parent' ) );
 }
