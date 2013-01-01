@@ -41,7 +41,7 @@ class Autoloader {
 		// Empty class
 		$this->create_class( $class );
 	}
-	/* "stack" is part a the namespace to : 
+	/* "stack" is now a part of the namespace to : 
 	 *   1. Separate stackable class files with others
 	 *   2. Separate the extension namespace with the query namespace
 	 *   3. There is no more burgers at my bakery 
