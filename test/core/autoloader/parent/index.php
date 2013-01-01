@@ -11,13 +11,28 @@ $app->start( );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing parent', [
-	'An unknown stack query give an empty stack' => function( ) {
+	'Query an unknown stack give an empty stack' => function( ) {
 		$stack = new \Stack\Machin\Coco;
 		return ( \Staq\Util\stack_height( $stack ) == 0 );
 	},
-	'An unknown controller stack query give a stack with the default controller' => function( ) {
+	'Query an unknown controller stack give a stack with the default controller' => function( ) {
 		$stack = new \Stack\Controller\Coco;
 		return ( \Staq\Util\stack_definition_contains( $stack, 'Staq\Ground\Stack\Controller\__Default' ) );
+	},
+	'Query a defined controller stack give a stack with the defined & default controller' => function( ) {
+		$stack = new \Stack\Controller\About;
+		return ( 
+			\Staq\Util\stack_definition_contains( $stack, 'Staq\Test\Core\Autoloader\Parent\Stack\Controller\About' ) &&
+			\Staq\Util\stack_definition_contains( $stack, 'Staq\Ground\Stack\Controller\__Default' ) 
+		);
+	},
+	'Query a defined stack element without define parent give a stack with a height of 1' => function( ) {
+		$stack = new \Stack\Machin\About;
+		return ( \Staq\Util\stack_height( $stack ) == 1 );
+	},
+	'Query a redefined default exception give a stack with with the two default exception' => function( ) {
+		$stack = new \Stack\Exception\Resource_Not_Found;
+		return ( \Staq\Util\stack_height( $stack ) == 2 );
 	}
 ] );
 
