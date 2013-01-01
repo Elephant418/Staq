@@ -17,13 +17,14 @@ $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing parent', [
 	},
 	'Query an unknown controller stack give a stack with the default controller' => function( ) {
 		$stack = new \Stack\Controller\Coco;
-		return ( \Staq\Util\stack_definition_contains( $stack, 'Staq\Ground\Stack\Controller\__Default' ) );
+		return ( \Staq\Util\stack_definition_contains( $stack, 'Staq\Core\Ground\Stack\Controller\__Default' ) );
 	},
 	'Query a defined controller stack give a stack with the defined & default controller' => function( ) {
 		$stack = new \Stack\Controller\About;
+		// \Staq\Util\stack_debug( $stack );
 		return ( 
 			\Staq\Util\stack_definition_contains( $stack, 'Staq\Test\Core\Autoloader\Parent\Stack\Controller\About' ) &&
-			\Staq\Util\stack_definition_contains( $stack, 'Staq\Ground\Stack\Controller\__Default' ) 
+			\Staq\Util\stack_definition_contains( $stack, 'Staq\Core\Ground\Stack\Controller\__Default' ) 
 		);
 	},
 	'Query a defined stack element without define parent give a stack with a height of 1' => function( ) {

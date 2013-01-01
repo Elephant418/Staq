@@ -39,7 +39,7 @@ class Application {
 	/*************************************************************************
 	  INITIALIZATION             
 	 *************************************************************************/
-	public function __construct( $path = 'Staq/ground', $platform = 'prod' ) {
+	public function __construct( $path = 'Staq/core/ground', $platform = 'prod' ) {
 		$this->path = $path;
 		self::$platform = $platform;
 		self::$extensions = $this->find_extensions( );
@@ -103,7 +103,7 @@ class Application {
 			}
 		} else {
 			// Default value for extension without configuration 
-			$added_extensions = [ 'Staq/ground' ];
+			$added_extensions = [ 'Staq/core/ground' ];
 		}
 		return $added_extensions;
 	}

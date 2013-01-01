@@ -3,7 +3,7 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Ground\Stack\Exception;
+namespace Staq\Core\Ground\Stack\Exception;
 
 class __Default extends \Exception {
 
