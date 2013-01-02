@@ -7,10 +7,10 @@ Staq is a mini PHP framework.<br>
 The main feature is that you can instantiate a stack of classes through all your extensions: <code>new \Stack\Model\User</code>,<br>
 instead of instantiate a class of one extension: <code>new \My\Extension\Prefixes\Model\User</code>.
 
-1. It is **readable**: you do not have to write/read the vendor prefixes ;
-2. It is **fast**: you can start to use a stack even before defining it ;
-3. It is **maintanaible**: you can add classes to a stack whenever you want ;
-4. It is **extendable**: you can add an external extension to complete your own stack.
+1. **Readable**: you do not have to write/read the vendor prefixes ;
+2. **Fast**: you can start to use a stack even before defining it ;
+3. **Maintanaible**: you can add classes to a stack whenever you want ;
+4. **Extendable**: you can add an external extension to complete your own stack.
 
 
 License
