@@ -1,6 +1,6 @@
 Staq
 ======
-Staq is a mini PHP framework for a enjoyable web development.
+Staq is a small PHP framework for a enjoyable web development.
 
 
 
