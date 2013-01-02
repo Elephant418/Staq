@@ -10,7 +10,7 @@ $app = new \Staq\Application( );
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Without custom application', [
 	'Extensions' => function( ) use ( $app ) {
-		return ( $app->get_extensions( ) == [ 'Staq/app/starter', 'Staq/core/view', 'Staq/core/route', 'Staq/core/ground' ] );
+		return ( $app->get_extensions( ) == [ 'Staq/app/starter', 'Staq/core/view', 'Staq/core/router', 'Staq/core/ground' ] );
 	},
 	'Platform'   => function( ) use ( $app ) {
 		return ( $app->get_platform( ) == 'prod' );

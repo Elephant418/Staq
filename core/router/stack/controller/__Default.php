@@ -3,7 +3,7 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Route\Stack\Controller;
+namespace Staq\Core\Router\Stack\Controller;
 
 class __Default {
 

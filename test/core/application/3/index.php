@@ -11,7 +11,7 @@ $app = new \Staq\Application( $path );
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'With default configuration', [
 	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( ) == [ $path, 'Staq/app/starter', 'Staq/core/view', 'Staq/core/route', 'Staq/core/ground' ] );
+		return ( $app->get_extensions( ) == [ $path, 'Staq/app/starter', 'Staq/core/view', 'Staq/core/router', 'Staq/core/ground' ] );
 	}
 ] );
 
