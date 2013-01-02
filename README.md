@@ -9,8 +9,8 @@ Features
 
 
 ### Stack
-The main feature is that you can instantiate a stack of classes through all your extensions: <code>new \Stack\Model\User</code>,<br>
-instead of instantiate a class of one extension: <code>new \My\Extension\Prefixes\Model\User</code>.
+The main feature is that you can instantiate a stack of classes through all your extensions with <code>new \Stack\Model\User</code>,
+where other frameworks limits you to one specific extension with <code>new \My\Extension\Prefixes\Model\User</code>.
 
 1. **Reduce weight**: you have a light syntax with more meaning ;
 2. **Reduce dependency**: you can start to use a stack even before defining it ;
