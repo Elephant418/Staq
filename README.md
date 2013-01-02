@@ -1,9 +1,9 @@
 Staq
 ======
 
-Modular & maintainable website
+Presentation
 --------
-Staq is a mini PHP framework for modular & maintainable website.<br>
+Staq is a mini PHP framework for *modular & maintainable website*.<br>
 Staq means "Stack query", it allow you to instantiate a stack of classes through several extensions.
 
 Instead of directly instantiate a class: <code>new \Model\User</code> or <code>new \My_Extension\Model\User</code>,<br>
@@ -24,4 +24,7 @@ Staq is under [MIT License](http://opensource.org/licenses/MIT)
 
 Roadmap
 --------
-We are managing current tasks with a [trello board](https://trello.com/board/staq/50de3fe18942735c620000a9).
+The stable version is [v0.2](https://github.com/Pixel418/Staq/tree/v0.2).
+
+We are working hard on the [v0.3](https://github.com/Pixel418/Staq/tree/v0.3). <br>
+If you are curious on the next features, you can see our [trello board](https://trello.com/board/staq/50de3fe18942735c620000a9).
