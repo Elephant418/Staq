@@ -18,15 +18,15 @@ where other frameworks limits you to one specific extension with <code>new \My\E
 
 
 ### Router
-Under development.
+Soon! It's under development.
 
 
 ### Model 
-Planned with the version v0.5.
+Planned for the version v0.5.
 
 
 ### Extendable applications
-Planned with the version v0.7.
+Planned for the version v0.7.
 
 
 
@@ -39,7 +39,7 @@ You need **PHP >= 5.4** and some happiness.
 
 
 ### Hello world tutorial 
-Under development.
+Soon! It's under development.
 
 
 
