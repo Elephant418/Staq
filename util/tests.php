@@ -37,11 +37,9 @@ class Test {
 	  OUPUT METHOD
 	 *************************************************************************/
 	public function to_html( ) {
-		$str = $this->name .': ';
-		if ( $this->result ) {
-			$str .= 'OK';
-		} else {
-			$str .= 'ERROR';
+		$str = $this->name;
+		if ( ! $this->result ) {
+			$str .= ': <b>ERROR</b>';
 			if ( is_object( $this->exception ) ) {
 				$str .= ' (' . $this->exception->get_message( ) . ')';
 			}
@@ -58,7 +56,8 @@ class Test_Case extends Test {
 	 ATTRIBUTES
 	 *************************************************************************/
 	public $folder = '.';
-	public $tests = [ ];
+	public $ok = 0;
+	public $error = 0;
 
 
 
@@ -68,7 +67,13 @@ class Test_Case extends Test {
 	public function __construct( $name, $tests ) {
 		$this->name = $name;
 		foreach ( $tests as $name => $test ) {
-			$this->tests[ ] = new \Staq\Util\Test( $name, $test );
+			$test = new \Staq\Util\Test( $name, $test );
+			if ( $test->result ) {
+				$this->ok++;
+			} else {
+				$this->error++;
+			}
+			$this->tests[ ] = $test;
 		}
 		$this->compute( );
 	}
@@ -83,11 +88,15 @@ class Test_Case extends Test {
 	 *************************************************************************/
 	public function to_html( $path = '' ) {
 		$path .= $this->folder . '/';
-		$html = '<a href="' . $path . '">' . parent::to_html( ) . '</a><ul>';
-		foreach ( $this->tests as $test ) {
-			$html .=  '<li>' . $test->to_html( $path ) . '</li>';
+		$html = '<a href="' . $path . '">' . $this->name . '</a> ' . $this->ok;
+		if ( $path == '' || $this->error > 0 ) {
+			$html .= ' / ' . $this->error . '<ul>';
+			foreach ( $this->tests as $test ) {
+				$html .=  '<li>' . $test->to_html( $path ) . '</li>';
+			}
+			$html .= '</ul>';
 		}
-		return $html . '</ul>';
+		return $html;
 	}
 }
 
@@ -108,12 +117,14 @@ class Test_Collection extends Test_Case {
 	public function __construct( $name, $test_cases, $dir ) {
 		$this->name = $name;
 		foreach ( $test_cases as $test_case ) {
-			ob_start();		
+			ob_start();
 			$result = ( include( $dir . '/' . $test_case . '/index.php' ) );
 			ob_end_clean();
 			if ( is_a( $result, 'Staq\\Util\\Test_Case' ) ) {
 				$result->folder = $test_case;
 			}
+			$this->ok += $result->ok;
+			$this->error += $result->error;
 			$this->tests[ ] = $result;
 		}
 		$this->compute( );
