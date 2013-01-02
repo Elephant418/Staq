@@ -17,7 +17,7 @@ instead of instantiate a class of one extension: <code>new \My\Extension\Prefixe
 3. **Increase reusability **: you can add an external extension to complete your own stack.
 
 
-### Routing
+### Router
 Todo.
 
 
@@ -39,6 +39,7 @@ You need **PHP >= 5.4** and some happiness.
 
 
 ## Hello world tutorial 
+Todo.
 
 
 
