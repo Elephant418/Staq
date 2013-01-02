@@ -18,15 +18,15 @@ instead of instantiate a class of one extension: <code>new \My\Extension\Prefixe
 
 
 ### Router
-Todo.
+Under development.
 
 
 ### Model 
-Todo.
+Planned with the version v0.5.
 
 
 ### Extendable applications
-Todo.
+Planned with the version v0.7.
 
 
 
@@ -38,8 +38,8 @@ Getting Started
 You need **PHP >= 5.4** and some happiness.
 
 
-## Hello world tutorial 
-Todo.
+### Hello world tutorial 
+Under development.
 
 
 
