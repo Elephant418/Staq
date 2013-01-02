@@ -1,21 +1,51 @@
 Staq
 ======
+Staq is a mini PHP framework for a enjoyable web development.
 
-Presentation
+
+
+Features
 --------
-Staq is a mini PHP framework.<br>
+
+
+### Stack
 The main feature is that you can instantiate a stack of classes through all your extensions: <code>new \Stack\Model\User</code>,<br>
 instead of instantiate a class of one extension: <code>new \My\Extension\Prefixes\Model\User</code>.
 
-1. **Readable**: you do not have to write/read the vendor prefixes ;
-2. **Fast**: you can start to use a stack even before defining it ;
-3. **Maintanaible**: you can add classes to a stack whenever you want ;
-4. **Extendable**: you can add an external extension to complete your own stack.
+1. **Reduce weight**: you do not have to write/read the vendor prefixes ;
+2. **Reduce dependency**: you can start to use a stack even before defining it ;
+3. **Increase reusability **: you can add an external extension to complete your own stack.
+
+
+### Routing
+Todo.
+
+
+### Model 
+Todo.
+
+
+### Extendable applications
+Todo.
+
+
+
+Getting Started
+--------
+
+
+### System Requirements
+You need **PHP >= 5.4** and some happiness.
+
+
+## Hello world tutorial 
+
 
 
 License
 --------
 Staq is under [MIT License](http://opensource.org/licenses/MIT)
+
 
 
 Roadmap
