@@ -50,7 +50,7 @@ class Autoloader {
 		$absolute_path = STAQ_ROOT_PATH . $relative_path . '.php';
 		if ( is_file( $absolute_path ) ) {
 			$real_class = $this->string_path_to_namespace( $relative_path );
-			if ( ! class_exists( $real_class ) ) {
+			if ( ! $this->class_exists( $real_class ) ) {
 				require_once( $absolute_path );
 				$this->check_class_loaded( $real_class );
 			}
@@ -88,20 +88,28 @@ class Autoloader {
 	/*************************************************************************
 	  CLASS DECLARATION             
 	 *************************************************************************/
+	protected function class_exists( $class ) {
+		return ( class_exists( $class ) || interface_exists( $class ) );
+	}
 	protected function create_alias_class( $alias, $class ) {
-		return $this->create_class( $alias, $class );
+		return $this->create_class( $alias, $class, interface_exists( $class ) );
 	}
 	protected function create_empty_class( $class ) {
 		return $this->create_class( $class, NULL );
 	}
-	protected function create_class( $class, $base_class ) {
+	protected function create_class( $class, $base_class, $is_interface = FALSE ) {
 		$namespace = \Staq\Util\string_substr_before_last( $class, '\\' );
 		$name = \Staq\Util\string_substr_after_last( $class, '\\' );
 		$code = '';
 		if ( $namespace ) {
 			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
 		}
-		$code .= 'class ' . $name . ' ';
+		if ( $is_interface ) {
+			$code .= 'interface';
+		} else {
+			$code .= 'class';
+		}
+		$code .= ' ' . $name . ' ';
 		if ( $base_class ) {
 			$code .= 'extends ' . $base_class . ' ';
 		}
@@ -110,7 +118,7 @@ class Autoloader {
 		eval( $code );
 	}
 	protected function check_class_loaded( $class ) {
-		if ( ! class_exists( $class ) ) {
+		if ( ! $this->class_exists( $class ) ) {
 			$classes = get_declared_classes( );
 			$loaded_class = end( $classes );
 			throw new \Stack\Exception\Wrong_Class_Definition( 'Wrong class definition: "' . $loaded_class . '" definition, but "' . $class . '" expected.' ); 
@@ -132,6 +140,9 @@ class Autoloader {
 	protected function string_namespace_to_path( $namespace, $file = TRUE ) {
 		if ( $file ) {
 			$parts = explode( '\\', $namespace );
+			if ( count( $parts ) == 1 ) {
+				return $parts[ 0 ];
+			}
 			$class = array_pop( $parts );
 			return strtolower( implode( '/', $parts ) ) . '/' . $class;
 		}
