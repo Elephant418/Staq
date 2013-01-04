@@ -32,7 +32,7 @@ $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing parent', [
 		return ( \Staq\Util\stack_height( $stack ) == 1 );
 	},
 	'Query a redefined default exception give a stack with with the two default exception' => function( ) {
-		$stack = new \Stack\Exception\Resource_Not_Found;
+		$stack = new \Stack\Exception\Unexisting_exception;
 		return ( \Staq\Util\stack_height( $stack ) == 2 );
 	}
 ] );
