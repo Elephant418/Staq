@@ -14,8 +14,10 @@ class Application {
 	 *************************************************************************/
 	public static $platform;
 	public static $extensions = [ ];
-	private $path;
-	private $controllers = [ ];
+	protected $path;
+	protected $root_uri;
+	protected $router;
+	protected $controllers = [ ];
 
 
 
@@ -24,6 +26,10 @@ class Application {
 	 *************************************************************************/
 	public function get_path( ) {
 		return $this->path;
+	}
+
+	public function get_root_uri( ) {
+		return $this->root_uri;
 	}
 
 	public function get_extensions( ) {
@@ -37,11 +43,22 @@ class Application {
 
 
 	/*************************************************************************
+	  SETTER             
+	 *************************************************************************/
+	public function add_controller( $uri, $controller ) {
+		$this->controllers[ ] = func_get_args( );
+		return $this;
+	}
+
+
+
+	/*************************************************************************
 	  INITIALIZATION             
 	 *************************************************************************/
-	public function __construct( $path = 'Staq/core/ground', $platform = 'prod' ) {
-		$this->path = $path;
-		self::$platform = $platform;
+	public function __construct( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
+		$this->path       = $path;
+		$this->root_uri  = $root_uri;
+		self::$platform   = $platform;
 		self::$extensions = $this->find_extensions( );
 	}
 
@@ -55,16 +72,11 @@ class Application {
 		spl_autoload_register( array( $autoloader, 'autoload' ) );
 	}
 
-	public function add_controller( $controller ) {
-		$this->controllers[ ] = $controller;
-	}
-
 	public function run( ) {
 		$this->start( );
-		// regarder si un controller d'application répond à l'url
-		// regarder si des controllers d'extension répond à l'url
-		// catcher les exceptions
-		// Lever une erreur 404
+		$this->router = new \Stack\Router( $this->controllers );
+		$uri          = \Staq\Util\string_substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+		echo $this->router->resolve( $uri );
 	}
 
 
@@ -72,13 +84,13 @@ class Application {
 	/*************************************************************************
 	  PARSE SETTINGS             
 	 *************************************************************************/
-	private function find_extensions( ) {
+	protected function find_extensions( ) {
 		$extensions = [ $this->path ];
 		$this->find_extensions_recursive( $this->path, $extensions );
 		return $extensions;
 	}
 
-	private function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
+	protected function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
 		$added_extensions = $this->find_extensions_parse_settings_file( $extension, $disabled );
 		$old_extensions = $extensions;
 		$extensions = \Staq\Util\array_reverse_merge_unique( $extensions, $added_extensions );
@@ -87,7 +99,7 @@ class Application {
 		}
 	}
 
-	private function find_extensions_parse_settings_file( $extension, &$disabled ) {
+	protected function find_extensions_parse_settings_file( $extension, &$disabled ) {
 		$added_extensions = [ ];
 		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
 		if ( is_file( $setting_file_path ) ) {
