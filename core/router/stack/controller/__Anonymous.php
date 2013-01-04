@@ -5,22 +5,23 @@
 
 namespace Staq\Core\Router\Stack\Controller;
 
-class __Default implements \Stack\IController {
+class __Anonymous extends __Anonymous\__Parent {
 
 
 
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $routes = [ ];
+	protected $callable;
 
 
 
 	/*************************************************************************
-	  GETTER
+	  CONSTRUCTOR             
 	 *************************************************************************/
-	public function get_routes( ) {
-		return $this->routes;
+	public function __construct( $uri, $callable ) {
+		$this->routes = [ new \Stack\Route( $this, '', $uri ) ];
+		$this->callable = $callable;
 	}
 
 
@@ -29,8 +30,8 @@ class __Default implements \Stack\IController {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action( $parameters, $action ) {
+		return call_user_func( $this->callable );
 	}
-
 }
 
 ?>
