@@ -38,24 +38,32 @@ class Router {
 		$this->uris[ ] = $uri;
 		return $this;
 	}
+	protected function add_routes( $routes ) {
+		$this->routes = array_merge( $this->routes, $routes );
+	}
 
 
 
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function __construct( $controllers ) {
+	public function __construct( $anonymous_controllers ) {
+		$this->initialize_controllers( );
+		$this->initialize_anonymous_controllers( $anonymous_controllers );
+	}
+	public function initialize_controllers( ) {
 		// TODO: Add enabled controllers
-		// TODO: Add global route
-		$class = new \ReflectionClass( 'Stack\\Controller\\__Anonymous' );
-		foreach ( $controllers as $controller ) {
-			$this->controllers[ ] = $class->newInstanceArgs( $controller );
-		}
 		foreach ( $this->controllers as $controller ) {
-			$this->routes = array_merge( $this->routes, $controller->get_routes( ) );
+			$this->add_routes( $controller->get_routes( ) );
 		}
 	}
-
+	public function initialize_anonymous_controllers( $anonymous_controllers ) {
+		$class = new \ReflectionClass( 'Stack\\Controller\\__Anonymous' );
+		foreach ( $anonymous_controllers as $arguments ) {
+			$anonymous = $class->newInstanceArgs( $arguments );
+			$this->add_routes( $anonymous->get_routes( ) );
+		}
+	}
 
 
 	/*************************************************************************
