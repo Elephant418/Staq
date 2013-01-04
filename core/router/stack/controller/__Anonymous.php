@@ -20,17 +20,7 @@ class __Anonymous extends __Anonymous\__Parent {
 	  CONSTRUCTOR             
 	 *************************************************************************/
 	public function __construct( $uri, $callable ) {
-		$this->routes = [ new \Stack\Route( $this, '', $uri ) ];
-		$this->callable = $callable;
-	}
-
-
-
-	/*************************************************************************
-	  ACTION METHODS           
-	 *************************************************************************/
-	public function action( $parameters, $action ) {
-		return call_user_func( $this->callable );
+		$this->routes = [ new \Stack\Route( $callable, $uri ) ];
 	}
 }
 
