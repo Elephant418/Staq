@@ -10,6 +10,6 @@ if ( ! defined( 'STAQ_ROOT_PATH' ) ) {
 	define( 'STAQ_ROOT_PATH', dirname( __DIR__ ) . '/' );
 }
 
-include_once( __DIR__ . '/util/functions.php' );
-include_once( __DIR__ . '/core/Application.php' );
-include_once( __DIR__ . '/core/Autoloader.php' );
+require_once( __DIR__ . '/util/functions.php' );
+require_once( __DIR__ . '/core/Application.php' );
+require_once( __DIR__ . '/core/Autoloader.php' );
