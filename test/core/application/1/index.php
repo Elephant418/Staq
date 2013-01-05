@@ -2,10 +2,10 @@
 
 $staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 );
 require_once( $staq_path . '/util/tests.php' );
-include_once( $staq_path . '/include.php' );
+require_once( $staq_path . '/include.php' );
 
 // CONTEXT
-$app = ( new \Staq\Server )->get_application( );
+$app = \Staq\application( );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Without custom application', [

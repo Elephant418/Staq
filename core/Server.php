@@ -19,9 +19,9 @@ class Server {
 
 
 	/*************************************************************************
-	  INITIALIZATION             
+	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function get_application( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
+	public function create_application( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
 		$extensions = $this->find_extensions( $path );
 		if ( ! is_null( self::$autoloader ) ) {
 			spl_autoload_unregister( array( self::$autoloader, 'autoload' ) );
@@ -35,7 +35,7 @@ class Server {
 
 
 	/*************************************************************************
-	  PARSE SETTINGS             
+	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
 	protected function find_extensions( $path ) {
 		$extensions = [ $path ];
@@ -72,5 +72,8 @@ class Server {
 		}
 		return $added_extensions;
 	}
+}
 
+function application( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
+	return ( new \Staq\Server )->create_application( $path, $root_uri, $platform );
 }
