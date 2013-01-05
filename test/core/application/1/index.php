@@ -5,7 +5,7 @@ require_once( $staq_path . '/util/tests.php' );
 include_once( $staq_path . '/include.php' );
 
 // CONTEXT
-$app = new \Staq\Application( );
+$app = ( new \Staq\Server )->get_application( );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Without custom application', [

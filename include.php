@@ -11,5 +11,5 @@ if ( ! defined( 'STAQ_ROOT_PATH' ) ) {
 }
 
 require_once( __DIR__ . '/util/functions.php' );
-require_once( __DIR__ . '/core/Application.php' );
+require_once( __DIR__ . '/core/Server.php' );
 require_once( __DIR__ . '/core/Autoloader.php' );

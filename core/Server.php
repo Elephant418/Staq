@@ -5,78 +5,31 @@
 
 namespace Staq;
 
-class Application {
+class Server {
 
 
 
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public static $platform;
-	public static $extensions = [ ];
-	protected $path;
-	protected $root_uri;
-	protected $router;
-	protected $controllers = [ ];
+	public static $application;
+	public static $autoloader;
 
-
-
-	/*************************************************************************
-	  GETTER             
-	 *************************************************************************/
-	public function get_path( ) {
-		return $this->path;
-	}
-
-	public function get_root_uri( ) {
-		return $this->root_uri;
-	}
-
-	public function get_extensions( ) {
-		return self::$extensions;
-	}
-
-	public function get_platform( ) {
-		return self::$platform;
-	}
-
-
-
-	/*************************************************************************
-	  SETTER             
-	 *************************************************************************/
-	public function add_controller( $uri, $controller ) {
-		$this->controllers[ ] = func_get_args( );
-		return $this;
-	}
 
 
 
 	/*************************************************************************
 	  INITIALIZATION             
 	 *************************************************************************/
-	public function __construct( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
-		$this->path       = $path;
-		$this->root_uri  = $root_uri;
-		self::$platform   = $platform;
-		self::$extensions = $this->find_extensions( );
-	}
-
-
-
-	/*************************************************************************
-	  PUBLIC METHODS             
-	 *************************************************************************/
-	public function start( ) {
-		$autoloader = new \Staq\Autoloader;
-		spl_autoload_register( array( $autoloader, 'autoload' ) );
-	}
-
-	public function run( ) {
-		$this->start( );
-		$this->router = new \Stack\Router( $this->controllers );
-		$uri          = \Staq\Util\string_substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
-		echo $this->router->resolve( $uri );
+	public function get_application( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
+		$extensions = $this->find_extensions( $path );
+		if ( ! is_null( self::$autoloader ) ) {
+			spl_autoload_unregister( array( self::$autoloader, 'autoload' ) );
+		}
+		self::$autoloader = new \Staq\Autoloader( $extensions );
+		spl_autoload_register( array( self::$autoloader, 'autoload' ) );
+		self::$application = new \Stack\Application( $extensions, $path, $root_uri, $platform );
+		return self::$application;
 	}
 
 
@@ -84,9 +37,9 @@ class Application {
 	/*************************************************************************
 	  PARSE SETTINGS             
 	 *************************************************************************/
-	protected function find_extensions( ) {
-		$extensions = [ $this->path ];
-		$this->find_extensions_recursive( $this->path, $extensions );
+	protected function find_extensions( $path ) {
+		$extensions = [ $path ];
+		$this->find_extensions_recursive( $path, $extensions );
 		return $extensions;
 	}
 

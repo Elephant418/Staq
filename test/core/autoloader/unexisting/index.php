@@ -6,8 +6,7 @@ include_once( $staq_path . '/include.php' );
 
 // CONTEXT
 $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
-$app = new \Staq\Application( $path );
-$app->start( );
+$app = ( new \Staq\Server )->get_application( $path );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Stack autoloading without existing class', [

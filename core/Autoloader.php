@@ -7,7 +7,22 @@ namespace Staq;
 
 class Autoloader {
 
+
+
+	/*************************************************************************
+	 ATTRIBUTES
+	 *************************************************************************/
+	protected $extensions = [ ];
 	const DEFAULT_CLASS = '__Default';
+
+
+
+	/*************************************************************************
+	  INITIALIZATION             
+	 *************************************************************************/
+	public function __construct( $extensions ) {
+		$this->extensions = $extensions;
+	}
 
 
 
@@ -29,7 +44,7 @@ class Autoloader {
 	protected function load_stack_class( $class ) {
 		$stack_query = \Staq\Util\stack_query( $class );
 		while( $stack_query ) {
-			foreach( Application::$extensions as $extension ) {
+			foreach( $this->extensions as $extension ) {
 				if ( $real_class = $this->load_stack_extension_file( $stack_query, $extension ) ) {
 					$this->create_alias_class( $class, $real_class );
 					return TRUE;
@@ -64,7 +79,7 @@ class Autoloader {
 		$query = \Staq\Util\parent_stack_query( $class );
 		$ready = FALSE;
 		while( $query ) {
-			foreach( Application::$extensions as $extension ) {
+			foreach( $this->extensions as $extension ) {
 				if ( $ready ) {
 					if ( $real_class = $this->load_stack_extension_file( $query, $extension ) ) {
 						$this->create_alias_class( $class, $real_class );

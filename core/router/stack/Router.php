@@ -45,19 +45,19 @@ class Router {
 
 
 	/*************************************************************************
-	  PUBLIC METHODS             
+	  CONSTRUCTOR             
 	 *************************************************************************/
 	public function __construct( $anonymous_controllers ) {
 		$this->initialize_controllers( );
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
 	}
-	public function initialize_controllers( ) {
+	protected function initialize_controllers( ) {
 		// TODO: Add enabled controllers
 		foreach ( $this->controllers as $controller ) {
 			$this->add_routes( $controller->get_routes( ) );
 		}
 	}
-	public function initialize_anonymous_controllers( $anonymous_controllers ) {
+	protected function initialize_anonymous_controllers( $anonymous_controllers ) {
 		$class = new \ReflectionClass( 'Stack\\Controller\\__Anonymous' );
 		foreach ( $anonymous_controllers as $arguments ) {
 			$anonymous = $class->newInstanceArgs( $arguments );
