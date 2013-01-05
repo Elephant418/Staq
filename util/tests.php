@@ -89,12 +89,25 @@ class Test_Case extends Test {
 	public function to_html( $path = '' ) {
 		$path .= $this->folder . '/';
 		$html = '<a href="' . $path . '">' . $this->name . '</a> ' . $this->ok;
-		if ( $path == '' || $this->error > 0 ) {
+		if ( $path == '' || $this->error > 0 || isset( $_GET[ 'all' ] ) ) {
 			$html .= ' / ' . $this->error . '<ul>';
 			foreach ( $this->tests as $test ) {
 				$html .=  '<li>' . $test->to_html( $path ) . '</li>';
 			}
 			$html .= '</ul>';
+		}
+		if ( $path == './' ) {
+			$path  = \Staq\Util\string_substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+			$get   = $_GET;
+			if ( isset( $_GET[ 'all' ] ) ) {
+				unset( $get['all'] );
+				$label = 'Hide successful tests';
+			} else {
+				$get['all'] = TRUE;
+				$label = 'Show all tests';
+			}
+			$url   = $path . '?' . http_build_query( $get );
+			$html .= '<br /><br /><a href="' . $url . '">' . $label . '</a>';
 		}
 		return $html;
 	}
