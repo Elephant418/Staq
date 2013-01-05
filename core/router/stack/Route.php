@@ -58,6 +58,7 @@ class Route {
 	}
 	public function match_uri( $uri ) {
 		$pattern = str_replace( [ '.', '+', '?' ],  [ '\.', '\+', '\?' ], $this->match_uri ); 
+		$pattern = preg_replace( '#\*#', '.*', $pattern );
 		$pattern = preg_replace( '#\(([^)]*)\)#', '(?:\1)?', $pattern ); 
 		$pattern = preg_replace( '#\:(\w+)#', '(?<\1>\w+)', $pattern ); 
 		$pattern = '#^' . $pattern . '/?$#';
