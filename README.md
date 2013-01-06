@@ -40,14 +40,15 @@ You need **PHP >= 5.4** and some happiness.
 
 ### Hello world tutorial 
 
-  require_once( 'path/to/Staq/include.php' );
+```php
+require_once( 'path/to/Staq/include.php' );
 
-  \Staq\application( 'Hello_World' )
-      ->add_controller( '/*', function( ) {
-          return 'Hello World';
-      } )
-      ->run( );
-
+\Staq\application( 'Hello_World' )
+    ->add_controller( '/*', function( ) {
+        return 'Hello World';
+    } )
+    ->run( );
+```
 
 License
 --------
