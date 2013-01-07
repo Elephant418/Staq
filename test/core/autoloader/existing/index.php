@@ -6,7 +6,7 @@ require_once( $staq_path . '/include.php' );
 
 // CONTEXT
 $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 6 );
-$app = \Staq\application( $path );
+$app = \Staq\Application::create( $path );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing class', [

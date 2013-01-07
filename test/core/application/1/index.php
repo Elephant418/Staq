@@ -5,7 +5,7 @@ require_once( $staq_path . '/util/tests.php' );
 require_once( $staq_path . '/include.php' );
 
 // CONTEXT
-$app = \Staq\application( );
+$app = \Staq\Application::create( );
 
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Without custom application', [

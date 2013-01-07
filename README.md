@@ -43,7 +43,7 @@ You need **PHP >= 5.4** and some happiness.
 ```php
 require_once( 'path/to/Staq/include.php' );
 
-\Staq\application( 'Hello_World' )
+\Staq\Application::create( 'Hello_World' )
     ->add_controller( '/*', function( ) {
         return 'Hello World';
     } )

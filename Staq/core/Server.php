@@ -73,7 +73,3 @@ class Server {
 		return $added_extensions;
 	}
 }
-
-function application( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
-	return ( new \Staq\Server )->create_application( $path, $root_uri, $platform );
-}
