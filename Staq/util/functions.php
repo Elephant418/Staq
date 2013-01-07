@@ -33,33 +33,33 @@ function string_ends_with( $hay, $needles ) {
 }
 
 function string_i_starts_with( $hay, $needle ) {
-	return starts_with( strtolower( $hay ), strtolower( $needle ) );
+	return string_starts_with( strtolower( $hay ), strtolower( $needle ) );
 }
 
 function string_i_ends_with( $hay, $needle ) {
-	return ends_with( strtolower( $hay ), strtolower( $needle ) );
+	return string_ends_with( strtolower( $hay ), strtolower( $needle ) );
 }
 
 function string_must_starts_with( &$hay, $needle ) {
-	if ( ! starts_with( $hay, $needle ) ) {
+	if ( ! string_starts_with( $hay, $needle ) ) {
 		$hay = $needle . $hay;
 	}
 }
 
 function string_must_ends_with( &$hay, $needle ) {
-	if ( ! ends_with( $hay, $needle ) ) {
+	if ( ! string_ends_with( $hay, $needle ) ) {
 		$hay .= $needle;
 	}
 }
 
 function string_must_not_starts_with( &$hay, $needle ) {
-	if ( starts_with( $hay, $needle ) ) {
+	if ( string_starts_with( $hay, $needle ) ) {
 		$hay = substr( $hay, strlen( $needle ) );
 	}
 }
 
 function string_must_not_ends_with( &$hay, $needle ) {
-	if ( ends_with( $hay, $needle ) ) {
+	if ( string_ends_with( $hay, $needle ) ) {
 		$hay = substr( $hay, 0, -strlen( $needle ) );
 	}
 }
@@ -79,7 +79,7 @@ function string_i_contains( $hay, $needle ) {
 
 // SUBSTRING FUNCTIONS
 function string_cut_before( &$hay, $needles ) {
-	$return = substr_before( $hay, $needles );
+	$return = string_substr_before( $hay, $needles );
 	$hay = substr( $hay, strlen( $return ) );
 	return $return;
 }
@@ -100,7 +100,7 @@ function string_substr_before( $hay, $needles ) {
 }
 
 function string_cut_before_last( &$hay, $needles ) {
-	$return = substr_before_last( $hay, $needles );
+	$return = string_substr_before_last( $hay, $needles );
 	$hay = substr( $hay, strlen( $return ) );
 	return $return;
 }
@@ -121,7 +121,7 @@ function string_substr_before_last( $hay, $needles ) {
 }
 
 function string_cut_after( &$hay, $needles ) {
-	$return = substr_after( $hay, $needles );
+	$return = string_substr_after( $hay, $needles );
 	$hay = substr( $hay, 0, - strlen( $return ) );
 	return $return;
 }
@@ -141,7 +141,7 @@ function string_substr_after( $hay, $needles ) {
 }
 
 function string_cut_after_last( &$hay, $needles ) {
-	$return = substr_after_last( $hay, $needles );
+	$return = string_substr_after_last( $hay, $needles );
 	$hay = substr( $hay, 0, - strlen( $return ) );
 	return $return;
 }
@@ -187,7 +187,7 @@ function string_basename( $path, $level = 1 ) {
 }
 
 function file_extension( $path ) {
-	return substr_after_last( $path, '.' );
+	return string_substr_after_last( $path, '.' );
 }
 
 
