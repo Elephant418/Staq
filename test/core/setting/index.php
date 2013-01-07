@@ -17,30 +17,30 @@ $case = new \Staq\Util\Test_Case( 'Setting', [
 	'Fetch a value from an existing setting file' => function( ) {
 		$setting = new \Stack\Setting( 'application' );
 		\Staq\Util\stack_debug( $setting );
-		return ( $setting->get_boolean( 'error', 'display_errors' ) == FALSE );
+		return ( $setting->get_as_boolean( 'error', 'display_errors' ) == FALSE );
 	},
 	'Fetch a value from a custom setting file' => function( ) {
 		$setting = new \Stack\Setting( 'test' );
-		return ( $setting->get_boolean( 'test', 'a_setting' ) == 'a_value' );
+		return ( $setting->get_as_boolean( 'test', 'a_setting' ) == 'a_value' );
 	},
 	'Fetch a value merged with an inherited extension' => function( ) {
 		$setting = new \Stack\Setting( 'application' );
-		return ( $setting->get_boolean( 'error', 'a_setting' ) == 'a_value' );
+		return ( $setting->get_as_boolean( 'error', 'a_setting' ) == 'a_value' );
 	},
 	'Fetch a value with an existing platform' => function( ) use ( $change_platform ) {
 		$change_platform( 'local' );
 		$setting = new \Stack\Setting( 'application' );
-		return ( $setting->get_boolean( 'error', 'display_errors' ) == TRUE );
+		return ( $setting->get_as_boolean( 'error', 'display_errors' ) == TRUE );
 	},
 	'Fetch a value merged with a custom platform' => function( ) use ( $change_platform ) {
 		$change_platform( 'titan' );
 		$setting = new \Stack\Setting( 'application' );
-		return ( $setting->get_boolean( 'error', 'error_reporting' ) == 'CHIPS' );
+		return ( $setting->get_as_boolean( 'error', 'error_reporting' ) == 'CHIPS' );
 	},
 	'Fetch a value merged with an inherited platform' => function( ) use ( $change_platform ) {
 		$change_platform( 'local.coco' );
 		$setting = new \Stack\Setting( 'application' );
-		return ( $setting->get_boolean( 'error', 'error_reporting' ) == 'E_ALL' );
+		return ( $setting->get_as_boolean( 'error', 'error_reporting' ) == 'E_ALL' );
 	}
 ] );
 

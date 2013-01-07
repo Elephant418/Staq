@@ -47,9 +47,17 @@ class Setting {
 		return $default;
 	}
 
-	public function get_boolean( $section, $property, $default = NULL ) {
+	public function get_as_boolean( $section, $property, $default = NULL ) {
 		$value = $this->get( $section, $property, $default );
 		return ( ! empty( $value ) );
+	}
+
+	public function get_as_constant( $section, $property, $default = NULL ) {
+		$value = $this->get( $section, $property );
+		if ( ! defined( $value ) ) {
+			return constant( $value );
+		}
+		return $default;
 	}
 
 
@@ -58,6 +66,7 @@ class Setting {
 	  ARRAY ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function get_list( $property, $initial = [ ] ) {
+		\Staq\Util\string_must_ends_with( $property, '_list' );
 		$disabled = [ ];
 		$enabled = $initial;
 		foreach ( $this->datas as $data ) {
