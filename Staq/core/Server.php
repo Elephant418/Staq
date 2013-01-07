@@ -66,8 +66,9 @@ class Server {
 					$disabled = \Staq\Util\array_merge_unique( $disabled, $ext[ 'disabled' ] );
 				}
 			}
-		} else {
-			// Default value for extension without configuration 
+		}
+		// Default value for extension without configuration 
+		if ( empty( $added_extensions ) ) {
 			$added_extensions = [ 'Staq/core/ground' ];
 		}
 		return $added_extensions;
