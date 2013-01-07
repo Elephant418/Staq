@@ -200,16 +200,17 @@ function string_path_to_namespace( $path, $absolute = TRUE ) {
 	return $namespace;
 }
 
-function string_namespace_to_path( $namespace, $file = TRUE ) {
-	if ( $file ) {
-		$parts = explode( '\\', $namespace );
-		if ( count( $parts ) == 1 ) {
-			return $parts[ 0 ];
-		}
-		$class = array_pop( $parts );
-		return strtolower( implode( '/', $parts ) ) . '/' . $class;
+function string_namespace_to_path( $namespace ) {
+	return strtolower( str_replace( '\\', '/' , $namespace ) );
+}
+
+function string_namespace_to_class_path( $namespace ) {
+	$parts = explode( '\\', $namespace );
+	if ( count( $parts ) == 1 ) {
+		return $parts[ 0 ];
 	}
-	return str_replace( '\\', '/' , $namespace );
+	$class = array_pop( $parts );
+	return strtolower( implode( '/', $parts ) ) . '/' . $class;
 }
 
 

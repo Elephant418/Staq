@@ -61,7 +61,7 @@ class Autoloader {
 	 *   3. There is no more burgers at my bakery 
 	 */
 	protected function load_stack_extension_file( $stack, $extension ) {
-		$relative_path = $extension . '/stack/' .\Staq\Util\string_namespace_to_path( $stack );
+		$relative_path = $extension . '/stack/' .\Staq\Util\string_namespace_to_class_path( $stack );
 		$absolute_path = STAQ_ROOT_PATH . $relative_path . '.php';
 		if ( is_file( $absolute_path ) ) {
 			$real_class = \Staq\Util\string_path_to_namespace( $relative_path );
@@ -75,7 +75,7 @@ class Autoloader {
 	
 
 	protected function load_stack_parent_class( $class ) {
-		$query_extension = \Staq\Util\string_namespace_to_path( \Staq\Util\stackable_extension( $class ) );
+		$query_extension = \Staq\Util\string_namespace_to_class_path( \Staq\Util\stackable_extension( $class ) );
 		$query = \Staq\Util\parent_stack_query( $class );
 		$ready = FALSE;
 		while( $query ) {
