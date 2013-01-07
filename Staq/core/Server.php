@@ -44,7 +44,7 @@ class Server {
 	}
 
 	protected function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
-		$added_extensions = $this->find_extensions_parse_settings_file( $extension, $disabled );
+		$added_extensions = $this->find_extensions_parse_setting_file( $extension, $disabled );
 		$old_extensions = $extensions;
 		$extensions = \Staq\Util\array_reverse_merge_unique( $extensions, $added_extensions );
 		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
@@ -52,13 +52,13 @@ class Server {
 		}
 	}
 
-	protected function find_extensions_parse_settings_file( $extension, &$disabled ) {
+	protected function find_extensions_parse_setting_file( $extension, &$disabled ) {
 		$added_extensions = [ ];
 		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
 		if ( is_file( $setting_file_path ) ) {
-			$settings = parse_ini_file( $setting_file_path, TRUE );
-			if ( isset( $settings[ 'extensions' ] ) ) {
-				$ext = $settings[ 'extensions' ];
+			$setting = parse_ini_file( $setting_file_path, TRUE );
+			if ( isset( $setting[ 'extensions' ] ) ) {
+				$ext = $setting[ 'extensions' ];
 				if ( isset( $ext[ 'enabled' ] ) && is_array( $ext[ 'enabled' ] ) ) {
 					$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
 				}

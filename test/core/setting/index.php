@@ -15,32 +15,32 @@ $change_platform = function( $platform ) {
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Setting', [
 	'Fetch a value from an existing setting file' => function( ) {
-		$settings = new \Stack\Settings( 'application' );
-		\Staq\Util\stack_debug( $settings );
-		return ( $settings->get_boolean( 'error', 'display_errors' ) == FALSE );
+		$setting = new \Stack\Setting( 'application' );
+		\Staq\Util\stack_debug( $setting );
+		return ( $setting->get_boolean( 'error', 'display_errors' ) == FALSE );
 	},
 	'Fetch a value from a custom setting file' => function( ) {
-		$settings = new \Stack\Settings( 'test' );
-		return ( $settings->get_boolean( 'test', 'a_setting' ) == 'a_value' );
+		$setting = new \Stack\Setting( 'test' );
+		return ( $setting->get_boolean( 'test', 'a_setting' ) == 'a_value' );
 	},
 	'Fetch a value merged with an inherited extension' => function( ) {
-		$settings = new \Stack\Settings( 'application' );
-		return ( $settings->get_boolean( 'error', 'a_setting' ) == 'a_value' );
+		$setting = new \Stack\Setting( 'application' );
+		return ( $setting->get_boolean( 'error', 'a_setting' ) == 'a_value' );
 	},
 	'Fetch a value with an existing platform' => function( ) use ( $change_platform ) {
 		$change_platform( 'local' );
-		$settings = new \Stack\Settings( 'application' );
-		return ( $settings->get_boolean( 'error', 'display_errors' ) == TRUE );
+		$setting = new \Stack\Setting( 'application' );
+		return ( $setting->get_boolean( 'error', 'display_errors' ) == TRUE );
 	},
 	'Fetch a value merged with a custom platform' => function( ) use ( $change_platform ) {
 		$change_platform( 'titan' );
-		$settings = new \Stack\Settings( 'application' );
-		return ( $settings->get_boolean( 'error', 'error_reporting' ) == 'CHIPS' );
+		$setting = new \Stack\Setting( 'application' );
+		return ( $setting->get_boolean( 'error', 'error_reporting' ) == 'CHIPS' );
 	},
 	'Fetch a value merged with an inherited platform' => function( ) use ( $change_platform ) {
 		$change_platform( 'local.coco' );
-		$settings = new \Stack\Settings( 'application' );
-		return ( $settings->get_boolean( 'error', 'error_reporting' ) == 'E_ALL' );
+		$setting = new \Stack\Setting( 'application' );
+		return ( $setting->get_boolean( 'error', 'error_reporting' ) == 'E_ALL' );
 	}
 ] );
 

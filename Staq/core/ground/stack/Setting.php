@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Ground\Stack;
 
-class Settings {
+class Setting {
 
 
 	/*************************************************************************
@@ -19,9 +19,9 @@ class Settings {
 	/*************************************************************************
 	  CONSTRUCTOR                 
 	 *************************************************************************/
-	public function __construct( $full_settings_file_name ) {
-		$settings_file_paths = $this->get_file_paths( $full_settings_file_name );
-		$this->datas = $this->parse_settings_files( $settings_file_paths );
+	public function __construct( $full_setting_file_name ) {
+		$setting_file_paths = $this->get_file_paths( $full_setting_file_name );
+		$this->datas = $this->parse_setting_files( $setting_file_paths );
 	}
 
 
@@ -123,8 +123,8 @@ class Settings {
 	/*************************************************************************
 	  PROTECTED METHODS                 
 	 *************************************************************************/
-	protected function get_file_paths( $full_settings_file_name ) {
-		$file_names = $this->get_file_names( $full_settings_file_name );
+	protected function get_file_paths( $full_setting_file_name ) {
+		$file_names = $this->get_file_names( $full_setting_file_name );
 		$platform_name = \Staq\Application::get_platform( );
 		$file_paths = [ ];
 		foreach ( \Staq\Application::get_extensions( ) as $extension ) {
@@ -148,7 +148,7 @@ class Settings {
 		} while( ! empty( $file_name ) );
 		return $file_names;
 	}
-	protected function parse_settings_files( $file_paths ) {
+	protected function parse_setting_files( $file_paths ) {
 		$datas = [ ];
 		foreach ( $file_paths as $file_path ) {
 			if ( isset( self::$cache_parsed_file[ $file_path ] ) ) {
