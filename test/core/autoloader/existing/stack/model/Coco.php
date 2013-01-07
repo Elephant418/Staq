@@ -1,6 +1,6 @@
 <?php
 
-namespace Staq\Test\Core\Autoloader\Existing\Stack\Model;
+namespace Test\Core\Autoloader\Existing\Stack\Model;
 
 class Coco {
 	

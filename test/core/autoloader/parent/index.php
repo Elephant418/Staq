@@ -1,11 +1,11 @@
 <?php
 
-$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 );
+$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/Staq';
 require_once( $staq_path . '/util/tests.php' );
 require_once( $staq_path . '/include.php' );
 
 // CONTEXT
-$path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 1 );
+$path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 6 );
 $app = \Staq\application( $path );
 
 // TEST COLLECTION
@@ -22,7 +22,7 @@ $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing parent', [
 		$stack = new \Stack\Controller\About;
 		// \Staq\Util\stack_debug( $stack );
 		return ( 
-			\Staq\Util\stack_definition_contains( $stack, 'Staq\Test\Core\Autoloader\Parent\Stack\Controller\About' ) &&
+			\Staq\Util\stack_definition_contains( $stack, 'Test\Core\Autoloader\Parent\Stack\Controller\About' ) &&
 			\Staq\Util\stack_definition_contains( $stack, 'Staq\Core\Router\Stack\Controller\__Default' ) 
 		);
 	},
