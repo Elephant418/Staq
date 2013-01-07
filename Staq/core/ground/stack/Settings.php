@@ -27,7 +27,7 @@ class Settings {
 
 
 	/*************************************************************************
-	  ACCESSOR METHODS                   
+	  SIMPLE ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function has( $section, $property ) {
 		foreach ( $this->datas as $data ) {
@@ -47,6 +47,16 @@ class Settings {
 		return $default;
 	}
 
+	public function get_boolean( $section, $property, $default = NULL ) {
+		$value = $this->get( $section, $property, $default );
+		return ( ! empty( $value ) );
+	}
+
+
+
+	/*************************************************************************
+	  ARRAY ACCESSOR METHODS                   
+	 *************************************************************************/
 	public function get_list( $property, $initial = [ ] ) {
 		$disabled = [ ];
 		$enabled = $initial;
