@@ -57,8 +57,8 @@ class Server {
 		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
 		if ( is_file( $setting_file_path ) ) {
 			$setting = parse_ini_file( $setting_file_path, TRUE );
-			if ( isset( $setting[ 'extensions' ] ) ) {
-				$ext = $setting[ 'extensions' ];
+			if ( isset( $setting[ 'extension_list' ] ) ) {
+				$ext = $setting[ 'extension_list' ];
 				if ( isset( $ext[ 'enabled' ] ) && is_array( $ext[ 'enabled' ] ) ) {
 					$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
 				}
