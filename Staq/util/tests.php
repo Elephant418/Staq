@@ -55,9 +55,10 @@ class Test_Case extends Test {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+	public $tests  = [ ];
 	public $folder = '.';
-	public $ok = 0;
-	public $error = 0;
+	public $ok     = 0;
+	public $error  = 0;
 
 
 
