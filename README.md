@@ -61,4 +61,4 @@ Roadmap
 The last stable version is [v0.2](https://github.com/Pixel418/Staq/tree/v0.2).
 
 I am working hard on the [v0.3](https://github.com/Pixel418/Staq/tree/v0.3). <br>
-If you are curious on the next features, you can see our [trello board](https://trello.com/board/staq/50de3fe18942735c620000a9).
+If you are curious on the next features, you can see my [trello board](https://trello.com/board/staq/50de3fe18942735c620000a9).
