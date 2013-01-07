@@ -258,6 +258,14 @@ function stack_query( $stack ) {
 		return substr( $stack, strlen( 'Stack\\' ) );
 	}
 }
+function stack_sub_query( $stack ) {
+	$query = \Staq\Util\stack_query( $stack );
+	return \Staq\Util\string_substr_after( $query, '\\' );
+}
+function stack_sub_query_text( $stack ) {
+	$sub_query = \Staq\Util\stack_sub_query( $stack );
+	return str_replace( [ '\\', '_' ], ' ', $sub_query );
+}
 function stack_definition( $stack ) {
 	if ( \Staq\Util\is_stack( $stack ) ) {
 		$parents = [ ];
