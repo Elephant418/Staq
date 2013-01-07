@@ -50,6 +50,11 @@ class Application {
 		return $this;
 	}
 
+	public function set_platform( $platform ) {
+		$this->platform = $platform;
+		return $this;
+	}
+
 
 
 	/*************************************************************************

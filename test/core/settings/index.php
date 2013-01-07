@@ -6,18 +6,41 @@ require_once( $staq_path . '/include.php' );
 
 // CONTEXT
 $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 6 );
+$app = \Staq\Application::create( $path );
+$change_platform = function( $platform ) {
+	\Staq\Application::current_application( )
+		->set_platform( $platform );
+};
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Parsing inherit setting files', [
-	'Error values for a production site' => function( ) use ( $path ) {
-		$app = \Staq\Application::create( $path );
+$case = new \Staq\Util\Test_Case( 'Setting', [
+	'Fetch a value from an existing setting file' => function( ) {
 		$settings = new \Stack\Settings( 'application' );
+		\Staq\Util\stack_debug( $settings );
 		return ( $settings->get_boolean( 'error', 'display_errors' ) == FALSE );
 	},
-	'Error values for a local site' => function( ) use ( $path ) {
-		$app = \Staq\Application::create( $path, '/', 'local' );
+	'Fetch a value from a custom setting file' => function( ) {
+		$settings = new \Stack\Settings( 'test' );
+		return ( $settings->get_boolean( 'test', 'a_setting' ) == 'a_value' );
+	},
+	'Fetch a value merged with an inherited extension' => function( ) {
+		$settings = new \Stack\Settings( 'application' );
+		return ( $settings->get_boolean( 'error', 'a_setting' ) == 'a_value' );
+	},
+	'Fetch a value with an existing platform' => function( ) use ( $change_platform ) {
+		$change_platform( 'local' );
 		$settings = new \Stack\Settings( 'application' );
 		return ( $settings->get_boolean( 'error', 'display_errors' ) == TRUE );
+	},
+	'Fetch a value merged with a custom platform' => function( ) use ( $change_platform ) {
+		$change_platform( 'titan' );
+		$settings = new \Stack\Settings( 'application' );
+		return ( $settings->get_boolean( 'error', 'error_reporting' ) == 'CHIPS' );
+	},
+	'Fetch a value merged with an inherited platform' => function( ) use ( $change_platform ) {
+		$change_platform( 'local.coco' );
+		$settings = new \Stack\Settings( 'application' );
+		return ( $settings->get_boolean( 'error', 'error_reporting' ) == 'E_ALL' );
 	}
 ] );
 
