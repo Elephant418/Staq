@@ -61,10 +61,10 @@ class Autoloader {
 	 *   3. There is no more burgers at my bakery 
 	 */
 	protected function load_stack_extension_file( $stack, $extension ) {
-		$relative_path = $extension . '/stack/' . $this->string_namespace_to_path( $stack );
+		$relative_path = $extension . '/stack/' .\Staq\Util\string_namespace_to_path( $stack );
 		$absolute_path = STAQ_ROOT_PATH . $relative_path . '.php';
 		if ( is_file( $absolute_path ) ) {
-			$real_class = $this->string_path_to_namespace( $relative_path );
+			$real_class = \Staq\Util\string_path_to_namespace( $relative_path );
 			if ( ! $this->class_exists( $real_class ) ) {
 				require_once( $absolute_path );
 				$this->check_class_loaded( $real_class );
@@ -75,7 +75,7 @@ class Autoloader {
 	
 
 	protected function load_stack_parent_class( $class ) {
-		$query_extension = $this->string_namespace_to_path( \Staq\Util\stackable_extension( $class ) );
+		$query_extension = \Staq\Util\string_namespace_to_path( \Staq\Util\stackable_extension( $class ) );
 		$query = \Staq\Util\parent_stack_query( $class );
 		$ready = FALSE;
 		while( $query ) {
@@ -145,22 +145,4 @@ class Autoloader {
 	/*************************************************************************
 	  NAMESPACE FORMAT             
 	 *************************************************************************/
-	protected function string_path_to_namespace( $path, $absolute = TRUE ) {
-		$namespace = implode( '\\', array_map( function( $a ) {
-			return ucfirst( $a );
-		}, explode( '/', $path ) ) );
-		if ( $absolute ) $namespace = '\\' . $namespace;
-		return $namespace;
-	}
-	protected function string_namespace_to_path( $namespace, $file = TRUE ) {
-		if ( $file ) {
-			$parts = explode( '\\', $namespace );
-			if ( count( $parts ) == 1 ) {
-				return $parts[ 0 ];
-			}
-			$class = array_pop( $parts );
-			return strtolower( implode( '/', $parts ) ) . '/' . $class;
-		}
-		return str_replace( '\\', '/' , $namespace );
-	}
 }

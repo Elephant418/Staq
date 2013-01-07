@@ -13,7 +13,7 @@ namespace Staq\Util;
 
 // STARTS WITH & ENDS WITH FUNCTIONS
 function string_starts_with( $hay, $needles ) {
-	must_be_array( $needles );
+	\Staq\Util\must_be_array( $needles );
 	foreach( $needles as $needle ) {
 		if ( substr( $hay, 0, strlen( $needle ) ) == $needle ) {
 			return TRUE;
@@ -23,7 +23,7 @@ function string_starts_with( $hay, $needles ) {
 }
 
 function string_ends_with( $hay, $needles ) {
-	must_be_array( $needles );
+	\Staq\Util\must_be_array( $needles );
 	foreach( $needles as $needle ) {
 		if ( substr( $hay, -strlen( $needle ) ) == $needle ) {
 			return TRUE;
@@ -33,33 +33,33 @@ function string_ends_with( $hay, $needles ) {
 }
 
 function string_i_starts_with( $hay, $needle ) {
-	return string_starts_with( strtolower( $hay ), strtolower( $needle ) );
+	return \Staq\Util\string_starts_with( strtolower( $hay ), strtolower( $needle ) );
 }
 
 function string_i_ends_with( $hay, $needle ) {
-	return string_ends_with( strtolower( $hay ), strtolower( $needle ) );
+	return \Staq\Util\string_ends_with( strtolower( $hay ), strtolower( $needle ) );
 }
 
 function string_must_starts_with( &$hay, $needle ) {
-	if ( ! string_starts_with( $hay, $needle ) ) {
+	if ( ! \Staq\Util\string_starts_with( $hay, $needle ) ) {
 		$hay = $needle . $hay;
 	}
 }
 
 function string_must_ends_with( &$hay, $needle ) {
-	if ( ! string_ends_with( $hay, $needle ) ) {
+	if ( ! \Staq\Util\string_ends_with( $hay, $needle ) ) {
 		$hay .= $needle;
 	}
 }
 
 function string_must_not_starts_with( &$hay, $needle ) {
-	if ( string_starts_with( $hay, $needle ) ) {
+	if ( \Staq\Util\string_starts_with( $hay, $needle ) ) {
 		$hay = substr( $hay, strlen( $needle ) );
 	}
 }
 
 function string_must_not_ends_with( &$hay, $needle ) {
-	if ( string_ends_with( $hay, $needle ) ) {
+	if ( \Staq\Util\string_ends_with( $hay, $needle ) ) {
 		$hay = substr( $hay, 0, -strlen( $needle ) );
 	}
 }
@@ -72,14 +72,14 @@ function string_contains( $hay, $needle ) {
 }
 
 function string_i_contains( $hay, $needle ) {
-	return string_contains( strtolower( $hay ), strtolower( $needle ) );
+	return \Staq\Util\string_contains( strtolower( $hay ), strtolower( $needle ) );
 }
 
 
 
 // SUBSTRING FUNCTIONS
 function string_cut_before( &$hay, $needles ) {
-	$return = string_substr_before( $hay, $needles );
+	$return = \Staq\Util\string_substr_before( $hay, $needles );
 	$hay = substr( $hay, strlen( $return ) );
 	return $return;
 }
@@ -88,7 +88,7 @@ function string_substr_before( $hay, $needles ) {
 	must_be_array( $needles );
 	$return = $hay;
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && \Staq\Util\string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, 0, strpos( $hay, $needle ) );
 			if ( strlen( $cut ) < strlen ( $return ) ) {
 				$return = $cut;
@@ -100,16 +100,16 @@ function string_substr_before( $hay, $needles ) {
 }
 
 function string_cut_before_last( &$hay, $needles ) {
-	$return = string_substr_before_last( $hay, $needles );
+	$return = \Staq\Util\string_substr_before_last( $hay, $needles );
 	$hay = substr( $hay, strlen( $return ) );
 	return $return;
 }
 
 function string_substr_before_last( $hay, $needles ) {
-	must_be_array( $needles );
+	\Staq\Util\must_be_array( $needles );
 	$return = '';
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && \Staq\Util\string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, 0, strrpos( $hay, $needle ) );
 			if ( strlen( $cut ) > strlen ( $return ) ) {
 				$return = $cut;
@@ -121,16 +121,16 @@ function string_substr_before_last( $hay, $needles ) {
 }
 
 function string_cut_after( &$hay, $needles ) {
-	$return = string_substr_after( $hay, $needles );
+	$return = \Staq\Util\string_substr_after( $hay, $needles );
 	$hay = substr( $hay, 0, - strlen( $return ) );
 	return $return;
 }
 
 function string_substr_after( $hay, $needles ) {
-	must_be_array( $needles );
+	\Staq\Util\must_be_array( $needles );
 	$return = '';
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && \Staq\Util\string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, strpos( $hay, $needle ) + strlen( $needle ) );
 			if ( strlen( $cut ) > strlen ( $return ) ) {
 				$return = $cut;
@@ -141,16 +141,16 @@ function string_substr_after( $hay, $needles ) {
 }
 
 function string_cut_after_last( &$hay, $needles ) {
-	$return = string_substr_after_last( $hay, $needles );
+	$return = \Staq\Util\string_substr_after_last( $hay, $needles );
 	$hay = substr( $hay, 0, - strlen( $return ) );
 	return $return;
 }
 
 function string_substr_after_last( $hay, $needles ) {
-	must_be_array( $needles );
+	\Staq\Util\must_be_array( $needles );
 	$return = $hay;
 	foreach( $needles as $needle ) {
-		if ( ! empty( $needle) && string_contains( $hay, $needle ) ) {
+		if ( ! empty( $needle) && \Staq\Util\string_contains( $hay, $needle ) ) {
 			$cut = substr( $hay, strrpos( $hay, $needle ) + strlen( $needle ) );
 			if ( strlen( $cut ) < strlen ( $return ) ) {
 				$return = $cut;
@@ -182,12 +182,34 @@ function string_dirname( $path, $level = 1 ) {
 }
 
 function string_basename( $path, $level = 1 ) {
-	$dirpath = string_dirname( $path, $level );
+	$dirpath = \Staq\Util\string_dirname( $path, $level );
 	return substr( $path, strlen( $dirpath ) + 1 );
 }
 
 function file_extension( $path ) {
-	return string_substr_after_last( $path, '.' );
+	return \Staq\Util\string_substr_after_last( $path, '.' );
+}
+
+function string_path_to_namespace( $path, $absolute = TRUE ) {
+	$namespace = implode( '\\', array_map( function( $a ) {
+		return ucfirst( $a );
+	}, explode( '/', $path ) ) );
+	if ( $absolute ) {
+		$namespace = '\\' . $namespace;
+	}
+	return $namespace;
+}
+
+function string_namespace_to_path( $namespace, $file = TRUE ) {
+	if ( $file ) {
+		$parts = explode( '\\', $namespace );
+		if ( count( $parts ) == 1 ) {
+			return $parts[ 0 ];
+		}
+		$class = array_pop( $parts );
+		return strtolower( implode( '/', $parts ) ) . '/' . $class;
+	}
+	return str_replace( '\\', '/' , $namespace );
 }
 
 
@@ -248,9 +270,12 @@ function is_default_stack_query( $string ) {
 }
 
 // STACK OBJECT
+function is_stack_object( $stack ) {
+	return ( is_object( $stack ) && \Staq\Util\is_stack( $stack ) );
+}
 function is_stack( $stack ) {
 	\Staq\Util\must_be_class( $stack );
-	return \Staq\Util\string_starts_with( $stack, 'Stack\\');
+	return \Staq\Util\string_starts_with( $stack, 'Stack\\' );
 }
 function stack_query( $stack ) {
 	\Staq\Util\must_be_class( $stack );
