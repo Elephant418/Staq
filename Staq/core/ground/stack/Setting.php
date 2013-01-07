@@ -20,6 +20,7 @@ class Setting {
 	  CONSTRUCTOR                 
 	 *************************************************************************/
 	public function __construct( $full_setting_file_name ) {
+		$this->must_be_setting_file_name( $full_setting_file_name );
 		$setting_file_paths = $this->get_file_paths( $full_setting_file_name );
 		$this->datas = $this->parse_setting_files( $setting_file_paths );
 	}
@@ -132,6 +133,11 @@ class Setting {
 	/*************************************************************************
 	  PROTECTED METHODS                 
 	 *************************************************************************/
+	protected function must_be_setting_file_name( &$mixed ) {
+		if ( \Staq\Util\is_stack_object( $mixed ) ) {
+			$mixed = \Staq\Util\string_namespace_to_path( \Staq\Util\stack_query( $mixed ) );
+		}
+	}
 	protected function get_file_paths( $full_setting_file_name ) {
 		$file_names = $this->get_file_names( $full_setting_file_name );
 		$platform_name = \Staq\Application::get_platform( );
