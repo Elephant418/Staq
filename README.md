@@ -27,8 +27,8 @@ Let's coding
 require_once( 'path/to/Staq/include.php' );
 
 \Staq\Application::create( 'Hello_World' )
-    ->add_controller( '/*', function( ) {
-        return 'Hello World';
+    ->add_controller( '/hello/:name', function( $name ) {
+        return 'Hello ' . $name;
     } )
     ->run( );
 ```
