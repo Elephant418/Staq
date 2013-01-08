@@ -4,10 +4,11 @@ Staq is a small PHP framework for a enjoyable web development.
 
 ### Features
 
-1. **Stack**: A new object pattern for extensible & low dependency development ;
-2. **Routing**: An adaptable routing system for [small](#hello-world-tutorial) & big projects ;
-3. **Model**: *Planned for the version v0.5* ;
-4. **Extendable applications**: *Planned for the version v0.7*.
+Staq contains all the needed features : Extensible structure, routing, ORM (*Planned*), templating (*Planned*) & pre-coded applications (*Planned*).
+
+Staq mainly contains a new object pattern, *the stack*, for low dependency & extensible development !
+
+In the little details, I take care of making the code enjoyable from the start to the production state.
 
 ### License
 
@@ -24,8 +25,7 @@ If you have a question, you can send a message to the community via [the mailing
 Getting Started
 --------
 
-### System Requirements
-You need **PHP >= 5.4** and some happiness.
+Let's coding :)
 
 ### Hello world tutorial 
 
@@ -38,6 +38,9 @@ require_once( 'path/to/Staq/include.php' );
     } )
     ->run( );
 ```
+
+### System Requirements
+You need **PHP >= 5.4** and some happiness.
 
 
 
