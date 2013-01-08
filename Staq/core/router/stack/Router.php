@@ -104,8 +104,11 @@ class Router {
 
 	protected function get_active_route_by_uri( $uri ) {
 		foreach ( $this->routes as $route ) {
-			if ( $route->match_uri( $uri ) ) {
-				return $route;
+			if ( $result = $route->is_route_catch_uri( $uri ) ) {
+				if ( $result === TRUE ) {
+					return $route;
+				}
+				\Staq\Util\http_action_redirect( $result );
 			}
 		}
 		throw ( new \Stack\Exception\Resource_Not_Found )->by_uri( $uri );
@@ -113,7 +116,7 @@ class Router {
 
 	protected function get_active_route_by_exception( $exception ) {
 		foreach ( $this->routes as $route ) {
-			if ( $route->match_exception( $exception ) ) {
+			if ( $route->is_route_catch_exception( $exception ) ) {
 				return $route;
 			}
 		}

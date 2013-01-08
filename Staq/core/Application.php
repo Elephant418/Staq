@@ -24,4 +24,7 @@ abstract class Application {
 	public static function get_platform( ) {
 		return self::current_application( )->get_platform( );
 	}
+	public static function get_root_uri( ) {
+		return self::current_application( )->get_root_uri( );
+	}
 }

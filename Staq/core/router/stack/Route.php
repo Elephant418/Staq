@@ -35,6 +35,23 @@ class Route {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
+	public function get_uri( $parameters ) {
+		$uri = $this->match_uri;
+		foreach ( $parameters as $name => $value ) {
+			if ( ! is_numeric( $name ) ) {
+				$uri = str_replace( ':' . $name, $value, $uri );
+				unset( $parameters[ $name ] );
+			}
+		}
+		ksort( $parameters );
+		foreach ( $parameters as $value ) {
+			$uri = preg_replace( '#^([^:]*):\w+#', '${1}' . $value, $route );
+		}
+		$uri = preg_replace( '#\(([^):]*)\)#', '${1}', $uri ); 
+		$uri = preg_replace( '#\([^)]*\)#', '', $uri ); 
+		$uri = preg_replace( '#:(\w+)#', '', $uri );
+		return $uri;
+	}
 	public function call_action( ) {
 		if ( is_array( $this->callable ) ) {
 			$reflection = new \ReflectionMethod( $this->callable[ 0 ], $this->callable[ 1 ] );
@@ -56,8 +73,29 @@ class Route {
 		}
 		return call_user_func_array( $this->callable, $parameters );
 	}
-	public function match_uri( $uri ) {
-		$pattern = str_replace( [ '.', '+', '?' ],  [ '\.', '\+', '\?' ], $this->match_uri ); 
+	public function is_route_catch_uri( $uri ) {
+		if ( $this->is_uri_match( $uri, $this->match_uri ) ) {
+			return TRUE;
+		}
+		foreach ( $this->aliases_uri as $alias ) {
+			if ( $this->is_uri_match( $uri, $alias ) ) {
+				return $this->get_uri( $this->parameters );
+			}
+		}
+		return FALSE;
+	}
+	public function is_route_catch_exception( $exception ) {
+		return FALSE;
+		throw new \Stack\Exception\Not_Implemented_Yet( __METHOD__ . ' not implemented yet' );
+	}
+
+
+
+	/*************************************************************************
+	  PROTECTED METHODS             
+	 *************************************************************************/
+	protected function is_uri_match( $uri, $refer ) {
+		$pattern = str_replace( [ '.', '+', '?' ],  [ '\.', '\+', '\?' ], $refer ); 
 		$pattern = preg_replace( '#\*#', '.*', $pattern );
 		$pattern = preg_replace( '#\(([^)]*)\)#', '(?:\1)?', $pattern ); 
 		$pattern = preg_replace( '#\:(\w+)#', '(?<\1>\w+)', $pattern ); 
@@ -75,9 +113,5 @@ class Route {
 		}
 		$this->parameters = $parameters;
 		return $result;
-	}
-	public function match_exception( $exception ) {
-		return FALSE;
-		throw new \Stack\Exception\Not_Implemented_Yet( __METHOD__ . ' not implemented yet' );
 	}
 }

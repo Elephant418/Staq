@@ -59,11 +59,11 @@ class __Default implements \Stack\IController {
 			$match_uri = NULL;
 			$match_exceptions = [ ];
 			$aliases_uri = [ ];
-			if ( is_array( params ) ) {
+			if ( is_array( $params ) ) {
 				$match_uri        = isset( $params[ 'match_uri'        ] ) ? $params[ 'match_uri'        ] : $match_uri;
 				$match_exceptions = isset( $params[ 'match_exceptions' ] ) ? $params[ 'match_exceptions' ] : $match_exceptions;
 				$aliases_uri      = isset( $params[ 'aliases_uri'      ] ) ? $params[ 'aliases_uri'      ] : $aliases_uri;
-			} else if ( is_string( params ) ) {
+			} else if ( is_string( $params ) ) {
 				$match_uri = $params;
 			}
 			return new \Stack\Route( $callable, $match_uri, $match_exceptions, $aliases_uri );

@@ -263,6 +263,21 @@ function get_attribute_names( $object ) {
 }
 
 
+
+/*************************************************************************
+  OBJECT METHODS                   
+ *************************************************************************/
+function http_redirect( $url ) {
+	header( 'HTTP/1.1 302 Moved Temporarily' );
+	header( 'Location: ' . $url );
+	die( );
+}
+function http_action_redirect( $uri ) {
+	\Staq\Util\http_redirect( \Staq\Application::get_root_uri( ) . substr( $uri, 1 ) );
+}
+
+
+
 /*************************************************************************
   STAQ METHODS                   
  *************************************************************************/
