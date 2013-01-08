@@ -4,11 +4,8 @@ Staq is a small PHP framework for a enjoyable web development.
 
 ### Features
 
-Staq contains all the needed features : Extensible structure, routing, ORM (*Planned*), templating (*Planned*) & pre-coded applications (*Planned*).
-
-Staq mainly contains a new object pattern, *the stack*, for low dependency & extensible development !
-
-In the little details, I take care of making the code enjoyable from the start to the production state.
+Staq contains all the needed features : Extensible structure, routing, ORM *Planned*, templating *Planned* & pre-coded applications *Planned*. <br>
+Staq mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
 
 ### License
 
@@ -16,16 +13,13 @@ Staq is under [MIT License](http://opensource.org/licenses/MIT)
 
 ### Community
 
-Staq is created and maintained by [Thomas ZILLIOX](http://zilliox.me). 
-
+Staq is created and maintained by [Thomas ZILLIOX](http://zilliox.me). <br>
 If you have a question, you can send a message to the community via [the mailing list](mailto:staq-project@googlegroups.com). 
 
 
 
-Getting Started
+Let's coding
 --------
-
-Let's coding :)
 
 ### Hello world tutorial 
 
