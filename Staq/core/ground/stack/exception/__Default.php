@@ -39,6 +39,9 @@ class __Default extends \Exception {
 	public function get_message( ) {
 		return $this->getMessage( );
 	}
+	public function get_code( ) {
+		return $this->getCode( );
+	}
 }
 
 ?>

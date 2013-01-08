@@ -24,10 +24,12 @@ class Route {
 	  CONSTRUCTOR            
 	 *************************************************************************/
 	public function __construct( $callable, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
+		\Staq\Util\must_be_array( $match_exceptions );
+		\Staq\Util\must_be_array( $aliases_uri );
 		$this->callable         = $callable;
 		$this->match_uri        = $match_uri;
 		$this->match_exceptions = $match_exceptions;
-		$this->aliases_uri          = $aliases_uri;
+		$this->aliases_uri      = $aliases_uri;
 	}
 
 
@@ -85,8 +87,28 @@ class Route {
 		return FALSE;
 	}
 	public function is_route_catch_exception( $exception ) {
-		return FALSE;
-		throw new \Stack\Exception\Not_Implemented_Yet( __METHOD__ . ' not implemented yet' );
+		$parameters = [ ];
+		$result = FALSE;
+		foreach ( $this->match_exceptions as $match_exception ) {
+			if ( is_numeric( $match_exception ) ) {
+				if( $exception->get_code( ) == $match_exception ) {
+					$result = TRUE;
+				}
+			} else if ( \Staq\Util\string_starts_with( $match_exception, '\\' ) ) {
+				if( get_class( $exception ) == substr( $match_exception, 1 ) ) {
+					$result = TRUE;
+				}
+			} else if ( \Staq\Util\is_stack( $exception ) ) {
+				if( \Staq\Util\stack_query( $exception ) == $match_exception ) {
+					$result = TRUE;
+				}
+			}
+		}
+		if ( $result ) {
+			$parameters = $this->get_parameter_from_exception( $exception );
+		}
+		$this->parameters = $parameters;
+		return $result;
 	}
 
 
@@ -113,5 +135,15 @@ class Route {
 		}
 		$this->parameters = $parameters;
 		return $result;
+	}
+	protected function get_parameter_from_exception( $exception ) {
+		$parameters = [ ];
+		$parameters[ 'code' ]      = $exception->get_code( );
+		$parameters[ 'exception' ] = $exception;
+		if ( \Staq\Util\is_stack( $exception ) ) {
+			$parameters[ 'query' ] = \Staq\Util\stack_query( $exception );
+			$parameters[ 'name'  ] = \Staq\Util\stack_sub_query( $exception );
+		}
+		return $parameters;
 	}
 }
