@@ -9,16 +9,11 @@ Features
 
 
 ### Stack
-The main feature is that you can instantiate a stack of classes through all your extensions with <code>new \Stack\Model\User</code>,
-where other frameworks limits you to one specific extension with <code>new \My\Extension\Prefixes\Model\User</code>.
-
-1. **Reduce weight**: you have a light syntax with more meaning ;
-2. **Reduce dependency**: you can start to use a stack even before defining it ;
-3. **Increase reusability**: you can add an external extension to complete your own stack.
+A new object pattern for extensible & low dependency development.
 
 
 ### Router
-Soon! It's under development.
+A router for small & big projects, you can inject [anonymous controller](#hello-world-tutorial) or define a general mapping via setting. files.
 
 
 ### Model 
@@ -49,6 +44,14 @@ require_once( 'path/to/Staq/include.php' );
     } )
     ->run( );
 ```
+
+
+
+Community
+--------
+If you have a question, you can send a message to the mailing list : staq-project@googlegroups.com
+
+
 
 License
 --------
