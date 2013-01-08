@@ -8,10 +8,10 @@ Features
 --------
 
 
-** 1. Stack**: A new object pattern for extensible & low dependency development ;
-** 2. Routing**: A routing system for [small](#hello-world-tutorial) & big projects ;
-** 3. Model**: *Planned for the version v0.5* ;
-** 4. Extendable applications**: *Planned for the version v0.7*.
+1. **Stack**: A new object pattern for extensible & low dependency development ;
+2. **Routing**: An adaptable routing system for [small](#hello-world-tutorial) & big projects ;
+3. **Model**: *Planned for the version v0.5* ;
+4. **Extendable applications**: *Planned for the version v0.7*.
 
 
 
