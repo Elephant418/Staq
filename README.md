@@ -16,7 +16,8 @@ Staq is under [MIT License](http://opensource.org/licenses/MIT)
 ### Community
 
 Staq is created and maintained by [Thomas ZILLIOX](http://zilliox.me). 
-If you have a question, you can send a message to the community via [the mailing list](staq-project@googlegroups.com). 
+
+If you have a question, you can send a message to the community via [the mailing list](mailto:staq-project@googlegroups.com). 
 
 
 
