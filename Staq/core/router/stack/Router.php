@@ -16,6 +16,7 @@ class Router {
 	protected $exceptions  = [ ];
 	protected $routes      = [ ];
 	protected $uris        = [ ];
+	protected $setting;
 
 
 
@@ -48,12 +49,15 @@ class Router {
 	  CONSTRUCTOR             
 	 *************************************************************************/
 	public function __construct( $anonymous_controllers ) {
+		$this->setting = new \Stack\Setting( $this );
 		$this->initialize_controllers( );
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
 	}
 	protected function initialize_controllers( ) {
-		// TODO: Add enabled controllers
-		foreach ( $this->controllers as $controller ) {
+		$controllers = $this->setting->get_list( 'controller' );
+		foreach ( $controllers as $controller_name ) {
+			$controller_class = '\\Stack\Controller\\' . $controller_name;
+			$controller = new $controller_class( );
 			$this->add_routes( $controller->get_routes( ) );
 		}
 	}

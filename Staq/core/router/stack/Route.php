@@ -14,20 +14,20 @@ class Route {
 	 *************************************************************************/
 	protected $callable;
 	protected $match_uri;
-	protected $match_exception;
-	protected $parameters = [ ];
-	protected $aliases    = [ ];
+	protected $match_exceptions = [ ];
+	protected $aliases_uri          = [ ];
+	protected $parameters       = [ ];
 
 
 
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function __construct( $callable, $match_uri, $match_exception = NULL , $aliases = [ ] ) {
-		$this->callable        = $callable;
-		$this->match_uri       = $match_uri;
-		$this->match_exception = $match_exception;
-		$this->aliases         = $aliases;
+	public function __construct( $callable, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
+		$this->callable         = $callable;
+		$this->match_uri        = $match_uri;
+		$this->match_exceptions = $match_exceptions;
+		$this->aliases_uri          = $aliases_uri;
 	}
 
 
@@ -78,11 +78,6 @@ class Route {
 	}
 	public function match_exception( $exception ) {
 		return FALSE;
+		throw new \Stack\Exception\Not_Implemented_Yet( __METHOD__ . ' not implemented yet' );
 	}
-
-
-
-	/*************************************************************************
-	  PRIVATE METHODS             
-	 *************************************************************************/
 }

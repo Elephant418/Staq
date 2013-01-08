@@ -55,7 +55,7 @@ class Setting {
 
 	public function get_as_constant( $section, $property, $default = NULL ) {
 		$value = $this->get( $section, $property );
-		if ( ! defined( $value ) ) {
+		if ( defined( $value ) ) {
 			return constant( $value );
 		}
 		return $default;

@@ -224,6 +224,20 @@ function must_be_array( &$array ) {
 	}
 }
 
+function array_must_valid_schema( &$array, $schema ) {
+	foreach ( $schema as $key => $value ) {
+		if ( is_numeric( $key ) ) {
+			if ( ! isset( $array[ $value ] ) ) {
+				throw new \Stack\Exception\Array_Shema_Invalid( 'The current array does not have the require entry named "' . $value . '"' );
+			}
+		} else {
+			if ( ! isset( $array[ $key ] ) ) {
+				$array[ $key ] = $value;
+			}
+		}
+	}
+}
+
 // Keep the order of each FIRST occurence 
 function array_merge_unique( $array1, $array2 ) {
 	return array_values( array_unique( array_merge( $array1, $array2 ) ) );
@@ -244,7 +258,9 @@ function must_be_class( &$object ) {
 		$object = get_class( $object );
 	}
 }
-
+function get_attribute_names( $object ) {
+	return array_keys( get_object_vars( $object ) );
+}
 
 
 /*************************************************************************
