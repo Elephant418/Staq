@@ -90,35 +90,6 @@ class Setting {
 		return $this->get_section( $section );
 	}
 
-	private function get_section( $sections ) {
-		$array = [ ];
-		\Staq\Util\must_be_array( $sections );
-		foreach( $sections as $section ) {
-			foreach ( $this->datas as $data ) {
-				if ( isset( $data[ $section ] ) ) {
-					foreach ( $data[ $section ] as $name => $value ) {
-						if ( ! isset( $array[ $name ] ) ) {
-							$array[ $name ] = $value;
-						}
-					}
-				}
-			}
-		}
-		return $array;
-	}
-
-	private function get_section_property_array( $section, $property ) {
-		$array = [ ];
-		foreach ( $this->datas as $data ) {
-			if ( isset( $data[ $section ][ $property ] ) ) {
-				$elements = $data[ $section ][ $property ];
-				\Staq\Util\must_be_array( $elements );
-				$array = array_merge( $array, $elements );
-			}
-		}
-		return $array;
-	}
-
 
 
 	/*************************************************************************
@@ -138,6 +109,36 @@ class Setting {
 			$mixed = \Staq\Util\string_namespace_to_path( \Staq\Util\stack_query( $mixed ) );
 		}
 	}
+
+	protected function get_section( $sections ) {
+		$array = [ ];
+		\Staq\Util\must_be_array( $sections );
+		foreach( $sections as $section ) {
+			foreach ( $this->datas as $data ) {
+				if ( isset( $data[ $section ] ) ) {
+					foreach ( $data[ $section ] as $name => $value ) {
+						if ( ! isset( $array[ $name ] ) ) {
+							$array[ $name ] = $value;
+						}
+					}
+				}
+			}
+		}
+		return $array;
+	}
+
+	protected function get_section_property_array( $section, $property ) {
+		$array = [ ];
+		foreach ( $this->datas as $data ) {
+			if ( isset( $data[ $section ][ $property ] ) ) {
+				$elements = $data[ $section ][ $property ];
+				\Staq\Util\must_be_array( $elements );
+				$array = array_merge( $array, $elements );
+			}
+		}
+		return $array;
+	}
+
 	protected function get_file_paths( $full_setting_file_name ) {
 		$file_names = $this->get_file_names( $full_setting_file_name );
 		$platform_name = \Staq\Application::get_platform( );
@@ -155,6 +156,7 @@ class Setting {
 		}
 		return $file_paths;
 	}
+
 	protected function get_file_names( $file_name ) {
 		$file_names = [ ];
 		do {
@@ -163,6 +165,7 @@ class Setting {
 		} while( ! empty( $file_name ) );
 		return $file_names;
 	}
+	
 	protected function parse_setting_files( $file_paths ) {
 		$datas = [ ];
 		foreach ( $file_paths as $file_path ) {
