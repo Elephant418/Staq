@@ -4,12 +4,12 @@ Staq is a small PHP framework for a enjoyable web development.
 
 ### Features
 
-Staq contains all the needed features : Extensible structure, routing, ORM ( *Planned* ), templating ( *Planned* ) & pre-coded applications ( *Planned* ). <br>
-Staq mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
+Staq contains all the expected features : Extensible structure, routing, ORM ( *Planned* ), templating ( *Planned* ) & pre-coded applications ( *Planned* ). <br>
+It mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
 
 ### License
 
-Staq is under [MIT License](http://opensource.org/licenses/MIT)
+Staq is under [MIT License](http://opensource.org/licenses/MIT).
 
 ### Community
 
