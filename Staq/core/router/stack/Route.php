@@ -99,7 +99,7 @@ class Route {
 					$result = TRUE;
 				}
 			} else if ( \Staq\Util\is_stack( $exception ) ) {
-				if( \Staq\Util\stack_query( $exception ) == $match_exception ) {
+				if( \Staq\Util\stack_sub_query( $exception ) == $match_exception ) {
 					$result = TRUE;
 				}
 			}
