@@ -1,4 +1,4 @@
-Staq
+Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=develop)](https://travis-ci.org/Pixel418/Staq?branch=develop)
 ======
 Staq is a small PHP framework for an enjoyable web development.
 
