@@ -37,5 +37,5 @@ $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing parent', [
 ] );
 
 // RESULT
-echo $case->to_html( );
+echo $case->output( );
 return $case;

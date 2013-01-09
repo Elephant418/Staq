@@ -11,5 +11,5 @@ $test_cases = [ 'application', 'autoloader', 'setting' ];
 $collection = new \Staq\Util\Test_Collection( $name, $test_cases, __DIR__ );
 
 // RESULT
-echo $collection->to_html( );
+echo $collection->output( );
 return $collection;

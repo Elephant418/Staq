@@ -11,5 +11,5 @@ $test_cases = [ 1, 2, 3, 4, 5 ];
 $collection = new \Staq\Util\Test_Collection( $name, $test_cases, __DIR__ );
 
 // RESULT
-echo $collection->to_html( );
+echo $collection->output( );
 return $collection;

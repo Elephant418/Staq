@@ -21,5 +21,5 @@ $case = new \Staq\Util\Test_Case( 'Stack autoloading without existing class', [
 ] );
 
 // RESULT
-echo $case->to_html( );
+echo $case->output( );
 return $case;

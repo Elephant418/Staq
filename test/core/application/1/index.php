@@ -18,5 +18,5 @@ $case = new \Staq\Util\Test_Case( 'Without custom application', [
 ] );
 
 // RESULT
-echo $case->to_html( );
+echo $case->output( );
 return $case;

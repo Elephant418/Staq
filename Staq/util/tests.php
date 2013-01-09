@@ -36,7 +36,19 @@ class Test {
 	/*************************************************************************
 	  OUPUT METHOD
 	 *************************************************************************/
-	public function to_html( ) {
+	public function output( ) {
+		return ( $this->is_cli( ) ? $this->to_string( ) : $this->to_html( ) );
+	}
+
+
+
+	/*************************************************************************
+	  PROTECTED METHOD
+	 *************************************************************************/
+	protected function is_cli( ) {
+		return ( PHP_SAPI === 'cli' );
+	}
+	protected function to_html( ) {
 		$str = $this->name;
 		if ( ! $this->result ) {
 			$str .= ': <b>ERROR</b>';
@@ -45,6 +57,20 @@ class Test {
 			}
 		}
 		return $str;
+	}
+	protected function to_string( ) {
+		$str = $this->to_html( );
+		$str = str_replace( [ '<b>', '</b>' ], '*'    , $str );
+		$str = str_replace( [ '<br>', '<br/>', '</li>' ], PHP_EOL, $str );
+
+		$match = [ ];
+		while ( preg_match( '#<ul>(.*)<\/ul>#s', $str, $match ) ) {
+			$target = $match[ 0 ];
+			$replace = PHP_EOL . str_replace( '<li>', '   <li>#', $match[ 1 ] );
+			$str = str_replace( $target, $replace, $str );
+		}
+
+		return strip_tags( $str ) . PHP_EOL;
 	}
 }
 
@@ -87,17 +113,17 @@ class Test_Case extends Test {
 	/*************************************************************************
 	  OUPUT METHOD
 	 *************************************************************************/
-	public function to_html( $path = '' ) {
+	protected function to_html( $path = '' ) {
 		$path .= $this->folder . '/';
-		$html = '<a href="' . $path . '">' . $this->name . '</a> ' . $this->ok;
+		$html = '<a href="' . $path . '">' . $this->name . '</a>   ' . $this->ok . '+';
 		if ( $path == '' || $this->error > 0 || isset( $_GET[ 'all' ] ) ) {
-			$html .= ' / ' . $this->error . '<ul>';
+			$html .= ' ' . $this->error . '-<ul>';
 			foreach ( $this->tests as $test ) {
-				$html .=  '<li>' . $test->to_html( $path ) . '</li>';
+				$html .=  '<li> ' . $test->to_html( $path ) . '</li>';
 			}
 			$html .= '</ul>';
 		}
-		if ( $path == './' ) {
+		if ( $path == './' && ! $this->is_cli( ) ) {
 			$path  = \Staq\Util\string_substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 			$get   = $_GET;
 			if ( isset( $_GET[ 'all' ] ) ) {
@@ -130,16 +156,16 @@ class Test_Collection extends Test_Case {
 	 *************************************************************************/
 	public function __construct( $name, $test_cases, $dir ) {
 		$this->name = $name;
-		foreach ( $test_cases as $test_case ) {
-			ob_start();
-			$result = ( include( $dir . '/' . $test_case . '/index.php' ) );
-			ob_end_clean();
-			if ( is_a( $result, 'Staq\\Util\\Test_Case' ) ) {
-				$result->folder = $test_case;
+		foreach ( $test_cases as $case_folder ) {
+			ob_start( );
+			$case = ( include( $dir . '/' . $case_folder . '/index.php' ) );
+			ob_end_clean( );
+			if ( is_a( $case, 'Staq\\Util\\Test_Case' ) ) {
+				$case->folder = $case_folder;
 			}
-			$this->ok += $result->ok;
-			$this->error += $result->error;
-			$this->tests[ ] = $result;
+			$this->ok += $case->ok;
+			$this->error += $case->error;
+			$this->tests[ ] = $case;
 		}
 		$this->compute( );
 	}
