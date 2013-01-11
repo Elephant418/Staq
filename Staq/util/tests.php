@@ -124,7 +124,7 @@ class Test_Case extends Test {
 			$html .= '</ul>';
 		}
 		if ( $path == './' && ! $this->is_cli( ) ) {
-			$path  = \Staq\Util\string_substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+			$path  = \UString\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 			$get   = $_GET;
 			if ( isset( $_GET[ 'all' ] ) ) {
 				unset( $get['all'] );

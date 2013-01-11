@@ -55,11 +55,7 @@ class Autoloader {
 
 		$this->create_empty_class( $class );
 	}
-	/* "stack" is now a part of the namespace to : 
-	 *   1. Separate stackable class files with others
-	 *   2. Separate the extension namespace with the query namespace
-	 *   3. There is no more burgers at my bakery 
-	 */
+	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
 	protected function load_stack_extension_file( $stack, $extension ) {
 		$relative_path = $extension . '/stack/' .\Staq\Util\string_namespace_to_class_path( $stack );
 		$absolute_path = STAQ_ROOT_PATH . $relative_path . '.php';
@@ -113,8 +109,8 @@ class Autoloader {
 		return $this->create_class( $class, NULL );
 	}
 	protected function create_class( $class, $base_class, $is_interface = FALSE ) {
-		$namespace = \Staq\Util\string_substr_before_last( $class, '\\' );
-		$name = \Staq\Util\string_substr_after_last( $class, '\\' );
+		$namespace = \UString\substr_before_last( $class, '\\' );
+		$name = \UString\substr_after_last( $class, '\\' );
 		$code = '';
 		if ( $namespace ) {
 			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
@@ -139,10 +135,4 @@ class Autoloader {
 			throw new \Stack\Exception\Wrong_Class_Definition( 'Wrong class definition: "' . $loaded_class . '" definition, but "' . $class . '" expected.' ); 
 		}
 	}
-
-
-
-	/*************************************************************************
-	  NAMESPACE FORMAT             
-	 *************************************************************************/
 }

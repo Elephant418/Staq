@@ -24,8 +24,8 @@ class Route {
 	  CONSTRUCTOR            
 	 *************************************************************************/
 	public function __construct( $callable, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
-		\Staq\Util\must_be_array( $match_exceptions );
-		\Staq\Util\must_be_array( $aliases_uri );
+		\UArray\must_be_array( $match_exceptions );
+		\UArray\must_be_array( $aliases_uri );
 		$this->callable         = $callable;
 		$this->match_uri        = $match_uri;
 		$this->match_exceptions = $match_exceptions;
@@ -94,7 +94,7 @@ class Route {
 				if( $exception->get_code( ) == $match_exception ) {
 					$result = TRUE;
 				}
-			} else if ( \Staq\Util\string_starts_with( $match_exception, '\\' ) ) {
+			} else if ( \UString\starts_with( $match_exception, '\\' ) ) {
 				if( get_class( $exception ) == substr( $match_exception, 1 ) ) {
 					$result = TRUE;
 				}
