@@ -3,14 +3,23 @@ Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=develop)](h
 
 Staq is a small PHP framework for an enjoyable web development.
 
-### Features
+1. [Features](#features)
+2. [Let's code](#lets-code)
+3. [How to Install](#how-to-install)
+4. [How to Contribute](#how-to-contribute)
+5. [Author & Community](#author--community)
+
+
+
+Features
+--------
 
 Staq contains all the expected features : Extensible structure, routing, ORM ( *Planned* ), templating ( *Planned* ) & pre-coded applications ( *Planned* ). <br>
 It mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
 
 
 
-Let's coding
+Let's code
 --------
 
 ### Hello world tutorial 
@@ -68,7 +77,7 @@ All pull requests must follow this particular [style guide](https://github.com/P
 
 
 
-Miscellaneous
+Author & Community 
 --------
 
 Staq is under [MIT License](http://opensource.org/licenses/MIT).  
