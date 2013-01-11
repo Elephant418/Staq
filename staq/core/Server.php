@@ -21,7 +21,7 @@ class Server {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function create_application( $path = 'Staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
+	public function create_application( $path = 'staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
 		$extensions = $this->find_extensions( $path );
 		if ( ! is_null( self::$autoloader ) ) {
 			spl_autoload_unregister( array( self::$autoloader, 'autoload' ) );
@@ -54,7 +54,7 @@ class Server {
 
 	protected function find_extensions_parse_setting_file( $extension, &$disabled ) {
 		$added_extensions = [ ];
-		$setting_file_path = STAQ_ROOT_PATH . $extension . '/setting/application.ini';
+		$setting_file_path = \Staq\ROOT_PATH . $extension . '/setting/application.ini';
 		if ( is_file( $setting_file_path ) ) {
 			$setting = parse_ini_file( $setting_file_path, TRUE );
 			if ( isset( $setting[ 'extension_list' ] ) ) {
@@ -69,7 +69,7 @@ class Server {
 		}
 		// Default value for extension without configuration 
 		if ( empty( $added_extensions ) ) {
-			$added_extensions = [ 'Staq/core/ground' ];
+			$added_extensions = [ 'staq/core/ground' ];
 		}
 		return $added_extensions;
 	}

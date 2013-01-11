@@ -8,8 +8,8 @@ namespace Staq {
 	if ( ! defined( 'HTML_EOL' ) ) {
 		define( 'HTML_EOL', '<br>' . PHP_EOL );
 	}
-	if ( ! defined( 'STAQ_ROOT_PATH' ) ) {
-		define( 'STAQ_ROOT_PATH', dirname( __DIR__ ) . '/' );
+	if ( ! defined( 'Staq\\ROOT_PATH' ) ) {
+		define( 'Staq\\ROOT_PATH', dirname( __DIR__ ) . '/' );
 	}
 
 	require_once( __DIR__ . '/util/functions.php' );

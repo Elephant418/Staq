@@ -172,7 +172,7 @@ class Setting {
 			if ( isset( self::$cache_parsed_file[ $file_path ] ) ) {
 				$datas[ $file_path ] = self::$cache_parsed_file[ $file_path ];
 			} else {
-				$absolute_file_path = STAQ_ROOT_PATH . $file_path;
+				$absolute_file_path = \Staq\ROOT_PATH . $file_path;
 				if ( is_file( $absolute_file_path ) ) {
 					$datas[ $file_path ] = parse_ini_file( $absolute_file_path, TRUE );
 				} else {
