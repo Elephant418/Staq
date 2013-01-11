@@ -2,10 +2,6 @@
 
 /* This file is part of the Ubiq project, which is under MIT license */
 
-
-/*************************************************************************
-  STRING METHODS                   
- *************************************************************************/
 namespace Ubiq {
 	const VERSION = '0.1';
 }
