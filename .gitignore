@@ -1,5 +1,7 @@
 *~
 *.local.perso.ini
+vendor/*
+composer.lock
 
 .buildpath
 .project
