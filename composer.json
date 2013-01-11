@@ -1,0 +1,19 @@
+{
+    "name": "pixel418/staq",
+    "type": "library",
+    "description": "Staq is a small PHP framework for an enjoyable web development",
+    "keywords": [ "framework" ],
+    "homepage": "https://github.com/Pixel418/Staq",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas ZILLIOX",
+            "homepage": "http://zilliox.me",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "pixel418/ubiq": "0.1"
+    }
+}
