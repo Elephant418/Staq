@@ -13,7 +13,7 @@ namespace Staq {
 	}
 
 	require_once( __DIR__ . '/util/functions.php' );
-	require_once( __DIR__ . '/../vendor/pixel418/ubiq/Ubiq/Ubiq.php' );
+	require_once( __DIR__ . '/../vendor/pixel418/ubiq/ubiq/Ubiq.php' );
 	require_once( __DIR__ . '/core/Server.php' );
 	require_once( __DIR__ . '/core/Application.php' );
 	require_once( __DIR__ . '/core/Autoloader.php' );
