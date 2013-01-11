@@ -2,6 +2,9 @@
 
 /* This file is part of the Staq project, which is under MIT license */
 
+namespace Staq {
+	const VERSION = '0.4';
+}
 
 if ( ! defined( 'HTML_EOL' ) ) {
 	define( 'HTML_EOL', '<br>' . PHP_EOL );
