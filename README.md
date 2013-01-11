@@ -17,6 +17,8 @@ Features
 Staq contains all the expected features : Extensible structure, routing, ORM ( *Planned* ), templating ( *Planned* ) & pre-coded applications ( *Planned* ). <br>
 It mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
 
+[top](#readme)
+
 
 
 Let's code
@@ -36,6 +38,8 @@ require_once( 'path/to/Staq/include.php' );
 
 ### System Requirements
 You need **PHP >= 5.4** and some happiness.
+
+[top](#readme)
 
 
 
@@ -62,6 +66,8 @@ The last step is to include Staq in your PHP file :
 require_once( './vendor/pixel418/staq/Staq/include.php' );
 ```
 
+[top](#readme)
+
 
 
 How to Contribute
@@ -75,12 +81,16 @@ If you don't know much about pull request, you can read [the Github article](htt
 
 All pull requests must follow this particular [style guide](https://github.com/Pixel418/Style_Guide) and accompanied by passing tests.
 
+[top](#readme)
 
 
-Author & Community 
+
+Author & Community
 --------
 
 Staq is under [MIT License](http://opensource.org/licenses/MIT).  
 It is created and maintained by [Thomas ZILLIOX](http://zilliox.me).  
 If you have a question, you can send a message to the community via [the mailing list](mailto:staq-project@googlegroups.com).  
 If you are curious on the next features, you can see my [trello board](https://trello.com/board/staq/50de3fe18942735c620000a9).
+
+[top](#readme)
