@@ -2,6 +2,10 @@ language: php
 before_script:
   - wget http://getcomposer.org/composer.phar
   - php composer.phar install
+  - mkdir vendor/pixel418/staq
+  - cd vendor/pixel418/staq
+  - ln -s ../../../staq
+  - cd ../../..
 script: php test/index.php
 php:
   - 5.4
