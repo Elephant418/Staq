@@ -149,7 +149,7 @@ class Setting {
 					$file_name .= '.' . $platform_name;
 				}
 				while ( $file_name ) {
-					$file_paths[ ] = $extension . '/setting/' . $file_name . '.ini';
+					$file_paths[ ] = $extension['path'] . '/setting/' . $file_name . '.ini';
 					$file_name = \UString\substr_before_last( $file_name, '.' );
 				}
 			}
@@ -172,9 +172,8 @@ class Setting {
 			if ( isset( self::$cache_parsed_file[ $file_path ] ) ) {
 				$datas[ $file_path ] = self::$cache_parsed_file[ $file_path ];
 			} else {
-				$absolute_file_path = \Staq\ROOT_PATH . $file_path;
-				if ( is_file( $absolute_file_path ) ) {
-					$datas[ $file_path ] = parse_ini_file( $absolute_file_path, TRUE );
+				if ( is_file( $file_path ) ) {
+					$datas[ $file_path ] = parse_ini_file( $file_path, TRUE );
 				} else {
 					$datas[ $file_path ] = [ ];
 				}

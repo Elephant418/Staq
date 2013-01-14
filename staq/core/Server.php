@@ -37,9 +37,10 @@ class Server {
 	/*************************************************************************
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
-	protected function find_extensions( $path ) {
-		$extensions = [ $path ];
-		$this->find_extensions_recursive( $path, $extensions );
+	protected function find_extensions( $name ) {
+		$extensions = [ $name ];
+		$this->find_extensions_recursive( $name, $extensions );
+		$extensions = $this->format_extensions_from_names( $extensions );
 		return $extensions;
 	}
 
@@ -54,16 +55,18 @@ class Server {
 
 	protected function find_extensions_parse_setting_file( $extension, &$disabled ) {
 		$added_extensions = [ ];
-		$setting_file_path = \Staq\ROOT_PATH . $extension . '/setting/application.ini';
-		if ( is_file( $setting_file_path ) ) {
-			$setting = parse_ini_file( $setting_file_path, TRUE );
-			if ( isset( $setting[ 'extension_list' ] ) ) {
-				$ext = $setting[ 'extension_list' ];
-				if ( isset( $ext[ 'enabled' ] ) && is_array( $ext[ 'enabled' ] ) ) {
-					$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
-				}
-				if ( isset( $ext[ 'disabled' ] ) && is_array( $ext[ 'disabled' ] ) ) {
-					$disabled = \UArray\merge_unique( $disabled, $ext[ 'disabled' ] );
+		if ( $setting_file_path = $this->find_extension_path( $extension ) ) {
+			$setting_file_path .= '/setting/application.ini';
+			if ( is_file( $setting_file_path ) ) {
+				$setting = parse_ini_file( $setting_file_path, TRUE );
+				if ( isset( $setting[ 'extension_list' ] ) ) {
+					$ext = $setting[ 'extension_list' ];
+					if ( isset( $ext[ 'enabled' ] ) && is_array( $ext[ 'enabled' ] ) ) {
+						$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
+					}
+					if ( isset( $ext[ 'disabled' ] ) && is_array( $ext[ 'disabled' ] ) ) {
+						$disabled = \UArray\merge_unique( $disabled, $ext[ 'disabled' ] );
+					}
 				}
 			}
 		}
@@ -72,5 +75,23 @@ class Server {
 			$added_extensions = [ 'staq/core/ground' ];
 		}
 		return $added_extensions;
+	}
+
+	protected function format_extensions_from_names( $extensions ) {
+		foreach ( $extensions as $key => $name ) {
+			$extensions[ $key ]                = [ ];
+			$extensions[ $key ][ 'name' ]      = $name;
+			$extensions[ $key ][ 'namespace' ] = \Staq\Util\string_path_to_namespace( $name );
+			$extensions[ $key ][ 'path' ]      = $this->find_extension_path( $name );
+		}
+		return $extensions;
+	}
+
+	protected function find_extension_path( $name ) {
+		foreach ( [ \Staq\STAQ_ROOT_PATH, \Staq\VENDOR_ROOT_PATH, \Staq\ROOT_PATH ] as $path ) {
+			if ( is_dir( $path . $name ) ) {
+				return $path . $name;
+			}
+		}
 	}
 }

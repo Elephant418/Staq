@@ -1,6 +1,6 @@
 <?php
 
-$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/staq';
+$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/vendor/pixel418/staq/staq';
 require_once( $staq_path . '/util/tests.php' );
 require_once( $staq_path . '/include.php' );
 
@@ -32,6 +32,7 @@ $case = new \Staq\Util\Test_Case( 'Stack autoloading with an existing parent', [
 	},
 	'Query a redefined default exception give a stack with with the two default exception' => function( ) {
 		$stack = new \Stack\Exception\Unexisting_exception;
+		// \Staq\Util\stack_debug( $stack );
 		return ( \Staq\Util\stack_height( $stack ) == 2 );
 	}
 ] );

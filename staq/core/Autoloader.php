@@ -56,10 +56,10 @@ class Autoloader {
 	}
 	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
 	protected function load_stack_extension_file( $stack, $extension ) {
-		$relative_path = $extension . '/stack/' .\Staq\Util\string_namespace_to_class_path( $stack );
-		$absolute_path = \Staq\ROOT_PATH . $relative_path . '.php';
+		$stack_path = \Staq\Util\string_namespace_to_class_path( $stack );
+		$absolute_path = $extension['path'] . '/stack/' . $stack_path . '.php';
 		if ( is_file( $absolute_path ) ) {
-			$real_class = \Staq\Util\string_path_to_namespace( $relative_path );
+			$real_class = $extension['namespace'] . '\\Stack\\' . $stack;
 			if ( ! $this->class_exists( $real_class ) ) {
 				require_once( $absolute_path );
 				$this->check_class_loaded( $real_class );
@@ -70,7 +70,7 @@ class Autoloader {
 	
 
 	protected function load_stack_parent_class( $class ) {
-		$query_extension = \Staq\Util\string_namespace_to_class_path( \Staq\Util\stackable_extension( $class ) );
+		$query_extension = \Staq\Util\stackable_extension( $class );
 		$query = \Staq\Util\parent_stack_query( $class );
 		$ready = FALSE;
 		while( $query ) {
@@ -81,7 +81,7 @@ class Autoloader {
 						return TRUE;
 					}
 				} else {
-					if ( strtolower( $query_extension ) == strtolower( $extension ) ) {
+					if ( $query_extension == $extension['namespace'] ) {
 						$ready = TRUE;
 					}
 				}
@@ -108,8 +108,8 @@ class Autoloader {
 		return $this->create_class( $class, NULL );
 	}
 	protected function create_class( $class, $base_class, $is_interface = FALSE ) {
-		$namespace = \UString\substr_before_last( $class, '\\' );
-		$name = \UString\substr_after_last( $class, '\\' );
+		$namespace = \UObject\get_namespace( $class, '\\' );
+		$name = \UObject\get_class_name( $class, '\\' );
 		$code = '';
 		if ( $namespace ) {
 			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
@@ -121,7 +121,7 @@ class Autoloader {
 		}
 		$code .= ' ' . $name . ' ';
 		if ( $base_class ) {
-			$code .= 'extends ' . $base_class . ' ';
+			$code .= 'extends \\' . $base_class . ' ';
 		}
 		$code .= '{ }' . PHP_EOL;
 		// echo $code . HTML_EOL;

@@ -1,6 +1,6 @@
 <?php
 
-$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/staq';
+$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/vendor/pixel418/staq/staq';
 require_once( $staq_path . '/util/tests.php' );
 require_once( $staq_path . '/include.php' );
 
@@ -11,7 +11,7 @@ $app = \Staq\Application::create( $path );
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Without configuration', [
 	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( ) == [ $path, 'staq/app/starter', 'staq/core/view', 'staq/core/router', 'staq/core/ground' ] );
+		return ( $app->get_extensions( 'name' ) == [ $path, 'staq/app/starter', 'staq/core/view', 'staq/core/router', 'staq/core/ground' ] );
 	},
 	'Platform'   => function( ) use ( $app ) {
 		return ( $app->get_platform( ) == 'prod' );

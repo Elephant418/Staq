@@ -24,8 +24,22 @@ class Application {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function get_extensions( ) {
-		return $this->extensions;
+	public function get_extensions( $filter = NULL ) {
+		$extensions = $this->extensions;
+		if ( $filter ) {
+			foreach ( $extensions as $key => $extension ) {
+				if ( isset( $extension[ $filter ] ) ) {
+					$extensions[ $key ] = $extension[ $filter ];
+				} else {
+					$extensions[ $key ] = NULL;
+				}
+			}
+		}
+		return $extensions;
+	}
+
+	public function get_extension_names( ) {
+		return $return;
 	}
 
 	public function get_name( ) {
