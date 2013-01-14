@@ -3,9 +3,9 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Ground\Stack\Exception;
+namespace Staq\Core\Ground\Stack;
 
-class __Default extends \Exception {
+class Exception extends \Exception {
 
 
 

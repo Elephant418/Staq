@@ -75,19 +75,13 @@ function http_action_redirect( $uri ) {
 function stack_query_pop( $string ) {
 	if ( \Staq\Util\is_stack_query_popable( $string ) ) {
 		$string = \UString\substr_before_last( $string, '\\' );
-		if ( ! \UString\contains( $string, '\\' ) ) {
-			$string = $string . '\\' . \Staq\Autoloader::DEFAULT_CLASS;
-		}
 	} else {
 		$string = NULL;
 	}
 	return $string;
 }
 function is_stack_query_popable( $string ) {
-	return ( \UString\contains( $string, '\\' ) && ! \Staq\Util\is_default_stack_query( $string ) );
-}
-function is_default_stack_query( $string ) {
-	return \UString\ends_with( $string, '\\' . \Staq\Autoloader::DEFAULT_CLASS );
+	return ( \UString\contains( $string, '\\' ) );
 }
 
 // STACK OBJECT
