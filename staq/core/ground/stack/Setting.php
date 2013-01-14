@@ -67,7 +67,7 @@ class Setting {
 	  ARRAY ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function get_list( $property, $initial = [ ] ) {
-		\UString\must_ends_with( $property, '_list' );
+		\UString\must_end_with( $property, '_list' );
 		$disabled = [ ];
 		$enabled = $initial;
 		foreach ( $this->datas as $data ) {
