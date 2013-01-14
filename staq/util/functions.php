@@ -28,13 +28,8 @@ function file_extension( $path ) {
 	return \UString\substr_after_last( $path, '.' );
 }
 
-function string_path_to_namespace( $path, $absolute = TRUE ) {
-	$namespace = implode( '\\', array_map( function( $a ) {
-		return ucfirst( $a );
-	}, explode( '/', $path ) ) );
-	if ( $absolute ) {
-		$namespace = '\\' . $namespace;
-	}
+function string_path_to_namespace( $path ) {
+	$namespace = implode( '\\', array_map( 'ucfirst', explode( '/', $path ) ) );
 	return $namespace;
 }
 
