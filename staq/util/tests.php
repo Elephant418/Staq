@@ -59,18 +59,25 @@ class Test {
 		return $str;
 	}
 	protected function to_string( ) {
-		$str = $this->to_html( );
-		$str = str_replace( [ '<b>', '</b>' ], '*'    , $str );
-		$str = str_replace( [ '<br>', '<br/>', '</li>' ], PHP_EOL, $str );
+		$string = $this->to_html( );
+		$string = str_replace( [ '<b>', '</b>' ], '*'    , $string );
+		$string = str_replace( [ '<br>', '<br/>', '</li>' ], PHP_EOL, $string );
 
 		$match = [ ];
-		while ( preg_match( '#<ul>(.*)<\/ul>#s', $str, $match ) ) {
-			$target = $match[ 0 ];
-			$replace = PHP_EOL . str_replace( '<li>', '   <li>#', $match[ 1 ] );
-			$str = str_replace( $target, $replace, $str );
-		}
+		while ( strpos( $string, '</ul>' ) ) {
+			$target = substr( $string, 0, strpos( $string, '</ul>' ) + 5 );
+			$target = substr( $target, strrpos( $target, '<ul>' ) );
 
-		return strip_tags( $str ) . PHP_EOL;
+			$replace = substr( $target, 4, strlen( $target ) - 9 );
+			$replace = PHP_EOL . str_replace( '<li>', ' | <li>', $replace );
+			$first   = strpos( $replace, '<li>' );
+
+			$string = str_replace( $target, $replace, $string );
+			preg_replace( '#<li>#', '<li>', $string );
+		}
+		$string = str_replace( '  <li> ', '  <li> |> ', $string );
+		$string = preg_replace( '/[' . PHP_EOL . ']+/s', PHP_EOL, $string );
+		return strip_tags( $string ) . PHP_EOL;
 	}
 }
 
@@ -116,7 +123,7 @@ class Test_Case extends Test {
 	protected function to_html( $path = '' ) {
 		$path .= $this->folder . '/';
 		$html = '<a href="' . $path . '">' . $this->name . '</a>   ' . $this->ok . '+';
-		if ( $path == '' || $this->error > 0 || isset( $_GET[ 'all' ] ) ) {
+		if ( $path == '' || $this->error > 0 || $this->is_all_asked( ) ) {
 			$html .= ' ' . $this->error . '-<ul>';
 			foreach ( $this->tests as $test ) {
 				$html .=  '<li> ' . $test->to_html( $path ) . '</li>';
@@ -126,7 +133,7 @@ class Test_Case extends Test {
 		if ( $path == './' && ! $this->is_cli( ) ) {
 			$path  = \UString\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 			$get   = $_GET;
-			if ( isset( $_GET[ 'all' ] ) ) {
+			if ( $this->is_all_asked( ) ) {
 				unset( $get['all'] );
 				$label = 'Hide successful tests';
 			} else {
@@ -137,6 +144,14 @@ class Test_Case extends Test {
 			$html .= '<br /><br /><a href="' . $url . '">' . $label . '</a>';
 		}
 		return $html;
+	}
+
+	protected function is_all_asked( ) {
+		if ( $this->is_cli( ) ) {
+			global $argv;
+			return in_array( 'all', $argv );
+		}
+		return isset( $_GET[ 'all' ] );
 	}
 }
 
