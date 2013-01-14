@@ -13,7 +13,6 @@ class Autoloader {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $extensions = [ ];
-	const DEFAULT_CLASS = '__Default';
 
 
 
