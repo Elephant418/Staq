@@ -38,10 +38,6 @@ class Application {
 		return $extensions;
 	}
 
-	public function get_extension_names( ) {
-		return $return;
-	}
-
 	public function get_name( ) {
 		return $this->name;
 	}
