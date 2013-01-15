@@ -12,7 +12,8 @@ namespace Staq {
 		if ( $pos = strrpos( __DIR__, '/vendor/' ) ) {
 			define( 'Staq\\VENDOR_ROOT_PATH', substr( __DIR__, 0, $pos ) . '/vendor/' );
 		} else {
-			define( 'Staq\\VENDOR_ROOT_PATH', dirname( __DIR__ ) . '/vendor/' );
+			trigger_error( 'Staq must be installed in the vendor folder.', E_USER_ERROR );
+			die;
 		}
 	}
 	if ( ! defined( 'Staq\\STAQ_ROOT_PATH' ) ) {
