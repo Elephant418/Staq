@@ -18,13 +18,13 @@ abstract class Application {
 	public static function current_application( ) {
 		return \Staq\Server::$application;
 	}
-	public static function get_extensions( ) {
-		return self::current_application( )->get_extensions( );
-	}
-	public static function get_platform( ) {
-		return self::current_application( )->get_platform( );
-	}
-	public static function get_root_uri( ) {
-		return self::current_application( )->get_root_uri( );
+	public static function __callStatic( $name, $arguments ) {
+		$application = self::current_application( );
+		$callable = [ $application, $name ];
+		if ( ! is_callable( $callable ) ) {
+			$caller = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 1 );
+			throw new \BadMethodCallException( 'Call to undefined method Stack\\Application::' . $name . ' in ' . $caller[ 'file' ] . ' on line ' . $caller[ 'line' ] );
+		}
+		return call_user_func_array( $callable, $arguments );
 	}
 }
