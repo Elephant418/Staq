@@ -94,7 +94,7 @@ class Route {
 				if( $exception->get_code( ) == $match_exception ) {
 					$result = TRUE;
 				}
-			} else if ( \UString\starts_with( $match_exception, '\\' ) ) {
+			} else if ( \UString\is_start_with( $match_exception, '\\' ) ) {
 				if( get_class( $exception ) == substr( $match_exception, 1 ) ) {
 					$result = TRUE;
 				}

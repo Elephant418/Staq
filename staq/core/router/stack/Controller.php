@@ -47,7 +47,7 @@ class Controller implements \Stack\IController {
 	 *************************************************************************/
 	protected function initialize_routes( ) {
 		foreach( array_keys( get_object_vars( $this ) ) as $attribute_name ) {
-			if ( \UString\starts_with( $attribute_name, 'route_action' ) ) {
+			if ( \UString\is_start_with( $attribute_name, 'route_action' ) ) {
 				$action = \UString\substr_after( $attribute_name, 'route_' );
 				$this->routes[ ] = $this->get_route_from_attribute( $action, $this->$attribute_name );
 			}

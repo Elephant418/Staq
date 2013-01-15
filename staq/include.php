@@ -23,7 +23,7 @@ namespace Staq {
 		define( 'Staq\\ROOT_PATH', dirname( \Staq\VENDOR_ROOT_PATH ) . '/' );
 	}
 
-	require_once( \Staq\VENDOR_ROOT_PATH . 'pixel418/ubiq/ubiq/Ubiq.php' );
+	require_once( \Staq\VENDOR_ROOT_PATH . 'pixel418/ubiq/src/Ubiq.php' );
 	require_once( __DIR__ . '/util/functions.php' );
 	require_once( __DIR__ . '/core/Server.php' );
 	require_once( __DIR__ . '/core/Application.php' );

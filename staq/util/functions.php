@@ -76,7 +76,7 @@ function stack_query_pop( $string ) {
 	return $string;
 }
 function is_stack_query_popable( $string ) {
-	return ( \UString\contains( $string, '\\' ) );
+	return ( \UString\has( $string, '\\' ) );
 }
 
 // STACK OBJECT
@@ -84,11 +84,11 @@ function is_stack_object( $stack ) {
 	return ( is_object( $stack ) && \Staq\Util\is_stack( $stack ) );
 }
 function is_stack( $stack ) {
-	\UObject\must_be_class( $stack );
-	return \UString\starts_with( $stack, 'Stack\\' );
+	\UObject\do_convert_to_class( $stack );
+	return \UString\is_start_with( $stack, 'Stack\\' );
 }
 function stack_query( $stack ) {
-	\UObject\must_be_class( $stack );
+	\UObject\do_convert_to_class( $stack );
 	if ( \Staq\Util\is_stack( $stack ) ) {
 		return substr( $stack, strlen( 'Stack\\' ) );
 	}
@@ -132,23 +132,23 @@ function stack_debug( $stack ) {
 
 // STACKABLE CLASS
 function is_stackable_class( $stackable ) {
-	\UObject\must_be_class( $stackable );
-	return ( \UString\contains( $stackable, '\\Stack\\' ) );
+	\UObject\do_convert_to_class( $stackable );
+	return ( \UString\has( $stackable, '\\Stack\\' ) );
 }
 function stackable_extension( $stackable ) {
-	\UObject\must_be_class( $stackable );
+	\UObject\do_convert_to_class( $stackable );
 	return ( \UString\substr_before( $stackable, '\\Stack\\' ) );
 }
 function stackable_query( $stackable ) {
-	\UObject\must_be_class( $stackable );
+	\UObject\do_convert_to_class( $stackable );
 	return ( \UString\substr_after( $stackable, '\\Stack\\' ) );
 }
 function is_parent_stack( $stackable ) {
-	\UObject\must_be_class( $stackable );
-	return ( \UString\ends_with( $stackable, '\\__Parent' ) );
+	\UObject\do_convert_to_class( $stackable );
+	return ( \UString\is_end_with( $stackable, '\\__Parent' ) );
 }
 function parent_stack_query( $stackable ) {
-	\UObject\must_be_class( $stackable );
+	\UObject\do_convert_to_class( $stackable );
 	$query = \Staq\Util\stackable_query( $stackable );
 	return ( \UString\substr_before( $query, '\\__Parent' ) );
 }
