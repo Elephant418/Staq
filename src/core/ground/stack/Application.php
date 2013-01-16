@@ -84,7 +84,7 @@ class Application {
 	 *************************************************************************/
 	public function run( ) {
 		$this->router = new \Stack\Router( $this->controllers );
-		$uri          = \UString\substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+		$uri          = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 		echo $this->router->resolve( $uri );
 	}
 }

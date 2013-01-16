@@ -47,7 +47,7 @@ class Server {
 	protected function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
 		$added_extensions = $this->find_extensions_parse_setting_file( $extension, $disabled );
 		$old_extensions = $extensions;
-		$extensions = \UArray\reverse_merge_unique( $extensions, $added_extensions );
+		$extensions = \UArray::reverse_merge_unique( $extensions, $added_extensions );
 		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
 			$this->find_extensions_recursive( $added_extension, $extensions, $disabled );
 		}
@@ -65,7 +65,7 @@ class Server {
 						$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
 					}
 					if ( isset( $ext[ 'disabled' ] ) && is_array( $ext[ 'disabled' ] ) ) {
-						$disabled = \UArray\merge_unique( $disabled, $ext[ 'disabled' ] );
+						$disabled = \UArray::merge_unique( $disabled, $ext[ 'disabled' ] );
 					}
 				}
 			}
@@ -89,7 +89,7 @@ class Server {
 	}
 
 	protected function find_extension_path( $name ) {
-		if ( \UString\is_start_with( $name, 'staq/' ) ) {
+		if ( \UString::is_start_with( $name, 'staq/' ) ) {
 			$name = 'pixel418/' . $name;
 		}
 		if ( is_dir( \Staq\ROOT_PATH . $name ) ) {
@@ -105,7 +105,7 @@ class Server {
 
 	protected function do_format_extension_name( &$name ) {
 		$name = str_replace( '\\', '/', $name );
-		\UString\do_not_start_with( $name, '/' );
-		\UString\do_not_end_with( $name, '/' );
+		\UString::do_not_start_with( $name, '/' );
+		\UString::do_not_end_with( $name, '/' );
 	}
 }

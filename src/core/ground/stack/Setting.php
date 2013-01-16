@@ -67,17 +67,17 @@ class Setting {
 	  ARRAY ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function get_list( $property, $initial = [ ] ) {
-		\UString\must_end_with( $property, '_list' );
+		\UString::must_end_with( $property, '_list' );
 		$disabled = [ ];
 		$enabled = $initial;
 		foreach ( $this->datas as $data ) {
 			if ( isset( $data[ $property ][ 'disabled' ] ) ) {
 				$new = $data[ $property ][ 'disabled' ];
-				$disabled = \UArray\merge_unique( $disabled, $new );
+				$disabled = \UArray::merge_unique( $disabled, $new );
 			}
 			if ( isset( $data[ $property ][ 'enabled' ] ) ) {
 				$new = array_diff( $data[ $property ][ 'enabled' ], $disabled );
-				$enabled  = \UArray\merge_unique( $enabled, $new );
+				$enabled  = \UArray::merge_unique( $enabled, $new );
 			}
 		}
 		return $enabled;
@@ -112,7 +112,7 @@ class Setting {
 
 	protected function get_section( $sections ) {
 		$array = [ ];
-		\UArray\must_be_array( $sections );
+		\UArray::must_be_array( $sections );
 		foreach( $sections as $section ) {
 			foreach ( $this->datas as $data ) {
 				if ( isset( $data[ $section ] ) ) {
@@ -132,7 +132,7 @@ class Setting {
 		foreach ( $this->datas as $data ) {
 			if ( isset( $data[ $section ][ $property ] ) ) {
 				$elements = $data[ $section ][ $property ];
-				\UArray\must_be_array( $elements );
+				\UArray::must_be_array( $elements );
 				$array = array_merge( $array, $elements );
 			}
 		}
@@ -150,7 +150,7 @@ class Setting {
 				}
 				while ( $file_name ) {
 					$file_paths[ ] = $extension['path'] . '/setting/' . $file_name . '.ini';
-					$file_name = \UString\substr_before_last( $file_name, '.' );
+					$file_name = \UString::substr_before_last( $file_name, '.' );
 				}
 			}
 		}
@@ -161,7 +161,7 @@ class Setting {
 		$file_names = [ ];
 		do {
 			$file_names[ ] = $file_name;
-			$file_name = \UString\substr_before_last( $file_name, '/' );
+			$file_name = \UString::substr_before_last( $file_name, '/' );
 		} while( ! empty( $file_name ) );
 		return $file_names;
 	}

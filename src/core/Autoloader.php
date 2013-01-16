@@ -109,8 +109,8 @@ class Autoloader {
 		return $this->create_class( $class, NULL );
 	}
 	protected function create_class( $class, $base_class, $is_interface = FALSE ) {
-		$namespace = \UObject\get_namespace( $class, '\\' );
-		$name = \UObject\get_class_name( $class, '\\' );
+		$namespace = \UObject::get_namespace( $class, '\\' );
+		$name = \UObject::get_class_name( $class, '\\' );
 		$code = '';
 		if ( $namespace ) {
 			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
