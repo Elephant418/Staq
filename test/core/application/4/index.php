@@ -1,6 +1,6 @@
 <?php
 
-$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/vendor/pixel418/staq/staq';
+$staq_path = substr( __DIR__, 0, strrpos( __DIR__, '/Staq/' ) + 5 ) . '/vendor/pixel418/staq/src';
 require_once( $staq_path . '/util/tests.php' );
 require_once( $staq_path . '/include.php' );
 

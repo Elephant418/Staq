@@ -27,9 +27,9 @@ Let's code
 ### Hello world tutorial 
 
 ```php
-require_once( 'path/to/staq/include.php' );
+require_once( 'vendor/pixel418/staq/src/include.php' );
 
-\Staq\Application::create( 'Hello_World' )
+\Staq\Application::create( )
     ->add_controller( '/hello/:name', function( $name ) {
         return 'Hello ' . $name;
     } )
@@ -63,7 +63,7 @@ Staq can now be [downloaded via composer](http://getcomposer.org/doc/01-basic-us
 The last step is to include Staq in your PHP file :
 
 ```php
-require_once( './vendor/pixel418/staq/staq/include.php' );
+require_once( './vendor/pixel418/staq/src/include.php' );
 ```
 
 [&uarr; top](#readme)

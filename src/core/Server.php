@@ -79,6 +79,7 @@ class Server {
 
 	protected function format_extensions_from_names( $extensions ) {
 		foreach ( $extensions as $key => $name ) {
+			$this->do_format_extension_name( $name );
 			$extensions[ $key ]                = [ ];
 			$extensions[ $key ][ 'name' ]      = $name;
 			$extensions[ $key ][ 'namespace' ] = \Staq\Util\string_path_to_namespace( $name );
@@ -88,10 +89,23 @@ class Server {
 	}
 
 	protected function find_extension_path( $name ) {
-		foreach ( [ \Staq\STAQ_ROOT_PATH, \Staq\VENDOR_ROOT_PATH, \Staq\ROOT_PATH ] as $path ) {
-			if ( is_dir( $path . $name ) ) {
-				return $path . $name;
-			}
+		if ( \UString\is_start_with( $name, 'staq/' ) ) {
+			$name = 'pixel418/' . $name;
 		}
+		if ( is_dir( \Staq\ROOT_PATH . $name ) ) {
+			return \Staq\ROOT_PATH . $name . '/';
+		}
+		$name = explode( '/', $name );
+		$name[ 1 ] .= '/src';
+		$name = implode( '/', $name );
+		if ( is_dir( \Staq\VENDOR_ROOT_PATH . $name ) ) {
+			return \Staq\VENDOR_ROOT_PATH . $name . '/';
+		}
+	}
+
+	protected function do_format_extension_name( &$name ) {
+		$name = str_replace( '\\', '/', $name );
+		\UString\do_not_start_with( $name, '/' );
+		\UString\do_not_end_with( $name, '/' );
 	}
 }
