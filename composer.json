@@ -14,6 +14,7 @@
     ],
     "require": {
         "pixel418/ubiq": "0.2.*",
+        "pixel418/iniliq": "0.1.*",
         "php": ">=5.4.0"
     }
 }
