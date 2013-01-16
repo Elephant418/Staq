@@ -49,7 +49,7 @@ class Router {
 	  CONSTRUCTOR             
 	 *************************************************************************/
 	public function __construct( $anonymous_controllers ) {
-		$this->setting = new \Stack\Setting( $this );
+		$this->setting = ( new \Stack\Setting )->parse( $this );
 		$this->initialize_controllers( );
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
 	}

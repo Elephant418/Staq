@@ -80,12 +80,17 @@ class Server {
 	protected function format_extensions_from_names( $extensions ) {
 		foreach ( $extensions as $key => $name ) {
 			$this->do_format_extension_name( $name );
-			$extensions[ $key ]                = [ ];
-			$extensions[ $key ][ 'name' ]      = $name;
-			$extensions[ $key ][ 'namespace' ] = \Staq\Util\string_path_to_namespace( $name );
-			$extensions[ $key ][ 'path' ]      = $this->find_extension_path( $name );
+			$path = $this->find_extension_path( $name );
+			if ( empty( $path ) ) {
+				unset( $extensions[ $key ] );
+			} else {
+				$extensions[ $key ]                = [ ];
+				$extensions[ $key ][ 'name' ]      = $name;
+				$extensions[ $key ][ 'namespace' ] = \Staq\Util\string_path_to_namespace( $name );
+				$extensions[ $key ][ 'path' ]      = $path;
+			}
 		}
-		return $extensions;
+		return array_values( $extensions );;
 	}
 
 	protected function find_extension_path( $name ) {

@@ -58,7 +58,6 @@ class Autoloader {
 	protected function load_stack_extension_file( $stack, $extension ) {
 		$stack_path = \Staq\Util\string_namespace_to_class_path( $stack );
 		$absolute_path = $extension['path'] . 'stack/' . $stack_path . '.php';
-		echo $absolute_path . PHP_EOL;
 		if ( is_file( $absolute_path ) ) {
 			$real_class = $extension['namespace'] . '\\Stack\\' . $stack;
 			if ( ! $this->class_exists( $real_class ) ) {

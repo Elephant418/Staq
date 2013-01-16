@@ -11,7 +11,7 @@ $app = \Staq\Application::create( $path );
 // TEST COLLECTION
 $case = new \Staq\Util\Test_Case( 'Without configuration', [
 	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( 'name' ) == [ $path, 'staq/app/starter', 'staq/core/view', 'staq/core/router', 'staq/core/ground' ] );
+		return ( $app->get_extensions( 'name' ) == [ $path, 'staq/app/starter', 'staq/core/router', 'staq/core/ground' ] );
 	},
 	'Platform'   => function( ) use ( $app ) {
 		return ( $app->get_platform( ) == 'prod' );
