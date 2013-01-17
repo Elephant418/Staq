@@ -30,21 +30,11 @@ class Util {
 	}
 
 	public static function string_path_to_namespace( $path ) {
-		$namespace = implode( '\\', array_map( 'ucfirst', explode( '/', $path ) ) );
-		return $namespace;
+		return str_replace( DIRECTORY_SEPARATOR , '\\', $path );
 	}
 
 	public static function string_namespace_to_path( $namespace ) {
-		return strtolower( str_replace( '\\', '/' , $namespace ) );
-	}
-
-	public static function string_namespace_to_class_path( $namespace ) {
-		$parts = explode( '\\', $namespace );
-		if ( count( $parts ) == 1 ) {
-			return $parts[ 0 ];
-		}
-		$class = array_pop( $parts );
-		return strtolower( implode( '/', $parts ) ) . '/' . $class;
+		return str_replace( '\\', DIRECTORY_SEPARATOR , $namespace );
 	}
 
 
@@ -123,12 +113,14 @@ class Util {
 		return is_a( $stack, $class ); 
 	}
 	public static function stack_debug( $stack ) {
-		$str = 'Debug of ' . get_class( $stack ) . '<ol>';
+		$list = [ ];
 		foreach ( \Staq\Util::stack_definition( $stack ) as $key => $stackable ) {
-			$str .= '<li>' . stackable_query( $stackable ) . ' from extension ' . stackable_extension( $stackable ) . '</li>';
+			$debug                = [ ];
+			$debug[ 'query'     ] = \Staq\Util::stackable_query( $stackable );
+			$debug[ 'extension' ] = \Staq\Util::stackable_extension( $stackable );
+			$list[ ] = $debug;
 		}
-		$str .= '</ol>';
-		echo $str;
+		return $list;
 	}
 
 	// STACKABLE CLASS
