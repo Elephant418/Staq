@@ -101,7 +101,6 @@ class Server {
 				unset( $extensions[ $key ] );
 			} else {
 				$extensions[ $key ]                = [ ];
-				$extensions[ $key ][ 'name' ]      = $name;
 				$extensions[ $key ][ 'namespace' ] = \Staq\Util::string_path_to_namespace( $name );
 				$extensions[ $key ][ 'path' ]      = $path;
 			}
@@ -121,8 +120,8 @@ class Server {
 	}
 
 	protected function do_format_extension_name( &$name ) {
-		$name = str_replace( '\\', '/', $name );
-		\UString::do_not_start_with( $name, '/' );
-		\UString::do_not_end_with( $name, '/' );
+		$name = str_replace( '/', '\\', $name );
+		\UString::do_not_start_with( $name, '\\' );
+		\UString::do_not_end_with( $name, '\\' );
 	}
 }
