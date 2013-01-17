@@ -125,3 +125,7 @@ class Server {
 		\UString::do_not_end_with( $name, '\\' );
 	}
 }
+
+if ( ! defined( 'HTML_EOL' ) ) {
+	define( 'HTML_EOL', '<br/>' . PHP_EOL );
+}
