@@ -2,7 +2,7 @@
 
 namespace Test\Staq;
 
-require_once( __DIR__ . '/../../vendor/autoload.php' );
+require_once( __DIR__ . '/../../../vendor/autoload.php' );
 
 class Application_Test extends \PHPUnit_Framework_TestCase {
 
