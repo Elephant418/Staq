@@ -8,37 +8,21 @@ namespace Staq\Core\Ground\Stack;
 class Setting {
 
 
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	public static $cache = [ ];
-
-
-	/*************************************************************************
-	  CACHE METHODS                   
-	 *************************************************************************/
-	public function clear_cache( ) {
-		self::$cache = [ ];
-	}
-
-
 
 	/*************************************************************************
 	  PARSE METHODS              
 	 *************************************************************************/
 	public function parse( $setting_file_name ) {
 		$this->do_format_setting_file_name( $setting_file_name );
-		if ( TRUE || ! isset( self::$cache[ $setting_file_name ] ) ) {
-			$file_paths = $this->get_file_paths( $setting_file_name );
-			$ini = ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
-			self::$cache[ $setting_file_name ] = $ini;
-		}
-		return self::$cache[ $setting_file_name ];
+		$file_paths = $this->get_file_paths( $setting_file_name );
+		return ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
 	}
 
 	protected function do_format_setting_file_name( &$mixed ) {
 		if ( \Staq\Util::is_stack_object( $mixed ) ) {
-			$mixed = \Staq\Util::string_namespace_to_path( \Staq\Util::stack_query( $mixed ) );
+			$mixed = \Staq\Util::stack_query( $mixed );
+			$mixed = \Staq\Util::string_namespace_to_path( $mixed );
+			$mixed = strtolower( $mixed );
 		}
 	}
 
