@@ -20,7 +20,7 @@ class Server {
 
 
 	/*************************************************************************
-	  CONSTRUCTO METHODS             
+	  CONSTRUCTOR METHODS             
 	 *************************************************************************/
 	public function __construct( ) {
 		if ( \UString::has( __DIR__, '/vendor/' ) ) {
