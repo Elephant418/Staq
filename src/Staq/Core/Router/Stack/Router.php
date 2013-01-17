@@ -62,7 +62,7 @@ class Router {
 		}
 	}
 	protected function initialize_anonymous_controllers( $anonymous_controllers ) {
-		$class = new \ReflectionClass( 'Stack\\Controller\\__Anonymous' );
+		$class = new \ReflectionClass( 'Stack\\Controller\\Anonymous' );
 		foreach ( $anonymous_controllers as $arguments ) {
 			$anonymous = $class->newInstanceArgs( $arguments );
 			$this->add_routes( $anonymous->get_routes( ) );

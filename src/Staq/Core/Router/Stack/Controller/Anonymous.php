@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Router\Stack\Controller;
 
-class __Anonymous extends __Anonymous\__Parent {
+class Anonymous extends Anonymous\__Parent {
 
 
 
