@@ -54,7 +54,7 @@ class Router {
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
 	}
 	protected function initialize_controllers( ) {
-		$controllers = $this->setting->get_list( 'controller' );
+		$controllers = $this->setting[ 'router.controller' ];
 		foreach ( $controllers as $controller_name ) {
 			$controller_class = '\\Stack\Controller\\' . $controller_name;
 			$controller = new $controller_class( );
