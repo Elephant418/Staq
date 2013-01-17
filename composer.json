@@ -19,7 +19,8 @@
     },
     "autoload": {
         "psr-0": {
-            "Staq": "src/"
+            "Staq": "src/",
+            "Test\\Staq": "test/"
         }
     }
 }

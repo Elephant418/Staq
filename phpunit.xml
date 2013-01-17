@@ -1,5 +1,5 @@
 <phpunit colors="true">
     <testsuite name="Staq">
-        <directory>./test/Staq</directory>
+        <directory>./test/Test/Staq</directory>
     </testsuite>
 </phpunit>
