@@ -44,7 +44,7 @@ class Autoloader {
 		$stack_query = \Staq\Util::stack_query( $class );
 		while( $stack_query ) {
 			foreach( $this->extensions as $extension ) {
-				if ( $real_class = $this->load_stack_extension_file( $stack_query, $extension ) ) {
+				if ( $real_class = $this->get_real_class_of_stack_extension( $stack_query, $extension ) ) {
 					$this->create_alias_class( $class, $real_class );
 					return TRUE;
 				}
@@ -54,16 +54,13 @@ class Autoloader {
 
 		$this->create_empty_class( $class );
 	}
+
 	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
-	protected function load_stack_extension_file( $stack, $extension ) {
+	protected function get_real_class_of_stack_extension( $stack, $extension ) {
 		$stack_path = \Staq\Util::string_namespace_to_class_path( $stack );
 		$absolute_path = $extension['path'] . 'Stack/' . $stack_path . '.php';
 		if ( is_file( $absolute_path ) ) {
 			$real_class = $extension['namespace'] . '\\Stack\\' . $stack;
-			if ( ! $this->class_exists( $real_class ) ) {
-				require_once( $absolute_path );
-				$this->check_class_loaded( $real_class );
-			}
 			return $real_class;
 		}
 	}
@@ -76,7 +73,7 @@ class Autoloader {
 		while( $query ) {
 			foreach( $this->extensions as $extension ) {
 				if ( $ready ) {
-					if ( $real_class = $this->load_stack_extension_file( $query, $extension ) ) {
+					if ( $real_class = $this->get_real_class_of_stack_extension( $query, $extension ) ) {
 						$this->create_alias_class( $class, $real_class );
 						return TRUE;
 					}
@@ -126,12 +123,5 @@ class Autoloader {
 		$code .= '{ }' . PHP_EOL;
 		// echo $code . HTML_EOL;
 		eval( $code );
-	}
-	protected function check_class_loaded( $class ) {
-		if ( ! $this->class_exists( $class ) ) {
-			$classes = get_declared_classes( );
-			$loaded_class = end( $classes );
-			throw new \Stack\Exception\Wrong_Class_Definition( 'Wrong class definition: "' . $loaded_class . '" definition, but "' . $class . '" expected.' ); 
-		}
 	}
 }
