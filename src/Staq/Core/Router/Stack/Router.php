@@ -108,7 +108,7 @@ class Router {
 				if ( $result === TRUE ) {
 					return $route;
 				}
-				\Staq\Util\http_action_redirect( $result );
+				\Staq\Util::http_action_redirect( $result );
 			}
 		}
 		throw ( new \Stack\Exception\Resource_Not_Found )->by_uri( $uri );
@@ -124,8 +124,8 @@ class Router {
 	}
 
 	protected function prevent_exception_boucle( $exception ) {
-		if ( \Staq\Util\is_stack( $exception ) ) {			
-			$name = \Staq\Util\stack_query( $exception );
+		if ( \Staq\Util::is_stack( $exception ) ) {			
+			$name = \Staq\Util::stack_query( $exception );
 		} else {
 			$name = get_class( $exception );
 		}

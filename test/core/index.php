@@ -8,7 +8,7 @@ $name  = 'Core';
 $test_cases = [ 'application', 'autoloader', 'setting' ];
 
 // COLLECTION
-$collection = new \Staq\Util\Test_Collection( $name, $test_cases, __DIR__ );
+$collection = new \Staq\Util\TestCollection( $name, $test_cases, __DIR__ );
 
 // RESULT
 echo $collection->output( );

@@ -9,9 +9,9 @@ $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 6 );
 $app = \Staq\Application::create( $path );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'With the starter disabled', [
+$case = new \Staq\Util\TestCase( 'With the starter disabled', [
 	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( 'name' ) == [ $path, 'staq/core/ground' ] );
+		return ( $app->get_extensions( 'name' ) == [ $path, 'Staq\Core\Ground' ] );
 	}
 ] );
 

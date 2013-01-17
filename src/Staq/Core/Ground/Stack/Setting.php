@@ -37,8 +37,8 @@ class Setting {
 	}
 
 	protected function do_format_setting_file_name( &$mixed ) {
-		if ( \Staq\Util\is_stack_object( $mixed ) ) {
-			$mixed = \Staq\Util\string_namespace_to_path( \Staq\Util\stack_query( $mixed ) );
+		if ( \Staq\Util::is_stack_object( $mixed ) ) {
+			$mixed = \Staq\Util::string_namespace_to_path( \Staq\Util::stack_query( $mixed ) );
 		}
 	}
 

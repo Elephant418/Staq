@@ -9,9 +9,9 @@ $path = substr( __DIR__, strrpos( __DIR__, '/Staq/' ) + 6 );
 $app = \Staq\Application::create( $path );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Extends project without configuration', [
+$case = new \Staq\Util\TestCase( 'Extends project without configuration', [
 	'Extensions' => function( ) use ( $app, $path ) {
-		return ( $app->get_extensions( 'name' ) == [ $path, 'staq/app/starter', 'staq/core/router', 'staq/core/ground' ] );
+		return ( $app->get_extensions( 'name' ) == [ $path, 'Staq\App\Starter', 'Staq\Core\Router', 'Staq\Core\Ground' ] );
 	}
 ] );
 

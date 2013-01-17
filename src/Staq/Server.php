@@ -14,6 +14,22 @@ class Server {
 	 *************************************************************************/
 	public static $application;
 	public static $autoloader;
+	public static $namespaces = [ ];
+
+
+
+
+	/*************************************************************************
+	  CONSTRUCTO METHODS             
+	 *************************************************************************/
+	public function __construct( ) {
+		if ( \UString::has( __DIR__, '/vendor/' ) ) {
+			$base_dir = \UString::substr_before_last( __DIR__, '/vendor/' );
+		} else {
+			$base_dir = __DIR__ . '/../..';
+		}
+		$this->namespaces = ( require( $base_dir . '/vendor/composer/autoload_namespaces.php' ) );
+	}
 
 
 
@@ -21,7 +37,7 @@ class Server {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function create_application( $path = 'staq/core/ground', $root_uri = '/', $platform = 'prod' ) {
+	public function create_application( $path = 'Staq\Core\Ground', $root_uri = '/', $platform = 'prod' ) {
 		$extensions = $this->find_extensions( $path );
 		if ( ! is_null( self::$autoloader ) ) {
 			spl_autoload_unregister( array( self::$autoloader, 'autoload' ) );
@@ -72,7 +88,7 @@ class Server {
 		}
 		// Default value for extension without configuration 
 		if ( empty( $added_extensions ) ) {
-			$added_extensions = [ 'staq/core/ground' ];
+			$added_extensions = [ 'Staq\Core\Ground' ];
 		}
 		return $added_extensions;
 	}
@@ -86,26 +102,22 @@ class Server {
 			} else {
 				$extensions[ $key ]                = [ ];
 				$extensions[ $key ][ 'name' ]      = $name;
-				$extensions[ $key ][ 'namespace' ] = \Staq\Util\string_path_to_namespace( $name );
+				$extensions[ $key ][ 'namespace' ] = \Staq\Util::string_path_to_namespace( $name );
 				$extensions[ $key ][ 'path' ]      = $path;
 			}
 		}
-		return array_values( $extensions );;
+		return array_values( $extensions );
 	}
 
 	protected function find_extension_path( $name ) {
-		if ( \UString::is_start_with( $name, 'staq/' ) ) {
-			$name = 'pixel418/' . $name;
-		}
-		if ( is_dir( \Staq\ROOT_PATH . $name ) ) {
-			return \Staq\ROOT_PATH . $name . '/';
-		}
-		$name = explode( '/', $name );
-		$name[ 1 ] .= '/src';
-		$name = implode( '/', $name );
-		if ( is_dir( \Staq\VENDOR_ROOT_PATH . $name ) ) {
-			return \Staq\VENDOR_ROOT_PATH . $name . '/';
-		}
+        $name = str_replace( '\\', DIRECTORY_SEPARATOR, $name );
+		foreach ( $this->namespaces as $namespace => $path ) {
+            if ( \UString::is_start_with( $name, $namespace ) ) {
+                if ( is_dir( $path . DIRECTORY_SEPARATOR . $name ) ) {
+                    return $path . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
+                }
+            }
+        }
 	}
 
 	protected function do_format_extension_name( &$name ) {

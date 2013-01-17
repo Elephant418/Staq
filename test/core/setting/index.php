@@ -12,10 +12,10 @@ $change_platform = function( $platform ) {
 };
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Setting', [
+$case = new \Staq\Util\TestCase( 'Setting', [
 	'Fetch a value from an existing setting file' => function( ) {
 		$setting = ( new \Stack\Setting )->parse( 'application' );
-		// \Staq\Util\stack_debug( $setting );
+		// \Staq\Util::stack_debug( $setting );
 		return ( $setting->get_as_boolean( 'error.display_errors' ) === FALSE );
 	},
 	'Fetch a value from a custom setting file' => function( ) {

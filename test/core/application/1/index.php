@@ -8,9 +8,9 @@ require_once( $staq_path . '/include.php' );
 $app = \Staq\Application::create( );
 
 // TEST COLLECTION
-$case = new \Staq\Util\Test_Case( 'Without custom application', [
+$case = new \Staq\Util\TestCase( 'Without custom application', [
 	'Extensions' => function( ) use ( $app ) {
-		return ( $app->get_extensions( 'name' ) == [ 'staq/app/starter', 'staq/core/router', 'staq/core/ground' ] );
+		return ( $app->get_extensions( 'name' ) == [ 'Staq\App\Starter', 'Staq\Core\Router', 'Staq\Core\Ground' ] );
 	},
 	'Platform'   => function( ) use ( $app ) {
 		return ( $app->get_platform( ) == 'prod' );

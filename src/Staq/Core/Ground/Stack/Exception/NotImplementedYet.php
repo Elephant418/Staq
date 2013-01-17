@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Ground\Stack\Exception;
 
-class Not_Implemented_Yet extends Not_Implemented_Yet\__Parent {
+class NotImplementedYet extends NotImplementedYet\__Parent {
 
 
 

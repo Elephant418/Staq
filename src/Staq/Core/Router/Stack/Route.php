@@ -98,8 +98,8 @@ class Route {
 				if( get_class( $exception ) == substr( $match_exception, 1 ) ) {
 					$result = TRUE;
 				}
-			} else if ( \Staq\Util\is_stack( $exception ) ) {
-				if( \Staq\Util\stack_sub_query( $exception ) == $match_exception ) {
+			} else if ( \Staq\Util::is_stack( $exception ) ) {
+				if( \Staq\Util::stack_sub_query( $exception ) == $match_exception ) {
 					$result = TRUE;
 				}
 			}
@@ -140,9 +140,9 @@ class Route {
 		$parameters = [ ];
 		$parameters[ 'code' ]      = $exception->get_code( );
 		$parameters[ 'exception' ] = $exception;
-		if ( \Staq\Util\is_stack( $exception ) ) {
-			$parameters[ 'query' ] = \Staq\Util\stack_query( $exception );
-			$parameters[ 'name'  ] = \Staq\Util\stack_sub_query( $exception );
+		if ( \Staq\Util::is_stack( $exception ) ) {
+			$parameters[ 'query' ] = \Staq\Util::stack_query( $exception );
+			$parameters[ 'name'  ] = \Staq\Util::stack_sub_query( $exception );
 		}
 		return $parameters;
 	}

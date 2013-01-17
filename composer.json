@@ -16,5 +16,10 @@
         "pixel418/ubiq": "0.3.1",
         "pixel418/iniliq": "0.1.5",
         "php": ">=5.4.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "Staq": "src/"
+        }
     }
 }

@@ -29,9 +29,9 @@ class Autoloader {
 	  TOP-LEVEL AUTOLOAD
 	 *************************************************************************/
 	public function autoload( $class ) {
-		if ( \Staq\Util\is_stack( $class ) ) {
+		if ( \Staq\Util::is_stack( $class ) ) {
 			$this->load_stack_class( $class );
-		} else if ( \Staq\Util\is_parent_stack( $class ) ) {
+		} else if ( \Staq\Util::is_parent_stack( $class ) ) {
 			$this->load_stack_parent_class( $class );
 		}
 	}
@@ -41,7 +41,7 @@ class Autoloader {
 	  FILE CLASS MANAGEMENT             
 	 *************************************************************************/
 	protected function load_stack_class( $class ) {
-		$stack_query = \Staq\Util\stack_query( $class );
+		$stack_query = \Staq\Util::stack_query( $class );
 		while( $stack_query ) {
 			foreach( $this->extensions as $extension ) {
 				if ( $real_class = $this->load_stack_extension_file( $stack_query, $extension ) ) {
@@ -49,15 +49,15 @@ class Autoloader {
 					return TRUE;
 				}
 			}
-			$stack_query = \Staq\Util\stack_query_pop( $stack_query );
+			$stack_query = \Staq\Util::stack_query_pop( $stack_query );
 		}
 
 		$this->create_empty_class( $class );
 	}
 	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
 	protected function load_stack_extension_file( $stack, $extension ) {
-		$stack_path = \Staq\Util\string_namespace_to_class_path( $stack );
-		$absolute_path = $extension['path'] . 'stack/' . $stack_path . '.php';
+		$stack_path = \Staq\Util::string_namespace_to_class_path( $stack );
+		$absolute_path = $extension['path'] . 'Stack/' . $stack_path . '.php';
 		if ( is_file( $absolute_path ) ) {
 			$real_class = $extension['namespace'] . '\\Stack\\' . $stack;
 			if ( ! $this->class_exists( $real_class ) ) {
@@ -70,8 +70,8 @@ class Autoloader {
 	
 
 	protected function load_stack_parent_class( $class ) {
-		$query_extension = \Staq\Util\stackable_extension( $class );
-		$query = \Staq\Util\parent_stack_query( $class );
+		$query_extension = \Staq\Util::stackable_extension( $class );
+		$query = \Staq\Util::parent_stack_query( $class );
 		$ready = FALSE;
 		while( $query ) {
 			foreach( $this->extensions as $extension ) {
@@ -86,7 +86,7 @@ class Autoloader {
 					}
 				}
 			}
-			$query = \Staq\Util\stack_query_pop( $query );
+			$query = \Staq\Util::stack_query_pop( $query );
 			$ready = TRUE;
 		}
 

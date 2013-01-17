@@ -22,7 +22,7 @@ class Exception extends \Exception {
 	 *************************************************************************/
 	public function __construct( $message = NULL, $code = NULL, \Exception $previous = NULL ) {
 		if ( is_null( $message ) ) $message = $this->default_message;
-		if ( is_null( $message ) ) $message = \Staq\Util\stack_sub_query_text( $this );
+		if ( is_null( $message ) ) $message = \Staq\Util::stack_sub_query_text( $this );
 		if ( is_null( $code ) )    $code    = $this->default_code;
 		parent::__construct( $message, $code, $previous );
 	}
