@@ -14,7 +14,7 @@ class Server {
 	 *************************************************************************/
 	public static $application;
 	public static $autoloader;
-	public static $namespaces = [ ];
+	public $namespaces = [ ];
 
 
 

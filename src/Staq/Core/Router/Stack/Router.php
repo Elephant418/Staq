@@ -111,7 +111,7 @@ class Router {
 				\Staq\Util::http_action_redirect( $result );
 			}
 		}
-		throw ( new \Stack\Exception\Resource_Not_Found )->by_uri( $uri );
+		throw ( new \Stack\Exception\ResourceNotFound )->by_uri( $uri );
 	}
 
 	protected function get_active_route_by_exception( $exception ) {
@@ -120,7 +120,7 @@ class Router {
 				return $route;
 			}
 		}
-		throw ( new \Stack\Exception\Resource_Not_Found )->by_exception( $exception );
+		throw ( new \Stack\Exception\ResourceNotFound )->by_exception( $exception );
 	}
 
 	protected function prevent_exception_boucle( $exception ) {
