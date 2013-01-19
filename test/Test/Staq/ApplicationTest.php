@@ -25,6 +25,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		return 'Test\\Staq\\Project\\Application\\' . $name;
 	}
 
+	public function append_project_namespace( $name ) {
+		$names = array_map( [ $this, 'get_project_namespace' ], func_get_args( ) );
+		return array_merge( $names, $this->starter_namespaces );
+	}
+
 
 
 
@@ -44,16 +49,21 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	public function test_no_configuration__extensions( ) {
 		$project_namespace = $this->get_project_namespace( 'NoConfiguration' );
 		$app = \Staq\Application::create( $project_namespace );
-		$expected = $this->starter_namespaces;
-		array_unshift( $expected, $project_namespace );
+		$expected = $this->append_project_namespace( 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
 	}
 
 	public function test_simple_configuration__extensions( ) {
 		$project_namespace = $this->get_project_namespace( 'SimpleConfiguration' );
 		$app = \Staq\Application::create( $project_namespace );
-		$expected = $this->starter_namespaces;
-		array_unshift( $expected, $project_namespace );
+		$expected = $this->append_project_namespace( 'SimpleConfiguration' );
+		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
+	}
+
+	public function test_extend_no_configuration__extensions( ) {
+		$project_namespace = $this->get_project_namespace( 'ExtendNoConfiguration' );
+		$app = \Staq\Application::create( $project_namespace );
+		$expected = $this->append_project_namespace( 'ExtendNoConfiguration', 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
 	}
 }
