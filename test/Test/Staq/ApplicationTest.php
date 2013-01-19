@@ -22,7 +22,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	  UTIL METHODS             
 	 *************************************************************************/
 	public function get_project_namespace( $name ) {
-		return 'Test\\Staq\\Project\\' . $name;
+		return 'Test\\Staq\\Project\\Application\\' . $name;
 	}
 
 
@@ -41,16 +41,16 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( 'prod', $app->get_platform( ) );
 	}
 
-	public function test_named_project__extensions( ) {
-		$project_namespace = $this->get_project_namespace( 'Empty' );
+	public function test_no_configuration__extensions( ) {
+		$project_namespace = $this->get_project_namespace( 'NoConfiguration' );
 		$app = \Staq\Application::create( $project_namespace );
 		$expected = $this->starter_namespaces;
 		array_unshift( $expected, $project_namespace );
 		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
 	}
 
-	public function test_default_application_configuration__extensions( ) {
-		$project_namespace = $this->get_project_namespace( 'DefaultApplicationConfiguration' );
+	public function test_simple_configuration__extensions( ) {
+		$project_namespace = $this->get_project_namespace( 'SimpleConfiguration' );
 		$app = \Staq\Application::create( $project_namespace );
 		$expected = $this->starter_namespaces;
 		array_unshift( $expected, $project_namespace );
