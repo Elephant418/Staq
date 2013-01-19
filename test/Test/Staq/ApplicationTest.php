@@ -4,6 +4,8 @@ namespace Test\Staq;
 
 require_once( __DIR__ . '/../../../vendor/autoload.php' );
 
+echo 'Staq ' . \Staq::VERSION . ' tested with ';
+
 class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
 

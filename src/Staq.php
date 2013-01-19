@@ -5,6 +5,6 @@
 
 class Staq { 
 
-	const HTML_EOL = '<br/>' . HTML_EOL;
+	const VERSION = '0.4.1';
 
 }
