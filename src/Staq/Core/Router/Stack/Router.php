@@ -33,7 +33,7 @@ class Router {
 	  SETTER          
 	 *************************************************************************/
 	public function change_uri( $uri ) {
-		if ( in_array( $uri, $this->uris ) ) {
+		if ( in_array( $uri, $this->uris, TRUE ) ) {
 			throw new \Exception( 'Redirecting loop detected' );
 		}
 		$this->uris[ ] = $uri;
@@ -129,7 +129,7 @@ class Router {
 		} else {
 			$name = get_class( $exception );
 		}
-		if ( in_array( $name, $this->exceptions ) ) {
+		if ( in_array( $name, $this->exceptions, TRUE ) ) {
 			throw new \Exception( 'Uncatched exception "' . $exception->getMessage( ) . '"' );
 		}
 		$this->exceptions[ ] = $name;
