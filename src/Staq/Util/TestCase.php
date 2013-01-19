@@ -47,14 +47,14 @@ class TestCase extends Test {
 	protected function to_html( $path = '' ) {
 		$path .= $this->folder . '/';
 		$html = '<a href="' . $path . '">' . $this->name . '</a>   ' . $this->ok . '+';
-		if ( $path == '' || $this->error > 0 || $this->is_all_asked( ) ) {
+		if ( $path === '' || $this->error > 0 || $this->is_all_asked( ) ) {
 			$html .= ' ' . $this->error . '-<ul>';
 			foreach ( $this->tests as $test ) {
 				$html .=  '<li> ' . $test->to_html( $path ) . '</li>';
 			}
 			$html .= '</ul>';
 		}
-		if ( $path == './' && ! $this->is_cli( ) ) {
+		if ( $path === './' && ! $this->is_cli( ) ) {
 			$path  = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
 			$get   = $_GET;
 			if ( $this->is_all_asked( ) ) {

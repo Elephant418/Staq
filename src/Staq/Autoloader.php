@@ -78,7 +78,7 @@ class Autoloader {
 						return TRUE;
 					}
 				} else {
-					if ( $query_extension == $extension['namespace'] ) {
+					if ( $query_extension === $extension['namespace'] ) {
 						$ready = TRUE;
 					}
 				}

@@ -91,15 +91,15 @@ class Route {
 		$result = FALSE;
 		foreach ( $this->match_exceptions as $match_exception ) {
 			if ( is_numeric( $match_exception ) ) {
-				if( $exception->get_code( ) == $match_exception ) {
+				if( $exception->get_code( ) === $match_exception ) {
 					$result = TRUE;
 				}
 			} else if ( \UString::is_start_with( $match_exception, '\\' ) ) {
-				if( get_class( $exception ) == substr( $match_exception, 1 ) ) {
+				if( get_class( $exception ) === substr( $match_exception, 1 ) ) {
 					$result = TRUE;
 				}
 			} else if ( \Staq\Util::is_stack( $exception ) ) {
-				if( \Staq\Util::stack_sub_query( $exception ) == $match_exception ) {
+				if( \Staq\Util::stack_sub_query( $exception ) === $match_exception ) {
 					$result = TRUE;
 				}
 			}

@@ -24,7 +24,7 @@ class Test {
 	public function __construct( $name, $test ) {
 		$this->name = $name;
 		try {
-			$this->result = ( $test( ) == TRUE );
+			$this->result = ( $test( ) === TRUE );
 		} catch ( \Exception $e ) {
 			$this->exception = $e;
 		}
