@@ -46,4 +46,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		array_unshift( $expected, $project_namespace );
 		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
 	}
+
+	public function test_default_application_configuration__extensions( ) {
+		$project_namespace = $this->get_project_namespace( 'DefaultApplicationConfiguration' );
+		$app = \Staq\Application::create( $project_namespace );
+		$expected = $this->starter_namespaces;
+		array_unshift( $expected, $project_namespace );
+		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
+	}
 }
