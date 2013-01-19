@@ -54,34 +54,23 @@ class Server {
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
 	protected function find_extensions( $namespace ) {
-		$disabled   = [ ];
-		$extensions = $this->find_extensions_recursive( $namespace, [ $namespace ], $disabled );
-		$extensions = $this->format_extensions_from_namespaces( $extensions );
-		return $extensions;
-	}
-
-	protected function find_extensions_recursive( $extension, $extensions, &$disabled ) {
-		$added_extensions = $this->find_extensions_parse_setting_file( $extension, $disabled );
-		$old_extensions = $extensions;
-		$extensions = \UArray::reverse_merge_unique( $extensions, $added_extensions );
-		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
-			$extensions = $this->find_extensions_recursive( $added_extension, $extensions, $disabled );
+		$namespaces = [ $namespace, 'Staq\Core\Ground' ];
+		$new_namespaces = [ $namespace, 'Staq\Core\Ground' ];
+		$extensions = [ ];
+		while ( count( $new_namespaces ) > 0 ) {
+			$new_extensions = $this->format_extensions_from_namespaces( $new_namespaces );
+			$extensions = array_merge( $extensions, $new_extensions );
+			$files = [  ];
+			foreach ( $extensions as $extension ) {
+				$files[ ] = $extension[ 'path' ] . '/setting/application.ini';
+			}
+			$ini = ( new \Pixel418\Iniliq\Parser )->parse( $files );
+			$fetch_namespaces = $ini->get_as_array( 'extension.list' );
+			$new_namespaces = array_diff( $fetch_namespaces, $namespaces );
+			$namespaces = array_merge( $namespaces, $fetch_namespaces );
 		}
-		return $extensions;
-	}
-
-	protected function find_extensions_parse_setting_file( $extension, &$disabled ) {
-		$added_extensions = [ ];
-		if ( $setting_file_path = $this->find_extension_path( $extension ) ) {
-			$ini = ( new \Pixel418\Iniliq\Parser )->parse( $setting_file_path . '/setting/application.ini' );
-			$added_extensions = $ini->get_as_array( 'extension_list.enabled' );
-			$disabled = \UArray::merge_unique( $disabled, $ini->get_as_array( 'extension_list.disabled' ) );
-		}
-		// Default value for extension without configuration 
-		if ( empty( $added_extensions ) ) {
-			$added_extensions = [ 'Staq\Core\Ground' ];
-		}
-		return $added_extensions;
+		$namespaces = \UArray::reverse_merge_unique( $namespaces, [ ] );
+		return $this->format_extensions_from_namespaces( $namespaces );
 	}
 
 	protected function format_extensions_from_namespaces( $extensions ) {
