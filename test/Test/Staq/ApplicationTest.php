@@ -66,4 +66,11 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		$expected = $this->append_project_namespace( 'ExtendNoConfiguration', 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
 	}
+
+	public function test_without_starter__extensions( ) {
+		$project_namespace = $this->get_project_namespace( 'WithoutStarter' );
+		$app = \Staq\Application::create( $project_namespace );
+		$expected = [ $project_namespace, 'Staq\Core\Ground' ];
+		$this->assertEquals( $expected, $app->get_extensions( 'namespace' ) );
+	}
 }

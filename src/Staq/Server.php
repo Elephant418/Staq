@@ -54,18 +54,16 @@ class Server {
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
 	protected function find_extensions( $namespace ) {
+		$files = [  ];
 		$namespaces = [ $namespace, 'Staq\Core\Ground' ];
 		$new_namespaces = [ $namespace, 'Staq\Core\Ground' ];
-		$extensions = [ ];
 		while ( count( $new_namespaces ) > 0 ) {
 			$new_extensions = $this->format_extensions_from_namespaces( $new_namespaces );
-			$extensions = array_merge( $extensions, $new_extensions );
-			$files = [  ];
-			foreach ( $extensions as $extension ) {
+			foreach ( $new_extensions as $extension ) {
 				$files[ ] = $extension[ 'path' ] . '/setting/application.ini';
 			}
-			$ini = ( new \Pixel418\Iniliq\Parser )->parse( $files );
-			$fetch_namespaces = $ini->get_as_array( 'extension.list' );
+			$ini = ( new \Pixel418\Iniliq\Parser )->parse( array_reverse( $files ) );
+			$fetch_namespaces = array_reverse( $ini->get_as_array( 'extension.list' ) );
 			$new_namespaces = array_diff( $fetch_namespaces, $namespaces );
 			$namespaces = array_merge( $namespaces, $fetch_namespaces );
 		}
