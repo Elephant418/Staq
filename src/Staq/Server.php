@@ -54,37 +54,28 @@ class Server {
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
 	protected function find_extensions( $namespace ) {
-		$extensions = [ $namespace ];
-		$this->find_extensions_recursive( $namespace, $extensions );
+		$disabled   = [ ];
+		$extensions = $this->find_extensions_recursive( $namespace, [ $namespace ], $disabled );
 		$extensions = $this->format_extensions_from_namespaces( $extensions );
 		return $extensions;
 	}
 
-	protected function find_extensions_recursive( $extension, &$extensions, $disabled = [ ] ) {
+	protected function find_extensions_recursive( $extension, $extensions, &$disabled ) {
 		$added_extensions = $this->find_extensions_parse_setting_file( $extension, $disabled );
 		$old_extensions = $extensions;
 		$extensions = \UArray::reverse_merge_unique( $extensions, $added_extensions );
 		foreach ( array_diff( $added_extensions, $old_extensions ) as $added_extension ) {
-			$this->find_extensions_recursive( $added_extension, $extensions, $disabled );
+			$extensions = $this->find_extensions_recursive( $added_extension, $extensions, $disabled );
 		}
+		return $extensions;
 	}
 
 	protected function find_extensions_parse_setting_file( $extension, &$disabled ) {
 		$added_extensions = [ ];
 		if ( $setting_file_path = $this->find_extension_path( $extension ) ) {
-			$setting_file_path .= '/setting/application.ini';
-			if ( is_file( $setting_file_path ) ) {
-				$setting = parse_ini_file( $setting_file_path, TRUE );
-				if ( isset( $setting[ 'extension_list' ] ) ) {
-					$ext = $setting[ 'extension_list' ];
-					if ( isset( $ext[ 'enabled' ] ) && is_array( $ext[ 'enabled' ] ) ) {
-						$added_extensions = array_diff( $ext[ 'enabled' ], $disabled );
-					}
-					if ( isset( $ext[ 'disabled' ] ) && is_array( $ext[ 'disabled' ] ) ) {
-						$disabled = \UArray::merge_unique( $disabled, $ext[ 'disabled' ] );
-					}
-				}
-			}
+			$ini = ( new \Pixel418\Iniliq\Parser )->parse( $setting_file_path . '/setting/application.ini' );
+			$added_extensions = $ini->get_as_array( 'extension_list.enabled' );
+			$disabled = \UArray::merge_unique( $disabled, $ini->get_as_array( 'extension_list.disabled' ) );
 		}
 		// Default value for extension without configuration 
 		if ( empty( $added_extensions ) ) {
@@ -94,6 +85,7 @@ class Server {
 	}
 
 	protected function format_extensions_from_namespaces( $extensions ) {
+		\UArray::do_convert_to_array( $extensions );
 		foreach ( $extensions as $key => $namespace ) {
 			$this->do_format_extension_namespace( $namespace );
 			$path = $this->find_extension_path( $namespace );
