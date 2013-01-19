@@ -107,7 +107,7 @@ class Util {
 		}
 	}
 	public static function stack_height( $stack ) {
-		return count( stack_definition( $stack ) ); 
+		return count( \Staq\Util::stack_definition( $stack ) ); 
 	}
 	public static function stack_definition_contains( $stack, $class ) {
 		return is_a( $stack, $class ); 
