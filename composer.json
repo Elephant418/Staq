@@ -20,7 +20,8 @@
     "autoload": {
         "psr-0": {
             "Staq": "src/",
-            "Test\\Staq": "test/"
+            "Test\\Staq": "test/",
+            "Test\\Staq\\Project": "test/resource"
         }
     }
 }

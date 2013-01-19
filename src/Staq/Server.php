@@ -53,10 +53,10 @@ class Server {
 	/*************************************************************************
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
-	protected function find_extensions( $name ) {
-		$extensions = [ $name ];
-		$this->find_extensions_recursive( $name, $extensions );
-		$extensions = $this->format_extensions_from_names( $extensions );
+	protected function find_extensions( $namespace ) {
+		$extensions = [ $namespace ];
+		$this->find_extensions_recursive( $namespace, $extensions );
+		$extensions = $this->format_extensions_from_namespaces( $extensions );
 		return $extensions;
 	}
 
@@ -93,36 +93,40 @@ class Server {
 		return $added_extensions;
 	}
 
-	protected function format_extensions_from_names( $extensions ) {
-		foreach ( $extensions as $key => $name ) {
-			$this->do_format_extension_name( $name );
-			$path = $this->find_extension_path( $name );
+	protected function format_extensions_from_namespaces( $extensions ) {
+		foreach ( $extensions as $key => $namespace ) {
+			$this->do_format_extension_namespace( $namespace );
+			$path = $this->find_extension_path( $namespace );
 			if ( empty( $path ) ) {
 				unset( $extensions[ $key ] );
 			} else {
 				$extensions[ $key ]                = [ ];
-				$extensions[ $key ][ 'namespace' ] = \Staq\Util::string_path_to_namespace( $name );
+				$extensions[ $key ][ 'namespace' ] = $namespace;
 				$extensions[ $key ][ 'path' ]      = $path;
 			}
 		}
 		return array_values( $extensions );
 	}
 
-	protected function find_extension_path( $name ) {
-        $name = str_replace( '\\', DIRECTORY_SEPARATOR, $name );
-		foreach ( $this->namespaces as $namespace => $path ) {
-            if ( \UString::is_start_with( $name, $namespace ) ) {
-                if ( is_dir( $path . DIRECTORY_SEPARATOR . $name ) ) {
-                    return $path . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
-                }
+	protected function find_extension_path( $namespace ) {
+		foreach ( $this->namespaces as $base_namespace => $base_paths ) {
+            if ( \UString::is_start_with( $namespace, $base_namespace ) ) {
+				\UArray::do_convert_to_array( $base_paths );
+				foreach ( $base_paths as $base_path ) {
+        			$path = str_replace( '\\', DIRECTORY_SEPARATOR, $namespace );
+	            	$path = $base_path . DIRECTORY_SEPARATOR . $path;
+	                if ( is_dir( $path ) ) {
+	                    return $path . DIRECTORY_SEPARATOR;
+	                }
+	        	}
             }
         }
 	}
 
-	protected function do_format_extension_name( &$name ) {
-		$name = str_replace( '/', '\\', $name );
-		\UString::do_not_start_with( $name, '\\' );
-		\UString::do_not_end_with( $name, '\\' );
+	protected function do_format_extension_namespace( &$namespace ) {
+		$namespace = str_replace( DIRECTORY_SEPARATOR, '\\', $namespace );
+		\UString::do_not_start_with( $namespace, '\\' );
+		\UString::do_not_end_with( $namespace, '\\' );
 	}
 }
 
