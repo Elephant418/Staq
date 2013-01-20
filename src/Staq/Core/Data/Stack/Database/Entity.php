@@ -38,10 +38,10 @@ class Entity {
 		return FALSE;
 	}
 
-	protected function get_datas_by_fields( $fields = [ ] ) {
+	public function get_datas_by_fields( $fields = [ ] ) {
 		$parameters = [ ];
 		$sql = 'SELECT * FROM ' . $this->settings[ 'database.table' ] . $this->get_clause_by_fields( $fields, $parameters );
-		$request = new Database_Request( $sql );
+		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
 
@@ -57,13 +57,15 @@ class Entity {
 	  PUBLIC DATABASE REQUEST
 	 *************************************************************************/
 	public function delete( $model ) {
-		$sql = 'DELETE FROM ' . $this->settings[ 'database.table' ] . ' WHERE ' . $this->settings[ 'database.id_field' ] . '=:id;';
-		$request = new Request( $sql );
-		return $request->execute_one( array( ':id' => $model->id ) );
+		if ( $model->exists( ) ) {
+			$sql = 'DELETE FROM ' . $this->settings[ 'database.table' ] . ' WHERE ' . $this->settings[ 'database.id_field' ] . '=:id;';
+			$request = new Request( $sql );
+			return $request->execute_one( array( ':id' => $model->id ) );
+		}
 	}
 
 	public function save( $model ) {
-		if ( $model->id !== NULL ) {
+		if ( $model->exists( ) ) {
 			$sql = 'UPDATE ' . $this->settings[ 'database.table' ]
 			. ' SET ' . $this->get_set_request( $model )
 			. ' WHERE `' . $this->settings[ 'database.id_field' ] . '` = :' . $this->settings[ 'database.id_field' ] . ' ;';
