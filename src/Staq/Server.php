@@ -44,7 +44,7 @@ class Server {
 		}
 		self::$autoloader = new \Staq\Autoloader( $extensions );
 		spl_autoload_register( array( self::$autoloader, 'autoload' ) );
-		self::$application = new \Stack\Application( $extensions, $path, $root_uri, $platform );
+		self::$application = new \Stack\Application( $extensions, $root_uri, $platform );
 		return self::$application;
 	}
 

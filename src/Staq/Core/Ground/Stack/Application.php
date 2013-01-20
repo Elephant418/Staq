@@ -13,7 +13,6 @@ class Application {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $extensions;
-	protected $name;
 	protected $root_uri;
 	protected $platform;
 	protected $router;
@@ -24,16 +23,35 @@ class Application {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function get_extensions( ) {
-		return $this->extensions;
+	public function get_extensions( $file = NULL ) {
+		$extensions = $this->extensions;
+		if ( ! empty( $file ) ) {
+			\UString::do_start_with( $file, DIRECTORY_SEPARATOR );
+			array_walk( $extensions, function( &$a ) use ( $file ) {
+				$a = realpath( $a . $file );
+			} );
+			$extensions = array_filter( $extensions, function( $a ) {
+				return ( $a !== FALSE );
+			} );
+		}
+		return $extensions;
 	}
 
 	public function get_extension_namespaces( ) {
 		return array_keys( $this->extensions );
 	}
 
-	public function get_name( ) {
-		return $this->name;
+	public function get_namespace( ) {
+		return reset( $this->get_extension_namespaces( ) );
+	}
+
+	public function get_path( $file = NULL ) {
+		$path = reset( $this->extensions );
+		if ( ! empty( $file ) ) {
+			\UString::do_start_with( $file, DIRECTORY_SEPARATOR );
+			$path = realpath( $path . $file );
+		}
+		return $path;
 	}
 
 	public function get_root_uri( ) {
@@ -72,9 +90,8 @@ class Application {
 	/*************************************************************************
 	  INITIALIZATION             
 	 *************************************************************************/
-	public function __construct( $extensions, $name, $root_uri, $platform ) {
+	public function __construct( $extensions, $root_uri, $platform ) {
 		$this->extensions = $extensions;
-		$this->name       = $name;
 		$this->root_uri   = $root_uri;
 		$this->platform   = $platform;
 	}
