@@ -54,24 +54,45 @@ class SettingTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( [ 'a_value', 'more_value' ], $setting[ 'test.a_setting' ] );
 	}
 
-	public function test_stack_setting( ) {
+	public function test_stack_setting_file( ) {
 		$app = \Staq\Application::create( $this->project_namespace );
 		$stack = new \Stack\Controller;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( 'empty', $setting[ 'view.layout' ] );
 	}
 
-	public function test_stack_setting__complex( ) {
+	public function test_stack_setting_file__complex( ) {
 		$app = \Staq\Application::create( $this->project_namespace );
 		$stack = new \Stack\Controller\Unexisting;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( 'bootstrap', $setting[ 'view.layout' ] );
 	}
 
-	public function test_stack_setting__inherit_class_name( ) {
+	public function test_stack_setting_file__inherit_class_name( ) {
 		$app = \Staq\Application::create( $this->project_namespace );
 		$stack = new \Stack\Controller\Unexisting;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( 'coco', $setting[ 'view.title' ] );
+	}
+
+	public function test_stack_setting_attribute( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Setting\Coco;
+		$setting = ( new \Stack\Setting )->parse( $stack );
+		$this->assertEquals( [ 'one' ], $setting[ 'data.value.list' ] );
+	}
+
+	public function test_stack_setting_attribute__complex( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Setting\Coco\Des;
+		$setting = ( new \Stack\Setting )->parse( $stack );
+		$this->assertEquals( [ 'one', 'two' ], $setting[ 'data.value.list' ] );
+	}
+
+	public function test_stack_setting_attribute__overrided_file( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Setting\Coco\Des\Bois;
+		$setting = ( new \Stack\Setting )->parse( $stack );
+		$this->assertEquals( [ 'three', 'four' ], $setting[ 'data.value.list' ] );
 	}
 }

@@ -23,7 +23,7 @@ class Setting {
 			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
 				$prop = new \ReflectionProperty( $class, 'setting' );
 				if ( $prop->isStatic( ) ) {
-					$file_paths[ ] = $class::$setting;
+					array_unshift( $file_paths, $class::$setting );
 				}
 			}
 		}
