@@ -21,8 +21,7 @@ class Setting {
 		$file_paths = $this->get_file_paths( $setting_file_name );
 		if ( $stack ) {
 			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
-				$prop = new \ReflectionProperty( $class, 'setting' );
-				if ( $prop->isStatic( ) ) {
+				if ( isset( $class::$setting ) ) {
 					array_unshift( $file_paths, $class::$setting );
 				}
 			}

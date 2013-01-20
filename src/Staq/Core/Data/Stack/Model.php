@@ -30,9 +30,9 @@ class Model extends \ArrayObject {
 	public function __construct( $datas = [ ] ) {
 		\UArray::do_convert_to_array( $datas );
 		parent::__construct( $datas );
-		$class = 'Stack\\Entity' . 
+		$class = 'Stack\\Entity';
 		$sub_query = \Staq\Util::stack_sub_query( $this );
-		if ( $subquery ) {
+		if ( $sub_query ) {
 			$class .= '\\' . $sub_query;
 		}
 		$this->entity = new $class;

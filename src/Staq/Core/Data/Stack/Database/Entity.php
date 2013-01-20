@@ -69,11 +69,11 @@ class Entity {
 			. ' WHERE `' . $this->settings[ 'database.id_field' ] . '` = :' . $this->settings[ 'database.id_field' ] . ' ;';
 			$request = new Request( $sql );
 			$request->execute_one( $this->get_bind_params( $model ) );
-			return $model->id
+			return $model->id;
 		} else {
 			$sql = 'INSERT INTO ' . $this->settings[ 'database.table' ]
-			. ' (`' . implode( '`, `', $this->settings[ 'database.fields' ] . '`) VALUES'
-			. ' (:' . implode( ', :', $this->settings[ 'database.fields' ] . ');';
+			. ' (`' . implode( '`, `', $this->settings[ 'database.fields' ] ) . '`) VALUES'
+			. ' (:' . implode( ', :', $this->settings[ 'database.fields' ] ) . ');';
 			$request = new Request( $sql );
 			$request->execute_one( $this->get_bind_params( $model ) );
 			return $request->last_insert_id( );
