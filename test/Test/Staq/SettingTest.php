@@ -66,4 +66,25 @@ class SettingTest extends \PHPUnit_Framework_TestCase {
 		$setting = ( new \Stack\Setting )->parse( 'test' );
 		$this->assertEquals( [ 'a_value', 'more_value' ], $setting[ 'test.a_setting' ] );
 	}
+
+	public function test_stack_setting( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Controller;
+		$setting = ( new \Stack\Setting )->parse( $stack );
+		$this->assertEquals( 'empty', $setting[ 'view.layout' ] );
+	}
+
+	public function test_stack_setting__complex( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Controller\Unexisting;
+		$setting = ( new \Stack\Setting )->parse( $stack );
+		$this->assertEquals( 'bootstrap', $setting[ 'view.layout' ] );
+	}
+
+	public function test_stack_setting__inherit_class_name( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Controller\Unexisting;
+		$setting = ( new \Stack\Setting )->parse( $stack );
+		$this->assertEquals( 'coco', $setting[ 'view.title' ] );
+	}
 }
