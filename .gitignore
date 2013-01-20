@@ -2,6 +2,7 @@
 *.local.perso.ini
 composer.lock
 vendor/*
+*/cache/*
 
 .buildpath
 .project

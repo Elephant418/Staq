@@ -45,11 +45,18 @@ class Application {
 		return reset( $this->get_extension_namespaces( ) );
 	}
 
-	public function get_path( $file = NULL ) {
+	public function get_path( $file = NULL, $create = FALSE ) {
 		$path = reset( $this->extensions );
 		if ( ! empty( $file ) ) {
 			\UString::do_start_with( $file, DIRECTORY_SEPARATOR );
-			$path = realpath( $path . $file );
+			$path .= $file;
+			$real_path = realpath( $path );
+			if ( $real_path == FALSE && $create ) {
+				if ( mkdir( $path, 0755, TRUE ) ) {
+					$real_path = realpath( $path );
+				}
+			}
+			$path = $real_path;
 		}
 		return $path;
 	}

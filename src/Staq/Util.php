@@ -4,7 +4,7 @@
 
 namespace Staq;
 
-class Util {
+abstract class Util {
 
 
 
