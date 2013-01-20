@@ -29,6 +29,7 @@ class Autoloader {
 	  TOP-LEVEL AUTOLOAD
 	 *************************************************************************/
 	public function autoload( $class ) {
+		echo $class . PHP_EOL;
 		if ( \Staq\Util::is_stack( $class ) ) {
 			$this->load_stack_class( $class );
 		} else if ( \Staq\Util::is_parent_stack( $class ) ) {
@@ -96,10 +97,10 @@ class Autoloader {
 	  CLASS DECLARATION             
 	 *************************************************************************/
 	protected function class_exists( $class ) {
-		return ( class_exists( $class ) || interface_exists( $class ) );
+		return ( \class_exists( $class ) || \interface_exists( $class ) );
 	}
 	protected function create_alias_class( $alias, $class ) {
-		return $this->create_class( $alias, $class, interface_exists( $class ) );
+		return $this->create_class( $alias, $class, \interface_exists( $class ) );
 	}
 	protected function create_empty_class( $class ) {
 		return $this->create_class( $class, NULL );

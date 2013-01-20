@@ -11,17 +11,20 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-
+	public $project_namespace = 'Test\\Staq\\Project\\Autoloader';
 
 
 
 	/*************************************************************************
 	  UTIL METHODS             
 	 *************************************************************************/
-	public function get_project_namespace( $name ) {
-		return 'Test\\Staq\\Project\\Application\\' . $name;
+	public function get_project_class( $name ) {
+		return $this->project_namespace . '\\' . $name;
 	}
 
+	public function get_project_stack_class( $name ) {
+		return $this->get_project_class( 'Stack\\' . $name );
+	}
 
 
 
@@ -31,14 +34,29 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase {
 	public function test_unexisting_class__simple( ) {
 		// $project_namespace = $this->get_project_namespace( 'NoConfiguration' );
 		$app = \Staq\Application::create( );
-		$stack = new \Stack\Coco;
-		$this->assertEquals( 'Stack\\Coco', get_class( $stack ) );
+		$stack = new \Stack\Unexisting\Coco;
+		$this->assertEquals( 'Stack\\Unexisting\\Coco', get_class( $stack ) );
 		$this->assertEquals( 0, \Staq\Util::stack_height( $stack ) );
 	}
+
 	public function test_unexisting_class__complex( ) {
 		$app = \Staq\Application::create( );
-		$stack = new \Stack\Coco\Des\Bois;
-		$this->assertEquals( 'Stack\\Coco\\Des\\Bois', get_class( $stack ) );
+		$stack = new \Stack\Unexisting\Coco\Des\Bois;
+		$this->assertEquals( 'Stack\\Unexisting\\Coco\\Des\\Bois', get_class( $stack ) );
 		$this->assertEquals( 0, \Staq\Util::stack_height( $stack ) );
+	}
+
+	public function test_existing_class__simple( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Existing\Coco;
+		$this->assertEquals( 1, \Staq\Util::stack_height( $stack ) );
+		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
+	}
+
+	public function test_existing_class__complex( ) {
+		$app = \Staq\Application::create( );
+		$stack = new \Stack\Existing\Coco;
+		$this->assertEquals( 1, \Staq\Util::stack_height( $stack ) );
+		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
 	}
 }

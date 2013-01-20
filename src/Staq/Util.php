@@ -122,6 +122,15 @@ class Util {
 		}
 		return $list;
 	}
+	public static function get_declared_stack_classes( ) {
+		$stack_classes = [ ];
+		foreach ( get_declared_classes( ) as $class ) {
+			if ( \Staq\Util::is_stack( $class ) ) {
+				$stack_classes[ ] = $class;
+			}
+		}
+		return $stack_classes;
+	}
 
 	// STACKABLE CLASS
 	public static function is_stackable_class( $stackable ) {
