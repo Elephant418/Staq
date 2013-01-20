@@ -13,7 +13,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $starter_namespaces = [ 'Staq\App\Starter', 'Staq\Core\Router', 'Staq\Core\Ground' ];
+	public $starter_namespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
 
 
 

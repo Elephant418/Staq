@@ -91,7 +91,11 @@ class Router {
 	protected function render( $exception = NULL ) {
 		try {
 			$active_route = $this->get_active_route( $exception );
-			return $active_route->call_action( );
+			$view = $active_route->call_action( );
+			if ( is_a( $view, 'Stack\\View' ) ) {
+				$view = $view->render( );
+			}
+			return $view;
 		} catch( \Exception $exception ) {
 			$this->prevent_exception_boucle( $exception );
 			return $this->render( $exception );
