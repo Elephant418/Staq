@@ -37,8 +37,7 @@ class Controller implements \Stack\IController {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action( $parameters, $action ) {
-	}
+	public function action( ) { }
 
 
 
