@@ -27,7 +27,8 @@ class Model extends \ArrayObject {
 	/*************************************************************************
 	  CONSTRUCTOR
 	 *************************************************************************/
-	public function __construct( $datas ) {
+	public function __construct( $datas = [ ] ) {
+		\UArray::do_convert_to_array( $datas );
 		parent::__construct( $datas );
 		$class = 'Stack\\Entity' . 
 		$sub_query = \Staq\Util::stack_sub_query( $this );
