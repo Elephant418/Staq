@@ -2,7 +2,7 @@
 *.local.perso.ini
 composer.lock
 vendor/*
-*/cache/*
+test/resource/Test/Staq/Project/*/cache/*
 
 .buildpath
 .project
