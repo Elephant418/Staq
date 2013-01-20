@@ -12,9 +12,9 @@ class Error extends Error\__Parent {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $route_action = [
-		'match_uri' => '/error/:code',
-		'match_exceptions' => [ '404', '500' ]
+	public static $setting = [
+		'route.action.uri' => '/error/:code',
+		'route.action.exceptions' => [ '404', '500' ]
 	];
 
 
