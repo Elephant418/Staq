@@ -29,7 +29,6 @@ class Autoloader {
 	  TOP-LEVEL AUTOLOAD
 	 *************************************************************************/
 	public function autoload( $class ) {
-		echo $class . PHP_EOL;
 		if ( \Staq\Util::is_stack( $class ) ) {
 			$this->load_stack_class( $class );
 		} else if ( \Staq\Util::is_parent_stack( $class ) ) {

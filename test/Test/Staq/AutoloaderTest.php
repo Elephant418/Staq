@@ -54,9 +54,39 @@ class AutoloaderTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_existing_class__complex( ) {
-		$app = \Staq\Application::create( );
-		$stack = new \Stack\Existing\Coco;
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Existing\Coco\Des\Bois;
 		$this->assertEquals( 1, \Staq\Util::stack_height( $stack ) );
 		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
+	}
+
+	public function test_controller_class__unexisting( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Controller\Unexisting;
+		$this->assertTrue( is_a( $stack, 'Staq\Core\Router\Stack\Controller' ) );
+	}
+
+	public function test_controller_class__existing( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Controller\Existing\Coco;
+		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Controller\\Existing\\Coco' ) ) );
+	}
+
+	public function test_controller_class__extending( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Controller\Existing\Coco;
+		$this->assertTrue( is_a( $stack, 'Staq\Core\Router\Stack\Controller' ) );
+	}
+
+	public function test_exception_class__existing( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Exception;
+		$this->assertTrue( is_a( $stack, 'Staq\Core\Ground\Stack\Exception' ) );
+	}
+
+	public function test_exception_class__extending( ) {
+		$app = \Staq\Application::create( $this->project_namespace );
+		$stack = new \Stack\Exception;
+		$this->assertTrue( is_a( $stack, 'Exception' ) );
 	}
 }
