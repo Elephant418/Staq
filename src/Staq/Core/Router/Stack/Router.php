@@ -27,6 +27,10 @@ class Router {
 		return end( $this->uris );
 	}
 
+	public function get_last_exception( ) {
+		return end( $this->exceptions );
+	}
+
 
 
 	/*************************************************************************
@@ -39,6 +43,7 @@ class Router {
 		$this->uris[ ] = $uri;
 		return $this;
 	}
+
 	protected function add_routes( $routes ) {
 		$this->routes = array_merge( $this->routes, $routes );
 	}

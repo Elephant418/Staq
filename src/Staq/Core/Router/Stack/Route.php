@@ -63,14 +63,14 @@ class Route {
 		$parameters = [ ];
 		foreach( $reflection->getParameters( ) as $parameter ) {
 			if ( ! $parameter->canBePassedByValue( ) ) {
-				throw new \Stack\Exception\Controller_Definition( 'A controller could not have parameter passed by reference' );
+				throw new \Stack\Exception\ControllerActionDefinition( 'A controller could not have parameter passed by reference' );
 			}
 			if ( isset( $this->parameters[ $parameter->name ] ) ) {
 				$parameters[ ] = $this->parameters[ $parameter->name ];
 			} else if ( $parameter->isDefaultValueAvailable( ) ) {
 				$parameters[ ] = $parameter->getDefaultValue( );
 			} else {
-				throw new \Stack\Exception\Controller_Definition( 'The current uri does not provide a value for the parameter "' . $parameter->name . '"' );
+				throw new \Stack\Exception\ControllerActionDefinition( 'The current uri does not provide a value for the parameter "' . $parameter->name . '"' );
 			}
 		}
 		return call_user_func_array( $this->callable, $parameters );
@@ -91,18 +91,16 @@ class Route {
 		$result = FALSE;
 		foreach ( $this->match_exceptions as $match_exception ) {
 			if ( is_numeric( $match_exception ) ) {
-				if( $exception->get_code( ) === $match_exception ) {
-					$result = TRUE;
-				}
-			} else if ( \UString::is_start_with( $match_exception, '\\' ) ) {
-				if( get_class( $exception ) === substr( $match_exception, 1 ) ) {
+				if( $exception->getCode( ) == $match_exception ) {
 					$result = TRUE;
 				}
 			} else if ( \Staq\Util::is_stack( $exception ) ) {
 				if( \Staq\Util::stack_sub_query( $exception ) === $match_exception ) {
 					$result = TRUE;
 				}
-			}
+			} else if( get_class( $exception ) === $match_exception ) {
+				$result = TRUE;
+			} 
 		}
 		if ( $result ) {
 			$parameters = $this->get_parameter_from_exception( $exception );
@@ -143,6 +141,9 @@ class Route {
 		if ( \Staq\Util::is_stack( $exception ) ) {
 			$parameters[ 'query' ] = \Staq\Util::stack_query( $exception );
 			$parameters[ 'name'  ] = \Staq\Util::stack_sub_query( $exception );
+		} else {
+			$parameters[ 'query' ] = get_class( $exception );
+			$parameters[ 'name'  ] = get_class( $exception );
 		}
 		return $parameters;
 	}

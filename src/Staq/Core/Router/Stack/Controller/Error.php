@@ -23,6 +23,15 @@ class Error extends Error\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action( $code ) {
+		if ( ! headers_sent( ) ) {
+			if ( $code == '403' ) {
+				header( 'HTTP/1.1 403 Forbidden' );
+			} else if ( $code == '404' ) {
+				header( 'HTTP/1.1 404 Not Found' );
+			} else {
+				header( 'HTTP/1.1 500 Internal Server Error' );
+			}
+		}
 		return 'Error ' . $code . '!';
 	}
 
