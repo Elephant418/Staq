@@ -60,7 +60,7 @@ class Server {
 		while ( count( $new_namespaces ) > 0 ) {
 			$new_extensions = $this->format_extensions_from_namespaces( $new_namespaces );
 			foreach ( $new_extensions as $extension ) {
-				$files[ ] = $extension[ 'path' ] . '/setting/application.ini';
+				$files[ ] = $extension . '/setting/application.ini';
 			}
 			$ini = ( new \Pixel418\Iniliq\Parser )->parse( array_reverse( $files ) );
 			$fetch_namespaces = array_reverse( $ini->get_as_array( 'extension.list' ) );
@@ -76,15 +76,12 @@ class Server {
 		foreach ( $extensions as $key => $namespace ) {
 			$this->do_format_extension_namespace( $namespace );
 			$path = $this->find_extension_path( $namespace );
-			if ( empty( $path ) ) {
-				unset( $extensions[ $key ] );
-			} else {
-				$extensions[ $key ]                = [ ];
-				$extensions[ $key ][ 'namespace' ] = $namespace;
-				$extensions[ $key ][ 'path' ]      = $path;
+			unset( $extensions[ $key ] );
+			if ( ! empty( $path ) ) {
+				$extensions[ $namespace ] = $path;
 			}
 		}
-		return array_values( $extensions );
+		return $extensions;
 	}
 
 	protected function find_extension_path( $namespace ) {
