@@ -16,19 +16,6 @@ class SettingTest extends \PHPUnit_Framework_TestCase {
 
 
 	/*************************************************************************
-	  UTIL METHODS             
-	 *************************************************************************/
-	public function get_project_class( $name ) {
-		return $this->project_namespace . '\\' . $name;
-	}
-
-	public function get_project_stack_class( $name ) {
-		return $this->get_project_class( 'Stack\\' . $name );
-	}
-
-
-
-	/*************************************************************************
 	  TEST METHODS             
 	 *************************************************************************/
 	public function test_unexisting_setting( ) {
