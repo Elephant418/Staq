@@ -92,7 +92,7 @@ class Server {
         			$path = str_replace( '\\', DIRECTORY_SEPARATOR, $namespace );
 	            	$path = $base_path . DIRECTORY_SEPARATOR . $path;
 	                if ( is_dir( $path ) ) {
-	                    return $path . DIRECTORY_SEPARATOR;
+	                    return $path;
 	                }
 	        	}
             }

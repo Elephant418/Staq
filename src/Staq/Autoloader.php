@@ -58,7 +58,7 @@ class Autoloader {
 	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
 	protected function get_real_class_of_stack_extension( $stack, $extension_namespace ) {
 		$stack_path = \Staq\Util::string_namespace_to_path( $stack );
-		$absolute_path = $this->extensions[ $extension_namespace ] . 'Stack/' . $stack_path . '.php';
+		$absolute_path = realpath( $this->extensions[ $extension_namespace ] . '/Stack/' . $stack_path . '.php' );
 		if ( is_file( $absolute_path ) ) {
 			$real_class = $extension_namespace . '\\Stack\\' . $stack;
 			return $real_class;
