@@ -45,7 +45,10 @@ class Setting {
 					$file_name .= '.' . $platform_name;
 				}
 				while ( $file_name ) {
-					$file_paths[ ] = realpath( $extension . '/setting/' . $file_name . '.ini' );
+					$path = realpath( $extension . '/setting/' . $file_name . '.ini' );
+					if ( $path ) {
+						$file_paths[ ] = $path;
+					}
 					$file_name = \UString::substr_before_last( $file_name, '.' );
 				}
 			}

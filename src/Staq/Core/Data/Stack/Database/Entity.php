@@ -12,6 +12,10 @@ class Entity {
 	  ATTRIBUTES                 
 	 *************************************************************************/
 	protected $settings;
+	protected $name;
+	protected $table;
+	protected $id_field;
+	protected $fields;
 
 
 
@@ -20,14 +24,24 @@ class Entity {
 	 *************************************************************************/
 	public function __construct( ) {
 		$this->settings = ( new \Stack\Setting )->parse( $this );
+		$this->name     = strtolower( str_replace( '\\', '_', \Staq\Util::stack_sub_query( $this ) ) );
+		$this->table    = $this->settings->get( 'database.table', $this->name );
+		$this->id_field = $this->settings->get( 'database.id_field', 'id' );
+		$this->fields   = $this->settings->get_as_array( 'database.id_field' );
 	}
 
 
 	/*************************************************************************
 	  INITIALIZATION          
 	 *************************************************************************/
+	public function get_id_by_data( $data ) {
+		if( isset( $data[ $this->id_field ] ) ) {
+			return $data[ $this->id_field ];
+		}
+	}
+
 	public function get_data_by_id( $id ) {
-		return $this->get_data_by_fields( [ $this->settings[ 'database.id_field' ] => $id ] );
+		return $this->get_data_by_fields( [ $this->id_field => $id ] );
 	}
 
 	public function get_data_by_fields( $fields = [ ] ) {
@@ -40,14 +54,14 @@ class Entity {
 
 	public function get_datas_by_fields( $fields = [ ] ) {
 		$parameters = [ ];
-		$sql = 'SELECT * FROM ' . $this->settings[ 'database.table' ] . $this->get_clause_by_fields( $fields, $parameters );
+		$sql = 'SELECT * FROM ' . $this->table . $this->get_clause_by_fields( $fields, $parameters );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
 
 	public function delete_by_fields( $fields ) {
 		$parameters = [ ];
-		$sql = 'DELETE FROM ' . $this->settings[ 'database.table' ] . $this->get_clause_by_fields( $fields, $parameters );
+		$sql = 'DELETE FROM ' . $this->table . $this->get_clause_by_fields( $fields, $parameters );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
@@ -58,7 +72,7 @@ class Entity {
 	 *************************************************************************/
 	public function delete( $model ) {
 		if ( $model->exists( ) ) {
-			$sql = 'DELETE FROM ' . $this->settings[ 'database.table' ] . ' WHERE ' . $this->settings[ 'database.id_field' ] . '=:id;';
+			$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->id_field . '=:id;';
 			$request = new Request( $sql );
 			return $request->execute_one( array( ':id' => $model->id ) );
 		}
@@ -66,16 +80,16 @@ class Entity {
 
 	public function save( $model ) {
 		if ( $model->exists( ) ) {
-			$sql = 'UPDATE ' . $this->settings[ 'database.table' ]
+			$sql = 'UPDATE ' . $this->table
 			. ' SET ' . $this->get_set_request( $model )
-			. ' WHERE `' . $this->settings[ 'database.id_field' ] . '` = :' . $this->settings[ 'database.id_field' ] . ' ;';
+			. ' WHERE `' . $this->id_field . '` = :' . $this->id_field . ' ;';
 			$request = new Request( $sql );
 			$request->execute_one( $this->get_bind_params( $model ) );
 			return $model->id;
 		} else {
-			$sql = 'INSERT INTO ' . $this->settings[ 'database.table' ]
-			. ' (`' . implode( '`, `', $this->settings[ 'database.fields' ] ) . '`) VALUES'
-			. ' (:' . implode( ', :', $this->settings[ 'database.fields' ] ) . ');';
+			$sql = 'INSERT INTO ' . $this->table
+			. ' (`' . implode( '`, `', $this->fields ) . '`) VALUES'
+			. ' (:' . implode( ', :', $this->fields ) . ');';
 			$request = new Request( $sql );
 			$request->execute_one( $this->get_bind_params( $model ) );
 			return $request->last_insert_id( );
@@ -119,7 +133,7 @@ class Entity {
 
 	protected function get_set_request( ) {
 		$request = [ ];
-		foreach ( $this->settings[ 'database.fields' ] as $field_name ) {
+		foreach ( $this->fields as $field_name ) {
 			$request[ ] = '`' . $field_name . '` = :' . $field_name;
 		}
 		return implde( ', ', $request );

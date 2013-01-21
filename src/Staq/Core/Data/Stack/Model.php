@@ -12,7 +12,7 @@ class Model extends \ArrayObject {
 	  ATTRIBUTES                 
 	 *************************************************************************/
 	public $id;
-	protected $entity;
+	public $entity;
 
 
 	/*************************************************************************
@@ -27,9 +27,7 @@ class Model extends \ArrayObject {
 	/*************************************************************************
 	  CONSTRUCTOR
 	 *************************************************************************/
-	public function __construct( $datas = [ ] ) {
-		\UArray::do_convert_to_array( $datas );
-		parent::__construct( $datas );
+	public function __construct( ) {
 		$class = 'Stack\\Entity';
 		$sub_query = \Staq\Util::stack_sub_query( $this );
 		if ( $sub_query ) {
@@ -43,7 +41,10 @@ class Model extends \ArrayObject {
 	  INITIALIZATION          
 	 *************************************************************************/
 	public function by_data( $data ) {
-		return new $this( $data );
+		\UArray::do_convert_to_array( $data );
+		$this->id = $this->entity->get_id_by_data( $data );
+		$this->exchangeArray( $data );
+		return $this;
 	}
 
 	public function by_id( $id ) {

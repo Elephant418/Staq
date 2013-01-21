@@ -37,6 +37,8 @@ class Request {
 	}
 
 	public function execute( $arguments = array( ) ) {
+		// echo $this->request . PHP_EOL;
+		// print_r( $arguments );
 		if ( empty( $this->request ) ) {
 			throw new \Stack\Exception\Database( 'The SQL request is empty.' );
 		}
@@ -80,23 +82,40 @@ class Request {
 	public function get_last_insert_id( ) {
 		return $this->last_insert_id;
 	}
+	
+	public function set_PDObject( $PDObject ) {
+		$this->PDObject = $PDObject;
+	}
+	
+	public function get_PDObject( ) {
+		if ( empty( $this->PDObject ) ) {
+			$ini = ( new \Stack\Setting )->parse( 'database' );
+			$this->PDObject = new \PDO(
+				$ini[ 'access.driver' ] . ':host=' . $ini[ 'access.host' ] . ';dbname=' . $ini[ 'access.name' ],
+				$ini[ 'access.user' ],
+				$ini[ 'access.password' ],
+				[ \PDO::ATTR_PERSISTENT => TRUE ]
+			);
+			$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+		}
+		return $this->PDObject;
+	}
+
+	public function load_mysql_file( $file ) {
+		$ini = ( new \Stack\Setting )->parse( 'database' );
+		system( 'mysql -u' . $ini[ 'access.user' ] . ' -p' . $ini[ 'access.password' ] . ' -D ' . $ini[ 'access.name' ] . ' < ' . $file );
+	}
 
 
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	private function connect( ) {
-		$ini = ( new \Stack\Setting )->parse( 'database' );
-		$this->PDObject = new \PDO(
-			$ini[ 'access.driver' ] . ':host=' . $ini[ 'access.host' ] . ';dbname=' . $ini[ 'access.name' ],
-			$ini[ 'access.user' ],
-			$ini[ 'access.password' ],
-			[ \PDO::ATTR_PERSISTENT => TRUE ]
-		);
-		$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+	protected function connect( ) {
+		$this->get_PDObject( );
 	}
-	private function disconnect( ) {
-		$this->PDObject = null;
+
+	protected function disconnect( ) {
+		$this->PDObject = NULL;
 	}
 }
 
