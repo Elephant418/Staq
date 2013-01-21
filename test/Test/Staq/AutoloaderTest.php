@@ -4,14 +4,7 @@ namespace Test\Staq;
 
 require_once( __DIR__ . '/../../../vendor/autoload.php' );
 
-class AutoloaderTest extends \PHPUnit_Framework_TestCase {
-
-
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	public $project_namespace = 'Test\\Staq\\Project\\Autoloader';
+class AutoloaderTest extends StaqTestCase {
 
 
 

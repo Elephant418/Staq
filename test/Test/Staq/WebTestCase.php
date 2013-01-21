@@ -4,7 +4,7 @@ namespace Test\Staq;
 
 require_once( __DIR__ . '/../../../vendor/autoload.php' );
 
-class WebTestCase extends \PHPUnit_Framework_TestCase {
+class WebTestCase extends StaqTestCase {
 
 
 
