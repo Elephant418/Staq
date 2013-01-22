@@ -8,19 +8,54 @@ namespace Staq\Core\Data\Stack\Database;
 class Request {
 
 
+
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
-	public $request;
+	protected $request;
 	protected $PDObject;
 	protected $last_insert_id = false;
+
+
+
+	/*************************************************************************
+	  GETTER                   
+	 *************************************************************************/
+	public function get_last_insert_id( ) {
+		return $this->last_insert_id;
+	}
+	
+	public function get_PDObject( ) {
+		$this->connect( );
+		return $this->PDObject;
+	}
+	
+	public function get_request( ) {
+		return $this->request;
+	}
+
+
+
+	/*************************************************************************
+	  SETTER                   
+	 *************************************************************************/
+	public function set_PDObject( $PDObject ) {
+		$this->PDObject = $PDObject;
+		return $this;
+	}
+	
+	public function set_request( $request ) {
+		$this->request = $request;
+		return $this;
+	}
+
 
 
 	/*************************************************************************
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( $request = '' ) {
-		$this->request = $request;
+		$this->set_request( $request );
 	}
 	
 	
@@ -37,6 +72,7 @@ class Request {
 	}
 
 	public function execute( $arguments = array( ) ) {
+
 		if ( empty( $this->request ) ) {
 			throw new \Stack\Exception\Database( 'The SQL request is empty.' );
 		}
@@ -76,27 +112,16 @@ class Request {
 		$this->disconnect( );
 		return $result;
 	}
-	
-	public function get_last_insert_id( ) {
-		return $this->last_insert_id;
-	}
-	
-	public function set_PDObject( $PDObject ) {
-		$this->PDObject = $PDObject;
-	}
-	
-	public function get_PDObject( ) {
-		if ( empty( $this->PDObject ) ) {
-			$ini = ( new \Stack\Setting )->parse( 'database' );
-			$this->PDObject = new \PDO(
-				$ini[ 'access.driver' ] . ':host=' . $ini[ 'access.host' ] . ';dbname=' . $ini[ 'access.name' ],
-				$ini[ 'access.user' ],
-				$ini[ 'access.password' ],
-				[ \PDO::ATTR_PERSISTENT => TRUE ]
-			);
-			$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+
+	public function require_database( $name = NULL ) {
+		if ( is_null( $name ) ) {
+			$ini  = ( new \Stack\Setting )->parse( 'database' );
+			$name = $ini[ 'access.name' ];
 		}
-		return $this->PDObject;
+		$this->connect( FALSE );
+		$statement = $this->PDObject->prepare( 'CREATE DATABASE IF NOT EXISTS `' . $name . '`;' );
+		$statement->execute( );
+		return $this;
 	}
 
 	public function load_mysql_file( $file ) {
@@ -107,14 +132,23 @@ class Request {
 		}
 		$system .= ' -D ' . $ini[ 'access.name' ] . ' < ' . $file;
 		system( $system );
+		return $this;
 	}
 
 
 	/*************************************************************************
 	  PRIVATE METHODS                   
 	 *************************************************************************/
-	protected function connect( ) {
-		$this->get_PDObject( );
+	protected function connect( $database = TRUE ) {
+		if ( empty( $this->PDObject ) ) {
+			$ini  = ( new \Stack\Setting )->parse( 'database' );
+			$conf = $ini[ 'access.driver' ] . ':host=' . $ini[ 'access.host' ];
+			if ( $database ) {
+				$conf .= ';dbname=' . $ini[ 'access.name' ];
+			}
+			$this->PDObject = new \PDO( $conf, $ini[ 'access.user' ], $ini[ 'access.password' ], [ \PDO::ATTR_PERSISTENT => TRUE ] );
+			$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+		}
 	}
 
 	protected function disconnect( ) {

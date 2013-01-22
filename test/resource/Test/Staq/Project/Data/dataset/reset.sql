@@ -1,1 +1,1 @@
-TRUNCATE `user`;
+DROP DATABASE staq;

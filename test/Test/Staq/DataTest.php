@@ -22,7 +22,9 @@ class DataTest extends StaqTestCase {
 	 *************************************************************************/
 	protected function setUp( ) {
 		$app = \Staq\Application::create( $this->project_namespace );
-		( new \Stack\Database\Request )->load_mysql_file( $app->get_path( 'dataset/user.sql' ) );
+		( new \Stack\Database\Request )
+			->require_database( )
+			->load_mysql_file( $app->get_path( 'dataset/user.sql' ) );
 	}
 
 	protected function tearDown( ) {
