@@ -14,7 +14,8 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	protected function setUp( ) {
 		$this->get_request_url( 'http://localhost/coco' );
-		$app = \Staq\Application::create( $this->project_namespace, '/', 'local' );
+		$app = \Staq\Application::create( $this->project_namespace )
+			->set_platform( 'local' );
 	}
 
 

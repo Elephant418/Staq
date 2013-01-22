@@ -96,6 +96,7 @@ class Application {
 
 	public function set_platform( $platform ) {
 		$this->platform = $platform;
+		$this->initialize( );
 		return $this;
 	}
 
