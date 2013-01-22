@@ -15,11 +15,11 @@ abstract class Application {
 	public static function create( $path = 'Staq\Core\Ground', $root_uri = '/', $platform = 'prod' ) {
 		return ( new \Staq\Server )->create_application( $path, $root_uri, $platform );
 	}
-	public static function current_application( ) {
+	public static function get_current_application( ) {
 		return \Staq\Server::$application;
 	}
 	public static function __callStatic( $name, $arguments ) {
-		$application = self::current_application( );
+		$application = self::get_current_application( );
 		$callable = [ $application, $name ];
 		if ( ! is_callable( $callable ) ) {
 			$caller = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 1 )[ 0 ];

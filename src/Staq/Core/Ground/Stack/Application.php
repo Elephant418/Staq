@@ -37,6 +37,13 @@ class Application {
 		return $extensions;
 	}
 
+	public function get_file_path( $file = NULL ) {
+		$paths = $this->get_extensions( $file );
+		if ( ! empty( $paths ) ) {
+			return reset( $paths );
+		}
+	}
+
 	public function get_extension_namespaces( ) {
 		return array_keys( $this->extensions );
 	}
@@ -114,7 +121,10 @@ class Application {
 		ini_set( 'display_errors', $display_errors );
 
 		// Level reporting
-		$level = $settings->get_as_constant( 'error.error_reporting', 0 );
+		$level = $settings->get( 'error.error_reporting' );
+		if ( ! is_numeric ( $level ) ) {
+			$level = 0;
+		}
 		error_reporting( $level );
 
 		return $this;

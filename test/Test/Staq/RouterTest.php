@@ -14,20 +14,26 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	protected function setUp( ) {
 		$this->get_request_url( 'http://localhost/coco' );
-		$app = \Staq\Application::create( $this->project_namespace );
+		$app = \Staq\Application::create( $this->project_namespace, '/', 'local' );
 	}
 
 
 
 
 	/*************************************************************************
-	  TEST METHODS             
+	  ERROR CONTROLLER TEST METHODS             
 	 *************************************************************************/
 	public function test_extended_error_controller( ) {
 		\Staq\Application::run( );
         $this->expectOutputString( 'error 404' );
 	}
 
+
+
+
+	/*************************************************************************
+	  ANONYMOUS CONTROLLER TEST METHODS             
+	 *************************************************************************/
 	public function test_anonymous_controller__magic_route( ) {
 		\Staq\Application::add_controller( '/*', function( ) {
 				return 'hello';
@@ -68,5 +74,17 @@ class RouterTest extends WebTestCase {
 			})
 			->run( );
         $this->expectOutputString( 'error 404' );
+	}
+
+
+
+
+	/*************************************************************************
+	  PUBLIC FILE CONTROLLER TEST METHODS             
+	 *************************************************************************/
+	public function test_public_controller__match( ) {
+		$this->get_request_url( 'http://localhost/static.txt' );
+		\Staq\Application::run( );
+        $this->expectOutputString( 'This is an example of static file' );
 	}
 }

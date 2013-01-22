@@ -93,7 +93,9 @@ class Router {
 			$active_routes = $this->get_active_routes( $exception );
 			foreach ( $active_routes as $route ) {
 				$result = $route->call_action( );
-				if ( ! is_null( $result ) ) {
+				if ( $result === TRUE ) {
+					return NULL;
+				} else if ( ! is_null( $result ) ) {
 					return $this->render( $result );
 				}
 			}
