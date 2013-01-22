@@ -101,7 +101,12 @@ class Request {
 
 	public function load_mysql_file( $file ) {
 		$ini = ( new \Stack\Setting )->parse( 'database' );
-		system( 'mysql -u' . $ini[ 'access.user' ] . ' -p' . $ini[ 'access.password' ] . ' -D ' . $ini[ 'access.name' ] . ' < ' . $file );
+		$system = 'mysql -u' . $ini[ 'access.user' ];
+		if ( isset( $ini[ 'access.password' ] ) ) {
+			$system .= ' -p' . $ini[ 'access.password' ];
+		}
+		$system .= ' -D ' . $ini[ 'access.name' ] . ' < ' . $file;
+		system( $system );
 	}
 
 

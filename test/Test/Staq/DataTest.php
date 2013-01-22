@@ -18,7 +18,7 @@ class DataTest extends StaqTestCase {
 
 
 	/*************************************************************************
-	  DATABASE METHODS			 
+	  GLOBAL METHODS			 
 	 *************************************************************************/
 	protected function setUp( ) {
 		$app = \Staq\Application::create( $this->project_namespace );
