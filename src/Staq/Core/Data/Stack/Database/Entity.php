@@ -11,6 +11,10 @@ class Entity {
 	/*************************************************************************
 	  ATTRIBUTES                 
 	 *************************************************************************/
+	public static $setting = [
+		'database.id_field' => 'id',
+		'database.fields'   => [ 'id' ]
+	];
 	protected $settings;
 	protected $name;
 	protected $table;
@@ -26,18 +30,21 @@ class Entity {
 		$this->settings = ( new \Stack\Setting )->parse( $this );
 		$this->name     = strtolower( str_replace( '\\', '_', \Staq\Util::stack_sub_query( $this ) ) );
 		$this->table    = $this->settings->get( 'database.table', $this->name );
-		$this->id_field = $this->settings->get( 'database.id_field', 'id' );
-		$this->fields   = $this->settings->get_as_array( 'database.id_field' );
+		$this->id_field = $this->settings[ 'database.id_field' ];
+		$this->fields   = $this->settings->get_as_array( 'database.fields' );
 	}
 
 
 	/*************************************************************************
 	  INITIALIZATION          
 	 *************************************************************************/
-	public function get_id_by_data( $data ) {
-		if( isset( $data[ $this->id_field ] ) ) {
-			return $data[ $this->id_field ];
+	public function extract_id( $data ) {
+		$id = NULL;
+		if ( isset( $data[ $this->id_field ] ) ) {
+			$id = $data[ $this->id_field ];
+			unset( $data[ $this->id_field ] );
 		}
+		return $id;
 	}
 
 	public function get_data_by_id( $id ) {
@@ -92,7 +99,7 @@ class Entity {
 			. ' (:' . implode( ', :', $this->fields ) . ');';
 			$request = new Request( $sql );
 			$request->execute_one( $this->get_bind_params( $model ) );
-			return $request->last_insert_id( );
+			return $request->get_last_insert_id( );
 		}
 	}
 
@@ -134,21 +141,30 @@ class Entity {
 	protected function get_set_request( ) {
 		$request = [ ];
 		foreach ( $this->fields as $field_name ) {
-			$request[ ] = '`' . $field_name . '` = :' . $field_name;
+			if ( $field_name != $this->id_field ) {
+				$request[ ] = '`' . $field_name . '` = :' . $field_name;
+			}
 		}
-		return implde( ', ', $request );
+		return implode( ', ', $request );
 	}
 
 	protected function get_bind_params( $model ) {
+		$data = $this->get_current_data( $model );
 		$bind_params = [ ];
-		foreach ( $this->get_current_data( $model ) as $field_name => $field_value ) {
-			$bind_params[ ':' . $field_name ] = $field_value;
+		foreach ( $this->fields as $field_name ) {
+			$field_value = NULL;
+			if ( isset( $data[ $field_name ] ) ) {
+				$field_value = $data[ $field_name ];
+			}
+			$bind_params[  $field_name ] = $field_value;
 		}
 		return $bind_params;
 	}
 
 	protected function get_current_data( $model ) {
-		return $model->getArrayCopy( );
+		$data = $model->getArrayCopy( );
+		$data[ $this->id_field ] = $model->id;
+		return $data;
 		// DO: Manage serializes extra fields here ;)
 	}
 }

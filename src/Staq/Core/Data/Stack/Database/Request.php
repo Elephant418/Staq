@@ -30,15 +30,13 @@ class Request {
 	 *************************************************************************/
 	public function execute_one( $arguments = array( ) ) {
 		$result = $this->execute( $arguments );
-		if ( count( $result ) > 0 ) {
+		if ( is_array( $result ) && count( $result ) > 0 ) {
 			$result = $result[ 0 ];
 		}
 		return $result;
 	}
 
 	public function execute( $arguments = array( ) ) {
-		// echo $this->request . PHP_EOL;
-		// print_r( $arguments );
 		if ( empty( $this->request ) ) {
 			throw new \Stack\Exception\Database( 'The SQL request is empty.' );
 		}

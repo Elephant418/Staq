@@ -42,9 +42,10 @@ class Model extends \ArrayObject {
 	 *************************************************************************/
 	public function by_data( $data ) {
 		\UArray::do_convert_to_array( $data );
-		$this->id = $this->entity->get_id_by_data( $data );
-		$this->exchangeArray( $data );
-		return $this;
+		$model = new $this;
+		$model->id = $this->entity->extract_id( $data );
+		$model->exchangeArray( $data );
+		return $model;
 	}
 
 	public function by_id( $id ) {
@@ -64,10 +65,14 @@ class Model extends \ArrayObject {
 	  PUBLIC DATABASE REQUEST
 	 *************************************************************************/
 	public function delete( ) {
-		return $this->entity->delete( $this );
+		if ( $this->entity->delete( $this ) ) {
+			$this->id = NULL;
+		}
+		return $this;
 	}
 
 	public function save( ) {
 		$this->id = $this->entity->save( $this );
+		return $this;
 	}
 }

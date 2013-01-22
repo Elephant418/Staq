@@ -31,14 +31,68 @@ class DataTest extends StaqTestCase {
 	/*************************************************************************
 	  TEST METHODS			 
 	 *************************************************************************/
-	public function test_select_user__no_match( ) {
+	public function test_select__no_match( ) {
 		$user = ( new \Stack\Model\User )->by_id( 1664 );
 		$this->assertFalse( $user->exists( ) );
 	}
 
-	public function test_select_user__match( ) {
+	public function test_select__match( ) {
 		$user = ( new \Stack\Model\User )->by_id( 1 );
 		$this->assertTrue( $user->exists( ) );
 		$this->assertEquals( 'Thomas', $user[ 'name' ] );
+	}
+
+	public function test_select__all( ) {
+		$users = ( new \Stack\Model\User )->all( );
+		$this->assertEquals( 4, count( $users ) );
+		$names = [ ];
+		foreach ( $users as $user ) {
+			$names[ $user->id ] = $user[ 'name' ];
+		}
+		$this->assertContains( 'Thomas' , $names );
+		$this->assertContains( 'Romaric', $names );
+		$this->assertContains( 'Simon'  , $names );
+		$this->assertContains( 'Sylvain', $names );
+	}
+
+    /**
+     * @expectedException PDOException
+     */
+	public function test_insert__exception( ) {
+		$user = new \Stack\Model\User;
+		$this->assertFalse( $user->exists( ) );
+		$user->save( );
+	}
+
+	public function test_insert__valid( ) {
+		$user = new \Stack\Model\User;
+		$this->assertFalse( $user->exists( ) );
+		$user[ 'name' ] = 'Christophe';
+		$user->save( );
+		$this->assertTrue( $user->exists( ) );
+		$id = $user->id;
+		unset( $user );
+		$user = ( new \Stack\Model\User )->by_id( $id );
+		$this->assertTrue( $user->exists( ) );
+		$this->assertEquals( 'Christophe', $user[ 'name' ] );
+	}
+
+	public function test_update( ) {
+		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$this->assertEquals( 'Thomas', $user[ 'name' ] );
+		$user[ 'name' ] = 'Antoine';
+		$user->save( );
+		unset( $user );
+		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$this->assertEquals( 'Antoine', $user[ 'name' ] );
+	}
+
+	public function test_delete( ) {
+		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user->delete( );
+		$this->assertFalse( $user->exists( ) );
+		unset( $user );
+		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$this->assertFalse( $user->exists( ) );
 	}
 }
