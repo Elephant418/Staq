@@ -25,6 +25,10 @@ class DataTest extends StaqTestCase {
 		( new \Stack\Database\Request )->load_mysql_file( $app->get_path( 'dataset/user.sql' ) );
 	}
 
+	protected function tearDown( ) {
+		( new \Stack\Database\Request )->load_mysql_file( \Staq\Application::get_path( 'dataset/reset.sql' ) );
+	}
+
 
 
 
