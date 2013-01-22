@@ -30,7 +30,7 @@ class ApplicationTest extends StaqTestCase {
 
 
 	/*************************************************************************
-	  TEST METHODS             
+	  EXTENSIONS TEST METHODS             
 	 *************************************************************************/
 	public function test_empty_project__extensions( ) {
 		$app = \Staq\Application::create( );
@@ -68,5 +68,23 @@ class ApplicationTest extends StaqTestCase {
 		$app = \Staq\Application::create( $project_namespace );
 		$expected = [ $project_namespace, 'Staq\Core\Ground' ];
 		$this->assertEquals( $expected, $app->get_extension_namespaces( ) );
+	}
+
+
+
+
+	/*************************************************************************
+	  EXTENSIONS TEST METHODS             
+	 *************************************************************************/
+	public function test_error_reporting__none( ) {
+		$app = \Staq\Application::create( );
+		$this->assertEquals( 0, ini_get( 'error_reporting' ) );
+	}
+
+	public function test_error_reporting__display( ) {
+		$this->setExpectedException( 'PHPUnit_Framework_Error' );
+		$app = \Staq\Application::create( 'Staq\\Core\\Ground', '/', 'local' );
+		$this->assertEquals( E_ALL, ini_get( 'error_reporting' ) );
+		trigger_error( 'Test of warnings', E_USER_ERROR );
 	}
 }

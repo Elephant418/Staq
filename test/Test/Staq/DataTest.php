@@ -61,10 +61,8 @@ class DataTest extends StaqTestCase {
 		$this->assertContains( 'Sylvain', $names );
 	}
 
-    /**
-     * @expectedException PDOException
-     */
 	public function test_insert__exception( ) {
+		$this->setExpectedException( 'PDOException' );
 		$user = new \Stack\Model\User;
 		$this->assertFalse( $user->exists( ) );
 		$user->save( );

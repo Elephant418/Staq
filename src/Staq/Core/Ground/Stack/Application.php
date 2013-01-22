@@ -103,6 +103,24 @@ class Application {
 		$this->platform   = $platform;
 	}
 
+	public function initialize( ) {
+		$settings = ( new \Stack\Setting )->parse( $this );
+
+		// Display errors
+		$display_errors = 0;
+		if ( $settings->get_as_boolean( 'error.display_errors' ) ) {
+			$display_errors = 1;
+		}
+		ini_set( 'display_errors', $display_errors );
+
+		// Level reporting
+		$level = $settings->get_as_constant( 'error.error_reporting', 0 );
+		error_reporting( $level );
+
+		return $this;
+	}
+
+
 
 
 	/*************************************************************************

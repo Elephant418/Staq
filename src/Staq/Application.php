@@ -22,8 +22,15 @@ abstract class Application {
 		$application = self::current_application( );
 		$callable = [ $application, $name ];
 		if ( ! is_callable( $callable ) ) {
-			$caller = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 1 );
-			throw new \BadMethodCallException( 'Call to undefined method Stack\\Application::' . $name . ' in ' . $caller[ 'file' ] . ' on line ' . $caller[ 'line' ] );
+			$caller = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 1 )[ 0 ];
+			$message = 'Call to undefined method Stack\\Application::' . $name;
+			if ( isset( $caller[ 'file' ] ) ) {
+				$message .= ' in ' . $caller[ 'file' ];
+				if ( isset( $caller[ 'line' ] ) ) {
+					$message .= ' in ' . $caller[ 'line' ];
+				}
+			}
+			throw new \BadMethodCallException( $message );
 		}
 		return call_user_func_array( $callable, $arguments );
 	}
