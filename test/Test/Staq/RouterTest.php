@@ -59,4 +59,14 @@ class RouterTest extends WebTestCase {
 			->run( );
         $this->expectOutputString( 'error 500' );
 	}
+
+	public function test_anonymous_controller__conditionnal_controller( ) {
+		\Staq\Application::add_controller( '/*', function( ) {
+				if ( \Staq\Application::get_current_uri( ) == '/coco' ) {
+					return NULL;
+				}
+			})
+			->run( );
+        $this->expectOutputString( 'error 404' );
+	}
 }
