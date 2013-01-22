@@ -54,6 +54,7 @@ class Route {
 		$uri = preg_replace( '#:(\w+)#', '', $uri );
 		return $uri;
 	}
+
 	public function call_action( ) {
 		if ( is_array( $this->callable ) ) {
 			$reflection = new \ReflectionMethod( $this->callable[ 0 ], $this->callable[ 1 ] );
@@ -75,6 +76,7 @@ class Route {
 		}
 		return call_user_func_array( $this->callable, $parameters );
 	}
+
 	public function is_route_catch_uri( $uri ) {
 		if ( $this->is_uri_match( $uri, $this->match_uri ) ) {
 			return TRUE;
@@ -86,6 +88,7 @@ class Route {
 		}
 		return FALSE;
 	}
+
 	public function is_route_catch_exception( $exception ) {
 		$parameters = [ ];
 		$result = FALSE;
@@ -134,6 +137,7 @@ class Route {
 		$this->parameters = $parameters;
 		return $result;
 	}
+
 	protected function get_parameter_from_exception( $exception ) {
 		$parameters = [ ];
 		$parameters[ 'code' ]      = $exception->get_code( );
@@ -146,5 +150,26 @@ class Route {
 			$parameters[ 'name'  ] = get_class( $exception );
 		}
 		return $parameters;
+	}
+
+
+
+	/*************************************************************************
+	  DEBUG METHODS             
+	 *************************************************************************/
+	public function __toString( ) {
+		$str = 'Route( ' . $this->match_uri . ' => ';
+		if ( is_array( $this->callable ) ) {
+			$controller = $this->callable[ 0 ];
+			if ( \Staq\Util::is_stack( $controller ) ) {
+				$str .= \Staq\Util::stack_sub_query( $controller );
+			} else {
+				$str .= \UObject::convert_to_class( $controller );
+			}
+			$str .= '::' . $this->callable[ 1 ];
+		} else {
+			$str .= 'anonymous';
+		}
+		return $str . ' )';
 	}
 }

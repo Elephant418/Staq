@@ -80,7 +80,7 @@ class Router {
 	 *************************************************************************/
 	public function resolve( $uri ) {
 		$this->change_uri( $uri );
-		return $this->render( );
+		return $this->resolve_current_uri( );
 	}
 
 
@@ -88,44 +88,66 @@ class Router {
 	/*************************************************************************
 	  PRIVATE METHODS             
 	 *************************************************************************/
-	protected function render( $exception = NULL ) {
+	protected function resolve_current_uri( $exception = NULL ) {
 		try {
-			$active_route = $this->get_active_route( $exception );
-			return $active_route->call_action( );
+			$active_routes = $this->get_active_routes( $exception );
+			foreach ( $active_routes as $route ) {
+				$result = $route->call_action( );
+				if ( ! is_null( $result ) ) {
+					return $this->render( $result );
+				}
+			}
+			$this->throw_404( $exception );
 		} catch( \Exception $exception ) {
 			$this->prevent_exception_boucle( $exception );
-			return $this->render( $exception );
+			return $this->resolve_current_uri( $exception );
 		}
 	}
 
-	protected function get_active_route( $exception ) {
+	protected function render( $result ) {
+		return $result;
+	}
+
+	protected function throw_404( $exception = NULL ) {
+		if ( is_null( $exception ) ) {
+			throw ( new \Stack\Exception\ResourceNotFound )->by_uri( $this->get_current_uri( ) );
+		} else {
+			throw ( new \Stack\Exception\ResourceNotFound )->by_exception( $exception );
+		}
+	}
+
+	protected function get_active_routes( $exception = NULL ) {
 		if ( is_null( $exception ) ) {
 			$uri = $this->get_current_uri( );
-			return $this->get_active_route_by_uri( $uri );
+			$active_routes = $this->get_active_route_by_uri( $uri );
 		} else {
-			return $this->get_active_route_by_exception( $exception );
+			$active_routes = $this->get_active_route_by_exception( $exception );
 		}
+		return $active_routes;
 	}
 
 	protected function get_active_route_by_uri( $uri ) {
+		$active_routes = [ ];
 		foreach ( $this->routes as $route ) {
 			if ( $result = $route->is_route_catch_uri( $uri ) ) {
 				if ( $result === TRUE ) {
-					return $route;
+					$active_routes[ ] = $route;
+				} else {
+					\Staq\Util::http_action_redirect( $result );
 				}
-				\Staq\Util::http_action_redirect( $result );
 			}
 		}
-		throw ( new \Stack\Exception\ResourceNotFound )->by_uri( $uri );
+		return $active_routes;
 	}
 
 	protected function get_active_route_by_exception( $exception ) {
+		$active_routes = [ ];
 		foreach ( $this->routes as $route ) {
 			if ( $route->is_route_catch_exception( $exception ) ) {
-				return $route;
+				$active_routes[ ] = $route;
 			}
 		}
-		throw ( new \Stack\Exception\ResourceNotFound )->by_exception( $exception );
+		return $active_routes;
 	}
 
 	protected function prevent_exception_boucle( $exception ) {

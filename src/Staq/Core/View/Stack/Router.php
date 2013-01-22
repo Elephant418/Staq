@@ -11,10 +11,9 @@ class Router extends Router\__Parent{
 	/*************************************************************************
 	  PRIVATE METHODS             
 	 *************************************************************************/
-	protected function render( $exception = NULL ) {
-		$view = parent::render( $exception );
+	protected function render( $view ) {
 		if ( is_a( $view, 'Stack\\View' ) ) {
-			$view = $view->render( );
+			$view = $this->render( $view->render( ) );
 		}
 		return $view;
 	}
