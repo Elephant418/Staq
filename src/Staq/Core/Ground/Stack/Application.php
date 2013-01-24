@@ -13,7 +13,7 @@ class Application {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $extensions;
-	protected $root_uri;
+	protected $base_uri;
 	protected $platform;
 	protected $router;
 	protected $controllers = [ ];
@@ -68,8 +68,8 @@ class Application {
 		return $path;
 	}
 
-	public function get_root_uri( ) {
-		return $this->root_uri;
+	public function get_base_uri( ) {
+		return $this->base_uri;
 	}
 
 	public function get_platform( ) {
@@ -100,8 +100,8 @@ class Application {
 		return $this;
 	}
 
-	public function set_root_uri( $root_uri ) {
-		$this->root_uri = $root_uri;
+	public function set_base_uri( $base_uri ) {
+		$this->base_uri = $base_uri;
 		return $this;
 	}
 
@@ -110,9 +110,9 @@ class Application {
 	/*************************************************************************
 	  INITIALIZATION             
 	 *************************************************************************/
-	public function __construct( $extensions, $root_uri, $platform ) {
+	public function __construct( $extensions, $base_uri, $platform ) {
 		$this->extensions = $extensions;
-		$this->root_uri   = $root_uri;
+		$this->base_uri   = $base_uri;
 		$this->platform   = $platform;
 	}
 
@@ -145,7 +145,7 @@ class Application {
 	public function run( ) {
 		$this->router = new \Stack\Router( $this->controllers );
 		$uri          = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
-		\UString::do_not_start_with( $uri, $this->root_uri );
+		\UString::do_not_start_with( $uri, $this->base_uri );
 		\UString::do_start_with( $uri, '/' );
 		echo $this->router->resolve( $uri );
 	}

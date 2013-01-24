@@ -12,18 +12,18 @@ abstract class Application {
 	/*************************************************************************
 	  STATIC SHORTHAND METHODS                 
 	 *************************************************************************/
-	public static function create( $path = 'Staq\Core\Ground', $root_uri = NULL, $platform = 'prod' ) {
-		if ( is_null( $root_uri ) ) {
+	public static function create( $path = 'Staq\Core\Ground', $base_uri = NULL, $platform = 'prod' ) {
+		if ( is_null( $base_uri ) ) {
 			if ( isset( $_SERVER[ 'DOCUMENT_ROOT' ] ) && isset( $_SERVER[ 'SCRIPT_FILENAME' ] ) ) {
 				if ( \UString::is_start_with( $_SERVER[ 'SCRIPT_FILENAME' ], $_SERVER[ 'DOCUMENT_ROOT' ] ) ) {
-					$root_uri = \UString::not_start_with( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
+					$base_uri = \UString::not_start_with( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
 				}
 			}
-			if ( is_null( $root_uri ) ) {
-				$root_uri = '/';
+			if ( is_null( $base_uri ) ) {
+				$base_uri = '/';
 			}
 		}
-		return ( new \Staq\Server )->create_application( $path, $root_uri, $platform );
+		return ( new \Staq\Server )->create_application( $path, $base_uri, $platform );
 	}
 	public static function get_current_application( ) {
 		return \Staq\Server::$application;

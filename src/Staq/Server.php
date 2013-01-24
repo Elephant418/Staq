@@ -37,14 +37,14 @@ class Server {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function create_application( $path = 'Staq\Core\Ground', $root_uri = '/', $platform = 'prod' ) {
+	public function create_application( $path = 'Staq\Core\Ground', $base_uri = '/', $platform = 'prod' ) {
 		$extensions = $this->find_extensions( $path );
 		if ( ! is_null( self::$autoloader ) ) {
 			spl_autoload_unregister( array( self::$autoloader, 'autoload' ) );
 		}
 		self::$autoloader = new \Staq\Autoloader( $extensions );
 		spl_autoload_register( array( self::$autoloader, 'autoload' ) );
-		self::$application = new \Stack\Application( $extensions, $root_uri, $platform );
+		self::$application = new \Stack\Application( $extensions, $base_uri, $platform );
 		self::$application->initialize( );
 		return self::$application;
 	}
