@@ -24,7 +24,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		\Twig_Autoloader::register( );
 		$loader = new \Twig_Loader_Filesystem( \Staq\Application::get_extensions( 'template' ) );
 		$params = [ ];
-		if ( $cache_path = \Staq\Application::get_path( 'cache/twig', TRUE ) ) {
+		if ( FALSE && $cache_path = \Staq\Application::get_path( 'cache/twig', TRUE ) ) {
 			$params[ 'cache' ] = $cache_path;
 		}
 		$this->twig = new \Twig_Environment( $loader, $params );

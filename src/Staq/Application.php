@@ -16,7 +16,7 @@ abstract class Application {
 		if ( is_null( $root_uri ) ) {
 			if ( isset( $_SERVER[ 'DOCUMENT_ROOT' ] ) && isset( $_SERVER[ 'SCRIPT_FILENAME' ] ) ) {
 				if ( \UString::is_start_with( $_SERVER[ 'SCRIPT_FILENAME' ], $_SERVER[ 'DOCUMENT_ROOT' ] ) ) {
-					$root_uri = \UString::not_start_with( $_SERVER[ 'SCRIPT_FILENAME' ], $_SERVER[ 'DOCUMENT_ROOT' ] );
+					$root_uri = \UString::not_start_with( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
 				}
 			}
 			if ( is_null( $root_uri ) ) {

@@ -44,8 +44,12 @@ class Router {
 		return $this;
 	}
 
-	protected function add_routes( $routes ) {
-		$this->routes = array_merge( $this->routes, $routes );
+	protected function add_routes( $routes, $prepend = FALSE ) {
+		if ( $prepend ) {
+			$this->routes = array_merge( $routes, $this->routes );
+		} else {
+			$this->routes = array_merge( $this->routes, $routes );
+		}
 	}
 
 
@@ -70,7 +74,7 @@ class Router {
 		$class = new \ReflectionClass( 'Stack\\Controller\\Anonymous' );
 		foreach ( $anonymous_controllers as $arguments ) {
 			$anonymous = $class->newInstanceArgs( $arguments );
-			$this->add_routes( $anonymous->get_routes( ) );
+			$this->add_routes( $anonymous->get_routes( ), TRUE );
 		}
 	}
 

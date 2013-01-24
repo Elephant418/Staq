@@ -145,7 +145,8 @@ class Application {
 	public function run( ) {
 		$this->router = new \Stack\Router( $this->controllers );
 		$uri          = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
-		echo $uri . HTML_EOL;
+		\UString::do_not_start_with( $uri, $this->root_uri );
+		\UString::do_start_with( $uri, '/' );
 		echo $this->router->resolve( $uri );
 	}
 }

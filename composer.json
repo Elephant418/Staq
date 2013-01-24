@@ -21,6 +21,7 @@
     "autoload": {
         "psr-0": {
             "Staq": "src/",
+            "Example\\Staq": "example/",
             "Test\\Staq": "test/",
             "Test\\Staq\\Project": "test/resource"
         }
