@@ -35,7 +35,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		}
 		$this->twig = new \Twig_Environment( $loader, $params );
 		$this[ 'template' ] = 'index.html';
-		$this[ 'base_uri' ] = \Staq\Application::get_base_uri( );
+		$this[ 'base_uri' ] = \UString::end_with( \Staq\Application::get_base_uri( ), '/' );
 	}
 
 
