@@ -9,7 +9,7 @@ class WebTestCase extends StaqTestCase {
 
 
 	/*************************************************************************
-	 WEB TEST CASE METHODS
+	 URL SIMULATE METHODS
 	 *************************************************************************/
 	public function get_request_url( $url, $method = 'GET' ) {
 		$_SERVER[ 'REQUEST_METHOD' ] = $method;
@@ -27,6 +27,32 @@ class WebTestCase extends StaqTestCase {
 		$_POST = $post;
 	}
 
+
+
+	/*************************************************************************
+	 HTML OUTPUT TEST METHODS
+	 *************************************************************************/
+	protected function setUp( ) {
+		parent::setUp( );
+		ob_start( );
+	}
+	
+	public function expectOutputHtmlContent( $expected ) {
+		$actual = ob_get_contents( );
+		ob_end_clean( );
+		$regex = '/<body\s?[^>]*>(.*)$/is';
+		$matches = [ ];
+		if ( preg_match( $regex, $actual, $matches ) ) {
+			$actual = $matches[ 1 ];
+		}
+		$this->assertEquals( trim( strip_tags( $actual ) ), $expected );
+	}
+
+
+
+	/*************************************************************************
+	 HEADERS TEST METHODS
+	 *************************************************************************/
 	public function is_error_document( $code = 404 ) {
 		foreach( headers_list( ) as $header ) {
 			echo $header . PHP_EOL;

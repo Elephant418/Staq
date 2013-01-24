@@ -13,6 +13,7 @@ class RouterTest extends WebTestCase {
 	  GLOBAL METHODS			 
 	 *************************************************************************/
 	protected function setUp( ) {
+		parent::setUp( );
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\Application::create( $this->project_namespace )
 			->set_platform( 'local' );
@@ -26,7 +27,7 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_extended_error_controller( ) {
 		\Staq\Application::run( );
-        $this->expectOutputString( 'error 404' );
+        $this->expectOutputHtmlContent( 'error 404' );
 	}
 
 
@@ -40,7 +41,7 @@ class RouterTest extends WebTestCase {
 				return 'hello';
 			})
 			->run( );
-        $this->expectOutputString( 'hello' );
+        $this->expectOutputHtmlContent( 'hello' );
 	}
 
 	public function test_anonymous_controller__simple_route__no_match( ) {
@@ -48,7 +49,7 @@ class RouterTest extends WebTestCase {
 				return 'hello';
 			})
 			->run( );
-        $this->expectOutputString( 'error 404' );
+        $this->expectOutputHtmlContent( 'error 404' );
 	}
 
 	public function test_anonymous_controller__simple_route__match( ) {
@@ -56,7 +57,7 @@ class RouterTest extends WebTestCase {
 				return 'hello';
 			})
 			->run( );
-        $this->expectOutputString( 'hello' );
+        $this->expectOutputHtmlContent( 'hello' );
 	}
 
 	public function test_anonymous_controller__param_route__wrong_definition( ) {
@@ -64,7 +65,7 @@ class RouterTest extends WebTestCase {
 				return 'hello ' . $world;
 			})
 			->run( );
-        $this->expectOutputString( 'error 500' );
+        $this->expectOutputHtmlContent( 'error 500' );
 	}
 
 	public function test_anonymous_controller__conditionnal_controller( ) {
@@ -74,7 +75,7 @@ class RouterTest extends WebTestCase {
 				}
 			})
 			->run( );
-        $this->expectOutputString( 'error 404' );
+        $this->expectOutputHtmlContent( 'error 404' );
 	}
 
 
@@ -86,6 +87,6 @@ class RouterTest extends WebTestCase {
 	public function test_public_controller__match( ) {
 		$this->get_request_url( 'http://localhost/static.txt' );
 		\Staq\Application::run( );
-        $this->expectOutputString( 'This is an example of static file' );
+        $this->expectOutputHtmlContent( 'This is an example of static file' );
 	}
 }
