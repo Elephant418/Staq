@@ -13,6 +13,9 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	  ATTRIBUTES              
 	 *************************************************************************/
 	public $var;
+	public static $setting = [
+		'twig.cache' => 'off'
+	];
 	protected $twig;
 
 
@@ -23,9 +26,12 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	public function __construct( ) {
 		\Twig_Autoloader::register( );
 		$loader = new \Twig_Loader_Filesystem( \Staq\Application::get_extensions( 'template' ) );
+		$settings = ( new \Stack\Setting )->parse( $this );
 		$params = [ ];
-		if ( FALSE && $cache_path = \Staq\Application::get_path( 'cache/twig', TRUE ) ) {
-			$params[ 'cache' ] = $cache_path;
+		if ( $settings->get_as_boolean( 'twig.cache' ) ) {
+			if ( $cache_path = \Staq\Application::get_path( 'cache/twig', TRUE ) ) {
+				$params[ 'cache' ] = $cache_path;
+			}
 		}
 		$this->twig = new \Twig_Environment( $loader, $params );
 		$this[ 'template' ] = 'index.html';
