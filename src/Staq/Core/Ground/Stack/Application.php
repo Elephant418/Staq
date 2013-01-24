@@ -100,6 +100,11 @@ class Application {
 		return $this;
 	}
 
+	public function set_root_uri( $root_uri ) {
+		$this->root_uri = $root_uri;
+		return $this;
+	}
+
 
 
 	/*************************************************************************
@@ -140,6 +145,7 @@ class Application {
 	public function run( ) {
 		$this->router = new \Stack\Router( $this->controllers );
 		$uri          = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+		echo $uri . HTML_EOL;
 		echo $this->router->resolve( $uri );
 	}
 }
