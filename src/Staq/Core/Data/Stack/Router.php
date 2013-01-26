@@ -16,6 +16,8 @@ class Router extends Router\__Parent{
 			$page = new \Stack\View;
 			$page[ 'content'  ] = $model;
 			$page[ 'template' ] = 'model/' . \Staq\Util::stack_sub_query( $model, '/' );
+		} else {
+			$page = $model;
 		}
 		return parent::render( $page );
 	}
