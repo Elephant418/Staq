@@ -74,9 +74,9 @@ abstract class Util {
 	public static function is_stack_object( $stack ) {
 		return ( is_object( $stack ) && \Staq\Util::is_stack( $stack ) );
 	}
-	public static function is_stack( $stack ) {
+	public static function is_stack( $stack, $query = 'Stack\\' ) {
 		\UObject::do_convert_to_class( $stack );
-		return \UString::is_start_with( $stack, 'Stack\\' );
+		return \UString::is_start_with( $stack, $query );
 	}
 	public static function stack_query( $stack ) {
 		\UObject::do_convert_to_class( $stack );

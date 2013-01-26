@@ -44,7 +44,22 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	  PUBLIC METHODS              
 	 *************************************************************************/
 	public function render( ) {
-		$template = $this->twig->loadTemplate( $this[ 'template' ] );
+		$template = $this->loadTemplate( );
 		return $template->render( $this->getArrayCopy( ) );
+	}
+	public function loadTemplate( ) {
+		$template = $this[ 'template' ];
+		while ( TRUE ) {
+			if ( \Staq\Application::get_file_path( 'template/' . $template ) ) {
+				break;
+			} 
+			if ( \UString::has( $template, '/' ) ) {
+				$template = \UString::substr_before_last( $template, '/' ) . '.html';
+			} else {
+				$template = 'index.html';
+				break;
+			}
+		}
+		return $this->twig->loadTemplate( $template );
 	}
 }

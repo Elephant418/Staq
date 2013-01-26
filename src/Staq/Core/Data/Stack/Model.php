@@ -75,4 +75,12 @@ class Model extends \ArrayObject {
 		$this->id = $this->entity->save( $this );
 		return $this;
 	}
+
+
+	/*************************************************************************
+	  PHP MEHODS                 
+	 *************************************************************************/
+	public function __toString( ) {
+		return ( get_class( $this ) . '(' . $this->id . ')';
+	}
 }
