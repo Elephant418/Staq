@@ -81,6 +81,6 @@ class Model extends \ArrayObject {
 	  PHP MEHODS                 
 	 *************************************************************************/
 	public function __toString( ) {
-		return ( get_class( $this ) . '(' . $this->id . ')';
+		return get_class( $this ) . '(' . $this->id . ')';
 	}
 }
