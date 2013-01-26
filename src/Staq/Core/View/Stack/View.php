@@ -44,6 +44,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	  PUBLIC METHODS              
 	 *************************************************************************/
 	public function render( ) {
-		return $this->twig->render( $this[ 'template' ], $this->getArrayCopy( ) );
+		$template = $this->twig->loadTemplate( $this[ 'template' ] );
+		return $template->render( $this->getArrayCopy( ) );
 	}
 }
