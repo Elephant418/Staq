@@ -84,9 +84,10 @@ abstract class Util {
 			return substr( $stack, strlen( 'Stack\\' ) );
 		}
 	}
-	public static function stack_sub_query( $stack ) {
+	public static function stack_sub_query( $stack, $separator = '\\' ) {
 		$query = \Staq\Util::stack_query( $stack );
-		return \UString::substr_after( $query, '\\' );
+		$sub_query = \UString::substr_after( $query, '\\' );
+		return str_replace( '\\', $separator, $sub_query );
 	}
 	public static function stack_sub_query_text( $stack ) {
 		$sub_query = \Staq\Util::stack_sub_query( $stack );

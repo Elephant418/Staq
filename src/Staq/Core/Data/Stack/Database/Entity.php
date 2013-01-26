@@ -28,7 +28,7 @@ class Entity {
 	 *************************************************************************/
 	public function __construct( ) {
 		$this->settings = ( new \Stack\Setting )->parse( $this );
-		$this->name     = strtolower( str_replace( '\\', '_', \Staq\Util::stack_sub_query( $this ) ) );
+		$this->name     = strtolower( \Staq\Util::stack_sub_query( $this, '_' ) );
 		$this->table    = $this->settings->get( 'database.table', $this->name );
 		$this->id_field = $this->settings[ 'database.id_field' ];
 		$this->fields   = $this->settings->get_as_array( 'database.fields' );
