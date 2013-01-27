@@ -64,7 +64,7 @@ class Router {
 	}
 	protected function initialize_controllers( ) {
 		$controllers = $this->setting[ 'controller' ];
-		foreach ( $controllers as $controller_name ) {
+		foreach ( array_reverse( $controllers ) as $controller_name ) {
 			$routes = [ ];
 			$controller_class = '\\Stack\Controller\\' . $controller_name;
 			$controller = new $controller_class( );
@@ -141,14 +141,14 @@ class Router {
 	protected function get_active_routes( $exception = NULL ) {
 		if ( is_null( $exception ) ) {
 			$uri = $this->get_current_uri( );
-			$active_routes = $this->get_active_route_by_uri( $uri );
+			$active_routes = $this->get_active_routes_by_uri( $uri );
 		} else {
-			$active_routes = $this->get_active_route_by_exception( $exception );
+			$active_routes = $this->get_active_routes_by_exception( $exception );
 		}
 		return $active_routes;
 	}
 
-	protected function get_active_route_by_uri( $uri ) {
+	protected function get_active_routes_by_uri( $uri ) {
 		$active_routes = [ ];
 		foreach ( $this->routes as $route ) {
 			if ( $result = $route->is_route_catch_uri( $uri ) ) {
@@ -162,7 +162,7 @@ class Router {
 		return $active_routes;
 	}
 
-	protected function get_active_route_by_exception( $exception ) {
+	protected function get_active_routes_by_exception( $exception ) {
 		$active_routes = [ ];
 		foreach ( $this->routes as $route ) {
 			if ( $route->is_route_catch_exception( $exception ) ) {
