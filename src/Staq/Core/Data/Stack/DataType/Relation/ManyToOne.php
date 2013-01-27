@@ -3,36 +3,29 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack ;
+namespace Staq\Core\Data\Stack\DataType\Relation;
 
-class DataType implements \Stack\IDataType {
+class ManyToOne extends ManyToOne\__Parent {
 
 
 
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $seed;
+	protected $remote_model;
+	protected $remote_type;
 
 
 
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function by_setting( $setting ) {
-		$class = 'Stack\\DataType';
-		if ( is_string( $setting ) ) {
-			$class .= '\\' . ucfirst( $setting );
-		} else if ( is_array( $setting ) && isset( $setting[ 'data_type' ] ) ) {
-			$class .= '\\' . ucfirst( $setting[ 'data_type' ] );
-		}
-		if ( $class != get_class( $this ) ) {
-			return ( new $class )->by_setting( $setting );
-		}
-		$this->init_by_setting( $setting );
-		return $this;
-	}
 	public function init_by_setting( $setting ) {
+		if ( is_array( $setting ) ) {
+			if ( isset( $setting[ 'remote_type' ] ) ) {
+				$this->remote_type = $setting[ 'remote_type' ];
+			} 
+		}
 	}
 
 
@@ -41,11 +34,25 @@ class DataType implements \Stack\IDataType {
 	  PUBLIC USER METHODS             
 	 *************************************************************************/
 	public function get( ) {
-		return $this->seed;
+		if ( is_null( $this->remote_model ) && isset( $this->seed ) ) {
+			$class = $this->get_remote_class( );
+			$this->remote_model = ( new $class )->by_id( $this->seed );
+		}
+		return $this->remote_model;
 	}
 
-	public function set( $value ) {
-		$this->seed = $value;
+	public function set( $model ) {
+		if ( ! \Staq\Util::is_stack( $model, $this->get_remote_class( ) ) ) {
+			$message = 'Input of type "' . $this->get_remote_class( ) . '", but "' . gettype( $model ) . '" given.';
+			throw new \Stack\Exception\NotRightInput( $message );
+		}
+		if ( ! $model->exists( ) ) {
+			$this->seed = NULL;
+			$this->remote_model = NULL;
+		} else {
+			$this->remote_model = $model;
+			$this->seed = $model->id;
+		}
 	}
 
 
@@ -59,14 +66,15 @@ class DataType implements \Stack\IDataType {
 
 	public function set_seed( $seed ) {
 		$this->seed = $seed;
+		$this->remote_model = NULL;
 	}
 
 
 
 	/*************************************************************************
-	  DEBUG METHODS             
+	  PROTECTED METHODS             
 	 *************************************************************************/
-	public function __toString( ) {
-		return \Staq\Util::stack_query( $this ) . '( ' . $this->value . ' )';
-	}
+	protected function get_remote_class( ) {
+		return $class = 'Stack\\Model\\' . $this->remote_type;
+	}	
 }

@@ -25,7 +25,7 @@ class DataTest extends StaqTestCase {
 			->set_platform( 'local' );
 		( new \Stack\Database\Request )
 			->require_database( )
-			->load_mysql_file( $app->get_path( 'dataset/user.sql' ) );
+			->load_mysql_file( $app->get_path( 'dataset/set.sql' ) );
 	}
 
 	protected function tearDown( ) {
@@ -36,7 +36,7 @@ class DataTest extends StaqTestCase {
 
 
 	/*************************************************************************
-	  TEST METHODS			 
+	  VARCHAR SCUD TEST METHODS			 
 	 *************************************************************************/
 	public function test_select__no_match( ) {
 		$user = ( new \Stack\Model\User )->by_id( 1664 );
@@ -63,9 +63,9 @@ class DataTest extends StaqTestCase {
 	}
 
 	public function test_insert__exception( ) {
-		$this->setExpectedException( 'PDOException' );
 		$user = new \Stack\Model\User;
 		$this->assertFalse( $user->exists( ) );
+		$this->setExpectedException( 'PDOException' );
 		$user->save( );
 	}
 
@@ -99,5 +99,44 @@ class DataTest extends StaqTestCase {
 		unset( $user );
 		$user = ( new \Stack\Model\User )->by_id( 1 );
 		$this->assertFalse( $user->exists( ) );
+	}
+
+
+
+
+	/*************************************************************************
+	  MANY TO ONE RELATION SCUD TEST METHODS			 
+	 *************************************************************************/
+	public function test_select_relation__no_match( ) {
+		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$this->assertTrue( $article->exists( ) );
+		$this->assertEquals( 'Dataq', $article[ 'title' ] );
+		$this->assertNull( $article[ 'author' ] );
+	}
+
+	public function test_select_relation__match( ) {
+		$article = ( new \Stack\Model\Article )->by_id( 1 );
+		$this->assertTrue( $article->exists( ) );
+		$this->assertEquals( 'Staq', $article[ 'title' ] );
+		$this->assertEquals( 'Stack\\Model\\User', get_class( $article[ 'author' ] ) );
+		$this->assertEquals( 'Thomas', $article[ 'author' ][ 'name' ] );
+	}
+
+	public function test_update_relation__exception( ) {
+		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$this->setExpectedException( 'Stack\\Exception\\NotRightInput' );
+		$article[ 'author' ] = 2;
+	}
+
+	public function test_update_relation__valid( ) {
+		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$user    = ( new \Stack\Model\User    )->by_id( 2 );
+		$article[ 'author' ] = $user;
+		$article->save( );
+		unset( $article, $user );
+		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$user = $article[ 'author' ];
+		$this->assertTrue( $user->exists( ) );
+		$this->assertEquals( 'Romaric', $user[ 'name' ] );
 	}
 }
