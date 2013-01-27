@@ -131,11 +131,20 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	/*************************************************************************
 	  HERITED ACCESSOR METHODS				   
 	 *************************************************************************/
+	public function get( $index, $new_val ) {
+		return $this->offsetGet( $index );
+	}
+
 	public function offsetGet( $index ) {
 		if ( parent::offsetExists( $index ) ) {
 			$datatype = parent::offsetGet( $index );
 			return $datatype->get( );
 		}
+	}
+ 
+	public function set( $index, $new_val ) {
+		$this->offsetSet( $index, $new_val );
+		return $this;
 	}
  
 	public function offsetSet( $index, $new_val ) {
