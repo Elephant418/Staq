@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Database;
 
-class Entity {
+class Entity implements \Stack\IEntity {
 
 
 	/*************************************************************************
@@ -36,7 +36,7 @@ class Entity {
 
 
 	/*************************************************************************
-	  INITIALIZATION          
+	  FETCHING METHODS          
 	 *************************************************************************/
 	public function extract_id( $data ) {
 		$id = NULL;
@@ -162,7 +162,7 @@ class Entity {
 	}
 
 	protected function get_current_data( $model ) {
-		$data = $model->getArrayCopy( );
+		$data = $model->extract_seeds( );
 		$data[ $this->id_field ] = $model->id;
 		return $data;
 		// DO: Manage serializes extra fields here ;)

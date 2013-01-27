@@ -31,18 +31,19 @@ class Route {
 		$this->match_exceptions = $match_exceptions;
 		$this->aliases_uri      = $aliases_uri;
 	}
-	public function by_attribute( $controller, $action, $params ) {
+	
+	public function by_setting( $controller, $action, $setting ) {
 		$callable = [ $controller, $action ];
 		if ( is_callable( $callable ) ) {
 			$uri = NULL;
 			$exceptions = [ ];
 			$aliases = [ ];
-			if ( is_array( $params ) ) {
-				$uri        = isset( $params[ 'uri'        ] ) ? $params[ 'uri'        ] : $uri;
-				$exceptions = isset( $params[ 'exceptions' ] ) ? $params[ 'exceptions' ] : $exceptions;
-				$aliases    = isset( $params[ 'aliases'    ] ) ? $params[ 'aliases'    ] : $aliases;
-			} else if ( is_string( $params ) ) {
-				$uri = $params;
+			if ( is_array( $setting ) ) {
+				$uri        = isset( $setting[ 'uri'        ] ) ? $setting[ 'uri'        ] : $uri;
+				$exceptions = isset( $setting[ 'exceptions' ] ) ? $setting[ 'exceptions' ] : $exceptions;
+				$aliases    = isset( $setting[ 'aliases'    ] ) ? $setting[ 'aliases'    ] : $aliases;
+			} else if ( is_string( $setting ) ) {
+				$uri = $setting;
 			}
 			return new $this( $callable, $uri, $exceptions, $aliases );
 		}

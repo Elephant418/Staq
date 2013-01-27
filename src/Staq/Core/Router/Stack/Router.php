@@ -73,8 +73,8 @@ class Router {
 				$this->setting[ 'mode' ] == 'mixed'
 			) {
 				$selector = 'route.' . strtolower( str_replace( '\\', '_', $controller_name ) );
-				foreach ( $this->setting->get_as_array( $selector ) as $action => $param ) {
-					$routes[ ] = ( new \Stack\Route )->by_attribute( $controller, $action, $param );
+				foreach ( $this->setting->get_as_array( $selector ) as $action => $setting ) {
+					$routes[ ] = ( new \Stack\Route )->by_setting( $controller, $action, $setting );
 				}
 			}
 			if ( 

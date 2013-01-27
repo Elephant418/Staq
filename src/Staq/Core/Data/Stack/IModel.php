@@ -3,47 +3,41 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Router\Stack;
+namespace Staq\Core\Data\Stack;
 
-class Controller implements \Stack\IController {
-
-
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	protected $routes = [ ];
-	public static $setting = [ ];
-
+interface IModel {
 
 
 	/*************************************************************************
-	  GETTER
+	  GETTER                 
 	 *************************************************************************/
-	public function get_routes( ) {
-		return $this->routes;
-	}
-
+	public function exists( );
 
 
 	/*************************************************************************
-	  CONSTRUCTOR             
+	  INITIALIZATION          
 	 *************************************************************************/
-	public function __construct( ) {
-		$this->initialize_routes( );
-	}
+	public function by_data( $data );
 
+	public function by_id( $id );
+
+	public function all( );
 
 
 	/*************************************************************************
-	  PROTECTED METHODS             
+	  PUBLIC DATABASE REQUEST
 	 *************************************************************************/
-	protected function initialize_routes( ) {
-		$setting = ( new \Stack\Setting )->parse( $this );
-		foreach ( $setting->get_as_array( 'route' ) as $action => $setting ) {
-			$this->routes[ ] = ( new \Stack\Route )->by_setting( $this, $action, $setting );
-		}
-	}
+	public function delete( );
+
+	public function save( );
+
+	public function extract_seeds( );
+
+
+	/*************************************************************************
+	  SPECIFIC MODEL ACCESSOR METHODS				   
+	 *************************************************************************/
+	public function get_data_type( $index );
+
+	public function attribute_names( );
 }
-
-?>

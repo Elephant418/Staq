@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack;
 
-class Model extends \ArrayObject {
+class Model extends \ArrayObject implements \Stack\IModel {
 
 
 	/*************************************************************************
@@ -28,12 +28,29 @@ class Model extends \ArrayObject {
 	  CONSTRUCTOR
 	 *************************************************************************/
 	public function __construct( ) {
+		$this->entity = $this->new_entity( );
+		$this->import_schema( );
+	}
+
+	protected function new_entity( ) {
 		$class = 'Stack\\Entity';
 		$sub_query = \Staq\Util::stack_sub_query( $this );
 		if ( $sub_query ) {
 			$class .= '\\' . $sub_query;
 		}
-		$this->entity = new $class;
+		return new $class;
+	}
+	
+	protected function import_schema( ) {
+		$settings = ( new \Stack\Setting )->parse( $this );
+		foreach ( $settings->get_as_array( 'schema' ) as $name => $setting ) {
+			$this->add_attribute( $name, $setting );
+		}
+	}
+
+	protected function add_attribute( $name, $setting ) {
+		$data_type = ( new \Stack\DataType )->by_setting( $setting );
+		parent::offsetSet( $name, $data_type );
 	}
 
 
@@ -44,7 +61,9 @@ class Model extends \ArrayObject {
 		\UArray::do_convert_to_array( $data );
 		$model = new $this;
 		$model->id = $this->entity->extract_id( $data );
-		$model->exchangeArray( $data );
+		foreach ( $data as $name => $seed ) {
+			$model->get_data_type( $name )->set_seed( $seed );
+		}
 		return $model;
 	}
 
@@ -74,6 +93,48 @@ class Model extends \ArrayObject {
 	public function save( ) {
 		$this->id = $this->entity->save( $this );
 		return $this;
+	}
+
+	public function extract_seeds( ) {
+		$data = [ ];
+		foreach( $this->attribute_names( ) as $name ) {
+			$data[ $name ] = $this->get_data_type( $name )->get_seed( );
+		}
+		return $data;
+	}
+
+
+	/*************************************************************************
+	  SPECIFIC MODEL ACCESSOR METHODS				   
+	 *************************************************************************/
+	public function get_data_type( $index ) {
+		return parent::offsetGet( $index );
+	}
+
+	public function attribute_names( ) {
+		return array_keys( $this->getArrayCopy( ) );
+	}
+
+
+	/*************************************************************************
+	  HERITED ACCESSOR METHODS				   
+	 *************************************************************************/
+	public function offsetGet( $index ) {
+		if ( parent::offsetExists( $index ) ) {
+			$datatype = parent::offsetGet( $index );
+			return $datatype->get( );
+		}
+	}
+ 
+	public function offsetSet( $index, $new_val ) {
+		if ( parent::offsetExists( $index ) ) {
+			$data_type = $this->get_data_type( $index );
+			$data_type->set( $new_val );
+		}
+	}
+ 
+	public function offsetUnset( $index ) {
+		$this->offsetSet( $index, NULL );
 	}
 
 
