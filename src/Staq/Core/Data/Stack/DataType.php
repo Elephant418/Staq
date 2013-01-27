@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack ;
 
-class DataType {
+class DataType implements \Stack\IDataType {
 
 
 
@@ -19,9 +19,6 @@ class DataType {
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function __construct( ) {
-	}
-
 	public function by_setting( $setting ) {
 		$class = 'Stack\\DataType\\';
 		if ( is_string( $setting ) ) {
@@ -44,12 +41,14 @@ class DataType {
 	}
 
 
+
 	/*************************************************************************
-	  PRIVATE DATABASE METHODS             
+	  PUBLIC DATABASE METHODS             
 	 *************************************************************************/
 	public function get_seed( ) {
 		return $this->seed;
 	}
+
 	public function set_seed( $seed ) {
 		$this->seed = $seed;
 	}
