@@ -25,17 +25,17 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	 *************************************************************************/
 	public function __construct( ) {
 		\Twig_Autoloader::register( );
-		$loader = new \Twig_Loader_Filesystem( \Staq\Application::get_extensions( 'template' ) );
+		$loader = new \Twig_Loader_Filesystem( \Staq\App::get_extensions( 'template' ) );
 		$settings = ( new \Stack\Setting )->parse( $this );
 		$params = [ ];
 		if ( $settings->get_as_boolean( 'twig.cache' ) ) {
-			if ( $cache_path = \Staq\Application::get_path( 'cache/twig', TRUE ) ) {
+			if ( $cache_path = \Staq\App::get_path( 'cache/twig', TRUE ) ) {
 				$params[ 'cache' ] = $cache_path;
 			}
 		}
 		$this->twig = new \Twig_Environment( $loader, $params );
 		$this[ 'template' ] = 'index.html';
-		$this[ 'base_uri' ] = \UString::end_with( \Staq\Application::get_base_uri( ), '/' );
+		$this[ 'base_uri' ] = \UString::end_with( \Staq\App::get_base_uri( ), '/' );
 	}
 
 
@@ -50,7 +50,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	public function loadTemplate( ) {
 		$template = $this[ 'template' ];
 		while ( TRUE ) {
-			if ( \Staq\Application::get_file_path( 'template/' . $template ) ) {
+			if ( \Staq\App::get_file_path( 'template/' . $template ) ) {
 				break;
 			} 
 			if ( \UString::has( $template, '/' ) ) {

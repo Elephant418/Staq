@@ -37,9 +37,9 @@ class Setting {
 
 	protected function get_file_paths( $full_setting_file_name ) {
 		$file_names = $this->get_file_names( $full_setting_file_name );
-		$platform_name = \Staq\Application::get_platform( );
+		$platform_name = \Staq\App::get_platform( );
 		$file_paths = [ ];
-		foreach ( \Staq\Application::get_extensions( ) as $extension ) {
+		foreach ( \Staq\App::get_extensions( ) as $extension ) {
 			foreach( $file_names as $file_name ) {
 				if ( $platform_name ) {
 					$file_name .= '.' . $platform_name;

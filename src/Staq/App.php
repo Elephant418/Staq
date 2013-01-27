@@ -5,7 +5,7 @@
 
 namespace Staq;
 
-abstract class Application {
+abstract class App {
 
 
 

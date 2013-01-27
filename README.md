@@ -29,7 +29,7 @@ Let's code
 ```php
 require_once( 'vendor/pixel418/staq/src/include.php' );
 
-\Staq\Application::create( )
+\Staq\App::create( )
     ->add_controller( '/hello/:name', function( $name ) {
         return 'Hello ' . $name;
     } )

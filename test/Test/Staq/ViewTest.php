@@ -13,7 +13,7 @@ class ViewTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_text_templating__no_variable( ) {
 		$this->get_request_url( 'http://localhost/coco' );
-		$app = \Staq\Application::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->project_namespace )
 			->add_controller( '/*', function( ) {
 				return new \Stack\View;
 			} )
@@ -23,7 +23,7 @@ class ViewTest extends WebTestCase {
 
 	public function test_text_templating__one_variable( ) {
 		$this->get_request_url( 'http://localhost/coco' );
-		$app = \Staq\Application::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->project_namespace )
 			->add_controller( '/*', function( ) {
 				$page = new \Stack\View;
 				$page[ 'name' ] = 'world';

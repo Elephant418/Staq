@@ -21,7 +21,7 @@ class DataTest extends StaqTestCase {
 	  GLOBAL METHODS			 
 	 *************************************************************************/
 	protected function setUp( ) {
-		$app = \Staq\Application::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->project_namespace )
 			->set_platform( 'local' );
 		( new \Stack\Database\Request )
 			->require_database( )
@@ -29,7 +29,7 @@ class DataTest extends StaqTestCase {
 	}
 
 	protected function tearDown( ) {
-		( new \Stack\Database\Request )->load_mysql_file( \Staq\Application::get_path( 'dataset/reset.sql' ) );
+		( new \Stack\Database\Request )->load_mysql_file( \Staq\App::get_path( 'dataset/reset.sql' ) );
 	}
 
 

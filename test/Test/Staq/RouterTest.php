@@ -15,7 +15,7 @@ class RouterTest extends WebTestCase {
 	protected function setUp( ) {
 		parent::setUp( );
 		$this->get_request_url( 'http://localhost/coco' );
-		$app = \Staq\Application::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->project_namespace )
 			->set_platform( 'local' );
 	}
 
@@ -26,7 +26,7 @@ class RouterTest extends WebTestCase {
 	  ERROR CONTROLLER TEST METHODS             
 	 *************************************************************************/
 	public function test_extended_error_controller( ) {
-		\Staq\Application::run( );
+		\Staq\App::run( );
         $this->expectOutputHtmlContent( 'error 404' );
 	}
 
@@ -37,7 +37,7 @@ class RouterTest extends WebTestCase {
 	  ANONYMOUS CONTROLLER TEST METHODS             
 	 *************************************************************************/
 	public function test_anonymous_controller__magic_route( ) {
-		\Staq\Application::add_controller( '/*', function( ) {
+		\Staq\App::add_controller( '/*', function( ) {
 				return 'hello';
 			})
 			->run( );
@@ -45,7 +45,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__simple_route__no_match( ) {
-		\Staq\Application::add_controller( '/hello', function( ) {
+		\Staq\App::add_controller( '/hello', function( ) {
 				return 'hello';
 			})
 			->run( );
@@ -53,7 +53,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__simple_route__match( ) {
-		\Staq\Application::add_controller( '/coco', function( ) {
+		\Staq\App::add_controller( '/coco', function( ) {
 				return 'hello';
 			})
 			->run( );
@@ -61,7 +61,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__param_route__wrong_definition( ) {
-		\Staq\Application::add_controller( '/:coco', function( $world ) {
+		\Staq\App::add_controller( '/:coco', function( $world ) {
 				return 'hello ' . $world;
 			})
 			->run( );
@@ -69,8 +69,8 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__conditionnal_controller( ) {
-		\Staq\Application::add_controller( '/*', function( ) {
-				if ( \Staq\Application::get_current_uri( ) == '/coco' ) {
+		\Staq\App::add_controller( '/*', function( ) {
+				if ( \Staq\App::get_current_uri( ) == '/coco' ) {
 					return NULL;
 				}
 			})
@@ -86,7 +86,7 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_public_controller__match( ) {
 		$this->get_request_url( 'http://localhost/static.txt' );
-		\Staq\Application::run( );
+		\Staq\App::run( );
         $this->expectOutputHtmlContent( 'This is an example of static file' );
 	}
 }
