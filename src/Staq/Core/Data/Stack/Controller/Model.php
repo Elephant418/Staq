@@ -17,8 +17,13 @@ class Model extends Model\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action( $id ) {
-		// TODO: Implement different actions
 		$model = $this->new_model( )->by_id( $id );
+		return $model;
+	}
+
+	public function action_delete( $id ) {
+		$model = $this->action( $id );
+		$model->delete( );
 		return $model;
 	}
 

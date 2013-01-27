@@ -63,10 +63,26 @@ class Router {
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
 	}
 	protected function initialize_controllers( ) {
-		$controllers = $this->setting[ 'router.controller' ];
+		$controllers = $this->setting[ 'controller' ];
 		foreach ( $controllers as $controller_name ) {
 			$controller_class = '\\Stack\Controller\\' . $controller_name;
 			$controller = new $controller_class( );
+			if ( 
+				$this->setting[ 'mode' ] == 'global' ||
+				$this->setting[ 'mode' ] == 'mixed'
+			) {
+				$routes = [ ];
+				$selector = 'route.' . strtolower( str_replace( '\\', '.', $controller_name ) );
+				foreach ( $this->setting->get_as_array( $selector ) as $action => $param ) {
+					$routes[ ] = ( new \Stack\Route )->by_attribute( $controller, $action, $param );
+				}
+			}
+			if ( 
+				$this->setting[ 'mode' ] == 'distributed' ||
+				$this->setting[ 'mode' ] == 'mixed' && empty( $routes )
+			) {
+				$routes = $controller->get_routes( );
+			}
 			$this->add_routes( $controller->get_routes( ) );
 		}
 	}

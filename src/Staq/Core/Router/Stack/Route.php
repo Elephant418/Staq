@@ -23,13 +23,29 @@ class Route {
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function __construct( $callable, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
+	public function __construct( $callable = NULL, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
 		\UArray::do_convert_to_array( $match_exceptions );
 		\UArray::do_convert_to_array( $aliases_uri );
 		$this->callable         = $callable;
 		$this->match_uri        = $match_uri;
 		$this->match_exceptions = $match_exceptions;
 		$this->aliases_uri      = $aliases_uri;
+	}
+	public function by_attribute( $controller, $action, $params ) {
+		$callable = [ $controller, $action ];
+		if ( is_callable( $callable ) ) {
+			$uri = NULL;
+			$exceptions = [ ];
+			$aliases = [ ];
+			if ( is_array( $params ) ) {
+				$uri        = isset( $params[ 'uri'        ] ) ? $params[ 'uri'        ] : $uri;
+				$exceptions = isset( $params[ 'exceptions' ] ) ? $params[ 'exceptions' ] : $exceptions;
+				$aliases    = isset( $params[ 'aliases'    ] ) ? $params[ 'aliases'    ] : $aliases;
+			} else if ( is_string( $params ) ) {
+				$uri = $params;
+			}
+			return new $this( $callable, $uri, $exceptions, $aliases );
+		}
 	}
 
 
