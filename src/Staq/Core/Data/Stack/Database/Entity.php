@@ -77,12 +77,18 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  PUBLIC DATABASE REQUEST
 	 *************************************************************************/
-	public function delete( $model ) {
-		if ( $model->exists( ) ) {
-			$sql = 'DELETE FROM ' . $this->table . ' WHERE ' . $this->id_field . '=:id;';
-			$request = new Request( $sql );
-			return $request->execute_one( array( ':id' => $model->id ) );
+	public function delete( $model = NULL ) {
+		$sql = 'DELETE FROM ' . $this->table;
+		$parameters = [ ];
+		if ( ! is_null( $model ) ) {
+			if ( ! $model->exists( ) ) {
+				return TRUE;
+			}
+			$sql .= ' WHERE ' . $this->id_field . '=:id';
+			$parameters[ ':id' ] = $model->id;
 		}
+		$request = new Request( $sql );
+		return $request->execute_one( $parameters );
 	}
 
 	public function save( $model ) {

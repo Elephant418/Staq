@@ -79,6 +79,18 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		return $all;
 	}
 
+	public function all( ) {
+		$all = [ ];
+		foreach ( $this->entity->get_datas_by_fields( ) as $data ) {
+			$all[ ] = $this->by_data( $data );
+		}
+		return $all;
+	}
+
+	public function delete_all( ) {
+		return $this->entity->delete( );
+	}
+
 
 	/*************************************************************************
 	  PUBLIC DATABASE REQUEST
