@@ -11,7 +11,7 @@ interface IEntity {
 	/*************************************************************************
 	  FETCHING METHODS          
 	 *************************************************************************/
-	public function extract_id( $data );
+	public function extract_id( &$data );
 
 	public function get_data_by_id( $id );
 

@@ -38,7 +38,7 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  FETCHING METHODS          
 	 *************************************************************************/
-	public function extract_id( $data ) {
+	public function extract_id( &$data ) {
 		$id = NULL;
 		if ( isset( $data[ $this->id_field ] ) ) {
 			$id = $data[ $this->id_field ];
