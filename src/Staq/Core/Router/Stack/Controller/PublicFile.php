@@ -13,7 +13,7 @@ class PublicFile extends PublicFile\__Parent {
 	 ATTRIBUTES
 	 *************************************************************************/
 	public static $setting = [
-		'route.action.uri' => '/*'
+		'route.view.uri' => '/*'
 	];
 
 
@@ -21,7 +21,7 @@ class PublicFile extends PublicFile\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action( ) {
+	public function action_view( ) {
 		$path = \Staq\App::get_current_uri( );
 		$real_path = \Staq\App::get_file_path( '/public' . $path );
 		if ( empty( $real_path ) || is_dir( $real_path ) ) {

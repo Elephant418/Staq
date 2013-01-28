@@ -96,7 +96,7 @@ class ApplicationTest extends StaqTestCase {
 		$this->setExpectedException( 'PHPUnit_Framework_Error' );
 		$app = \Staq\App::create( )
 			->set_platform( 'local' );
-		$this->assertEquals( E_ALL, ini_get( 'error_reporting' ) );
+		$this->assertEquals( 30719, ini_get( 'error_reporting' ) );
 		trigger_error( 'Test of warnings', E_USER_ERROR );
 	}
 }

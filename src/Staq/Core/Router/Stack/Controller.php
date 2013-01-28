@@ -36,12 +36,27 @@ class Controller implements \Stack\IController {
 
 
 	/*************************************************************************
-	  PROTECTED METHODS             
+	  ACTION METHODS           
 	 *************************************************************************/
+	public function action_view( ) {
+		$page = new \Stack\View;
+		$page[ 'template' ] = $this->get_sub_template( );
+		return $page;
+	}
+
+
+
+	/*************************************************************************
+	  PRIVATE METHODS           
+	 *************************************************************************/
+	protected function get_sub_template( ) {
+		return strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
+	}
+	
 	protected function initialize_routes( ) {
 		$setting = ( new \Stack\Setting )->parse( $this );
 		foreach ( $setting->get_as_array( 'route' ) as $action => $setting ) {
-			$this->routes[ ] = ( new \Stack\Route )->by_setting( $this, $action, $setting );
+			$this->routes[ ] = ( new \Stack\Route )->by_setting( $this, 'action_' . $action, $setting );
 		}
 	}
 }

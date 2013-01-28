@@ -13,8 +13,8 @@ class Error extends Error\__Parent {
 	 ATTRIBUTES
 	 *************************************************************************/
 	public static $setting = [
-		'route.action.uri' => '/error/:code',
-		'route.action.exceptions' => [ '404', '500' ]
+		'route.view.uri' => '/error/:code',
+		'route.view.exceptions' => [ '404', '500' ]
 	];
 
 
@@ -22,7 +22,7 @@ class Error extends Error\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action( $code ) {
+	public function action_view( $code ) {
 		if ( ! headers_sent( ) ) {
 			if ( $code == '403' ) {
 				header( 'HTTP/1.1 403 Forbidden' );

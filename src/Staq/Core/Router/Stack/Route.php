@@ -34,19 +34,21 @@ class Route {
 	
 	public function by_setting( $controller, $action, $setting ) {
 		$callable = [ $controller, $action ];
-		if ( is_callable( $callable ) ) {
-			$uri = NULL;
-			$exceptions = [ ];
-			$aliases = [ ];
-			if ( is_array( $setting ) ) {
-				$uri        = isset( $setting[ 'uri'        ] ) ? $setting[ 'uri'        ] : $uri;
-				$exceptions = isset( $setting[ 'exceptions' ] ) ? $setting[ 'exceptions' ] : $exceptions;
-				$aliases    = isset( $setting[ 'aliases'    ] ) ? $setting[ 'aliases'    ] : $aliases;
-			} else if ( is_string( $setting ) ) {
-				$uri = $setting;
-			}
-			return new $this( $callable, $uri, $exceptions, $aliases );
+		if ( ! is_callable( $callable ) ) {
+			$message = get_class( $controller ) . '::' .$action . ' is not callable';
+			throw new \Stack\Exception\NoCallable( $message );
 		}
+		$uri = NULL;
+		$exceptions = [ ];
+		$aliases = [ ];
+		if ( is_array( $setting ) ) {
+			$uri        = isset( $setting[ 'uri'        ] ) ? $setting[ 'uri'        ] : $uri;
+			$exceptions = isset( $setting[ 'exceptions' ] ) ? $setting[ 'exceptions' ] : $exceptions;
+			$aliases    = isset( $setting[ 'aliases'    ] ) ? $setting[ 'aliases'    ] : $aliases;
+		} else if ( is_string( $setting ) ) {
+			$uri = $setting;
+		}
+		return new $this( $callable, $uri, $exceptions, $aliases );
 	}
 
 

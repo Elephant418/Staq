@@ -12,7 +12,7 @@ class Error extends Error\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action( $code ) {
+	public function action_view( $code ) {
 		return 'error ' . $code;
 	}
 
