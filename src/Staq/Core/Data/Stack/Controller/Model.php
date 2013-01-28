@@ -19,10 +19,12 @@ class Model extends Model\__Parent {
 
 	public function action_view( $id ) {
 		$model = $this->new_model( )->by_id( $id );
-		$page = new \Stack\View;
-		$page[ 'content'  ] = $model;
-		$page[ 'template' ] = 'model/view/' . $this->get_sub_template( );
-		return $page;
+		if ( $model->exists( ) ) {
+			$page = new \Stack\View;
+			$page[ 'content'  ] = $model;
+			$page[ 'template' ] = 'model/view/' . $this->get_sub_template( );
+			return $page;
+		}
 	}
 
 
