@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack ;
 
-class DataType implements \Stack\IDataType {
+class Attribute implements \Stack\IAttribute {
 
 
 
@@ -20,11 +20,11 @@ class DataType implements \Stack\IDataType {
 	  CONSTRUCTOR            
 	 *************************************************************************/
 	public function by_setting( $setting ) {
-		$class = 'Stack\\DataType';
+		$class = 'Stack\\Attribute';
 		if ( is_string( $setting ) ) {
 			$class .= '\\' . ucfirst( $setting );
-		} else if ( is_array( $setting ) && isset( $setting[ 'data_type' ] ) ) {
-			$class .= '\\' . ucfirst( $setting[ 'data_type' ] );
+		} else if ( is_array( $setting ) && isset( $setting[ 'attribute' ] ) ) {
+			$class .= '\\' . ucfirst( $setting[ 'attribute' ] );
 		}
 		if ( $class != get_class( $this ) ) {
 			return ( new $class )->by_setting( $setting );

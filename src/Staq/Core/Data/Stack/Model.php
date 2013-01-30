@@ -49,8 +49,8 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	}
 
 	protected function add_attribute( $name, $setting ) {
-		$data_type = ( new \Stack\DataType )->by_setting( $setting );
-		parent::offsetSet( $name, $data_type );
+		$attribute = ( new \Stack\Attribute )->by_setting( $setting );
+		parent::offsetSet( $name, $attribute );
 	}
 
 
@@ -62,7 +62,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		$model = new $this;
 		$model->id = $this->entity->extract_id( $data );
 		foreach ( $data as $name => $seed ) {
-			$model->get_data_type( $name )->set_seed( $seed );
+			$model->get_attribute( $name )->set_seed( $seed );
 		}
 		return $model;
 	}
@@ -103,7 +103,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	public function extract_seeds( ) {
 		$data = [ ];
 		foreach( $this->attribute_names( ) as $name ) {
-			$data[ $name ] = $this->get_data_type( $name )->get_seed( );
+			$data[ $name ] = $this->get_attribute( $name )->get_seed( );
 		}
 		return $data;
 	}
@@ -112,7 +112,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	/*************************************************************************
 	  SPECIFIC MODEL ACCESSOR METHODS				   
 	 *************************************************************************/
-	public function get_data_type( $index ) {
+	public function get_attribute( $index ) {
 		return parent::offsetGet( $index );
 	}
 
@@ -130,8 +130,8 @@ class Model extends \ArrayObject implements \Stack\IModel {
 
 	public function offsetGet( $index ) {
 		if ( parent::offsetExists( $index ) ) {
-			$datatype = parent::offsetGet( $index );
-			return $datatype->get( );
+			$attribute = parent::offsetGet( $index );
+			return $attribute->get( );
 		}
 	}
  
@@ -142,8 +142,8 @@ class Model extends \ArrayObject implements \Stack\IModel {
  
 	public function offsetSet( $index, $new_val ) {
 		if ( parent::offsetExists( $index ) ) {
-			$data_type = $this->get_data_type( $index );
-			$data_type->set( $new_val );
+			$attribute = $this->get_attribute( $index );
+			$attribute->set( $new_val );
 		}
 	}
  

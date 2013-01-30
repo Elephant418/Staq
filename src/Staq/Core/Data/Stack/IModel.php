@@ -37,7 +37,7 @@ interface IModel {
 	/*************************************************************************
 	  SPECIFIC MODEL ACCESSOR METHODS				   
 	 *************************************************************************/
-	public function get_data_type( $index );
+	public function get_attribute( $index );
 
 	public function attribute_names( );
 }

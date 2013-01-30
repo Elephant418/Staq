@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack ;
 
-interface IDataType {
+interface IAttribute {
 
 
 
