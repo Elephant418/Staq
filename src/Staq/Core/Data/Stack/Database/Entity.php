@@ -124,7 +124,7 @@ class Entity implements \Stack\IEntity {
 						isset( $field_value[ 1 ] ) &&
 						isset( $field_value[ 2 ] ) 
 					) {
-						$where[ ] = $field_value[ 0 ] . $field_value[ 1 ] . ':' . $field_value[ 0 ];
+						$where[ ] = $field_value[ 0 ] . ' ' . $field_value[ 1 ] . ' :' . $field_value[ 0 ];
 						$parameters[ ':' . $field_value[ 0 ] ] = $field_value[ 2 ];
 					}
 				} else if ( is_array( $field_value ) ) {
@@ -133,7 +133,7 @@ class Entity implements \Stack\IEntity {
 					foreach( $field_value as $key => $value ) {
 						$clause_parameters[ ':' . $field_name . '_' .$key ] = $value;
 					}
-					$clause .= implode( ', ', array_keys( $clause_parameters ) ) . ')';
+					$clause .= implode( ', ', array_keys( $clause_parameters ) ) . ' )';
 					$parameters = array_merge( $parameters, $clause_parameters );
 					$where[ ] = $clause;
 				} else {
@@ -146,11 +146,11 @@ class Entity implements \Stack\IEntity {
 		if ( ! empty( $where ) ) {
 			$sql .= ' WHERE ' . implode ( ' AND ', $where );
 		}
+		if ( ! is_null( $order ) ) {
+			$sql .= ' ORDER BY ' . $order;
+		}
 		if ( ! is_null( $limit ) ) {
 			$sql .= ' LIMIT ' . $limit;
-		}
-		if ( ! is_null( $order ) ) {
-			$sql .= ' ORDER ' . $order;
 		}
 		return $sql . ';';
 	}

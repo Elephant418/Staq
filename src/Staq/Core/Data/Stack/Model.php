@@ -71,12 +71,12 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		return $this->by_data( $this->entity->get_data_by_id( $id ) );
 	}
 
-	public function all( ) {
-		return $this->fetch( );
+	public function all( $order = NULL ) {
+		return $this->fetch( [ ], NULL, $order );
 	}
 
-	public function fetch( $fields = [ ], $limit = NULL ) {
-		$datas = $this->entity->get_datas_by_fields( $fields, $limit );
+	public function fetch( $fields = [ ], $limit = NULL, $order = NULL ) {
+		$datas = $this->entity->get_datas_by_fields( $fields, $limit, $order );
 		return $this->get_list_by_datas( $datas );
 	}
 
