@@ -75,8 +75,8 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		return $this->fetch( );
 	}
 
-	public function fetch( $fields = [ ] ) {
-		$datas = $this->entity->get_datas_by_fields( $fields );
+	public function fetch( $fields = [ ], $limit = NULL ) {
+		$datas = $this->entity->get_datas_by_fields( $fields, $limit );
 		return $this->get_list_by_datas( $datas );
 	}
 

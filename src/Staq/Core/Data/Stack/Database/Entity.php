@@ -51,29 +51,24 @@ class Entity implements \Stack\IEntity {
 		return $this->get_data_by_fields( [ $this->id_field => $id ] );
 	}
 
-	public function get_data_by_fields( $fields = [ ] ) {
-		$datas = $this->get_datas_by_fields( $fields, 1 );
+	public function get_data_by_fields( $where = [ ] ) {
+		$datas = $this->get_datas_by_fields( $where, 1 );
 		if ( isset( $datas[ 0 ] ) ) {
 			return $datas[ 0 ];
 		}
 		return FALSE;
 	}
 
-	public function get_datas_by_fields( $fields = [ ], $limit = NULL ) {
-		$request = [ 'where' => $fields ];
-		if ( ! is_null( $limit ) ) {
-			$request[ 'limit' ] = $limit;
-		}
+	public function get_datas_by_fields( $where = [ ], $limit = NULL, $order = NULL ) {
 		$parameters = [ ];
-		$sql = 'SELECT * FROM ' . $this->table . $this->get_clause_by_fields( $request, $parameters );
+		$sql = 'SELECT * FROM ' . $this->table . $this->get_clause_by_fields( $where, $parameters, $limit, $order );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
 
-	public function delete_by_fields( $fields ) {
-		$request = [ 'where' => $fields ];
+	public function delete_by_fields( $where ) {
 		$parameters = [ ];
-		$sql = 'DELETE FROM ' . $this->table . $this->get_clause_by_fields( $request, $parameters );
+		$sql = 'DELETE FROM ' . $this->table . $this->get_clause_by_fields( $where, $parameters );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
@@ -118,14 +113,10 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  PRIVATE METHODS
 	 *************************************************************************/
-	protected function get_clause_by_fields( $request, &$parameters ) {
+	protected function get_clause_by_fields( $request, &$parameters, $limit = NULL, $order = NULL ) {
 		$where = [ ];
-		$limit = NULL;
-		if ( isset( $request[ 'limit' ] ) ) {
-			$limit = $request[ 'limit' ];
-		}
-		if ( isset( $request[ 'where' ] ) && is_array( $request[ 'where' ] ) ) {
-			foreach ( $request[ 'where' ] as $field_name => $field_value ) {
+		if ( is_array( $request ) ) {
+			foreach ( $request as $field_name => $field_value ) {
 				if ( is_numeric( $field_name ) ) {
 					if ( 
 						is_array( $field_value ) &&
@@ -157,6 +148,9 @@ class Entity implements \Stack\IEntity {
 		}
 		if ( ! is_null( $limit ) ) {
 			$sql .= ' LIMIT ' . $limit;
+		}
+		if ( ! is_null( $order ) ) {
+			$sql .= ' ORDER ' . $order;
 		}
 		return $sql . ';';
 	}

@@ -73,6 +73,12 @@ class DataTest extends StaqTestCase {
 		$this->assertContains( 'Romaric', $names );
 	}
 
+	public function test_select__list_by_ids_and_limit( ) {
+		$users = ( new \Stack\Model\User )->fetch( [ 'id' => [ 1, 2 ] ], 1 );
+		$this->assertEquals( 1, count( $users ) );
+		$this->assertEquals( 'Thomas' , $users[ 0 ][ 'name' ] );
+	}
+
 	public function test_insert__exception( ) {
 		$user = new \Stack\Model\User;
 		$this->assertFalse( $user->exists( ) );
