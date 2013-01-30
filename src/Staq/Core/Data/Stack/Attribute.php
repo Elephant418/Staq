@@ -19,7 +19,7 @@ class Attribute implements \Stack\IAttribute {
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function by_setting( $setting ) {
+	public function by_setting( $model, $setting ) {
 		$class = 'Stack\\Attribute';
 		if ( is_string( $setting ) ) {
 			$class .= '\\' . ucfirst( $setting );
@@ -27,12 +27,12 @@ class Attribute implements \Stack\IAttribute {
 			$class .= '\\' . ucfirst( $setting[ 'attribute' ] );
 		}
 		if ( $class != get_class( $this ) ) {
-			return ( new $class )->by_setting( $setting );
+			return ( new $class )->by_setting( $model, $setting );
 		}
-		$this->init_by_setting( $setting );
+		$this->init_by_setting( $model, $setting );
 		return $this;
 	}
-	public function init_by_setting( $setting ) {
+	public function init_by_setting( $model, $setting ) {
 	}
 
 

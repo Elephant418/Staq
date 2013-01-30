@@ -5,15 +5,17 @@
 
 namespace Staq\Core\Data\Stack\Attribute\Relation;
 
-class ManyToOne extends ManyToOne\__Parent {
+class OneToMany extends OneToMany\__Parent {
 
 
 
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $remote_model;
+	protected $model;
+	protected $remote_models = NULL;
 	protected $remote_class_type;
+	protected $remote_attribute_name;
 
 
 
@@ -21,10 +23,16 @@ class ManyToOne extends ManyToOne\__Parent {
 	  CONSTRUCTOR            
 	 *************************************************************************/
 	public function init_by_setting( $model, $setting ) {
+		$this->model = $model;
 		if ( is_array( $setting ) ) {
-			if ( isset( $setting[ 'remote_class_type' ] ) ) {
-				$this->remote_class_type = $setting[ 'remote_class_type' ];
+			if ( ! isset( $setting[ 'remote_class_type' ] ) ) {
+				throw new \Stack\Exception\MissingSetting( '"remote_class_type" missing for the OneToMany relation.');
 			} 
+			if ( ! isset( $setting[ 'remote_attribute_name' ] ) ) {
+				throw new \Stack\Exception\MissingSetting( '"remote_attribute_name" missing for the OneToMany relation.');
+			} 
+			$this->remote_class_type = $setting[ 'remote_class_type' ];
+			$this->remote_attribute_name = $setting[ 'remote_attribute_name' ];
 		}
 	}
 
@@ -34,25 +42,17 @@ class ManyToOne extends ManyToOne\__Parent {
 	  PUBLIC USER METHODS             
 	 *************************************************************************/
 	public function get( ) {
-		if ( is_null( $this->remote_model ) && isset( $this->seed ) ) {
+		if ( is_null( $this->remote_models ) ) {
+			$request = [ $this->remote_attribute_name => $this->model->id ];
 			$class = $this->get_remote_class( );
-			$this->remote_model = ( new $class )->by_id( $this->seed );
+			$this->remote_models = ( new $class )->fetch( $request );
 		}
-		return $this->remote_model;
+		return $this->remote_models;
 	}
 
-	public function set( $model ) {
-		if ( ! \Staq\Util::is_stack( $model, $this->get_remote_class( ) ) ) {
-			$message = 'Input of type "' . $this->get_remote_class( ) . '", but "' . gettype( $model ) . '" given.';
-			throw new \Stack\Exception\NotRightInput( $message );
-		}
-		if ( ! $model->exists( ) ) {
-			$this->seed = NULL;
-			$this->remote_model = NULL;
-		} else {
-			$this->remote_model = $model;
-			$this->seed = $model->id;
-		}
+	public function set( $remote_models ) {
+		// TODO: Manage to keep old ones to delete it.
+		return $this->remote_models = $remote_models;
 	}
 
 
@@ -61,12 +61,10 @@ class ManyToOne extends ManyToOne\__Parent {
 	  PUBLIC DATABASE METHODS             
 	 *************************************************************************/
 	public function get_seed( ) {
-		return $this->seed;
+		return NULL;
 	}
 
 	public function set_seed( $seed ) {
-		$this->seed = $seed;
-		$this->remote_model = NULL;
 	}
 
 
