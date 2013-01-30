@@ -49,7 +49,7 @@ class DataTest extends StaqTestCase {
 		$this->assertEquals( 'Thomas', $user[ 'name' ] );
 	}
 
-	public function test_select__all( ) {
+	public function test_select__list_all( ) {
 		$users = ( new \Stack\Model\User )->all( );
 		$this->assertEquals( 4, count( $users ) );
 		$names = [ ];
@@ -60,6 +60,17 @@ class DataTest extends StaqTestCase {
 		$this->assertContains( 'Romaric', $names );
 		$this->assertContains( 'Simon'  , $names );
 		$this->assertContains( 'Sylvain', $names );
+	}
+
+	public function test_select__list_by_ids( ) {
+		$users = ( new \Stack\Model\User )->fetch( [ 'id' => [ 1, 2 ] ] );
+		$this->assertEquals( 2, count( $users ) );
+		$names = [ ];
+		foreach ( $users as $user ) {
+			$names[ $user->id ] = $user[ 'name' ];
+		}
+		$this->assertContains( 'Thomas' , $names );
+		$this->assertContains( 'Romaric', $names );
 	}
 
 	public function test_insert__exception( ) {

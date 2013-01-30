@@ -72,11 +72,12 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	}
 
 	public function all( ) {
-		$all = [ ];
-		foreach ( $this->entity->get_datas_by_fields( ) as $data ) {
-			$all[ ] = $this->by_data( $data );
-		}
-		return $all;
+		return $this->fetch( );
+	}
+
+	public function fetch( $fields = [ ] ) {
+		$datas = $this->entity->get_datas_by_fields( $fields );
+		return $this->get_list_by_datas( $datas );
 	}
 
 	public function delete_all( ) {
@@ -149,6 +150,19 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	public function offsetUnset( $index ) {
 		$this->offsetSet( $index, NULL );
 	}
+
+
+	/*************************************************************************
+	  PRIVATE MEHODS                 
+	 *************************************************************************/
+	protected function get_list_by_datas( $datas ) {
+		$list = [ ];
+		foreach ( $datas as $data ) {
+			$list[ ] = $this->by_data( $data );
+		}
+		return $list;
+	}
+
 
 
 	/*************************************************************************

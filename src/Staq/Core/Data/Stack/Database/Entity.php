@@ -52,23 +52,28 @@ class Entity implements \Stack\IEntity {
 	}
 
 	public function get_data_by_fields( $fields = [ ] ) {
-		$datas = $this->get_datas_by_fields( $fields );
+		$datas = $this->get_datas_by_fields( $fields, 1 );
 		if ( isset( $datas[ 0 ] ) ) {
 			return $datas[ 0 ];
 		}
 		return FALSE;
 	}
 
-	public function get_datas_by_fields( $fields = [ ] ) {
+	public function get_datas_by_fields( $fields = [ ], $limit = NULL ) {
+		$request = [ 'where' => $fields ];
+		if ( ! is_null( $limit ) ) {
+			$request[ 'limit' ] = $limit;
+		}
 		$parameters = [ ];
-		$sql = 'SELECT * FROM ' . $this->table . $this->get_clause_by_fields( $fields, $parameters );
+		$sql = 'SELECT * FROM ' . $this->table . $this->get_clause_by_fields( $request, $parameters );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
 
 	public function delete_by_fields( $fields ) {
+		$request = [ 'where' => $fields ];
 		$parameters = [ ];
-		$sql = 'DELETE FROM ' . $this->table . $this->get_clause_by_fields( $fields, $parameters );
+		$sql = 'DELETE FROM ' . $this->table . $this->get_clause_by_fields( $request, $parameters );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
@@ -113,25 +118,37 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  PRIVATE METHODS
 	 *************************************************************************/
-	protected function get_clause_by_fields( $fields, &$parameters ) {
+	protected function get_clause_by_fields( $request, &$parameters ) {
 		$where = [ ];
 		$limit = NULL;
-		foreach ( $fields as $fields_name => $field_value ) {
-			if ( is_array( $field_value ) ) {
-				if ( isset( $field_value[ 'parameters' ] ) ) {
-					$parameters = array_merge( $parameters, $field_value[ 'parameters' ] );
+		if ( isset( $request[ 'limit' ] ) ) {
+			$limit = $request[ 'limit' ];
+		}
+		if ( isset( $request[ 'where' ] ) && is_array( $request[ 'where' ] ) ) {
+			foreach ( $request[ 'where' ] as $field_name => $field_value ) {
+				if ( is_numeric( $field_name ) ) {
+					if ( 
+						is_array( $field_value ) &&
+						isset( $field_value[ 0 ] ) &&
+						isset( $field_value[ 1 ] ) &&
+						isset( $field_value[ 2 ] ) 
+					) {
+						$where[ ] = $field_value[ 0 ] . $field_value[ 1 ] . ':' . $field_value[ 0 ];
+						$parameters[ ':' . $field_value[ 0 ] ] = $field_value[ 2 ];
+					}
+				} else if ( is_array( $field_value ) ) {
+					$clause = $field_name . ' IN ( ';
+					$clause_parameters = [ ];
+					foreach( $field_value as $key => $value ) {
+						$clause_parameters[ ':' . $field_name . '_' .$key ] = $value;
+					}
+					$clause .= implode( ', ', array_keys( $clause_parameters ) ) . ')';
+					$parameters = array_merge( $parameters, $clause_parameters );
+					$where[ ] = $clause;
+				} else {
+					$where[ ] = $field_name . '=:' . $field_name;
+					$parameters[ ':' . $field_name ] = $field_value;
 				}
-				if ( isset( $field_value[ 'limit' ] ) ) {
-					$limit = $field_value[ 'limit' ];
-				} else if ( isset( $field_value[ 'where' ] ) ) {
-					$where[ ] = '( ' . $field_value[ 'where' ] . ' )';
-				} else if ( isset( $field_value[ 0 ] ) && isset( $field_value[ 1 ] ) ) {
-					$where[ ] = $fields_name . $field_value[ 0 ] . ':' . $fields_name;
-					$parameters[ ':' . $fields_name ] = $field_value[ 1 ];
-				}
-			} else {
-				$where[ ] = $fields_name . '=:' . $fields_name;
-				$parameters[ ':' . $fields_name ] = $field_value;
 			}
 		}
 		$sql = '';
