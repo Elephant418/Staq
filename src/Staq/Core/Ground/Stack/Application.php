@@ -101,6 +101,8 @@ class Application {
 	}
 
 	public function set_base_uri( $base_uri ) {
+		\UString::do_start_with( $base_uri, '/' );
+		\UString::do_not_end_with( $base_uri, '/' );
 		$this->base_uri = $base_uri;
 		return $this;
 	}
@@ -112,7 +114,7 @@ class Application {
 	 *************************************************************************/
 	public function __construct( $extensions, $base_uri, $platform ) {
 		$this->extensions = $extensions;
-		$this->base_uri   = $base_uri;
+		$this->set_base_uri( $base_uri );
 		$this->platform   = $platform;
 	}
 
