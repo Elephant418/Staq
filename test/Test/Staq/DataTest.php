@@ -29,7 +29,7 @@ class DataTest extends StaqTestCase {
 	}
 
 	protected function tearDown( ) {
-		( new \Stack\Database\Request )->load_mysql_file( \Staq\App::get_path( 'dataset/reset.sql' ) );
+		( new \Stack\Database\Request )->load_mysql_file( \Staq::App()->get_path( 'dataset/reset.sql' ) );
 	}
 
 

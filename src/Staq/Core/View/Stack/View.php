@@ -44,7 +44,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	public function loadTemplate( ) {
 		$template = $this[ 'template' ];
 		while ( TRUE ) {
-			if ( \Staq\App::get_file_path( 'template/' . $template ) ) {
+			if ( \Staq::App()->get_file_path( 'template/' . $template ) ) {
 				break;
 			} 
 			if ( \UString::has( $template, '/' ) ) {
@@ -63,13 +63,13 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	  PRIVATE METHODS              
 	 *************************************************************************/
 	protected function get_twig_environment_loader( ) {
-		return new \Twig_Loader_Filesystem( \Staq\App::get_extensions( 'template' ) );
+		return new \Twig_Loader_Filesystem( \Staq::App()->get_extensions( 'template' ) );
 	}
 	protected function get_twig_environment_parameters( ) {
 		$params = [ ];
 		$settings = ( new \Stack\Setting )->parse( $this );
 		if ( $settings->get_as_boolean( 'twig.cache' ) ) {
-			if ( $cache_path = \Staq\App::get_path( 'cache/twig', TRUE ) ) {
+			if ( $cache_path = \Staq::App()->get_path( 'cache/twig', TRUE ) ) {
 				$params[ 'cache' ] = $cache_path;
 			}
 		}
@@ -78,11 +78,11 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	protected function extend_twig( ) {
 		$public = function( $path ) {
 			\UString::do_start_with( $path, '/' );
-			return \Staq\App::get_base_uri( ) . $path;
+			return \Staq::App()->get_base_uri( ) . $path;
 		};
 		$route = function( $controller, $action ) use ( $public ) {
 			$parameters = array_slice( func_get_args( ), 2 );
-			$uri = \Staq\App::get_uri( $controller, $action, $parameters );
+			$uri = \Staq::App()->get_uri( $controller, $action, $parameters );
 			return $public( $uri );
 		};
 		$public_filter = new \Twig_SimpleFilter( 'public', $public );
