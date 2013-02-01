@@ -39,9 +39,7 @@ class Controller implements \Stack\IController {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action_view( ) {
-		$page = new \Stack\View;
-		$page[ 'template' ] = $this->get_sub_template( );
-		return $page;
+		return ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ) );
 	}
 
 
@@ -49,10 +47,6 @@ class Controller implements \Stack\IController {
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
-	protected function get_sub_template( ) {
-		return strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
-	}
-	
 	protected function initialize_routes( ) {
 		$setting = ( new \Stack\Setting )->parse( $this );
 		foreach ( $setting->get_as_array( 'route' ) as $action => $setting ) {

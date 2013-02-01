@@ -11,18 +11,16 @@ class Model extends Model\__Parent {
 	 *************************************************************************/
 	public function action_list( ) {
 		$models = $this->new_model( )->all( );
-		$page = new \Stack\View;
+		$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model\\List' );
 		$page[ 'content'  ] = $models;
-		$page[ 'template' ] = 'model/list/' . $this->get_sub_template( );
 		return $page;
 	}
 
 	public function action_view( $id ) {
 		$model = $this->new_model( )->by_id( $id );
 		if ( $model->exists( ) ) {
-			$page = new \Stack\View;
+			$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model\\View' );
 			$page[ 'content'  ] = $model;
-			$page[ 'template' ] = 'model/view/' . $this->get_sub_template( );
 			return $page;
 		}
 	}

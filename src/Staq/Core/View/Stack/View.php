@@ -12,7 +12,6 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	/*************************************************************************
 	  ATTRIBUTES              
 	 *************************************************************************/
-	public $var;
 	public static $setting = [
 		'twig.cache' => 'off'
 	];
@@ -31,6 +30,21 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		$this->extend_twig( );
 		$this->init_default_variables( );
 	}
+	public function by_name( $name, $prefix = NULL ) {
+		$class = [ 'Stack\\View' ];
+		\UString::do_not_start_with( $prefix, '\\' );
+		\UString::do_not_end_with( $prefix, '\\' );
+		if ( ! empty( $prefix ) ) {
+			$class[ ] = $prefix;
+		}
+		\UString::do_not_start_with( $name, '\\' );
+		\UString::do_not_end_with( $name, '\\' );
+		if ( ! empty( $name ) ) {
+			$class[ ] = $name;
+		}
+		$class = implode( '\\', $class );
+		return new $class;
+	}
 
 
 
@@ -42,7 +56,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		return $template->render( $this->getArrayCopy( ) );
 	}
 	public function loadTemplate( ) {
-		$template = $this[ 'template' ];
+		$template = strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
 		while ( TRUE ) {
 			if ( \Staq::App()->get_file_path( 'template/' . $template ) ) {
 				break;
@@ -93,6 +107,5 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		$this->twig->addFunction( $route_function );
 	}
 	protected function init_default_variables( ) {
-		$this[ 'template' ] = strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
 	}
 }
