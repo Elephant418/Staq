@@ -11,7 +11,7 @@ class Model extends Model\__Parent {
 	 *************************************************************************/
 	public function action_list( ) {
 		$models = $this->new_model( )->all( );
-		$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model_List' );
+		$page = ( new \Stack\View )->by_name( $this->model_name( ), 'Model_List' );
 		$page[ 'content'  ] = $models;
 		return $page;
 	}
@@ -19,7 +19,7 @@ class Model extends Model\__Parent {
 	public function action_view( $id ) {
 		$model = $this->new_model( )->by_id( $id );
 		if ( $model->exists( ) ) {
-			$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model_View' );
+			$page = ( new \Stack\View )->by_name( $this->model_name( ), 'Model_View' );
 			$page[ 'content'  ] = $model;
 			return $page;
 		}
@@ -30,12 +30,16 @@ class Model extends Model\__Parent {
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
-	protected function new_model( ) {
-		$class = 'Stack\\' . \Staq\Util::stack_sub_query( $this );
-		return new $class;
+	protected function model_name( ) {
+		return \Staq\Util::stack_sub_query( $this->model_class( ) );
 	}
 
-	protected function get_sub_template( ) {
-		return strtolower( \Staq\Util::stack_sub_query( $this->new_model( ), '/' ) ) . '.html';
+	protected function model_class( ) {
+		return 'Stack\\' . \Staq\Util::stack_sub_query( $this );
+	}
+
+	protected function new_model( ) {
+		$class = $this->model_class( );
+		return new $class;
 	}
 }
