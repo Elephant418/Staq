@@ -13,7 +13,7 @@ class Router extends Router\__Parent{
 	 *************************************************************************/
 	protected function render( $view ) {
 		$view = parent::render( $view );
-		if ( ! is_a( $view, 'Stack\\View' ) ) {
+		if ( ! \Staq\Util::is_stack( $view, 'Stack\\View' ) ) {
 			$page = new \Stack\View;
 			$page[ 'content' ] = $view;
 			$view = $page;

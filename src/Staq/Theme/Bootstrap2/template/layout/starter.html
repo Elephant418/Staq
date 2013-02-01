@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
   {{ parent( ) }}
-  <link rel="stylesheet" href="{{ 'css/bootstrap-layout-starter.css'|link }}">
+  <link rel="stylesheet" href="{{ 'css/bootstrap-layout-starter.css'|public }}">
 {% endblock %}
 
 {% block body %}
@@ -26,9 +26,8 @@
             </p>
             <ul class="nav">
               {% block navbar_left %}
-                <li class="active"><a href="#">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li class="active"><a href="{{ '/'|public }}">Home</a></li>
+                <li><a href="{{ route( 'Error', 'view', '404' ) }}">404</a></li>
               {% endblock %}
             </ul>
           </div><!--/.nav-collapse -->

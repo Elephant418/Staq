@@ -15,7 +15,7 @@ class Route {
 	protected $callable;
 	protected $match_uri;
 	protected $match_exceptions = [ ];
-	protected $aliases_uri          = [ ];
+	protected $aliases_uri      = [ ];
 	protected $parameters       = [ ];
 
 
@@ -33,6 +33,7 @@ class Route {
 	}
 	
 	public function by_setting( $controller, $action, $setting ) {
+		\UString::do_start_with( $action, 'action_' );
 		$callable = [ $controller, $action ];
 		if ( ! is_callable( $callable ) ) {
 			$message = get_class( $controller ) . '::' .$action . ' is not callable';
@@ -66,7 +67,7 @@ class Route {
 		}
 		ksort( $parameters );
 		foreach ( $parameters as $value ) {
-			$uri = preg_replace( '#^([^:]*):\w+#', '${1}' . $value, $route );
+			$uri = preg_replace( '#^([^:]*):\w+#', '${1}' . $value, $uri );
 		}
 		$uri = preg_replace( '#\(([^):]*)\)#', '${1}', $uri ); 
 		$uri = preg_replace( '#\([^)]*\)#', '', $uri ); 

@@ -15,8 +15,6 @@ class Application {
 	protected $extensions;
 	protected $base_uri;
 	protected $platform;
-	protected $router;
-	protected $controllers = [ ];
 
 
 
@@ -89,11 +87,6 @@ class Application {
 	/*************************************************************************
 	  SETTER             
 	 *************************************************************************/
-	public function add_controller( $uri, $controller ) {
-		$this->controllers[ ] = func_get_args( );
-		return $this;
-	}
-
 	public function set_platform( $platform ) {
 		$this->platform = $platform;
 		$this->initialize( );
@@ -136,19 +129,5 @@ class Application {
 		error_reporting( $level );
 
 		return $this;
-	}
-
-
-
-
-	/*************************************************************************
-	  PUBLIC METHODS             
-	 *************************************************************************/
-	public function run( ) {
-		$this->router = new \Stack\Router( $this->controllers );
-		$uri          = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
-		\UString::do_not_start_with( $uri, $this->base_uri );
-		\UString::do_start_with( $uri, '/' );
-		echo $this->router->resolve( $uri );
 	}
 }

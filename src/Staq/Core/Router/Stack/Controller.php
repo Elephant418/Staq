@@ -56,7 +56,8 @@ class Controller implements \Stack\IController {
 	protected function initialize_routes( ) {
 		$setting = ( new \Stack\Setting )->parse( $this );
 		foreach ( $setting->get_as_array( 'route' ) as $action => $setting ) {
-			$this->routes[ ] = ( new \Stack\Route )->by_setting( $this, 'action_' . $action, $setting );
+			$route_name = \Stack\Router::get_route_name( $this, $action );
+			$this->routes[ $route_name ] = ( new \Stack\Route )->by_setting( $this, $action, $setting );
 		}
 	}
 }

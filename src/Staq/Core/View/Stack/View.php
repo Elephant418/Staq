@@ -76,12 +76,23 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		return $params;
 	}
 	protected function extend_twig( ) {
-		$link = new \Twig_SimpleFilter( 'link', function( $path ) {
-			return \Staq\App::get_base_uri( ) . '/' . $path;
-		});
-		$this->twig->addFilter( $link );
+		$public = function( $path ) {
+			\UString::do_start_with( $path, '/' );
+			return \Staq\App::get_base_uri( ) . $path;
+		};
+		$route = function( $controller, $action ) use ( $public ) {
+			$parameters = array_slice( func_get_args( ), 2 );
+			$uri = \Staq\App::get_uri( $controller, $action, $parameters );
+			return $public( $uri );
+		};
+		$public_filter = new \Twig_SimpleFilter( 'public', $public );
+		$this->twig->addFilter( $public_filter );
+		$public_function = new \Twig_SimpleFunction( 'public', $public );
+		$this->twig->addFunction( $public_function );
+		$route_function = new \Twig_SimpleFunction( 'route', $route );
+		$this->twig->addFunction( $route_function );
 	}
 	protected function init_default_variables( ) {
-		$this[ 'template' ] = 'index.html';
+		$this[ 'template' ] = strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
 	}
 }

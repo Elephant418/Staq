@@ -31,6 +31,27 @@ class Router {
 		return end( $this->exceptions );
 	}
 
+	public function get_controller( $name ) {
+		if ( isset( $this->controllers[ $name ] ) ) {
+			return $this->controllers[ $name ];
+		}
+	}
+
+	public function get_route( $controller, $action ) {
+		$route_name = static::get_route_name( $controller, $action );
+		if ( isset( $this->routes[ $route_name ] ) ) {
+			return $this->routes[ $route_name ];
+		}
+	}
+
+	public function get_uri( $controller, $action, $parameters ) {
+		$route = $this->get_route( $controller, $action );
+		if ( $route ) {
+			return $route->get_uri( $parameters );
+		}
+		return '#unknownroute';
+	}
+
 
 
 	/*************************************************************************
@@ -63,8 +84,8 @@ class Router {
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
 	}
 	protected function initialize_controllers( ) {
-		$controllers = $this->setting[ 'controller' ];
-		foreach ( array_reverse( $controllers ) as $controller_name ) {
+		$names = $this->setting[ 'controller' ];
+		foreach ( array_reverse( $names ) as $controller_name ) {
 			$routes = [ ];
 			$controller_class = '\\Stack\Controller\\' . $controller_name;
 			$controller = new $controller_class( );
@@ -74,7 +95,7 @@ class Router {
 			) {
 				$selector = 'route.' . strtolower( str_replace( '\\', '_', $controller_name ) );
 				foreach ( $this->setting->get_as_array( $selector ) as $action => $setting ) {
-					$routes[ ] = ( new \Stack\Route )->by_setting( $controller, 'action_' . $action, $setting );
+					$routes[ ] = ( new \Stack\Route )->by_setting( $controller, $action, $setting );
 				}
 			}
 			if ( 
@@ -84,6 +105,7 @@ class Router {
 				$routes = $controller->get_routes( );
 			}
 			$this->add_routes( $routes );
+			$this->controllers[ $controller_class ] = $controller;
 		}
 	}
 	protected function initialize_anonymous_controllers( $anonymous_controllers ) {
@@ -101,6 +123,18 @@ class Router {
 	public function resolve( $uri ) {
 		$this->change_uri( $uri );
 		return $this->resolve_current_uri( );
+	}
+
+
+
+	/*************************************************************************
+	  STATIC METHODS          
+	 *************************************************************************/
+	public static function get_route_name( $controller, $action ) {
+		if ( is_object( $controller ) ) {
+			$controller = \Staq\Util::stack_sub_query( $controller, '_' );
+		}
+		return $controller . '.' . $action;
 	}
 
 
