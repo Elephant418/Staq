@@ -11,7 +11,7 @@ class Model extends Model\__Parent {
 	 *************************************************************************/
 	public function action_list( ) {
 		$models = $this->new_model( )->all( );
-		$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model\\List' );
+		$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model_List' );
 		$page[ 'content'  ] = $models;
 		return $page;
 	}
@@ -19,7 +19,7 @@ class Model extends Model\__Parent {
 	public function action_view( $id ) {
 		$model = $this->new_model( )->by_id( $id );
 		if ( $model->exists( ) ) {
-			$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model\\View' );
+			$page = ( new \Stack\View )->by_name( \Staq\Util::stack_sub_query( $this ), 'Model_View' );
 			$page[ 'content'  ] = $model;
 			return $page;
 		}

@@ -32,13 +32,13 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	}
 	public function by_name( $name, $prefix = NULL ) {
 		$class = [ 'Stack\\View' ];
-		\UString::do_not_start_with( $prefix, '\\' );
-		\UString::do_not_end_with( $prefix, '\\' );
+		\UString::do_not_start_with( $prefix, [ '\\', '_' ] );
+		\UString::do_not_end_with( $prefix, [ '\\', '_' ] );
 		if ( ! empty( $prefix ) ) {
 			$class[ ] = $prefix;
 		}
-		\UString::do_not_start_with( $name, '\\' );
-		\UString::do_not_end_with( $name, '\\' );
+		\UString::do_not_start_with( $name, [ '\\', '_' ] );
+		\UString::do_not_end_with( $name, [ '\\', '_' ] );
 		if ( ! empty( $name ) ) {
 			$class[ ] = $name;
 		}
@@ -57,6 +57,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	}
 	public function loadTemplate( ) {
 		$template = strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
+		$template = str_replace( '_', '/', $template );
 		while ( TRUE ) {
 			if ( \Staq::App()->get_file_path( 'template/' . $template ) ) {
 				break;
