@@ -38,9 +38,8 @@ class Router {
 	}
 
 	public function get_route( $controller, $action ) {
-		$route_name = static::get_route_name( $controller, $action );
-		if ( isset( $this->routes[ $route_name ] ) ) {
-			return $this->routes[ $route_name ];
+		if ( isset( $this->routes[ $controller ][ $action ] ) ) {
+			return $this->routes[ $controller ][ $action ];
 		}
 	}
 
@@ -65,11 +64,11 @@ class Router {
 		return $this;
 	}
 
-	protected function add_routes( $routes, $prepend = FALSE ) {
+	protected function add_routes( $controller_name, $routes, $prepend = FALSE ) {
 		if ( $prepend ) {
-			$this->routes = array_merge( $routes, $this->routes );
+			$this->routes = array_merge( [ $controller_name => $routes ], $this->routes );
 		} else {
-			$this->routes = array_merge( $this->routes, $routes );
+			$this->routes[ $controller_name ] = $routes;
 		}
 	}
 
@@ -95,7 +94,7 @@ class Router {
 			) {
 				$selector = 'route.' . strtolower( str_replace( '\\', '_', $controller_name ) );
 				foreach ( $this->setting->get_as_array( $selector ) as $action => $setting ) {
-					$routes[ ] = ( new \Stack\Route )->by_setting( $controller, $action, $setting );
+					$routes[ $action ] = ( new \Stack\Route )->by_setting( $controller, $action, $setting );
 				}
 			}
 			if ( 
@@ -104,15 +103,15 @@ class Router {
 			) {
 				$routes = $controller->get_routes( );
 			}
-			$this->add_routes( $routes );
-			$this->controllers[ $controller_class ] = $controller;
+			$this->add_routes( $controller_name, $routes );
+			$this->controllers[ $controller_name ] = $controller;
 		}
 	}
 	protected function initialize_anonymous_controllers( $anonymous_controllers ) {
 		$class = new \ReflectionClass( 'Stack\\Controller\\Anonymous' );
 		foreach ( $anonymous_controllers as $arguments ) {
 			$anonymous = $class->newInstanceArgs( $arguments );
-			$this->add_routes( $anonymous->get_routes( ), TRUE );
+			$this->add_routes( 'Anonymous', $anonymous->get_routes( ), TRUE );
 		}
 	}
 
@@ -123,18 +122,6 @@ class Router {
 	public function resolve( $uri ) {
 		$this->change_uri( $uri );
 		return $this->resolve_current_uri( );
-	}
-
-
-
-	/*************************************************************************
-	  STATIC METHODS          
-	 *************************************************************************/
-	public static function get_route_name( $controller, $action ) {
-		if ( is_object( $controller ) ) {
-			$controller = \Staq\Util::stack_sub_query( $controller, '_' );
-		}
-		return $controller . '.' . $action;
 	}
 
 
@@ -184,12 +171,14 @@ class Router {
 
 	protected function get_active_routes_by_uri( $uri ) {
 		$active_routes = [ ];
-		foreach ( $this->routes as $route ) {
-			if ( $result = $route->is_route_catch_uri( $uri ) ) {
-				if ( $result === TRUE ) {
-					$active_routes[ ] = $route;
-				} else {
-					\Staq\Util::http_action_redirect( $result );
+		foreach ( $this->routes as $routes ) {
+			foreach ( $routes as $route ) {
+				if ( $result = $route->is_route_catch_uri( $uri ) ) {
+					if ( $result === TRUE ) {
+						$active_routes[ ] = $route;
+					} else {
+						\Staq\Util::http_action_redirect( $result );
+					}
 				}
 			}
 		}
@@ -198,9 +187,11 @@ class Router {
 
 	protected function get_active_routes_by_exception( $exception ) {
 		$active_routes = [ ];
-		foreach ( $this->routes as $route ) {
-			if ( $route->is_route_catch_exception( $exception ) ) {
-				$active_routes[ ] = $route;
+		foreach ( $this->routes as $routes ) {
+			foreach ( $routes as $route ) {
+				if ( $route->is_route_catch_exception( $exception ) ) {
+					$active_routes[ ] = $route;
+				}
 			}
 		}
 		return $active_routes;
