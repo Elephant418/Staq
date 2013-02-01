@@ -100,11 +100,21 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 			$uri = \Staq::App()->get_uri( $controller, $action, $parameters );
 			return $public( $uri );
 		};
+		$route_model_action = function( $action, $model ) use ( $route ) {
+			return $route( \Staq\Util::stack_query( $model ), $action, $model->id );
+		};
+		$route_model = function( $model ) use ( $route_model_action ) {
+			return $route_model_action( 'view', $model );
+		};
 		$public_filter = new \Twig_SimpleFilter( 'public', $public );
 		$this->twig->addFilter( $public_filter );
 		$public_function = new \Twig_SimpleFunction( 'public', $public );
 		$this->twig->addFunction( $public_function );
 		$route_function = new \Twig_SimpleFunction( 'route', $route );
+		$this->twig->addFunction( $route_function );
+		$route_function = new \Twig_SimpleFunction( 'route_model_*', $route_model_action );
+		$this->twig->addFunction( $route_function );
+		$route_function = new \Twig_SimpleFunction( 'route_model', $route_model );
 		$this->twig->addFunction( $route_function );
 	}
 	protected function init_default_variables( ) {
