@@ -29,7 +29,7 @@ abstract class Application {
 		return \Staq\Server::$application;
 	}
 	public static function __callStatic( $name, $arguments ) {
-		$application = self::get_current_application( );
+		$application = static::get_current_application( );
 		$callable = [ $application, $name ];
 		if ( ! is_callable( $callable ) ) {
 			$caller = debug_backtrace( DEBUG_BACKTRACE_PROVIDE_OBJECT, 1 )[ 0 ];
