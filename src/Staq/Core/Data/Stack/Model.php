@@ -12,6 +12,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	  ATTRIBUTES                 
 	 *************************************************************************/
 	public $id;
+	protected $schema_attribute_names = [ ];
 	public $entity;
 
 
@@ -28,6 +29,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	  CONSTRUCTOR
 	 *************************************************************************/
 	public function __construct( ) {
+		$this->setFlags( \ArrayObject::ARRAY_AS_PROPS );
 		$this->entity = $this->new_entity( );
 		$this->import_schema( );
 	}
@@ -50,7 +52,12 @@ class Model extends \ArrayObject implements \Stack\IModel {
 
 	protected function add_attribute( $name, $setting ) {
 		$attribute = ( new \Stack\Attribute )->by_setting( $this, $setting );
+		$this->schema_attribute_names[ ] = $name;
 		parent::offsetSet( $name, $attribute );
+	}
+
+	protected function initialize( ) {
+		
 	}
 
 
@@ -64,6 +71,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		foreach ( $data as $name => $seed ) {
 			$model->get_attribute( $name )->set_seed( $seed );
 		}
+		$model->initialize( );
 		return $model;
 	}
 
@@ -102,7 +110,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 
 	public function extract_seeds( ) {
 		$data = [ ];
-		foreach( $this->attribute_names( ) as $name ) {
+		foreach( $this->schema_attribute_names as $name ) {
 			$data[ $name ] = $this->get_attribute( $name )->get_seed( );
 		}
 		return $data;
@@ -113,25 +121,25 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	  SPECIFIC MODEL ACCESSOR METHODS				   
 	 *************************************************************************/
 	public function get_attribute( $index ) {
-		return parent::offsetGet( $index );
-	}
-
-	public function attribute_names( ) {
-		return array_keys( $this->getArrayCopy( ) );
+		if ( $this->offsetExists( $index ) ) {
+			return parent::offsetGet( $index );
+		}
 	}
 
 
 	/*************************************************************************
 	  HERITED ACCESSOR METHODS				   
 	 *************************************************************************/
-	public function get( $index, $new_val ) {
+	public function get( $index ) {
 		return $this->offsetGet( $index );
 	}
 
 	public function offsetGet( $index ) {
-		if ( parent::offsetExists( $index ) ) {
-			$attribute = parent::offsetGet( $index );
+		$attribute = $this->get_attribute( $index );
+		if ( \Staq\Util::is_stack( $attribute, 'Stack\\Attribute' ) ) {
 			return $attribute->get( );
+		} else {
+			return $attribute;
 		}
 	}
  
@@ -141,9 +149,11 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	}
  
 	public function offsetSet( $index, $new_val ) {
-		if ( parent::offsetExists( $index ) ) {
-			$attribute = $this->get_attribute( $index );
+		$attribute = $this->get_attribute( $index );
+		if ( \Staq\Util::is_stack( $attribute, 'Stack\\Attribute' ) ) {
 			$attribute->set( $new_val );
+		} else {
+			parent::offsetSet( $index, $new_val );
 		}
 	}
  

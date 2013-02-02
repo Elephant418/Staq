@@ -39,5 +39,7 @@ interface IModel {
 	 *************************************************************************/
 	public function get_attribute( $index );
 
-	public function attribute_names( );
+	public function get( $index );
+
+	public function set( $index, $new_val );
 }
