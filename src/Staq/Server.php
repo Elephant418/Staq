@@ -14,31 +14,45 @@ class Server {
 	 *************************************************************************/
 	public static $application;
 	public static $autoloader;
+	protected $applications;
+	protected $platforms;
 	public $namespaces = [ ];
 
 
 
-
 	/*************************************************************************
-	  CONSTRUCTOR METHODS             
+	  SETTER METHODS                   
 	 *************************************************************************/
-	public function __construct( ) {
-		if ( \UString::has( __DIR__, '/vendor/' ) ) {
-			$base_dir = \UString::substr_before_last( __DIR__, '/vendor/' );
-		} else {
-			$base_dir = __DIR__ . '/../..';
+	public function add_application( $namespace, $listenings = NULL ) {
+		if ( is_null( $listenings ) ) {
+			$listenings = $this->get_default_base_uri( );
 		}
-		$this->namespaces = ( require( $base_dir . '/vendor/composer/autoload_namespaces.php' ) );
+		$this->do_format_listenings( $listenings );
+		$this->applications[ $namespace ] = $listenings;
+		return $this;
 	}
 
+	public function add_platform( $platform_name, $listenings = '/' ) {
+		$this->do_format_listenings( $listenings );
+		$this->platforms[ $platform_name ] = $listenings;
+		return $this;
+	}
+
+	protected function do_format_listenings( &$listenings ) {
+		\UArray::do_convert_to_array( $listenings );
+		$listenings = ( new \Staq\Url )->from_array( $listenings );
+	}  
 
 
 
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function create_application( $path = 'Staq\Core\Ground', $base_uri = '/', $platform = 'prod' ) {
-		$extensions = $this->find_extensions( $path );
+	public function create_application( $namespace = 'Staq\Core\Ground', $base_uri = NULL, $platform = 'prod' ) {
+		if ( is_null( $base_uri ) ) {
+			$base_uri = $this->get_default_base_uri( );
+		}
+		$extensions = $this->find_extensions( $namespace );
 		if ( ! is_null( static::$autoloader ) ) {
 			spl_autoload_unregister( array( static::$autoloader, 'autoload' ) );
 		}
@@ -49,12 +63,70 @@ class Server {
 		return static::$application;
 	}
 
+	public function launch( ) {
+		return $this->launch_current_application( );
+	}
+
+	public function launch_current_application( ) {
+		$base_uri  = '';
+		$request   = ( new \Staq\Url )->by_server( );
+		$platform  = $this->get_current_platform( $request, $base_uri );
+		$namespace = $this->get_current_application_name( $request, $base_uri );
+		\UString::do_start_with( $base_uri, '/' );
+		return $this->create_application( $namespace, $base_uri, $platform );
+	}
+
+
+
+	/*************************************************************************
+	  APPLICATION SWITCH SETTINGS             
+	 *************************************************************************/
+	protected function get_current_platform( $request, &$base_uri ) {
+		foreach ( $this->platforms as $platform => $listenings ) {
+			foreach ( $listenings as $listening ) {
+				if ( $listening->match( $request ) ) {
+					$base_uri .= $listening->uri;
+					\UString::do_not_end_with( $base_uri, '/' );
+					return $platform;
+				}
+			}
+		}
+		return 'prod';
+	}
+
+	protected function get_current_application_name( $request, &$base_uri ) {
+		foreach ( $this->applications as $application => $listenings ) {
+			foreach ( $listenings as $listening ) {
+				if ( $listening->match( $request ) ) {
+					$base_uri .= $listening->uri;
+					\UString::do_not_end_with( $base_uri, '/' );
+					return $application;
+				}
+			}
+		}
+		return 'Staq\Core\Ground';
+	}
+
+	protected function get_default_base_uri( ) {
+		$base_uri = NULL;
+		if ( isset( $_SERVER[ 'DOCUMENT_ROOT' ] ) && isset( $_SERVER[ 'SCRIPT_FILENAME' ] ) ) {
+			if ( \UString::is_start_with( $_SERVER[ 'SCRIPT_FILENAME' ], $_SERVER[ 'DOCUMENT_ROOT' ] ) ) {
+				$base_uri = \UString::not_start_with( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
+			}
+		}
+		if ( is_null( $base_uri ) ) {
+			$base_uri = '/';
+		}
+		return $base_uri;
+	}
+
 
 
 	/*************************************************************************
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
 	protected function find_extensions( $namespace ) {
+		$this->initialize_namespaces( );
 		$files = [  ];
 		$namespaces = [ $namespace, 'Staq\Core\Ground' ];
 		$new_namespaces = [ $namespace, 'Staq\Core\Ground' ];
@@ -70,6 +142,17 @@ class Server {
 		}
 		$namespaces = \UArray::reverse_merge_unique( $namespaces, [ ] );
 		return $this->format_extensions_from_namespaces( $namespaces );
+	}
+
+	protected function initialize_namespaces( ) {
+		if ( empty( $this->namespaces ) ) {
+			if ( \UString::has( __DIR__, '/vendor/' ) ) {
+				$base_dir = \UString::substr_before_last( __DIR__, '/vendor/' );
+			} else {
+				$base_dir = __DIR__ . '/../..';
+			}
+			$this->namespaces = ( require( $base_dir . '/vendor/composer/autoload_namespaces.php' ) );
+		}
 	}
 
 	protected function format_extensions_from_namespaces( $extensions ) {
