@@ -97,8 +97,9 @@ class Server {
 	protected function get_current_application_name( $request, &$base_uri ) {
 		foreach ( $this->applications as $application => $listenings ) {
 			foreach ( $listenings as $listening ) {
+				$listening->uri = $base_uri . $listening->uri;
 				if ( $listening->match( $request ) ) {
-					$base_uri .= $listening->uri;
+					$base_uri = $listening->uri;
 					\UString::do_not_end_with( $base_uri, '/' );
 					return $application;
 				}

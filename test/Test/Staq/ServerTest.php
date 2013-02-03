@@ -213,4 +213,54 @@ class ServerTest extends WebTestCase {
 		$this->assertEquals( '/', $app->get_base_uri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
+
+
+
+
+	/*************************************************************************
+	  APPLICATION & PLATFORM SWITCHER TEST METHODS             
+	 *************************************************************************/
+	public function test_application_n_platform_switcher__default( ) {
+		$this->get_request_url( 'http://localhost/bou' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_platform( 'local', '/local')
+			->launch( );
+		$this->assertEquals( 'Staq\\App\\Starter', $app->get_namespace( ) );
+		$this->assertEquals( 'prod', $app->get_platform( ) );
+		$this->assertEquals( '/bou', $app->get_current_uri( ) );
+	}
+
+	public function test_application_n_platform_switcher__match_application( ) {
+		$this->get_request_url( 'http://localhost/noconf/bou' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_platform( 'local', '/local')
+			->launch( );
+		$this->assertEquals( $this->get_project_class( 'NoConfiguration' ), $app->get_namespace( ) );
+		$this->assertEquals( 'prod', $app->get_platform( ) );
+		$this->assertEquals( '/bou', $app->get_current_uri( ) );
+	}
+
+	public function test_application_n_platform_switcher__match_platform( ) {
+		$this->get_request_url( 'http://localhost/local/bou' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_platform( 'local', '/local')
+			->launch( );
+		$this->assertEquals( 'Staq\\App\\Starter', $app->get_namespace( ) );
+		$this->assertEquals( 'local', $app->get_platform( ) );
+		$this->assertEquals( '/bou' , $app->get_current_uri( ) );
+	}
+
+	public function test_application_n_platform_switcher__match_application_n_platform( ) {
+		$this->get_request_url( 'http://localhost/local/noconf/bou' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_platform( 'local', '/local')
+			->launch( );
+		$this->assertEquals( $this->get_project_class( 'NoConfiguration' ), $app->get_namespace( ) );
+		$this->assertEquals( 'local', $app->get_platform( ) );
+		$this->assertEquals( '/bou' , $app->get_current_uri( ) );
+	}
 }
