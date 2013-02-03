@@ -161,4 +161,56 @@ class ServerTest extends WebTestCase {
 		$this->assertEquals( '/', $app->get_base_uri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
+
+
+
+
+	/*************************************************************************
+	  APPLICATION SWITCHER TEST METHODS             
+	 *************************************************************************/
+	public function test_application_switcher__default( ) {
+		$this->get_request_url( 'http://localhost/' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_application( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
+			->add_application( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->launch( );
+		$this->assertEquals( 'Staq\\App\\Starter', $app->get_namespace( ) );
+	}
+
+	public function test_application_switcher__path( ) {
+		$this->get_request_url( 'http://localhost/noconf/bou' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_application( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
+			->add_application( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->launch( );
+		$this->assertEquals( $this->get_project_class( 'NoConfiguration' ), $app->get_namespace( ) );
+		$this->assertEquals( '/noconf', $app->get_base_uri( ) );
+		$this->assertEquals( '/bou'  , $app->get_current_uri( ) );
+	}
+
+	public function test_application_switcher__domain( ) {
+		$this->get_request_url( 'http://example.com/lievre/tortue' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_application( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
+			->add_application( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->launch( );
+		$this->assertEquals( $this->get_project_class( 'SimpleConfiguration' ), $app->get_namespace( ) );
+		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
+	}
+
+	public function test_application_switcher__port( ) {
+		$this->get_request_url( 'http://localhost:8020/lievre/tortue' );
+		$app = ( new \Staq\Server )
+			->add_application( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->add_application( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
+			->add_application( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->launch( );
+		$this->assertEquals( $this->get_project_class( 'WithoutStarter' ), $app->get_namespace( ) );
+		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
+	}
 }
