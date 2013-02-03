@@ -86,7 +86,9 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_public_controller__match( ) {
 		$this->get_request_url( 'http://localhost/static.txt' );
-		\Staq::App()->run( );
+		\Staq\App::create( $this->project_namespace )
+			->set_platform( 'local' )
+			->run( );
         $this->expectOutputHtmlContent( 'This is an example of static file' );
 	}
 }

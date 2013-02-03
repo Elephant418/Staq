@@ -56,7 +56,7 @@ class Router {
 	/*************************************************************************
 	  SETTER          
 	 *************************************************************************/
-	public function change_uri( $uri ) {
+	public function set_uri( $uri ) {
 		if ( in_array( $uri, $this->uris, TRUE ) ) {
 			throw new \Exception( 'Redirecting loop detected' );
 		}
@@ -77,7 +77,7 @@ class Router {
 	/*************************************************************************
 	  CONSTRUCTOR             
 	 *************************************************************************/
-	public function __construct( $anonymous_controllers ) {
+	public function initialize( $anonymous_controllers ) {
 		$this->setting = ( new \Stack\Setting )->parse( $this );
 		$this->initialize_controllers( );
 		$this->initialize_anonymous_controllers( $anonymous_controllers );
@@ -119,8 +119,7 @@ class Router {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function resolve( $uri ) {
-		$this->change_uri( $uri );
+	public function resolve( ) {
 		return $this->resolve_current_uri( );
 	}
 

@@ -27,6 +27,14 @@ class Application extends Application\__Parent {
 	public function get_uri( $controller, $action, $parameters ) {
 		return $this->router->get_uri( $controller, $action, $parameters );
 	}
+
+	public function get_current_uri( ) {
+		return $this->router->get_current_uri( );
+	}
+
+	public function get_last_exception( ) {
+		return $this->router->get_last_exception( );
+	}
 	
 
 
@@ -42,13 +50,27 @@ class Application extends Application\__Parent {
 
 
 	/*************************************************************************
+	  INITIALIZATION            
+	 *************************************************************************/
+	public function initialize( ) {
+		parent::initialize( );
+		$this->router = new \Stack\Router( );
+		if ( isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
+			$uri = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+			\UString::do_not_start_with( $uri, $this->base_uri );
+			\UString::do_start_with( $uri, '/' );
+			$this->router->set_uri( $uri );
+		}
+	}
+
+
+
+
+	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
 	public function run( ) {
-		$this->router = new \Stack\Router( $this->controllers );
-		$uri          = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
-		\UString::do_not_start_with( $uri, $this->base_uri );
-		\UString::do_start_with( $uri, '/' );
-		echo $this->router->resolve( $uri );
+		$this->router->initialize( $this->controllers );
+		echo $this->router->resolve( );
 	}
 }

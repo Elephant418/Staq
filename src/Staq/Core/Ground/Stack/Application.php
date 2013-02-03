@@ -73,14 +73,6 @@ class Application {
 	public function get_platform( ) {
 		return $this->platform;
 	}
-
-	public function get_current_uri( ) {
-		return $this->router->get_current_uri( );
-	}
-
-	public function get_last_exception( ) {
-		return $this->router->get_last_exception( );
-	}
 	
 
 
