@@ -121,6 +121,7 @@ class Request {
 		$this->connect( FALSE );
 		$statement = $this->PDObject->prepare( 'CREATE DATABASE IF NOT EXISTS `' . $name . '`;' );
 		$statement->execute( );
+		$this->disconnect( );
 		return $this;
 	}
 
@@ -147,15 +148,16 @@ class Request {
 		if ( empty( $this->PDObject ) ) {
 			$ini  = ( new \Stack\Setting )->parse( 'database' );
 			$conf = $ini[ 'access.driver' ] . ':host=' . $ini[ 'access.host' ];
-			if ( $database ) {
-				$conf .= ';dbname=' . $ini[ 'access.name' ];
-			}
 			$this->PDObject = new \PDO( $conf, $ini[ 'access.user' ], $ini[ 'access.password' ], [ \PDO::ATTR_PERSISTENT => TRUE ] );
 			$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
+			if ( $database ) {
+				$this->PDObject->query( 'USE `' . $ini[ 'access.name' ] . '`' );
+			}
 		}
 	}
 
 	protected function disconnect( ) {
+		unset( $this->PDObject );
 		$this->PDObject = NULL;
 	}
 }
