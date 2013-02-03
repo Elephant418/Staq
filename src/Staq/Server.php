@@ -14,8 +14,8 @@ class Server {
 	 *************************************************************************/
 	public static $application;
 	public static $autoloader;
-	protected $applications;
-	protected $platforms;
+	protected $applications = [ ];
+	protected $platforms = [ ];
 	public $namespaces = [ ];
 
 
@@ -49,7 +49,7 @@ class Server {
 	  PUBLIC METHODS             
 	 *************************************************************************/
 	public function create_application( $namespace = 'Staq\Core\Ground', $base_uri = NULL, $platform = 'prod' ) {
-		if ( is_null( $base_uri ) ) {
+		if ( empty( $base_uri ) ) {
 			$base_uri = $this->get_default_base_uri( );
 		}
 		$extensions = $this->find_extensions( $namespace );
@@ -72,7 +72,6 @@ class Server {
 		$request   = ( new \Staq\Url )->by_server( );
 		$platform  = $this->get_current_platform( $request, $base_uri );
 		$namespace = $this->get_current_application_name( $request, $base_uri );
-		\UString::do_start_with( $base_uri, '/' );
 		return $this->create_application( $namespace, $base_uri, $platform );
 	}
 
