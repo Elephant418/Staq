@@ -41,7 +41,7 @@ class Server {
 	protected function do_format_listenings( &$listenings ) {
 		\UArray::do_convert_to_array( $listenings );
 		$listenings = ( new \Staq\Url )->from_array( $listenings );
-	}  
+	}
 
 
 
@@ -68,10 +68,12 @@ class Server {
 	}
 
 	public function launch_current_application( ) {
+	 	$this->add_default_environment( );
 		$base_uri  = '';
 		$request   = ( new \Staq\Url )->by_server( );
 		$platform  = $this->get_current_platform( $request, $base_uri );
 		$namespace = $this->get_current_application_name( $request, $base_uri );
+		\UString::do_start_with( $base_uri, '/' );
 		return $this->create_application( $namespace, $base_uri, $platform );
 	}
 
@@ -90,7 +92,6 @@ class Server {
 				}
 			}
 		}
-		return 'prod';
 	}
 
 	protected function get_current_application_name( $request, &$base_uri ) {
@@ -103,7 +104,6 @@ class Server {
 				}
 			}
 		}
-		return 'Staq\Core\Ground';
 	}
 
 	protected function get_default_base_uri( ) {
@@ -117,6 +117,11 @@ class Server {
 			$base_uri = '/';
 		}
 		return $base_uri;
+	}
+
+	protected function add_default_environment( ) {
+	 	$this->add_application( 'Staq\Core\Ground' );
+	 	$this->add_platform( 'prod', '/' );
 	}
 
 

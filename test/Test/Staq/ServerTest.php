@@ -121,7 +121,7 @@ class ServerTest extends WebTestCase {
 		$app = ( new \Staq\Server )
 			->add_platform( 'local', '/local')
 			->add_platform( 'remote', '//example.com')
-			->add_platform( 'debug', ':80/debug')
+			->add_platform( 'debug', ':8020')
 			->launch( );
 		$this->assertEquals( 'prod', $app->get_platform( ) );
 	}
@@ -131,10 +131,34 @@ class ServerTest extends WebTestCase {
 		$app = ( new \Staq\Server )
 			->add_platform( 'local', '/local')
 			->add_platform( 'remote', '//example.com')
-			->add_platform( 'debug', ':80/debug')
+			->add_platform( 'debug', ':8020')
 			->launch( );
 		$this->assertEquals( 'local' , $app->get_platform( ) );
 		$this->assertEquals( '/local', $app->get_base_uri( ) );
 		$this->assertEquals( '/bou'  , $app->get_current_uri( ) );
+	}
+
+	public function test_platform_switcher__domain( ) {
+		$this->get_request_url( 'http://example.com/lievre/tortue' );
+		$app = ( new \Staq\Server )
+			->add_platform( 'local', '/local')
+			->add_platform( 'remote', '//example.com')
+			->add_platform( 'debug', ':8020')
+			->launch( );
+		$this->assertEquals( 'remote' , $app->get_platform( ) );
+		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
+	}
+
+	public function test_platform_switcher__port( ) {
+		$this->get_request_url( 'http://localhost:8020/lievre/tortue' );
+		$app = ( new \Staq\Server )
+			->add_platform( 'local', '/local')
+			->add_platform( 'remote', '//example.com')
+			->add_platform( 'debug', ':8020')
+			->launch( );
+		$this->assertEquals( 'debug' , $app->get_platform( ) );
+		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
 }
