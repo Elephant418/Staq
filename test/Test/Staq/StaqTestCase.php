@@ -12,7 +12,6 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase {
 	  ATTRIBUTES
 	 *************************************************************************/
 	public $project_namespace = 'Test\\Staq\\Project\\';
-	public $project_path;
 
 
 
@@ -25,8 +24,6 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase {
 		$project_name = \UObject::get_class_name( $this );
 		\UString::do_not_end_with( $project_name, 'Test' );
 		$this->project_namespace .= $project_name;
-
-		$this->project_path = realpath( __DIR__ . '/../../resource/Test/Staq/Project/' . $project_name );
 	}
 
 

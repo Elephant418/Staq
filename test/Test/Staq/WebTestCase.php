@@ -23,7 +23,7 @@ class WebTestCase extends StaqTestCase {
 	}
 
 	public function post_request_url( $url, $post = [ ] ) {
-		$this->get_request_url( $url, $method = 'GET' );
+		$this->get_request_url( $url, 'POST' );
 		$_POST = $post;
 	}
 
@@ -45,7 +45,7 @@ class WebTestCase extends StaqTestCase {
 		if ( preg_match( $regex, $actual, $matches ) ) {
 			$actual = $matches[ 1 ];
 		}
-		$this->assertEquals( trim( strip_tags( $actual ) ), $expected );
+		$this->assertEquals( $expected, trim( strip_tags( $actual ) ) );
 	}
 
 
