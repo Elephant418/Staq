@@ -114,7 +114,7 @@ class Server {
 				$base_uri = \UString::not_start_with( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
 			}
 		}
-		if ( is_null( $base_uri ) ) {
+		if ( empty( $base_uri ) ) {
 			$base_uri = '/';
 		}
 		return $base_uri;
