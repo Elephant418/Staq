@@ -125,14 +125,18 @@ class Request {
 	}
 
 	public function load_mysql_file( $file ) {
-		$ini = ( new \Stack\Setting )->parse( 'database' );
-		$system = 'mysql -u' . $ini[ 'access.user' ];
-		if ( isset( $ini[ 'access.password' ] ) ) {
-			$system .= ' -p' . $ini[ 'access.password' ];
+		$requests = file_get_contents( $file );
+		$requests = explode( ';', $requests );
+		foreach ( $requests as $request ) {
+			$request = preg_replace( '/\/\*.*\*\//s', '' , $request );
+			$request = preg_replace( '/\s+/s'      , ' ', $request );
+			$request = trim( $request );
+			if ( ! empty( $request ) ) {
+				( new \Stack\Database\Request )
+					->set_request( $request )
+					->execute( );
+			}
 		}
-		$system .= ' -D ' . $ini[ 'access.name' ] . ' < ' . $file;
-		system( $system );
-		return $this;
 	}
 
 
