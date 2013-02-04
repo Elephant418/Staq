@@ -61,7 +61,7 @@ class Entity implements \Stack\IEntity {
 
 	public function get_datas_by_fields( $where = [ ], $limit = NULL, $order = NULL ) {
 		$parameters = [ ];
-		$sql = 'SELECT * FROM ' . $this->table . $this->get_clause_by_fields( $where, $parameters, $limit, $order );
+		$sql = $this->get_base_select( ) . $this->get_clause_by_fields( $where, $parameters, $limit, $order );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
@@ -113,6 +113,21 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  PRIVATE METHODS
 	 *************************************************************************/
+	protected function get_base_select( ) {
+		return 'SELECT ' . $this->get_base_selector( ) . ' FROM ' . $this->get_base_table( );
+	}
+
+	protected function get_base_selector( ) {
+		$fields = array_map( function( $field ) {
+			return $this->table . '.' . $field;
+		}, $this->fields);
+		return implode( ', ', $fields );
+	}
+
+	protected function get_base_table( ) {
+		return $this->table;
+	}
+
 	protected function get_clause_by_fields( $request, &$parameters, $limit = NULL, $order = NULL ) {
 		$where = [ ];
 		if ( is_array( $request ) ) {

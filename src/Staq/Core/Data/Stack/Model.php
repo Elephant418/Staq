@@ -69,7 +69,12 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		$model = new $this;
 		$model->id = $this->entity->extract_id( $data );
 		foreach ( $data as $name => $seed ) {
-			$model->get_attribute( $name )->set_seed( $seed );
+			$attribute = $model->get_attribute( $name );
+			if ( is_object( $attribute ) ) {
+				$attribute->set_seed( $seed );
+			} else {
+				$model->set( $name, $seed );
+			}
 		}
 		$model->initialize( );
 		return $model;
