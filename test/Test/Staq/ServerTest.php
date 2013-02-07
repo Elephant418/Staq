@@ -146,7 +146,7 @@ class ServerTest extends WebTestCase {
 			->add_platform( 'debug', ':8020')
 			->launch( );
 		$this->assertEquals( 'remote' , $app->get_platform( ) );
-		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '', $app->get_base_uri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
 
@@ -158,7 +158,7 @@ class ServerTest extends WebTestCase {
 			->add_platform( 'debug', ':8020')
 			->launch( );
 		$this->assertEquals( 'debug' , $app->get_platform( ) );
-		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '', $app->get_base_uri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
 
@@ -198,7 +198,7 @@ class ServerTest extends WebTestCase {
 			->add_application( $this->get_project_class( 'WithoutStarter' ), ':8020')
 			->launch( );
 		$this->assertEquals( $this->get_project_class( 'SimpleConfiguration' ), $app->get_namespace( ) );
-		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '', $app->get_base_uri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
 
@@ -210,7 +210,7 @@ class ServerTest extends WebTestCase {
 			->add_application( $this->get_project_class( 'WithoutStarter' ), ':8020')
 			->launch( );
 		$this->assertEquals( $this->get_project_class( 'WithoutStarter' ), $app->get_namespace( ) );
-		$this->assertEquals( '/', $app->get_base_uri( ) );
+		$this->assertEquals( '', $app->get_base_uri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->get_current_uri( ) );
 	}
 

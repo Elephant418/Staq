@@ -27,7 +27,7 @@ class PublicFile extends PublicFile\__Parent {
 		if ( 
 			empty( $real_path ) || 
 			is_dir( $real_path ) || 
-			\UString::end_with( $real_path, '.php' )
+			\UString::is_end_with( $real_path, '.php' )
 		) {
 			return NULL;
 		}
