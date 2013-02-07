@@ -10,6 +10,23 @@ class Setting {
 
 
 	/*************************************************************************
+	  ATTRIBUTES         
+	 *************************************************************************/
+	static public $cache = [ ]; 
+
+
+
+	/*************************************************************************
+	  CACHE METHODS              
+	 *************************************************************************/
+	public function clear_cache( ) {
+		static::$cache = [ ];
+		return $this;
+	}
+
+
+
+	/*************************************************************************
 	  PARSE METHODS              
 	 *************************************************************************/
 	public function parse( $setting_file_name ) {
@@ -18,15 +35,18 @@ class Setting {
 			$stack = $setting_file_name;
 			$this->do_format_setting_file_name( $setting_file_name );
 		}
-		$file_paths = $this->get_file_paths( $setting_file_name );
-		if ( $stack ) {
-			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
-				if ( isset( $class::$setting ) ) {
-					array_unshift( $file_paths, $class::$setting );
+		if ( ! isset( static::$cache[ $setting_file_name ] ) ) {
+			$file_paths = $this->get_file_paths( $setting_file_name );
+			if ( $stack ) {
+				foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
+					if ( isset( $class::$setting ) ) {
+						array_unshift( $file_paths, $class::$setting );
+					}
 				}
 			}
+			static::$cache[ $setting_file_name ] = ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
 		}
-		return ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
+		return static::$cache[ $setting_file_name ];
 	}
 
 	protected function do_format_setting_file_name( &$mixed ) {

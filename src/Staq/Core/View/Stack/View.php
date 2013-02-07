@@ -82,7 +82,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	}
 	protected function get_twig_environment_parameters( ) {
 		$params = [ ];
-		$settings = ( new \Stack\Setting )->parse( $this );
+		$settings = ( new \Stack\Setting )->parse( 'application.ini' );
 		if ( $settings->get_as_boolean( 'twig.cache' ) ) {
 			if ( $cache_path = \Staq::App()->get_path( 'cache/twig', TRUE ) ) {
 				$params[ 'cache' ] = $cache_path;

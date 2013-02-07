@@ -104,7 +104,9 @@ class Application {
 	}
 
 	public function initialize( ) {
-		$settings = ( new \Stack\Setting )->parse( $this );
+		$settings = ( new \Stack\Setting )
+			->clear_cache( )
+			->parse( $this );
 
 		// Display errors
 		$display_errors = 0;
