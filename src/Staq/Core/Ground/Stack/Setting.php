@@ -22,8 +22,8 @@ class Setting {
 	  CONSTRUCTOR             
 	 *************************************************************************/
 	public function __construct( ) {
-		if ( static::$initialized ) {
-			$this->clear_cache( );
+		if ( ! static::$initialized ) {
+			$this->initialize( );
 		}
 	}
 	
