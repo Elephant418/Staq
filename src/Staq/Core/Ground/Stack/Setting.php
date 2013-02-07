@@ -29,11 +29,13 @@ class Setting {
 	
 	protected function initialize( ) {
 		$path = \Staq::App()->get_path( 'cache/', TRUE );
-		static::$cache_file = $path . '/setting.' . \Staq::App()->get_platform( ) . '.php';
-		if ( is_file( static::$cache_file ) ) {
-			require( static::$cache_file );
-			if ( is_array( $cache ) ) {
-				static::$cache = $cache;
+		if ( $path ) {
+			static::$cache_file = $path . '/setting.' . \Staq::App()->get_platform( ) . '.php';
+			if ( is_file( static::$cache_file ) ) {
+				require( static::$cache_file );
+				if ( is_array( $cache ) ) {
+					static::$cache = $cache;
+				}
 			}
 		}
 		static::$initialized = TRUE;
@@ -61,6 +63,7 @@ class Setting {
 		if ( ! static::$cache_file ) {
 			return NULL;
 		}
+		if ( is)
 		if ( ! $handle = fopen( static::$cache_file, 'a' ) ) {
 			return NULL;
 		}
