@@ -24,7 +24,11 @@ class PublicFile extends PublicFile\__Parent {
 	public function action_view( ) {
 		$path = \Staq::App()->get_current_uri( );
 		$real_path = \Staq::App()->get_file_path( '/public' . $path );
-		if ( empty( $real_path ) || is_dir( $real_path ) ) {
+		if ( 
+			empty( $real_path ) || 
+			is_dir( $real_path ) || 
+			\UString::end_with( $real_path, '.php' )
+		) {
 			return NULL;
 		}
 		$this->render_static_file( $real_path );
