@@ -12,7 +12,33 @@ class Setting {
 	/*************************************************************************
 	  ATTRIBUTES         
 	 *************************************************************************/
+	static public $initialized = FALSE;
 	static public $cache = [ ]; 
+	static public $cache_file;
+
+
+
+	/*************************************************************************
+	  CONSTRUCTOR             
+	 *************************************************************************/
+	public function __construct( ) {
+		if ( static::$initialized ) {
+			$this->clear_cache( );
+		}
+	}
+	
+	protected function initialize( ) {
+		$path = \Staq::App()->get_path( 'cache/', TRUE );
+		static::$cache_file = $path . '/setting.' . \Staq::App()->get_platform( ) . '.php';
+		if ( is_file( static::$cache_file ) ) {
+			require( static::$cache_file );
+			if ( is_array( $cache ) ) {
+				static::$cache = $cache;
+			}
+		}
+		static::$initialized = TRUE;
+		return $this;
+	}
 
 
 
@@ -21,7 +47,32 @@ class Setting {
 	 *************************************************************************/
 	public function clear_cache( ) {
 		static::$cache = [ ];
+		$this->initialize( );
 		return $this;
+	}
+
+	protected function has_cache( $setting_file_name ) {
+		return isset( static::$cache[ $setting_file_name ] );
+	}
+
+	protected function add_cache( $setting_file_name, $settings ) {
+		$settings = $settings->getArrayCopy( );
+		static::$cache[ $setting_file_name ] = $settings;
+		if ( ! static::$cache_file ) {
+			return NULL;
+		}
+		if ( ! $handle = fopen( static::$cache_file, 'a' ) ) {
+			return NULL;
+		}
+		if ( 0 == filesize( static::$cache_file ) ) {
+			fwrite( $handle, '<?php' . PHP_EOL . '$cache = array( );' . PHP_EOL );
+		}
+		fwrite( $handle, '$cache["' . $setting_file_name . '"] = ' . var_export( $settings, TRUE ) . ';' . PHP_EOL );	
+		fclose($handle);		
+	}
+
+	protected function get_cache( $setting_file_name ) {
+		return new \Pixel418\Iniliq\ArrayObject( static::$cache[ $setting_file_name ] );
 	}
 
 
@@ -38,7 +89,7 @@ class Setting {
 
 	protected function parse_from_stack( $stack ) {
 		$setting_file_name = $this->get_setting_file_name_from_stack( $stack );
-		if ( ! isset( static::$cache[ $setting_file_name ] ) ) {
+		if ( ! $this->has_cache( $setting_file_name ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );
 			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
 				if ( isset( $class::$setting ) ) {
@@ -46,9 +97,9 @@ class Setting {
 				}
 			}
 			$settings = ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
-			static::$cache[ $setting_file_name ] = $settings;
+			$this->add_cache( $setting_file_name, $settings );
 		}
-		return static::$cache[ $setting_file_name ];
+		return $this->get_cache( $setting_file_name );
 	}
 
 	protected function parse_from_string( $setting_file_name ) {

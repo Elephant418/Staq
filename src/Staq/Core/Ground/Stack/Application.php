@@ -57,7 +57,7 @@ class Application {
 			$path .= $file;
 			$real_path = realpath( $path );
 			if ( $real_path == FALSE && $create ) {
-				if ( mkdir( $path, 0755, TRUE ) ) {
+				if ( @mkdir( $path, 0755, TRUE ) ) {
 					$real_path = realpath( $path );
 				}
 			}
