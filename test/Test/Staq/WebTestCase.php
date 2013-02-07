@@ -55,7 +55,6 @@ class WebTestCase extends StaqTestCase {
 	 *************************************************************************/
 	public function is_error_document( $code = 404 ) {
 		foreach( headers_list( ) as $header ) {
-			echo $header . PHP_EOL;
 			if ( \UString::is_start_with( $header, 'HTTP/1.1 ' . $code ) ) {
 				return TRUE;
 			}
