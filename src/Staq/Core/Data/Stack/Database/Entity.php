@@ -142,18 +142,24 @@ class Entity implements \Stack\IEntity {
 						$where[ ] = $field_value[ 0 ] . ' ' . $field_value[ 1 ] . ' :' . $field_value[ 0 ];
 						$parameters[ ':' . $field_value[ 0 ] ] = $field_value[ 2 ];
 					}
-				} else if ( is_array( $field_value ) ) {
-					$clause = $field_name . ' IN ( ';
-					$clause_parameters = [ ];
-					foreach( $field_value as $key => $value ) {
-						$clause_parameters[ ':' . $field_name . '_' .$key ] = $value;
-					}
-					$clause .= implode( ', ', array_keys( $clause_parameters ) ) . ' )';
-					$parameters = array_merge( $parameters, $clause_parameters );
-					$where[ ] = $clause;
 				} else {
-					$where[ ] = $field_name . '=:' . $field_name;
-					$parameters[ ':' . $field_name ] = $field_value;
+					if ( ! \UString::has( $field_name, '.' ) ) {
+						$field_name = $this->table . '.' . $field_name;
+					}
+					$parameter_name = str_replace( '.', '__', $field_name );
+					if ( is_array( $field_value ) ) {
+						$clause = $field_name . ' IN ( ';
+						$clause_parameters = [ ];
+						foreach( $field_value as $key => $value ) {
+							$clause_parameters[ ':' . $parameter_name . '_' .$key ] = $value;
+						}
+						$clause .= implode( ', ', array_keys( $clause_parameters ) ) . ' )';
+						$parameters = array_merge( $parameters, $clause_parameters );
+						$where[ ] = $clause;
+					} else {
+						$where[ ] = $field_name . '=:' . $parameter_name;
+						$parameters[ ':' . $parameter_name ] = $field_value;
+					}
 				}
 			}
 		}
