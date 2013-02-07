@@ -179,7 +179,8 @@ class Server {
 				\UArray::do_convert_to_array( $base_paths );
 				foreach ( $base_paths as $base_path ) {
         			$path = str_replace( '\\', DIRECTORY_SEPARATOR, $namespace );
-	            	$path = $base_path . DIRECTORY_SEPARATOR . $path;
+                	\UString::do_end_with( $base_path, DIRECTORY_SEPARATOR );
+	            	$path = $base_path . $path;
 	                if ( is_dir( $path ) ) {
 	                    return $path;
 	                }
