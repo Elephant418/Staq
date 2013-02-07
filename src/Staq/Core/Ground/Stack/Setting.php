@@ -28,8 +28,7 @@ class Setting {
 	}
 	
 	protected function initialize( ) {
-		$path = \Staq::App()->get_path( 'cache/', TRUE );
-		if ( $path ) {
+		if ( $path = \Staq::App()->get_path( 'cache/', TRUE ) ) {
 			static::$cache_file = $path . '/setting.' . \Staq::App()->get_platform( ) . '.php';
 			if ( is_file( static::$cache_file ) ) {
 				require( static::$cache_file );
@@ -49,6 +48,7 @@ class Setting {
 	 *************************************************************************/
 	public function clear_cache( ) {
 		static::$cache = [ ];
+		static::$cache_file = NULL;
 		$this->initialize( );
 		return $this;
 	}
@@ -60,17 +60,22 @@ class Setting {
 	protected function add_cache( $setting_file_name, $settings ) {
 		$settings = $settings->getArrayCopy( );
 		static::$cache[ $setting_file_name ] = $settings;
-		if ( ! static::$cache_file ) {
-			return NULL;
+		if ( \Staq::App( )->is_initialized( ) ) {
+			$setting = ( new $this )->parse( 'Application' );
+			if ( $setting->get_as_boolean( 'cache.setting' ) ) {
+				if ( 
+					! static::$cache_file ||
+					! $handle = @fopen( static::$cache_file, 'a' )
+				) {
+					return NULL;
+				}
+				if ( 0 == filesize( static::$cache_file ) ) {
+					fwrite( $handle, '<?php' . PHP_EOL . '$cache = array( );' . PHP_EOL );
+				}
+				fwrite( $handle, '$cache["' . $setting_file_name . '"] = ' . var_export( $settings, TRUE ) . ';' . PHP_EOL );	
+				fclose($handle);
+			}
 		}
-		if ( ! $handle = @fopen( static::$cache_file, 'a' ) ) {
-			return NULL;
-		}
-		if ( 0 == filesize( static::$cache_file ) ) {
-			fwrite( $handle, '<?php' . PHP_EOL . '$cache = array( );' . PHP_EOL );
-		}
-		fwrite( $handle, '$cache["' . $setting_file_name . '"] = ' . var_export( $settings, TRUE ) . ';' . PHP_EOL );	
-		fclose($handle);		
 	}
 
 	protected function get_cache( $setting_file_name ) {
@@ -91,9 +96,14 @@ class Setting {
 
 	protected function parse_from_stack( $stack ) {
 		$setting_file_name = $this->get_setting_file_name_from_stack( $stack );
+		return $this->parse_from_string( $setting_file_name );
+	}
+
+	protected function parse_from_string( $setting_file_name ) {
+		\UString::do_substr_before( $setting_file_name, '.' );
 		if ( ! $this->has_cache( $setting_file_name ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );
-			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
+			foreach( \Staq\Util::stack_definition( 'Stack\\' . $setting_file_name ) as $class ) {
 				if ( isset( $class::$setting ) ) {
 					array_unshift( $file_paths, $class::$setting );
 				}
@@ -102,11 +112,6 @@ class Setting {
 			$this->add_cache( $setting_file_name, $settings );
 		}
 		return $this->get_cache( $setting_file_name );
-	}
-
-	protected function parse_from_string( $setting_file_name ) {
-		\UString::do_substr_before( $setting_file_name, '.' );
-		return $this->parse_from_stack( 'Stack\\' . $setting_file_name );
 	}
 
 	protected function get_setting_file_name_from_stack( $stack ) {

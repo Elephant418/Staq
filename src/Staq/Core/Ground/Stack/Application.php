@@ -15,6 +15,7 @@ class Application {
 	protected $extensions;
 	protected $base_uri;
 	protected $platform;
+	protected $initialized = FALSE;
 
 
 
@@ -73,6 +74,10 @@ class Application {
 	public function get_platform( ) {
 		return $this->platform;
 	}
+
+	public function is_initialized( ) {
+		return $this->initialized;
+	}
 	
 
 
@@ -121,7 +126,8 @@ class Application {
 			$level = 0;
 		}
 		error_reporting( $level );
-
+		
+		$this->initialized = TRUE;
 		return $this;
 	}
 }

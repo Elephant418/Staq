@@ -26,11 +26,13 @@ class Autoloader {
 	}
 	
 	protected function initialize( ) {
-		static::$cache_file = reset( $this->extensions ) . '/cache/autoload.php';
-		if ( is_file( static::$cache_file ) ) {
-			require_once( static::$cache_file );
+		if ( \Staq::App( ) && \Staq::App( )->is_initialized( ) ) {
+			static::$cache_file = reset( $this->extensions ) . '/cache/autoload.php';
+			if ( is_file( static::$cache_file ) ) {
+				require_once( static::$cache_file );
+			}
+			static::$initialized = TRUE;
 		}
-		static::$initialized = TRUE;
 		return $this;
 	}
 
@@ -143,10 +145,11 @@ class Autoloader {
 	}
 
 	protected function add_cache( $code ) {
-		if ( ! static::$cache_file ) {
-			return NULL;
-		}
-		if ( ! $handle = @fopen( static::$cache_file, 'a' ) ) {
+		if ( 
+			! static::$initialized ||
+			! static::$cache_file || 
+			! $handle = @fopen( static::$cache_file, 'a' )
+		) {
 			return NULL;
 		}
 		fwrite( $handle, '<?php ' . $code . ' ?>' . PHP_EOL);	
