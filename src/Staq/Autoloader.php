@@ -13,6 +13,8 @@ class Autoloader {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $extensions = [ ];
+	static public $initialized = FALSE;
+	static public $cache_file;
 
 
 
@@ -22,6 +24,15 @@ class Autoloader {
 	public function __construct( $extensions ) {
 		$this->extensions = $extensions;
 	}
+	
+	protected function initialize( ) {
+		static::$cache_file = reset( $this->extensions ) . '/cache/autoload.php';
+		if ( is_file( static::$cache_file ) ) {
+			require_once( static::$cache_file );
+		}
+		static::$initialized = TRUE;
+		return $this;
+	}
 
 
 
@@ -29,6 +40,12 @@ class Autoloader {
 	  TOP-LEVEL AUTOLOAD
 	 *************************************************************************/
 	public function autoload( $class ) {
+		if ( ! static::$initialized ) {
+			$this->initialize( );
+			if ( $this->class_exists( $class ) ) {
+				return TRUE;
+			}
+		}
 		if ( \Staq\Util::is_stack( $class ) ) {
 			$this->load_stack_class( $class );
 		} else if ( \Staq\Util::is_parent_stack( $class ) ) {
@@ -109,7 +126,7 @@ class Autoloader {
 		$name = \UObject::get_class_name( $class, '\\' );
 		$code = '';
 		if ( $namespace ) {
-			$code = 'namespace ' . $namespace . ';' . PHP_EOL;
+			$code = 'namespace ' . $namespace . ' {' . PHP_EOL;
 		}
 		if ( $is_interface ) {
 			$code .= 'interface';
@@ -120,8 +137,19 @@ class Autoloader {
 		if ( $base_class ) {
 			$code .= 'extends \\' . $base_class . ' ';
 		}
-		$code .= '{ }' . PHP_EOL;
-		// echo $code . PHP_EOL;
+		$code .= '{ }' . PHP_EOL . '}' . PHP_EOL;
+		$this->add_cache( $code );
 		eval( $code );
+	}
+
+	protected function add_cache( $code ) {
+		if ( ! static::$cache_file ) {
+			return NULL;
+		}
+		if ( ! $handle = @fopen( static::$cache_file, 'a' ) ) {
+			return NULL;
+		}
+		fwrite( $handle, '<?php ' . $code . ' ?>' . PHP_EOL);	
+		fclose($handle);		
 	}
 }
