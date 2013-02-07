@@ -138,7 +138,7 @@ class Server {
 		while ( count( $new_namespaces ) > 0 ) {
 			$new_extensions = $this->format_extensions_from_namespaces( $new_namespaces );
 			foreach ( $new_extensions as $extension ) {
-				$files[ ] = $extension . '/setting/application.ini';
+				$files[ ] = $extension . '/setting/Application.ini';
 			}
 			$ini = ( new \Pixel418\Iniliq\Parser )->parse( array_reverse( $files ) );
 			$fetch_namespaces = array_reverse( $ini->get_as_array( 'extension.list' ) );

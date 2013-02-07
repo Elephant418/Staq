@@ -13,40 +13,40 @@ class SettingTest extends StaqTestCase {
 	 *************************************************************************/
 	public function test_unexisting_setting( ) {
 		$app = \Staq\App::create( $this->project_namespace );
-		$setting = ( new \Stack\Setting )->parse( 'test' );
+		$setting = ( new \Stack\Setting )->parse( 'Test' );
 		$this->assertEquals( 'a_value', $setting[ 'test.a_setting' ] );
 	}
 
 	public function test_existing_setting__existing_key( ) {
 		$app = \Staq\App::create( $this->project_namespace );
-		$setting = ( new \Stack\Setting )->parse( 'application' );
+		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$this->assertEquals( 0, $setting[ 'error.display_errors' ] );
 	}
 
 	public function test_existing_setting__custom_key( ) {
 		$app = \Staq\App::create( $this->project_namespace )
 			->set_platform( 'local' );
-		$setting = ( new \Stack\Setting )->parse( 'application' );
+		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$this->assertEquals( 'a_value', $setting[ 'error.a_setting' ] );
 	}
 
 	public function test_existing_setting__inherit_key__extension( ) {
 		$app = \Staq\App::create( $this->project_namespace );
-		$setting = ( new \Stack\Setting )->parse( 'application' );
+		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$this->assertEquals( 'E_STRICT', $setting[ 'error.error_reporting' ] );
 	}
 
 	public function test_existing_setting__inherit_key__platform( ) {
 		$app = \Staq\App::create( $this->project_namespace )
 			->set_platform( 'local' );
-		$setting = ( new \Stack\Setting )->parse( 'application' );
+		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$this->assertEquals( 1, $setting[ 'error.display_errors' ] );
 	}
 
 	public function test_existing_setting__merged_key__platform( ) {
 		$app = \Staq\App::create( $this->project_namespace )
 			->set_platform( 'local' );
-		$setting = ( new \Stack\Setting )->parse( 'test' );
+		$setting = ( new \Stack\Setting )->parse( 'Test' );
 		$this->assertEquals( [ 'a_value', 'more_value' ], $setting[ 'test.a_setting' ] );
 	}
 

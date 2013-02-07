@@ -29,30 +29,36 @@ class Setting {
 	/*************************************************************************
 	  PARSE METHODS              
 	 *************************************************************************/
-	public function parse( $setting_file_name ) {
-		$stack = FALSE;
-		if ( \Staq\Util::is_stack( $setting_file_name ) ) {
-			$stack = $setting_file_name;
-			$this->do_format_setting_file_name( $setting_file_name );
+	public function parse( $mixed ) {
+		if ( \Staq\Util::is_stack( $mixed ) ) {
+			return $this->parse_from_stack( $mixed );
 		}
+		return $this->parse_from_string( $mixed );
+	}
+
+	protected function parse_from_stack( $stack ) {
+		$setting_file_name = $this->get_setting_file_name_from_stack( $stack );
 		if ( ! isset( static::$cache[ $setting_file_name ] ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );
-			if ( $stack ) {
-				foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
-					if ( isset( $class::$setting ) ) {
-						array_unshift( $file_paths, $class::$setting );
-					}
+			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
+				if ( isset( $class::$setting ) ) {
+					array_unshift( $file_paths, $class::$setting );
 				}
 			}
-			static::$cache[ $setting_file_name ] = ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
+			$settings = ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
+			static::$cache[ $setting_file_name ] = $settings;
 		}
 		return static::$cache[ $setting_file_name ];
 	}
 
-	protected function do_format_setting_file_name( &$mixed ) {
-		$mixed = \Staq\Util::stack_query( $mixed );
-		$mixed = \Staq\Util::string_namespace_to_path( $mixed );
-		$mixed = strtolower( $mixed );
+	protected function parse_from_string( $setting_file_name ) {
+		\UString::do_substr_before( $setting_file_name, '.' );
+		return $this->parse_from_stack( 'Stack\\' . $setting_file_name );
+	}
+
+	protected function get_setting_file_name_from_stack( $stack ) {
+		$setting_file_name = \Staq\Util::stack_query( $stack );
+		return \Staq\Util::string_namespace_to_path( $setting_file_name );
 	}
 
 	protected function get_file_paths( $full_setting_file_name ) {

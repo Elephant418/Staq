@@ -115,7 +115,7 @@ class Request {
 
 	public function require_database( $name = NULL ) {
 		if ( is_null( $name ) ) {
-			$ini  = ( new \Stack\Setting )->parse( 'database' );
+			$ini  = ( new \Stack\Setting )->parse( 'Database' );
 			$name = $ini[ 'access.name' ];
 		}
 		$this->connect( FALSE );
@@ -146,7 +146,7 @@ class Request {
 	 *************************************************************************/
 	protected function connect( $database = TRUE ) {
 		if ( empty( $this->PDObject ) ) {
-			$ini  = ( new \Stack\Setting )->parse( 'database' );
+			$ini  = ( new \Stack\Setting )->parse( 'Database' );
 			$conf = $ini[ 'access.driver' ] . ':host=' . $ini[ 'access.host' ];
 			$this->PDObject = new \PDO( $conf, $ini[ 'access.user' ], $ini[ 'access.password' ], [ \PDO::ATTR_PERSISTENT => TRUE ] );
 			$this->PDObject->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );

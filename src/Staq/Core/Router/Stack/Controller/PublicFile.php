@@ -68,7 +68,7 @@ class PublicFile extends PublicFile\__Parent {
 	}    
 
 	protected function get_public_file_cache_time( ) {
-		$setting = ( new \Stack\Setting )->parse( 'application' );
+		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$public_file_cache = $setting[ 'cache.public_file_cache' ];
 		if ( ! $public_file_cache_time = strtotime( $public_file_cache ) ) {
 			$public_file_cache_time = strtotime( '+1 hour' );
