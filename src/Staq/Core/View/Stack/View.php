@@ -12,9 +12,6 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	/*************************************************************************
 	  ATTRIBUTES              
 	 *************************************************************************/
-	public static $setting = [
-		'twig.cache' => 'off'
-	];
 	protected $twig;
 
 
