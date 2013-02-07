@@ -63,8 +63,7 @@ class Setting {
 		if ( ! static::$cache_file ) {
 			return NULL;
 		}
-		if ( is)
-		if ( ! $handle = fopen( static::$cache_file, 'a' ) ) {
+		if ( ! $handle = @fopen( static::$cache_file, 'a' ) ) {
 			return NULL;
 		}
 		if ( 0 == filesize( static::$cache_file ) ) {
