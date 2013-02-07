@@ -103,7 +103,8 @@ class Setting {
 		\UString::do_substr_before( $setting_file_name, '.' );
 		if ( ! $this->has_cache( $setting_file_name ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );
-			foreach( \Staq\Util::stack_definition( 'Stack\\' . $setting_file_name ) as $class ) {
+			$stack = 'Stack\\' . \Staq\Util::string_path_to_namespace( $setting_file_name );
+			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
 				if ( isset( $class::$setting ) ) {
 					array_unshift( $file_paths, $class::$setting );
 				}
