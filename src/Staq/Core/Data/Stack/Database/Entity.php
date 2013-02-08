@@ -133,7 +133,9 @@ class Entity implements \Stack\IEntity {
 		if ( is_array( $request ) ) {
 			foreach ( $request as $field_name => $field_value ) {
 				if ( is_numeric( $field_name ) ) {
-					if ( 
+					if ( is_string( $field_value ) ) {
+						$where[ ] = $field_value;
+					} else if (
 						is_array( $field_value ) &&
 						isset( $field_value[ 0 ] ) &&
 						isset( $field_value[ 1 ] ) &&
