@@ -67,6 +67,6 @@ class Attribute implements \Stack\IAttribute {
 	  DEBUG METHODS             
 	 *************************************************************************/
 	public function __toString( ) {
-		return \Staq\Util::stack_query( $this ) . '( ' . $this->value . ' )';
+		return \Staq\Util::stack_query( $this ) . '( ' . $this->seed . ' )';
 	}
 }
