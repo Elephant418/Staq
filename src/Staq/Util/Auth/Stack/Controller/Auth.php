@@ -38,8 +38,11 @@ class Auth extends Auth\__Parent {
 			if ( isset( $_GET[ 'login' ][ 'password' ] ) ) {
 				$password = $_GET[ 'login' ][ 'password' ];
 				if ( $this->login( $login, $password ) ) {
-					\Staq::App()->run();
-					return TRUE;
+					$redirect = '/';
+					if ( isset( $_GET[ 'login' ][ 'redirect' ] ) ) {
+						$redirect = $_GET[ 'login' ][ 'redirect' ];
+					}
+					\Staq\Util::http_redirect( $redirect );
 				} else {
 					$bad_credentials = TRUE;
 				}
@@ -47,6 +50,7 @@ class Auth extends Auth\__Parent {
 		}
 		$page = new \Stack\View\Auth\Login;
 		$page[ 'login' ] = $login;
+		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
 		$page[ 'bad_credentials' ] = $bad_credentials;
 		return $page;
 	}
@@ -99,12 +103,11 @@ class Auth extends Auth\__Parent {
 	}
 
 	public function is_logged( ) {
-		return TRUE;
 		return ( $this->current_user( ) !== FALSE );
 	}
 
 	public function logout( ) {
-		unset( $_SESSION[ 'Supersoniq' ][ 'user' ] );
+		unset( $_SESSION[ 'Staq' ][ 'logged_user' ] );
 		static::$current_user = NULL;
 	}
 

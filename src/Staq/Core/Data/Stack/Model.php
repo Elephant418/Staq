@@ -81,7 +81,11 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	}
 
 	public function by_id( $id ) {
-		return $this->by_data( $this->entity->get_data_by_id( $id ) );
+		return $this->by_field( 'id', $id );
+	}
+
+	protected function by_field( $field, $value ) {
+		return $this->by_data( $this->entity->get_data_by_fields( [ $field => $value ] ) );
 	}
 
 	public function all( $order = NULL ) {
