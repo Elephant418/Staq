@@ -27,6 +27,7 @@ class Auth extends Auth\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action_inscription( ) {
+		$code = ''; 
 		$login = ''; 
 		$bad_credentials = FALSE;
 		$bad_code = FALSE;
@@ -61,7 +62,7 @@ class Auth extends Auth\__Parent {
 				}
 			}
 		}
-		$page = new \Stack\View\Auth\Login;
+		$page = new \Stack\View\Auth\Inscription;
 		$page[ 'login' ]    = $login;
 		$page[ 'code' ]     = $code;
 		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
