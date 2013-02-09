@@ -14,6 +14,6 @@ class View extends View\__Parent {
 	 *************************************************************************/
 	public function render( ) {
 		$this[ 'user_logged' ] = \Staq::App()->get_controller( 'Auth' )->is_logged( );
-		parent::render( );
+		return parent::render( );
 	}
 }

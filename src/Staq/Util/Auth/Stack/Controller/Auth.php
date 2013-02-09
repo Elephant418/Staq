@@ -97,7 +97,7 @@ class Auth extends Auth\__Parent {
 
 	public function action_logout( ) {
 		$this->logout( );
-		\Staq\Util::http_redirect( \Staq::App()->get_current_uri( ) );
+		\Staq\Util::http_redirect( \Staq::App()->get_uri( 'Auth', 'login' ) );
 	}
 
 
