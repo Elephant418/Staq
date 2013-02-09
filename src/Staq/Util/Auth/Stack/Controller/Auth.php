@@ -49,6 +49,7 @@ class Auth extends Auth\__Parent {
 			}
 		}
 		$page = new \Stack\View\Auth\Login;
+		$page[ 'logged' ] = $this->is_logged( );
 		$page[ 'login' ] = $login;
 		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
 		$page[ 'bad_credentials' ] = $bad_credentials;
@@ -108,7 +109,9 @@ class Auth extends Auth\__Parent {
 	}
 
 	public function logout( ) {
-		unset( $_SESSION[ 'Staq' ][ 'logged_user' ] );
+		if ( isset( $_SESSION[ 'Staq' ][ 'logged_user' ] ) ) {
+			unset( $_SESSION[ 'Staq' ][ 'logged_user' ] );
+		}
 		static::$current_user = NULL;
 	}
 
