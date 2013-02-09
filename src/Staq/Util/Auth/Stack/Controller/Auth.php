@@ -57,7 +57,7 @@ class Auth extends Auth\__Parent {
 						}
 					}
 				} else {
-					$bad_code = TRUE
+					$bad_code = TRUE;
 				}
 			}
 		}
