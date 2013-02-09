@@ -46,7 +46,11 @@ class Auth extends Auth\__Parent {
 							->set( 'login', $login )
 							->set( 'password', $password )
 							->set( 'code', $code );
-						if ( $user->save( ) ) {
+						$saved = FALSE;
+						try {
+							$saved = $user->save( );
+						} catch ( \Exception $e ) { }
+						if ( $saved ) {
 							$this->login( $user );
 							$redirect = '/';
 							if ( isset( $_GET[ 'inscription' ][ 'redirect' ] ) ) {
