@@ -26,7 +26,7 @@ class Attribute implements \Stack\IAttribute {
 		} else if ( is_array( $setting ) && isset( $setting[ 'attribute' ] ) ) {
 			$class .= '\\' . ucfirst( $setting[ 'attribute' ] );
 		}
-		if ( $class != get_class( $this ) ) {
+		if ( strtolower( $class ) != strtolower( get_class( $this ) ) ) {
 			return ( new $class )->by_setting( $model, $setting );
 		}
 		$this->init_by_setting( $model, $setting );
