@@ -24,7 +24,9 @@ class Server {
 	  CONSTRUCTOR
 	 *************************************************************************/
 	public function __construct( ) {
-		session_start( );
+		if ( ! headers_sent() && session_id( ) === '' ) {
+			session_start( );
+		}
 	}
 
 
