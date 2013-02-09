@@ -1,0 +1,28 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+	<h1>Inscription</h1>
+	<form action="{{ route( 'Auth', 'inscription' ) }}">
+		{% if logged %}
+			<div class="notice">
+				You are logged !
+			</div>
+		{% else %}
+			{% if bad_credentials %}
+				<div class="error">
+					Bad credentials
+				</div>
+			{% endif %}
+			{% if bad_code %}
+				<div class="error">
+					Code beta invalid
+				</div>
+			{% endif %}
+			<label>Login: <input type="text" name="inscription[login]" value="{{ login }}" /></label>
+			<label>Password: <input type="password" name="inscription[password]" /></label>
+			<label>Code Beta: <input type="text" name="inscription[code]" value="{{ code }}" /></label>
+			<input type="hidden" name="login[redirect]" value="{{ redirect }}" />
+			<button type="submit">Login</button>
+		{% endif %}
+	</form>
+{% endblock %}

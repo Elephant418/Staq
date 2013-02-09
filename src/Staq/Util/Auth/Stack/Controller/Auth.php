@@ -27,7 +27,48 @@ class Auth extends Auth\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action_inscription( ) {
-		return 'Inscription';
+		$login = ''; 
+		$bad_credentials = FALSE;
+		$bad_code = FALSE;
+		if ( isset( $_GET[ 'inscription' ][ 'login' ] ) ) {
+			$login = $_GET[ 'inscription' ][ 'login' ];
+			if ( isset( $_GET[ 'inscription' ][ 'code' ] ) ) {
+				$code = $_GET[ 'inscription' ][ 'code' ];
+				$match = ( new \Stack\Setting )
+					->parse( $this )
+					->get_as_array( 'code' );
+				if ( in_array( $code, $match ) ) {
+					if ( isset( $_GET[ 'inscription' ][ 'password' ] ) ) {
+						$password = $_GET[ 'inscription' ][ 'password' ];
+						$password = $this->encrypt_password( $password );
+						$user = ( new \Stack\Model\User )
+							->set( 'login', $login )
+							->set( 'password', $password )
+							->set( 'code', $code );
+						if ( $user->save( ) ) {
+							$this->login( $user );
+							$redirect = '/';
+							if ( isset( $_GET[ 'inscription' ][ 'redirect' ] ) ) {
+								$redirect = $_GET[ 'inscription' ][ 'redirect' ];
+							}
+							\Staq\Util::http_redirect( $redirect );
+						} else {
+							$bad_credentials = TRUE;
+						}
+					}
+				} else {
+					$bad_code = TRUE
+				}
+			}
+		}
+		$page = new \Stack\View\Auth\Login;
+		$page[ 'logged' ]   = $this->is_logged( );
+		$page[ 'login' ]    = $login;
+		$page[ 'code' ]     = $code;
+		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
+		$page[ 'bad_code' ] = $bad_code;
+		$page[ 'bad_credentials' ] = $bad_credentials;
+		return $page;
 	}
 
 	public function action_login( ) {
