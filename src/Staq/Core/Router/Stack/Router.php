@@ -131,12 +131,14 @@ class Router {
 	protected function resolve_current_uri( $exception = NULL ) {
 		try {
 			$active_routes = $this->get_active_routes( $exception );
-			foreach ( $active_routes as $route ) {
-				$result = $route->call_action( );
-				if ( $result === TRUE ) {
-					return NULL;
-				} else if ( ! is_null( $result ) ) {
-					return $this->render( $result );
+			foreach ( $active_routes as $controller => $routes ) {
+				foreach ( $routes as $action => $route ) {
+					$result = $this->call_controller( $controller, $action, $route );
+					if ( $result === TRUE ) {
+						return NULL;
+					} else if ( ! is_null( $result ) ) {
+						return $this->render( $result );
+					}
 				}
 			}
 			$this->throw_404( $exception );
@@ -144,6 +146,10 @@ class Router {
 			$this->prevent_exception_boucle( $exception );
 			return $this->resolve_current_uri( $exception );
 		}
+	}
+
+	protected function call_controller( $controller, $action, $route ) {
+		return $route->call_action( );
 	}
 
 	protected function render( $result ) {
@@ -170,11 +176,14 @@ class Router {
 
 	protected function get_active_routes_by_uri( $uri ) {
 		$active_routes = [ ];
-		foreach ( $this->routes as $routes ) {
-			foreach ( $routes as $route ) {
+		foreach ( $this->routes as $controller => $routes ) {
+			foreach ( $routes as $action => $route ) {
 				if ( $result = $route->is_route_catch_uri( $uri ) ) {
 					if ( $result === TRUE ) {
-						$active_routes[ ] = $route;
+						if ( ! isset( $active_routes[ $controller ] ) ) {
+							$active_routes[ $controller ] = [ ];
+						}
+						$active_routes[ $controller ][ $action ] = $route;
 					} else {
 						\Staq\Util::http_action_redirect( $result );
 					}
@@ -186,10 +195,13 @@ class Router {
 
 	protected function get_active_routes_by_exception( $exception ) {
 		$active_routes = [ ];
-		foreach ( $this->routes as $routes ) {
-			foreach ( $routes as $route ) {
+		foreach ( $this->routes as $controller => $routes ) {
+			foreach ( $routes as $action => $route ) {
 				if ( $route->is_route_catch_exception( $exception ) ) {
-					$active_routes[ ] = $route;
+					if ( ! isset( $active_routes[ $controller ] ) ) {
+						$active_routes[ $controller ] = [ ];
+					}
+					$active_routes[ $controller ][ $action ] = $route;
 				}
 			}
 		}
