@@ -71,6 +71,7 @@ class Application extends Application\__Parent {
 	 *************************************************************************/
 	public function run( ) {
 		$this->router->initialize( $this->controllers );
+		$this->controllers = [ ];
 		echo $this->router->resolve( );
 	}
 }

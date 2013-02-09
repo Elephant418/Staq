@@ -12,6 +12,7 @@ class Auth extends Auth\__Parent {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+	const CRYPT_SEED = 'dacz:;,aafapojn';
 	static public $current_user;
 	public static $setting = [
 		'route.inscription.uri'  => '/inscription',
@@ -30,7 +31,24 @@ class Auth extends Auth\__Parent {
 	}
 
 	public function action_login( ) {
-		return 'Login';
+		$login = ''; 
+		$bad_credentials = FALSE;
+		if ( isset( $_GET[ 'login' ][ 'login' ] ) ) {
+			$login = $_GET[ 'login' ][ 'login' ];
+			if ( isset( $_GET[ 'login' ][ 'password' ] ) ) {
+				$password = $_GET[ 'login' ][ 'password' ];
+				if ( $this->login( $login, $password ) ) {
+					\Staq::App()->run();
+					return TRUE;
+				} else {
+					$bad_credentials = TRUE;
+				}
+			}
+		}
+		$page = new \Stack\View\Auth\Login;
+		$page[ 'login' ] = $login;
+		$page[ 'bad_credentials' ] = $bad_credentials;
+		return $page;
 	}
 
 	public function action_logout( ) {
@@ -62,12 +80,26 @@ class Auth extends Auth\__Parent {
 		return static::$current_user;
 	}
 
-	public function login( $user ) {
+	public function login( $user, $password = NULL ) {
+		if ( ! is_object( $user ) ) {
+			$user = ( new \Stack\Model\User )->by_login( $user );
+		}
+		if ( ! $user->exists( ) ) {
+			return FALSE;
+		}
+		if ( ! is_null( $password ) ) {
+			$password = $this->encrypt_password( $password );
+			if ( $user->password !== $password ) {
+				return FALSE;
+			}
+		}
 		$_SESSION[ 'Staq' ][ 'logged_user' ] = $user->id;
 		static::$current_user = $user;
+		return TRUE;
 	}
 
 	public function is_logged( ) {
+		return TRUE;
 		return ( $this->current_user( ) !== FALSE );
 	}
 
@@ -76,6 +108,9 @@ class Auth extends Auth\__Parent {
 		static::$current_user = NULL;
 	}
 
+	public function encrypt_password( $password ) {
+		return sha1( static::CRYPT_SEED . $password );
+	}
 }
 
 ?>
