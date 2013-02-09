@@ -66,7 +66,7 @@ class Router {
 
 	protected function add_routes( $controller_name, $routes, $prepend = FALSE ) {
 		if ( $prepend ) {
-			$this->routes = array_merge( [ $controller_name => $routes ], $this->routes );
+			$this->routes = array_merge_recursive( [ $controller_name => $routes ], $this->routes );
 		} else {
 			$this->routes[ $controller_name ] = $routes;
 		}
