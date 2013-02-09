@@ -148,6 +148,9 @@ class Autoloader {
 		if ( 
 			! static::$initialized ||
 			! static::$cache_file || 
+			! ( new \Stack\Setting )
+				->parse( 'Application' )
+				->get_as_boolean( 'cache.autoload' ) ||
 			! $handle = @fopen( static::$cache_file, 'a' )
 		) {
 			return NULL;
