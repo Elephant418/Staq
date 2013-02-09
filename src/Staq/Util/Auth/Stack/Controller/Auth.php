@@ -62,7 +62,6 @@ class Auth extends Auth\__Parent {
 			}
 		}
 		$page = new \Stack\View\Auth\Login;
-		$page[ 'logged' ]   = $this->is_logged( );
 		$page[ 'login' ]    = $login;
 		$page[ 'code' ]     = $code;
 		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
@@ -90,7 +89,6 @@ class Auth extends Auth\__Parent {
 			}
 		}
 		$page = new \Stack\View\Auth\Login;
-		$page[ 'logged' ] = $this->is_logged( );
 		$page[ 'login' ] = $login;
 		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
 		$page[ 'bad_credentials' ] = $bad_credentials;
