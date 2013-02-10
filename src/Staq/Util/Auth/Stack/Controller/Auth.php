@@ -32,7 +32,7 @@ class Auth extends Auth\__Parent {
 		$bad_credentials = FALSE;
 		$bad_code = FALSE;
 		if ( isset( $_GET[ 'inscription' ][ 'redirect' ] ) ) {
-			$origin = $_GET[ 'inscription' ][ 'origin' ];
+			$origin = $_GET[ 'inscription' ][ 'redirect' ];
 		} else {
 			$origin = \Staq::App()->get_current_uri( );
 		}
@@ -79,16 +79,17 @@ class Auth extends Auth\__Parent {
 	public function action_login( ) {
 		$login = ''; 
 		$bad_credentials = FALSE;
+		if ( isset( $_GET[ 'login' ][ 'redirect' ] ) ) {
+			$origin = $_GET[ 'login' ][ 'redirect' ];
+		} else {
+			$origin = \Staq::App()->get_current_uri( );
+		}
 		if ( isset( $_GET[ 'login' ][ 'login' ] ) ) {
 			$login = $_GET[ 'login' ][ 'login' ];
 			if ( isset( $_GET[ 'login' ][ 'password' ] ) ) {
 				$password = $_GET[ 'login' ][ 'password' ];
 				if ( $this->login( $login, $password ) ) {
-					$redirect = '/';
-					if ( isset( $_GET[ 'login' ][ 'redirect' ] ) ) {
-						$redirect = $_GET[ 'login' ][ 'redirect' ];
-					}
-					\Staq\Util::http_redirect( $redirect );
+					\Staq\Util::http_redirect( $origin );
 				} else {
 					$bad_credentials = TRUE;
 				}
@@ -96,14 +97,14 @@ class Auth extends Auth\__Parent {
 		}
 		$page = new \Stack\View\Auth\Login;
 		$page[ 'login' ] = $login;
-		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
+		$page[ 'redirect' ] = $origin;
 		$page[ 'bad_credentials' ] = $bad_credentials;
 		return $page;
 	}
 
 	public function action_logout( ) {
 		$this->logout( );
-		\Staq\Util::http_redirect( \Staq::App()->get_uri( 'Auth', 'login' ) );
+		\Staq\Util::http_redirect( '/' . \Staq::App()->get_base_uri( ) );
 	}
 
 
