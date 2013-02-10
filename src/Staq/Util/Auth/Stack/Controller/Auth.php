@@ -31,6 +31,11 @@ class Auth extends Auth\__Parent {
 		$login = ''; 
 		$bad_credentials = FALSE;
 		$bad_code = FALSE;
+		if ( isset( $_GET[ 'inscription' ][ 'redirect' ] ) ) {
+			$origin = $_GET[ 'inscription' ][ 'origin' ];
+		} else {
+			$origin = \Staq::App()->get_current_uri( );
+		}
 		if ( isset( $_GET[ 'inscription' ][ 'login' ] ) ) {
 			$login = $_GET[ 'inscription' ][ 'login' ];
 			if ( isset( $_GET[ 'inscription' ][ 'code' ] ) ) {
@@ -52,11 +57,7 @@ class Auth extends Auth\__Parent {
 						} catch ( \Exception $e ) { }
 						if ( $saved ) {
 							$this->login( $user );
-							$redirect = '/';
-							if ( isset( $_GET[ 'inscription' ][ 'redirect' ] ) ) {
-								$redirect = $_GET[ 'inscription' ][ 'redirect' ];
-							}
-							\Staq\Util::http_redirect( $redirect );
+							\Staq\Util::http_redirect( $origin );
 						} else {
 							$bad_credentials = TRUE;
 						}
@@ -69,7 +70,7 @@ class Auth extends Auth\__Parent {
 		$page = new \Stack\View\Auth\Inscription;
 		$page[ 'login' ]    = $login;
 		$page[ 'code' ]     = $code;
-		$page[ 'redirect' ] = \Staq::App()->get_current_uri( );
+		$page[ 'redirect' ] = $origin;
 		$page[ 'bad_code' ] = $bad_code;
 		$page[ 'bad_credentials' ] = $bad_credentials;
 		return $page;
