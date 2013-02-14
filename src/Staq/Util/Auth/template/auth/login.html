@@ -2,8 +2,8 @@
 
 {% block content %}
 	<h1>Login</h1>
-	<form action="{{ route( 'Auth', 'login' ) }}">
-		{% if user_logged %}
+	<form method="post" action="{{ route( 'Auth', 'login' ) }}">
+		{% if current_user %}
 			<div class="notice">
 				You are logged !
 			</div>

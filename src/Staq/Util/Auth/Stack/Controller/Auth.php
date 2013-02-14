@@ -31,21 +31,21 @@ class Auth extends Auth\__Parent {
 		$login = ''; 
 		$bad_credentials = FALSE;
 		$bad_code = FALSE;
-		if ( isset( $_GET[ 'inscription' ][ 'redirect' ] ) ) {
-			$origin = $_GET[ 'inscription' ][ 'redirect' ];
+		if ( isset( $_POST[ 'inscription' ][ 'redirect' ] ) ) {
+			$origin = $_POST[ 'inscription' ][ 'redirect' ];
 		} else {
 			$origin = \Staq::App()->get_current_uri( );
 		}
-		if ( isset( $_GET[ 'inscription' ][ 'login' ] ) ) {
-			$login = $_GET[ 'inscription' ][ 'login' ];
-			if ( isset( $_GET[ 'inscription' ][ 'code' ] ) ) {
-				$code = $_GET[ 'inscription' ][ 'code' ];
+		if ( isset( $_POST[ 'inscription' ][ 'login' ] ) ) {
+			$login = $_POST[ 'inscription' ][ 'login' ];
+			if ( isset( $_POST[ 'inscription' ][ 'code' ] ) ) {
+				$code = $_POST[ 'inscription' ][ 'code' ];
 				$match = ( new \Stack\Setting )
 					->parse( $this )
 					->get_as_array( 'code' );
 				if ( in_array( $code, $match ) ) {
-					if ( isset( $_GET[ 'inscription' ][ 'password' ] ) ) {
-						$password = $_GET[ 'inscription' ][ 'password' ];
+					if ( isset( $_POST[ 'inscription' ][ 'password' ] ) ) {
+						$password = $_POST[ 'inscription' ][ 'password' ];
 						$password = $this->encrypt_password( $password );
 						$user = ( new \Stack\Model\User )
 							->set( 'login', $login )
@@ -79,15 +79,15 @@ class Auth extends Auth\__Parent {
 	public function action_login( ) {
 		$login = ''; 
 		$bad_credentials = FALSE;
-		if ( isset( $_GET[ 'login' ][ 'redirect' ] ) ) {
-			$origin = $_GET[ 'login' ][ 'redirect' ];
+		if ( isset( $_POST[ 'login' ][ 'redirect' ] ) ) {
+			$origin = $_POST[ 'login' ][ 'redirect' ];
 		} else {
 			$origin = \Staq::App()->get_current_uri( );
 		}
-		if ( isset( $_GET[ 'login' ][ 'login' ] ) ) {
-			$login = $_GET[ 'login' ][ 'login' ];
-			if ( isset( $_GET[ 'login' ][ 'password' ] ) ) {
-				$password = $_GET[ 'login' ][ 'password' ];
+		if ( isset( $_POST[ 'login' ][ 'login' ] ) ) {
+			$login = $_POST[ 'login' ][ 'login' ];
+			if ( isset( $_POST[ 'login' ][ 'password' ] ) ) {
+				$password = $_POST[ 'login' ][ 'password' ];
 				if ( $this->login( $login, $password ) ) {
 					\Staq\Util::http_redirect( $origin );
 				} else {
