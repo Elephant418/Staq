@@ -12,8 +12,8 @@ class View extends View\__Parent {
 	/*************************************************************************
 	  PRIVATE METHODS              
 	 *************************************************************************/
-	public function render( ) {
-		$this[ 'user_logged' ] = \Staq::App()->get_controller( 'Auth' )->is_logged( );
-		return parent::render( );
+	public function add_variables( ) {
+		parent::add_variables( );
+		$this[ 'current_user' ] = \Staq::App()->get_controller( 'Auth' )->current_user( );
 	}
 }

@@ -49,6 +49,13 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	  PUBLIC METHODS              
 	 *************************************************************************/
 	public function render( ) {
+		if ( ! empty( $_GET ) ) {
+			$this->entry_get( );
+		}
+		if ( ! empty( $_POST ) ) {
+			$this->entry_post( );
+		}
+		$this->add_variables( );
 		$template = $this->loadTemplate( );
 		return $template->render( $this->getArrayCopy( ) );
 	}
@@ -68,6 +75,19 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		}
 		return $this->twig->loadTemplate( $template );
 	}
+
+
+
+	/*************************************************************************
+	  OVERRIDABLE METHODS              
+	 *************************************************************************/
+	public function entry_get( ) {
+	}
+	public function entry_post( ) {
+	}
+	public function add_variables( ) {
+	}
+
 
 
 
