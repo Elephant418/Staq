@@ -56,6 +56,10 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		parent::offsetSet( $name, $attribute );
 	}
 
+	public function keys( ) {
+		return array_keys( $this->getArrayCopy( ) );
+	}
+
 	protected function initialize( ) {
 		
 	}
@@ -119,8 +123,12 @@ class Model extends \ArrayObject implements \Stack\IModel {
 
 	public function extract_seeds( ) {
 		$data = [ ];
-		foreach( $this->schema_attribute_names as $name ) {
-			$data[ $name ] = $this->get_attribute( $name )->get_seed( );
+		foreach( $this->keys( ) as $name ) {
+			$attribute = $this->get_attribute( $name );
+			if ( \Staq\Util::is_stack( $attribute, 'Stack\\Attribute' ) ) {
+				$attribute = $attribute->get_seed( );
+			}
+			$data[ $name ] = $attribute;
 		}
 		return $data;
 	}
