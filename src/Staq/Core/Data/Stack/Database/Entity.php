@@ -141,34 +141,13 @@ class Entity implements \Stack\IEntity {
 						isset( $field_value[ 1 ] ) &&
 						isset( $field_value[ 2 ] ) 
 					) {
-						$field_name  = $field_value[ 0 ];
-						$operator    = $field_value[ 1 ];
-						$field_value = $field_value[ 2 ];
-						if ( ! \UString::has( $field_name, '.' ) ) {
-							$field_name = $this->table . '.' . $field_name;
-						}
-						$parameter_name = 'key' . count( $parameters );
-						$where[ ] = $field_name . ' ' . $operator . ' :' . $parameter_name;
-						$parameters[ ':' . $parameter_name ] = $field_value;
+						$where[ ] = $this->get_clause_condition( $parameters, $field_value[ 0 ], $field_value[ 1 ], $field_value[ 2 ] );
 					}
 				} else {
 					if ( ! \UString::has( $field_name, '.' ) ) {
 						$field_name = $this->table . '.' . $field_name;
 					}
-					$parameter_name = 'key' . count( $parameters );
-					if ( is_array( $field_value ) ) {
-						$clause = $field_name . ' IN ( ';
-						$clause_parameters = [ ];
-						foreach( $field_value as $key => $value ) {
-							$clause_parameters[ ':' . 'key_' . ( count( $parameters ) + $key ) ] = $value;
-						}
-						$clause .= implode( ', ', array_keys( $clause_parameters ) ) . ' )';
-						$parameters = array_merge( $parameters, $clause_parameters );
-						$where[ ] = $clause;
-					} else {
-						$where[ ] = $field_name . '=:' . $parameter_name;
-						$parameters[ ':' . $parameter_name ] = $field_value;
-					}
+					$where[ ] = $this->get_clause_condition( $parameters, $field_name, '=', $field_value );
 				}
 			}
 		}
@@ -183,6 +162,24 @@ class Entity implements \Stack\IEntity {
 			$sql .= ' LIMIT ' . $limit;
 		}
 		return $sql . ';';
+	}
+
+	protected function get_clause_condition( &$parameters, $field_name, $operator, $field_value ) {
+		$condition = NULL;	
+		$parameter_name = 'key' . count( $parameters );
+		if ( is_array( $field_value ) ) {
+			$condition_parameters = [ ];
+			foreach( $field_value as $key => $value ) {
+				$condition_parameters[ ':' . 'key_' . ( count( $parameters ) + $key ) ] = $value;
+			}
+			$condition = implode( ', ', array_keys( $condition_parameters ) );
+			$condition = $field_name . ' IN ( ' . $condition . ' )';
+			$parameters = array_merge( $parameters, $condition_parameters );
+		} else {
+			$condition = $field_name . ' ' . $operator . ' :' . $parameter_name;
+			$parameters[ ':' . $parameter_name ] = $field_value;
+		}
+		return $condition;
 	}
 
 	protected function get_set_request( ) {
