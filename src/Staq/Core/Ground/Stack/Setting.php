@@ -60,7 +60,7 @@ class Setting {
 	protected function add_cache( $setting_file_name, $settings ) {
 		$settings = $settings->getArrayCopy( );
 		static::$cache[ $setting_file_name ] = $settings;
-		if ( \Staq::App( )->is_initialized( ) ) {
+		if ( \Staq::App( )->isInitialized( ) ) {
 			$setting = ( new $this )->parse( 'Application' );
 			if ( $setting->get_as_boolean( 'cache.setting' ) ) {
 				if ( 
@@ -88,7 +88,7 @@ class Setting {
 	  PARSE METHODS              
 	 *************************************************************************/
 	public function parse( $mixed ) {
-		if ( \Staq\Util::is_stack( $mixed ) ) {
+		if ( \Staq\Util::isStack( $mixed ) ) {
 			return $this->parse_from_stack( $mixed );
 		}
 		return $this->parse_from_string( $mixed );
@@ -116,7 +116,7 @@ class Setting {
 	}
 
 	protected function get_setting_file_name_from_stack( $stack ) {
-		$setting_file_name = \Staq\Util::stack_query( $stack );
+		$setting_file_name = \Staq\Util::stackQuery( $stack );
 		return \Staq\Util::string_namespace_to_path( $setting_file_name );
 	}
 

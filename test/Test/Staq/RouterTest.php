@@ -16,7 +16,7 @@ class RouterTest extends WebTestCase {
 		parent::setUp( );
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 	}
 
 
@@ -37,7 +37,7 @@ class RouterTest extends WebTestCase {
 	  ANONYMOUS CONTROLLER TEST METHODS             
 	 *************************************************************************/
 	public function test_anonymous_controller__magic_route( ) {
-		\Staq::App()->add_controller( '/*', function( ) {
+		\Staq::App()->addController( '/*', function( ) {
 				return 'hello';
 			})
 			->run( );
@@ -45,7 +45,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__simple_route__no_match( ) {
-		\Staq::App()->add_controller( '/hello', function( ) {
+		\Staq::App()->addController( '/hello', function( ) {
 				return 'hello';
 			})
 			->run( );
@@ -53,7 +53,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__simple_route__match( ) {
-		\Staq::App()->add_controller( '/coco', function( ) {
+		\Staq::App()->addController( '/coco', function( ) {
 				return 'hello';
 			})
 			->run( );
@@ -61,7 +61,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__param_route__wrong_definition( ) {
-		\Staq::App()->add_controller( '/:coco', function( $world ) {
+		\Staq::App()->addController( '/:coco', function( $world ) {
 				return 'hello ' . $world;
 			})
 			->run( );
@@ -69,7 +69,7 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__conditionnal_controller( ) {
-		\Staq::App()->add_controller( '/*', function( ) {
+		\Staq::App()->addController( '/*', function( ) {
 				if ( \Staq::App()->get_current_uri( ) == '/coco' ) {
 					return NULL;
 				}
@@ -87,7 +87,7 @@ class RouterTest extends WebTestCase {
 	public function test_public_controller__match( ) {
 		$this->get_request_url( 'http://localhost/static.txt' );
 		\Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
+			->setPlatform( 'local' )
 			->run( );
         $this->expectOutputHtmlContent( 'This is an example of static file' );
 	}

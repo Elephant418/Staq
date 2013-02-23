@@ -14,8 +14,8 @@ class ViewTest extends WebTestCase {
 	public function test_text_templating__no_variable( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
-			->add_controller( '/*', function( ) {
+			->setPlatform( 'local' )
+			->addController( '/*', function( ) {
 				return new \Stack\View;
 			} )
 			->run( );
@@ -25,8 +25,8 @@ class ViewTest extends WebTestCase {
 	public function test_text_templating__inherit( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
-			->add_controller( '/*', function( ) {
+			->setPlatform( 'local' )
+			->addController( '/*', function( ) {
 				return new \Stack\View\Some\Path\That\No\Body\Knows;
 			} )
 			->run( );
@@ -36,8 +36,8 @@ class ViewTest extends WebTestCase {
 	public function test_text_templating__complex( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
-			->add_controller( '/*', function( ) {
+			->setPlatform( 'local' )
+			->addController( '/*', function( ) {
 				return new \Stack\View\Inherited\Template;
 			} )
 			->run( );
@@ -47,8 +47,8 @@ class ViewTest extends WebTestCase {
 	public function test_text_templating__one_variable( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
-			->add_controller( '/*', function( ) {
+			->setPlatform( 'local' )
+			->addController( '/*', function( ) {
 				$page = new \Stack\View;
 				$page[ 'name' ] = 'world';
 				return $page;
@@ -65,9 +65,9 @@ class ViewTest extends WebTestCase {
 	public function test_public_filter( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
+			->setPlatform( 'local' )
 			->set_base_uri( '/prefix/path' )
-			->add_controller( '/*', function( ) {
+			->addController( '/*', function( ) {
 				return new \Stack\View\Extension\PublicFilter;
 			} )
 			->run( );
@@ -77,9 +77,9 @@ class ViewTest extends WebTestCase {
 	public function test_public_function( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
+			->setPlatform( 'local' )
 			->set_base_uri( 'prefix/path/' )
-			->add_controller( '/*', function( ) {
+			->addController( '/*', function( ) {
 				return new \Stack\View\Extension\PublicFunction;
 			} )
 			->run( );
@@ -89,9 +89,9 @@ class ViewTest extends WebTestCase {
 	public function test_route_function( ) {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' )
+			->setPlatform( 'local' )
 			->set_base_uri( '/prefix/path/' )
-			->add_controller( '/*', function( ) {
+			->addController( '/*', function( ) {
 				return new \Stack\View\Extension\RouteFunction;
 			} )
 			->run( );

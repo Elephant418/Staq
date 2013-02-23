@@ -25,7 +25,7 @@ class SettingTest extends StaqTestCase {
 
 	public function test_existing_setting__custom_key( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$this->assertEquals( 'a_value', $setting[ 'error.a_setting' ] );
 	}
@@ -38,21 +38,21 @@ class SettingTest extends StaqTestCase {
 
 	public function test_existing_setting__inherit_key__platform( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$setting = ( new \Stack\Setting )->parse( 'Application' );
 		$this->assertEquals( 1, $setting[ 'error.display_errors' ] );
 	}
 
 	public function test_existing_setting__merged_key__platform( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$setting = ( new \Stack\Setting )->parse( 'Test' );
 		$this->assertEquals( [ 'a_value', 'more_value' ], $setting[ 'test.a_setting' ] );
 	}
 
 	public function test_stack_setting_file( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$stack = new \Stack\Controller;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( 'empty', $setting[ 'view.layout' ] );
@@ -60,7 +60,7 @@ class SettingTest extends StaqTestCase {
 
 	public function test_stack_setting_file__complex( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$stack = new \Stack\Controller\Unexisting;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( 'bootstrap', $setting[ 'view.layout' ] );
@@ -68,7 +68,7 @@ class SettingTest extends StaqTestCase {
 
 	public function test_stack_setting_file__inherit_class_name( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$stack = new \Stack\Controller\Unexisting;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( 'coco', $setting[ 'view.title' ] );
@@ -76,7 +76,7 @@ class SettingTest extends StaqTestCase {
 
 	public function test_stack_setting_attribute( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$stack = new \Stack\Setting\Coco;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( [ 'one' ], $setting[ 'data.value.list' ] );
@@ -84,7 +84,7 @@ class SettingTest extends StaqTestCase {
 
 	public function test_stack_setting_attribute__complex( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$stack = new \Stack\Setting\Coco\Des;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( [ 'one', 'two' ], $setting[ 'data.value.list' ] );
@@ -92,7 +92,7 @@ class SettingTest extends StaqTestCase {
 
 	public function test_stack_setting_attribute__overrided_file( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		$stack = new \Stack\Setting\Coco\Des\Bois;
 		$setting = ( new \Stack\Setting )->parse( $stack );
 		$this->assertEquals( [ 'three', 'four' ], $setting[ 'data.value.list' ] );

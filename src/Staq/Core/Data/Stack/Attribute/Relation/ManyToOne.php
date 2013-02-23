@@ -42,7 +42,7 @@ class ManyToOne extends ManyToOne\__Parent {
 	}
 
 	public function set( $model ) {
-		if ( ! \Staq\Util::is_stack( $model, $this->get_remote_class( ) ) ) {
+		if ( ! \Staq\Util::isStack( $model, $this->get_remote_class( ) ) ) {
 			$message = 'Input of type "' . $this->get_remote_class( ) . '", but "' . gettype( $model ) . '" given.';
 			throw new \Stack\Exception\NotRightInput( $message );
 		}

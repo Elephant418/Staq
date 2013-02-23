@@ -125,7 +125,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		$data = [ ];
 		foreach( $this->keys( ) as $name ) {
 			$attribute = $this->get_attribute( $name );
-			if ( \Staq\Util::is_stack( $attribute, 'Stack\\Attribute' ) ) {
+			if ( \Staq\Util::isStack( $attribute, 'Stack\\Attribute' ) ) {
 				$attribute = $attribute->get_seed( );
 			}
 			$data[ $name ] = $attribute;
@@ -153,7 +153,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 
 	public function offsetGet( $index ) {
 		$attribute = $this->get_attribute( $index );
-		if ( \Staq\Util::is_stack( $attribute, 'Stack\\Attribute' ) ) {
+		if ( \Staq\Util::isStack( $attribute, 'Stack\\Attribute' ) ) {
 			return $attribute->get( );
 		} else {
 			return $attribute;
@@ -167,7 +167,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
  
 	public function offsetSet( $index, $new_val ) {
 		$attribute = $this->get_attribute( $index );
-		if ( \Staq\Util::is_stack( $attribute, 'Stack\\Attribute' ) ) {
+		if ( \Staq\Util::isStack( $attribute, 'Stack\\Attribute' ) ) {
 			$attribute->set( $new_val );
 		} else {
 			parent::offsetSet( $index, $new_val );

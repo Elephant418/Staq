@@ -209,8 +209,8 @@ class Router {
 	}
 
 	protected function prevent_exception_boucle( $exception ) {
-		if ( \Staq\Util::is_stack( $exception ) ) {			
-			$name = \Staq\Util::stack_query( $exception );
+		if ( \Staq\Util::isStack( $exception ) ) {			
+			$name = \Staq\Util::stackQuery( $exception );
 		} else {
 			$name = get_class( $exception );
 		}

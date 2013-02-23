@@ -72,20 +72,20 @@ abstract class Util {
 
 	// STACK OBJECT
 	public static function is_stack_object( $stack ) {
-		return ( is_object( $stack ) && \Staq\Util::is_stack( $stack ) );
+		return ( is_object( $stack ) && \Staq\Util::isStack( $stack ) );
 	}
-	public static function is_stack( $stack, $query = 'Stack\\' ) {
+	public static function isStack( $stack, $query = 'Stack\\' ) {
 		\UObject::do_convert_to_class( $stack );
 		return \UString::is_start_with( $stack, $query );
 	}
-	public static function stack_query( $stack ) {
+	public static function stackQuery( $stack ) {
 		\UObject::do_convert_to_class( $stack );
-		if ( \Staq\Util::is_stack( $stack ) ) {
+		if ( \Staq\Util::isStack( $stack ) ) {
 			return substr( $stack, strlen( 'Stack\\' ) );
 		}
 	}
 	public static function stack_sub_query( $stack, $separator = '\\' ) {
-		$query = \Staq\Util::stack_query( $stack );
+		$query = \Staq\Util::stackQuery( $stack );
 		$sub_query = \UString::substr_after( $query, '\\' );
 		return str_replace( '\\', $separator, $sub_query );
 	}
@@ -94,12 +94,12 @@ abstract class Util {
 		return str_replace( [ '\\', '_' ], ' ', $sub_query );
 	}
 	public static function stack_definition( $stack ) {
-		if ( \Staq\Util::is_stack( $stack ) ) {
+		if ( \Staq\Util::isStack( $stack ) ) {
 			$parents = [ ];
 			while ( $stack = get_parent_class( $stack ) ) {
 				if ( 
 					\Staq\Util::is_stackable_class( $stack ) && 
-					! \Staq\Util::is_parent_stack( $stack )
+					! \Staq\Util::isParentStack( $stack )
 				) {
 					$parents[ ] = $stack;
 				}
@@ -117,8 +117,8 @@ abstract class Util {
 		$list = [ ];
 		foreach ( \Staq\Util::stack_definition( $stack ) as $key => $stackable ) {
 			$debug                = [ ];
-			$debug[ 'query'     ] = \Staq\Util::stackable_query( $stackable );
-			$debug[ 'extension' ] = \Staq\Util::stackable_extension( $stackable );
+			$debug[ 'query'     ] = \Staq\Util::getStackableQuery( $stackable );
+			$debug[ 'extension' ] = \Staq\Util::getStackableExtension( $stackable );
 			$list[ ] = $debug;
 		}
 		return $list;
@@ -126,7 +126,7 @@ abstract class Util {
 	public static function get_declared_stack_classes( ) {
 		$stack_classes = [ ];
 		foreach ( get_declared_classes( ) as $class ) {
-			if ( \Staq\Util::is_stack( $class ) ) {
+			if ( \Staq\Util::isStack( $class ) ) {
 				$stack_classes[ ] = $class;
 			}
 		}
@@ -138,21 +138,21 @@ abstract class Util {
 		\UObject::do_convert_to_class( $stackable );
 		return ( \UString::has( $stackable, '\\Stack\\' ) );
 	}
-	public static function stackable_extension( $stackable ) {
+	public static function getStackableExtension( $stackable ) {
 		\UObject::do_convert_to_class( $stackable );
 		return ( \UString::substr_before( $stackable, '\\Stack\\' ) );
 	}
-	public static function stackable_query( $stackable ) {
+	public static function getStackableQuery( $stackable ) {
 		\UObject::do_convert_to_class( $stackable );
 		return ( \UString::substr_after( $stackable, '\\Stack\\' ) );
 	}
-	public static function is_parent_stack( $stackable ) {
+	public static function isParentStack( $stackable ) {
 		\UObject::do_convert_to_class( $stackable );
 		return ( \UString::is_end_with( $stackable, '\\__Parent' ) );
 	}
-	public static function parent_stack_query( $stackable ) {
+	public static function getParentStackQuery( $stackable ) {
 		\UObject::do_convert_to_class( $stackable );
-		$query = \Staq\Util::stackable_query( $stackable );
+		$query = \Staq\Util::getStackableQuery( $stackable );
 		return ( \UString::substr_before( $query, '\\__Parent' ) );
 	}
 }

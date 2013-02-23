@@ -30,7 +30,7 @@ Let's code
 require_once( 'vendor/pixel418/staq/src/include.php' );
 
 \Staq\App::create( )
-    ->add_controller( '/hello/:name', function( $name ) {
+    ->addController( '/hello/:name', function( $name ) {
         return 'Hello ' . $name;
     } )
     ->run( );

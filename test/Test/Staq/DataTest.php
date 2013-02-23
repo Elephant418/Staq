@@ -22,7 +22,7 @@ class DataTest extends StaqTestCase {
 	 *************************************************************************/
 	protected function setUp( ) {
 		$app = \Staq\App::create( $this->project_namespace )
-			->set_platform( 'local' );
+			->setPlatform( 'local' );
 		( new \Stack\Database\Request )
 			->require_database( )
 			->load_mysql_file( $app->get_path( 'dataset/set.sql' ) );

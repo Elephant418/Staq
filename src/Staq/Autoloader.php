@@ -26,7 +26,7 @@ class Autoloader {
 	}
 	
 	protected function initialize( ) {
-		if ( \Staq::App( ) && \Staq::App( )->is_initialized( ) ) {
+		if ( \Staq::App( ) && \Staq::App( )->isInitialized( ) ) {
 			static::$cache_file = reset( $this->extensions ) . '/cache/autoload.php';
 			if ( is_file( static::$cache_file ) ) {
 				require_once( static::$cache_file );
@@ -44,14 +44,14 @@ class Autoloader {
 	public function autoload( $class ) {
 		if ( ! static::$initialized ) {
 			$this->initialize( );
-			if ( $this->class_exists( $class ) ) {
+			if ( $this->classExists( $class ) ) {
 				return TRUE;
 			}
 		}
-		if ( \Staq\Util::is_stack( $class ) ) {
-			$this->load_stack_class( $class );
-		} else if ( \Staq\Util::is_parent_stack( $class ) ) {
-			$this->load_stack_parent_class( $class );
+		if ( \Staq\Util::isStack( $class ) ) {
+			$this->loadStackClass( $class );
+		} else if ( \Staq\Util::isParentStack( $class ) ) {
+			$this->loadStackParentClass( $class );
 		}
 	}
 
@@ -59,11 +59,11 @@ class Autoloader {
 	/*************************************************************************
 	  FILE CLASS MANAGEMENT             
 	 *************************************************************************/
-	protected function load_stack_class( $class ) {
-		$stack_query = \Staq\Util::stack_query( $class );
+	protected function loadStackClass( $class ) {
+		$stack_query = \Staq\Util::stackQuery( $class );
 		while( $stack_query ) {
 			foreach( array_keys( $this->extensions ) as $extension_namespace ) {
-				if ( $real_class = $this->get_real_class_of_stack_extension( $stack_query, $extension_namespace ) ) {
+				if ( $real_class = $this->getRealClass( $stack_query, $extension_namespace ) ) {
 					$this->create_alias_class( $class, $real_class );
 					return TRUE;
 				}
@@ -75,7 +75,7 @@ class Autoloader {
 	}
 
 	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
-	protected function get_real_class_of_stack_extension( $stack, $extension_namespace ) {
+	protected function getRealClass( $stack, $extension_namespace ) {
 		$stack_path = \Staq\Util::string_namespace_to_path( $stack );
 		$absolute_path = realpath( $this->extensions[ $extension_namespace ] . '/Stack/' . $stack_path . '.php' );
 		if ( is_file( $absolute_path ) ) {
@@ -85,14 +85,14 @@ class Autoloader {
 	}
 	
 
-	protected function load_stack_parent_class( $class ) {
-		$query_extension = \Staq\Util::stackable_extension( $class );
-		$query = \Staq\Util::parent_stack_query( $class );
+	protected function loadStackParentClass( $class ) {
+		$query_extension = \Staq\Util::getStackableExtension( $class );
+		$query = \Staq\Util::getParentStackQuery( $class );
 		$ready = FALSE;
 		while( $query ) {
 			foreach( array_keys( $this->extensions ) as $extension_namespace ) {
 				if ( $ready ) {
-					if ( $real_class = $this->get_real_class_of_stack_extension( $query, $extension_namespace ) ) {
+					if ( $real_class = $this->getRealClass( $query, $extension_namespace ) ) {
 						$this->create_alias_class( $class, $real_class );
 						return TRUE;
 					}
@@ -114,7 +114,7 @@ class Autoloader {
 	/*************************************************************************
 	  CLASS DECLARATION             
 	 *************************************************************************/
-	protected function class_exists( $class ) {
+	protected function classExists( $class ) {
 		return ( \class_exists( $class ) || \interface_exists( $class ) );
 	}
 	protected function create_alias_class( $alias, $class ) {

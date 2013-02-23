@@ -41,7 +41,7 @@ class Application extends Application\__Parent {
 	/*************************************************************************
 	  SETTER             
 	 *************************************************************************/
-	public function add_controller( $uri, $controller ) {
+	public function addController( $uri, $controller ) {
 		$this->controllers[ ] = func_get_args( );
 		return $this;
 	}

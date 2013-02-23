@@ -118,7 +118,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 			return $public( $uri );
 		};
 		$route_model_action = function( $action, $model ) use ( $route ) {
-			return $route( \Staq\Util::stack_query( $model ), $action, $model->id );
+			return $route( \Staq\Util::stackQuery( $model ), $action, $model->id );
 		};
 		$route_model = function( $model ) use ( $route_model_action ) {
 			return $route_model_action( 'view', $model );

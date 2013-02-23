@@ -117,7 +117,7 @@ class Route {
 				if( $exception->getCode( ) == $match_exception ) {
 					$result = TRUE;
 				}
-			} else if ( \Staq\Util::is_stack( $exception ) ) {
+			} else if ( \Staq\Util::isStack( $exception ) ) {
 				if( \Staq\Util::stack_sub_query( $exception ) === $match_exception ) {
 					$result = TRUE;
 				}
@@ -162,8 +162,8 @@ class Route {
 		$parameters = [ ];
 		$parameters[ 'code' ]      = $exception->get_code( );
 		$parameters[ 'exception' ] = $exception;
-		if ( \Staq\Util::is_stack( $exception ) ) {
-			$parameters[ 'query' ] = \Staq\Util::stack_query( $exception );
+		if ( \Staq\Util::isStack( $exception ) ) {
+			$parameters[ 'query' ] = \Staq\Util::stackQuery( $exception );
 			$parameters[ 'name'  ] = \Staq\Util::stack_sub_query( $exception );
 		} else {
 			$parameters[ 'query' ] = get_class( $exception );
@@ -181,7 +181,7 @@ class Route {
 		$str = 'Route( ' . $this->match_uri . ' => ';
 		if ( is_array( $this->callable ) ) {
 			$controller = $this->callable[ 0 ];
-			if ( \Staq\Util::is_stack( $controller ) ) {
+			if ( \Staq\Util::isStack( $controller ) ) {
 				$str .= \Staq\Util::stack_sub_query( $controller );
 			} else {
 				$str .= \UObject::convert_to_class( $controller );

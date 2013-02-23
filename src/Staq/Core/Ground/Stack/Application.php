@@ -75,7 +75,7 @@ class Application {
 		return $this->platform;
 	}
 
-	public function is_initialized( ) {
+	public function isInitialized( ) {
 		return $this->initialized;
 	}
 	
@@ -84,7 +84,7 @@ class Application {
 	/*************************************************************************
 	  SETTER             
 	 *************************************************************************/
-	public function set_platform( $platform ) {
+	public function setPlatform( $platform ) {
 		$this->platform = $platform;
 		$this->initialize( );
 		return $this;
