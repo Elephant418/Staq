@@ -152,7 +152,7 @@ class Server {
 				$files[ ] = $extension . '/setting/Application.ini';
 			}
 			$ini = ( new \Pixel418\Iniliq\Parser )->parse( array_reverse( $files ) );
-			$fetch_namespaces = array_reverse( $ini->get_as_array( 'extension.list' ) );
+			$fetch_namespaces = array_reverse( $ini->getAsArray( 'extension.list' ) );
 			$new_namespaces = array_diff( $fetch_namespaces, $namespaces );
 			$namespaces = array_merge( $namespaces, $fetch_namespaces );
 		}

@@ -150,7 +150,7 @@ class Autoloader {
 			! static::$cache_file || 
 			! ( new \Stack\Setting )
 				->parse( 'Application' )
-				->get_as_boolean( 'cache.autoload' ) ||
+				->getAsBoolean( 'cache.autoload' ) ||
 			! $handle = @fopen( static::$cache_file, 'a' )
 		) {
 			return NULL;

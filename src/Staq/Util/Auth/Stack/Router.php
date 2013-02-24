@@ -13,7 +13,7 @@ class Router extends Router\__Parent {
 	  PRIVATE METHODS             
 	 *************************************************************************/
 	protected function call_controller( $controller, $action, $route ) {
-		$controllers = $this->setting->get_as_array( 'auth.controller' );
+		$controllers = $this->setting->getAsArray( 'auth.controller' );
 		$exclude = ( $this->setting[ 'auth.mode' ] == 'exclude' );
 		$inner   = in_array( $controller, $controllers );
 		if ( $exclude xor $inner ) {

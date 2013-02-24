@@ -49,7 +49,7 @@ class Controller implements \Stack\IController {
 	 *************************************************************************/
 	protected function initialize_routes( ) {
 		$setting = ( new \Stack\Setting )->parse( $this );
-		foreach ( $setting->get_as_array( 'route' ) as $action => $setting ) {
+		foreach ( $setting->getAsArray( 'route' ) as $action => $setting ) {
 			$this->routes[ $action ] = ( new \Stack\Route )->by_setting( $this, $action, $setting );
 		}
 	}

@@ -31,7 +31,7 @@ class Entity implements \Stack\IEntity {
 		$this->name     = strtolower( \Staq\Util::stack_sub_query( $this, '_' ) );
 		$this->table    = $this->settings->get( 'database.table', $this->name );
 		$this->id_field = $this->settings[ 'database.id_field' ];
-		$this->fields   = $this->settings->get_as_array( 'database.fields' );
+		$this->fields   = $this->settings->getAsArray( 'database.fields' );
 	}
 
 

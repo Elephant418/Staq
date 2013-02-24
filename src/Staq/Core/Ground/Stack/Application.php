@@ -115,7 +115,7 @@ class Application {
 
 		// Display errors
 		$display_errors = 0;
-		if ( $settings->get_as_boolean( 'error.display_errors' ) ) {
+		if ( $settings->getAsBoolean( 'error.display_errors' ) ) {
 			$display_errors = 1;
 		}
 		ini_set( 'display_errors', $display_errors );

@@ -45,7 +45,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	
 	protected function import_schema( ) {
 		$settings = ( new \Stack\Setting )->parse( $this );
-		foreach ( $settings->get_as_array( 'schema' ) as $name => $setting ) {
+		foreach ( $settings->getAsArray( 'schema' ) as $name => $setting ) {
 			$this->add_attribute( $name, $setting );
 		}
 	}

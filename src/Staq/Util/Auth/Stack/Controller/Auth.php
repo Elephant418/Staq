@@ -42,7 +42,7 @@ class Auth extends Auth\__Parent {
 				$code = $_POST[ 'inscription' ][ 'code' ];
 				$match = ( new \Stack\Setting )
 					->parse( $this )
-					->get_as_array( 'code' );
+					->getAsArray( 'code' );
 				if ( in_array( $code, $match ) ) {
 					if ( isset( $_POST[ 'inscription' ][ 'password' ] ) ) {
 						$password = $_POST[ 'inscription' ][ 'password' ];

@@ -62,7 +62,7 @@ class Setting {
 		static::$cache[ $setting_file_name ] = $settings;
 		if ( \Staq::App( )->isInitialized( ) ) {
 			$setting = ( new $this )->parse( 'Application' );
-			if ( $setting->get_as_boolean( 'cache.setting' ) ) {
+			if ( $setting->getAsBoolean( 'cache.setting' ) ) {
 				if ( 
 					! static::$cache_file ||
 					! $handle = @fopen( static::$cache_file, 'a' )
