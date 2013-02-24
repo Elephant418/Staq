@@ -14,7 +14,7 @@ class Autoloader {
 	 *************************************************************************/
 	protected $extensions = [ ];
 	static public $initialized = FALSE;
-	static public $cache_file;
+	static public $cacheFile;
 
 
 
@@ -27,9 +27,9 @@ class Autoloader {
 	
 	protected function initialize( ) {
 		if ( \Staq::App( ) && \Staq::App( )->isInitialized( ) ) {
-			static::$cache_file = reset( $this->extensions ) . '/cache/autoload.php';
-			if ( is_file( static::$cache_file ) ) {
-				require_once( static::$cache_file );
+			static::$cacheFile = reset( $this->extensions ) . '/cache/autoload.php';
+			if ( \is_file( static::$cacheFile ) ) {
+				require_once( static::$cacheFile );
 			}
 			static::$initialized = TRUE;
 		}
@@ -60,53 +60,53 @@ class Autoloader {
 	  FILE CLASS MANAGEMENT             
 	 *************************************************************************/
 	protected function loadStackClass( $class ) {
-		$stack_query = \Staq\Util::stackQuery( $class );
-		while( $stack_query ) {
-			foreach( array_keys( $this->extensions ) as $extension_namespace ) {
-				if ( $real_class = $this->getRealClass( $stack_query, $extension_namespace ) ) {
-					$this->create_alias_class( $class, $real_class );
+		$stackQuery = \Staq\Util::getStackQuery( $class );
+		while( $stackQuery ) {
+			foreach( array_keys( $this->extensions ) as $extensionNamespace ) {
+				if ( $realClass = $this->getRealClass( $stackQuery, $extensionNamespace ) ) {
+					$this->createClassAlias( $class, $realClass );
 					return TRUE;
 				}
 			}
-			$stack_query = \Staq\Util::stack_query_pop( $stack_query );
+			$stackQuery = \Staq\Util::popStackQuery( $stackQuery );
 		}
 
-		$this->create_empty_class( $class );
+		$this->createClassEmpty( $class );
 	}
 
 	// "stack" is now a part of the namespace, there is no burgers left at my bakery 
-	protected function getRealClass( $stack, $extension_namespace ) {
-		$stack_path = \Staq\Util::string_namespace_to_path( $stack );
-		$absolute_path = realpath( $this->extensions[ $extension_namespace ] . '/Stack/' . $stack_path . '.php' );
-		if ( is_file( $absolute_path ) ) {
-			$real_class = $extension_namespace . '\\Stack\\' . $stack;
-			return $real_class;
+	protected function getRealClass( $stack, $extensionNamespace ) {
+		$stackPath = \Staq\Util::convertNamespaceToPath( $stack );
+		$absolutePath = realpath( $this->extensions[ $extensionNamespace ] . '/Stack/' . $stackPath . '.php' );
+		if ( is_file( $absolutePath ) ) {
+			$realClass = $extensionNamespace . '\\Stack\\' . $stack;
+			return $realClass;
 		}
 	}
 	
 
 	protected function loadStackParentClass( $class ) {
-		$query_extension = \Staq\Util::getStackableExtension( $class );
+		$queryExtension = \Staq\Util::getStackableExtension( $class );
 		$query = \Staq\Util::getParentStackQuery( $class );
 		$ready = FALSE;
 		while( $query ) {
-			foreach( array_keys( $this->extensions ) as $extension_namespace ) {
+			foreach( array_keys( $this->extensions ) as $extensionNamespace ) {
 				if ( $ready ) {
-					if ( $real_class = $this->getRealClass( $query, $extension_namespace ) ) {
-						$this->create_alias_class( $class, $real_class );
+					if ( $realClass = $this->getRealClass( $query, $extensionNamespace ) ) {
+						$this->createClassAlias( $class, $realClass );
 						return TRUE;
 					}
 				} else {
-					if ( $query_extension === $extension_namespace ) {
+					if ( $queryExtension === $extensionNamespace ) {
 						$ready = TRUE;
 					}
 				}
 			}
-			$query = \Staq\Util::stack_query_pop( $query );
+			$query = \Staq\Util::popStackQuery( $query );
 			$ready = TRUE;
 		}
 
-		$this->create_empty_class( $class );
+		$this->createClassEmpty( $class );
 	}
 
 
@@ -117,41 +117,41 @@ class Autoloader {
 	protected function classExists( $class ) {
 		return ( \class_exists( $class ) || \interface_exists( $class ) );
 	}
-	protected function create_alias_class( $alias, $class ) {
-		return $this->create_class( $alias, $class, \interface_exists( $class ) );
+	protected function createClassAlias( $alias, $class ) {
+		return $this->createClass( $alias, $class, \interface_exists( $class ) );
 	}
-	protected function create_empty_class( $class ) {
-		return $this->create_class( $class, NULL );
+	protected function createClassEmpty( $class ) {
+		return $this->createClass( $class, NULL );
 	}
-	protected function create_class( $class, $base_class, $is_interface = FALSE ) {
+	protected function createClass( $class, $baseClass, $isInterface = FALSE ) {
 		$namespace = \UObject::getNamespace( $class, '\\' );
 		$name = \UObject::getClassName( $class, '\\' );
 		$code = '';
 		if ( $namespace ) {
 			$code = 'namespace ' . $namespace . ' {' . PHP_EOL;
 		}
-		if ( $is_interface ) {
+		if ( $isInterface ) {
 			$code .= 'interface';
 		} else {
 			$code .= 'class';
 		}
 		$code .= ' ' . $name . ' ';
-		if ( $base_class ) {
-			$code .= 'extends \\' . $base_class . ' ';
+		if ( $baseClass ) {
+			$code .= 'extends \\' . $baseClass . ' ';
 		}
 		$code .= '{ }' . PHP_EOL . '}' . PHP_EOL;
-		$this->add_cache( $code );
+		$this->addToCache( $code );
 		eval( $code );
 	}
 
-	protected function add_cache( $code ) {
+	protected function addToCache( $code ) {
 		if ( 
 			! static::$initialized ||
-			! static::$cache_file || 
+			! static::$cacheFile || 
 			! ( new \Stack\Setting )
 				->parse( 'Application' )
 				->getAsBoolean( 'cache.autoload' ) ||
-			! $handle = @fopen( static::$cache_file, 'a' )
+			! $handle = @fopen( static::$cacheFile, 'a' )
 		) {
 			return NULL;
 		}

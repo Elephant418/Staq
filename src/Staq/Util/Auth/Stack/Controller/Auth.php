@@ -57,7 +57,7 @@ class Auth extends Auth\__Parent {
 						} catch ( \Exception $e ) { }
 						if ( $saved ) {
 							$this->login( $user );
-							\Staq\Util::http_redirect( $origin );
+							\Staq\Util::httpRedirect( $origin );
 						} else {
 							$bad_credentials = TRUE;
 						}
@@ -89,7 +89,7 @@ class Auth extends Auth\__Parent {
 			if ( isset( $_POST[ 'login' ][ 'password' ] ) ) {
 				$password = $_POST[ 'login' ][ 'password' ];
 				if ( $this->login( $login, $password ) ) {
-					\Staq\Util::http_redirect( $origin );
+					\Staq\Util::httpRedirect( $origin );
 				} else {
 					$bad_credentials = TRUE;
 				}
@@ -104,7 +104,7 @@ class Auth extends Auth\__Parent {
 
 	public function action_logout( ) {
 		$this->logout( );
-		\Staq\Util::http_redirect( '/' . \Staq::App()->get_base_uri( ) );
+		\Staq\Util::httpRedirect( '/' . \Staq::App()->get_base_uri( ) );
 	}
 
 

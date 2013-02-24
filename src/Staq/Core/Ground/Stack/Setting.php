@@ -103,8 +103,8 @@ class Setting {
 		\UString::doSubstrBefore( $setting_file_name, '.' );
 		if ( ! $this->has_cache( $setting_file_name ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );
-			$stack = 'Stack\\' . \Staq\Util::string_path_to_namespace( $setting_file_name );
-			foreach( \Staq\Util::stack_definition( $stack ) as $class ) {
+			$stack = 'Stack\\' . \Staq\Util::convertPathToNamespace( $setting_file_name );
+			foreach( \Staq\Util::getStackDefinition( $stack ) as $class ) {
 				if ( isset( $class::$setting ) ) {
 					array_unshift( $file_paths, $class::$setting );
 				}
@@ -116,8 +116,8 @@ class Setting {
 	}
 
 	protected function get_setting_file_name_from_stack( $stack ) {
-		$setting_file_name = \Staq\Util::stackQuery( $stack );
-		return \Staq\Util::string_namespace_to_path( $setting_file_name );
+		$setting_file_name = \Staq\Util::getStackQuery( $stack );
+		return \Staq\Util::convertNamespaceToPath( $setting_file_name );
 	}
 
 	protected function get_file_paths( $full_setting_file_name ) {

@@ -31,11 +31,11 @@ class Model extends Model\__Parent {
 	  PRIVATE METHODS           
 	 *************************************************************************/
 	protected function model_name( ) {
-		return \Staq\Util::stack_sub_query( $this->model_class( ) );
+		return \Staq\Util::getStackSubQuery( $this->model_class( ) );
 	}
 
 	protected function model_class( ) {
-		return 'Stack\\' . \Staq\Util::stack_sub_query( $this );
+		return 'Stack\\' . \Staq\Util::getStackSubQuery( $this );
 	}
 
 	protected function new_model( ) {

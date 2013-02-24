@@ -36,7 +36,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 
 	protected function new_entity( ) {
 		$class = 'Stack\\Entity';
-		$sub_query = \Staq\Util::stack_sub_query( $this );
+		$sub_query = \Staq\Util::getStackSubQuery( $this );
 		if ( $sub_query ) {
 			$class .= '\\' . $sub_query;
 		}

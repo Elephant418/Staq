@@ -17,7 +17,7 @@ class AutoloaderTest extends StaqTestCase {
 			->setPlatform( 'local' );
 		$stack = new \Stack\Unexisting\Coco;
 		$this->assertEquals( 'Stack\\Unexisting\\Coco', get_class( $stack ) );
-		$this->assertEquals( 0, \Staq\Util::stack_height( $stack ) );
+		$this->assertEquals( 0, \Staq\Util::getStackHeight( $stack ) );
 	}
 
 	public function test_unexisting_class__complex( ) {
@@ -25,14 +25,14 @@ class AutoloaderTest extends StaqTestCase {
 			->setPlatform( 'local' );
 		$stack = new \Stack\Unexisting\Coco\Des\Bois;
 		$this->assertEquals( 'Stack\\Unexisting\\Coco\\Des\\Bois', get_class( $stack ) );
-		$this->assertEquals( 0, \Staq\Util::stack_height( $stack ) );
+		$this->assertEquals( 0, \Staq\Util::getStackHeight( $stack ) );
 	}
 
 	public function test_existing_class__simple( ) {
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Existing\Coco;
-		$this->assertEquals( 1, \Staq\Util::stack_height( $stack ) );
+		$this->assertEquals( 1, \Staq\Util::getStackHeight( $stack ) );
 		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
 	}
 
@@ -40,7 +40,7 @@ class AutoloaderTest extends StaqTestCase {
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Existing\Coco\Des\Bois;
-		$this->assertEquals( 1, \Staq\Util::stack_height( $stack ) );
+		$this->assertEquals( 1, \Staq\Util::getStackHeight( $stack ) );
 		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
 	}
 

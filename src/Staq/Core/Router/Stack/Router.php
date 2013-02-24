@@ -185,7 +185,7 @@ class Router {
 						}
 						$active_routes[ $controller ][ $action ] = $route;
 					} else {
-						\Staq\Util::http_action_redirect( $result );
+						\Staq\Util::httpRedirectUri( $result );
 					}
 				}
 			}
@@ -210,7 +210,7 @@ class Router {
 
 	protected function prevent_exception_boucle( $exception ) {
 		if ( \Staq\Util::isStack( $exception ) ) {			
-			$name = \Staq\Util::stackQuery( $exception );
+			$name = \Staq\Util::getStackQuery( $exception );
 		} else {
 			$name = get_class( $exception );
 		}

@@ -60,7 +60,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		return $template->render( $this->getArrayCopy( ) );
 	}
 	public function loadTemplate( ) {
-		$template = strtolower( \Staq\Util::stack_sub_query( $this, '/' ) ) . '.html';
+		$template = strtolower( \Staq\Util::getStackSubQuery( $this, '/' ) ) . '.html';
 		$template = str_replace( '_', '/', $template );
 		while ( TRUE ) {
 			if ( \Staq::App()->get_file_path( 'template/' . $template ) ) {
@@ -118,7 +118,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 			return $public( $uri );
 		};
 		$route_model_action = function( $action, $model ) use ( $route ) {
-			return $route( \Staq\Util::stackQuery( $model ), $action, $model->id );
+			return $route( \Staq\Util::getStackQuery( $model ), $action, $model->id );
 		};
 		$route_model = function( $model ) use ( $route_model_action ) {
 			return $route_model_action( 'view', $model );

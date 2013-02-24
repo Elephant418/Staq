@@ -13,27 +13,27 @@ abstract class Util {
 	 *************************************************************************/
 
 	// PATH FUNCTIONS
-	public static function string_dirname( $path, $level = 1 ) {
+	public static function dirname( $path, $level = 1 ) {
 		for ( $i = 0; $i < $level; $i++ ) {
 			$path = \dirname( $path );
 		}
 		return $path;
 	}
 
-	public static function string_basename( $path, $level = 1 ) {
-		$dirpath = \Staq\Util::string_dirname( $path, $level );
+	public static function basename( $path, $level = 1 ) {
+		$dirpath = \Staq\Util::dirname( $path, $level );
 		return substr( $path, strlen( $dirpath ) + 1 );
 	}
 
-	public static function file_extension( $path ) {
+	public static function getFileExtension( $path ) {
 		return \UString::substrAfterLast( $path, '.' );
 	}
 
-	public static function string_path_to_namespace( $path ) {
+	public static function convertPathToNamespace( $path ) {
 		return str_replace( DIRECTORY_SEPARATOR , '\\', $path );
 	}
 
-	public static function string_namespace_to_path( $namespace ) {
+	public static function convertNamespaceToPath( $namespace ) {
 		return str_replace( '\\', DIRECTORY_SEPARATOR , $namespace );
 	}
 
@@ -42,13 +42,13 @@ abstract class Util {
 	/*************************************************************************
 	  HTTP METHODS                   
 	 *************************************************************************/
-	public static function http_redirect( $url ) {
+	public static function httpRedirect( $url ) {
 		header( 'HTTP/1.1 302 Moved Temporarily' );
 		header( 'Location: ' . $url );
 		die( );
 	}
-	public static function http_action_redirect( $uri ) {
-		\Staq\Util::http_redirect( \Staq::App()->get_base_uri( ) . substr( $uri, 1 ) );
+	public static function httpRedirectUri( $uri ) {
+		\Staq\Util::httpRedirect( \Staq::App()->get_base_uri( ) . substr( $uri, 1 ) );
 	}
 
 
@@ -58,47 +58,47 @@ abstract class Util {
 	 *************************************************************************/
 
 	// STACK QUERY
-	public static function stack_query_pop( $string ) {
-		if ( \Staq\Util::is_stack_query_popable( $string ) ) {
+	public static function popStackQuery( $string ) {
+		if ( \Staq\Util::isStackQueryPopable( $string ) ) {
 			$string = \UString::substrBeforeLast( $string, '\\' );
 		} else {
 			$string = NULL;
 		}
 		return $string;
 	}
-	public static function is_stack_query_popable( $string ) {
+	public static function isStackQueryPopable( $string ) {
 		return ( \UString::has( $string, '\\' ) );
 	}
 
 	// STACK OBJECT
-	public static function is_stack_object( $stack ) {
+	public static function isStackObject( $stack ) {
 		return ( is_object( $stack ) && \Staq\Util::isStack( $stack ) );
 	}
 	public static function isStack( $stack, $query = 'Stack\\' ) {
 		\UObject::doConvertToClass( $stack );
 		return \UString::isStartWith( $stack, $query );
 	}
-	public static function stackQuery( $stack ) {
+	public static function getStackQuery( $stack ) {
 		\UObject::doConvertToClass( $stack );
 		if ( \Staq\Util::isStack( $stack ) ) {
 			return substr( $stack, strlen( 'Stack\\' ) );
 		}
 	}
-	public static function stack_sub_query( $stack, $separator = '\\' ) {
-		$query = \Staq\Util::stackQuery( $stack );
+	public static function getStackSubQuery( $stack, $separator = '\\' ) {
+		$query = \Staq\Util::getStackQuery( $stack );
 		$sub_query = \UString::substrAfter( $query, '\\' );
 		return str_replace( '\\', $separator, $sub_query );
 	}
-	public static function stack_sub_query_text( $stack ) {
-		$sub_query = \Staq\Util::stack_sub_query( $stack );
+	public static function getStackSubQueryText( $stack ) {
+		$sub_query = \Staq\Util::getStackSubQuery( $stack );
 		return str_replace( [ '\\', '_' ], ' ', $sub_query );
 	}
-	public static function stack_definition( $stack ) {
+	public static function getStackDefinition( $stack ) {
 		if ( \Staq\Util::isStack( $stack ) ) {
 			$parents = [ ];
 			while ( $stack = get_parent_class( $stack ) ) {
 				if ( 
-					\Staq\Util::is_stackable_class( $stack ) && 
+					\Staq\Util::isStackableClass( $stack ) && 
 					! \Staq\Util::isParentStack( $stack )
 				) {
 					$parents[ ] = $stack;
@@ -107,15 +107,15 @@ abstract class Util {
 			return $parents;
 		}
 	}
-	public static function stack_height( $stack ) {
-		return count( \Staq\Util::stack_definition( $stack ) ); 
+	public static function getStackHeight( $stack ) {
+		return count( \Staq\Util::getStackDefinition( $stack ) ); 
 	}
-	public static function stack_definition_contains( $stack, $class ) {
+	public static function isStackContains( $stack, $class ) {
 		return is_a( $stack, $class ); 
 	}
-	public static function stack_debug( $stack ) {
+	public static function getStackDebug( $stack ) {
 		$list = [ ];
-		foreach ( \Staq\Util::stack_definition( $stack ) as $key => $stackable ) {
+		foreach ( \Staq\Util::getStackDefinition( $stack ) as $key => $stackable ) {
 			$debug                = [ ];
 			$debug[ 'query'     ] = \Staq\Util::getStackableQuery( $stackable );
 			$debug[ 'extension' ] = \Staq\Util::getStackableExtension( $stackable );
@@ -123,7 +123,7 @@ abstract class Util {
 		}
 		return $list;
 	}
-	public static function get_declared_stack_classes( ) {
+	public static function getDeclaredStackClasses( ) {
 		$stack_classes = [ ];
 		foreach ( get_declared_classes( ) as $class ) {
 			if ( \Staq\Util::isStack( $class ) ) {
@@ -134,7 +134,7 @@ abstract class Util {
 	}
 
 	// STACKABLE CLASS
-	public static function is_stackable_class( $stackable ) {
+	public static function isStackableClass( $stackable ) {
 		\UObject::doConvertToClass( $stackable );
 		return ( \UString::has( $stackable, '\\Stack\\' ) );
 	}
