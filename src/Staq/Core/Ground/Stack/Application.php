@@ -25,7 +25,7 @@ class Application {
 	public function get_extensions( $file = NULL ) {
 		$extensions = $this->extensions;
 		if ( ! empty( $file ) ) {
-			\UString::do_start_with( $file, DIRECTORY_SEPARATOR );
+			\UString::doStartWith( $file, DIRECTORY_SEPARATOR );
 			array_walk( $extensions, function( &$a ) use ( $file ) {
 				$a = realpath( $a . $file );
 			} );
@@ -54,7 +54,7 @@ class Application {
 	public function get_path( $file = NULL, $create = FALSE ) {
 		$path = reset( $this->extensions );
 		if ( ! empty( $file ) ) {
-			\UString::do_start_with( $file, DIRECTORY_SEPARATOR );
+			\UString::doStartWith( $file, DIRECTORY_SEPARATOR );
 			$path .= $file;
 			$real_path = realpath( $path );
 			if ( $real_path == FALSE && $create ) {
@@ -91,8 +91,8 @@ class Application {
 	}
 
 	public function set_base_uri( $base_uri ) {
-		\UString::do_start_with( $base_uri, '/' );
-		\UString::do_not_end_with( $base_uri, '/' );
+		\UString::doStartWith( $base_uri, '/' );
+		\UString::doNotEndWith( $base_uri, '/' );
 		$this->base_uri = $base_uri;
 		return $this;
 	}

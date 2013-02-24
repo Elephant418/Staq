@@ -24,8 +24,8 @@ class Route {
 	  CONSTRUCTOR            
 	 *************************************************************************/
 	public function __construct( $callable = NULL, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
-		\UArray::do_convert_to_array( $match_exceptions );
-		\UArray::do_convert_to_array( $aliases_uri );
+		\UArray::doConvertToArray( $match_exceptions );
+		\UArray::doConvertToArray( $aliases_uri );
 		$this->callable         = $callable;
 		$this->match_uri        = $match_uri;
 		$this->match_exceptions = $match_exceptions;
@@ -33,7 +33,7 @@ class Route {
 	}
 	
 	public function by_setting( $controller, $action, $setting ) {
-		\UString::do_start_with( $action, 'action_' );
+		\UString::doStartWith( $action, 'action_' );
 		$callable = [ $controller, $action ];
 		if ( ! is_callable( $callable ) ) {
 			$message = get_class( $controller ) . '::' .$action . ' is not callable';
@@ -184,7 +184,7 @@ class Route {
 			if ( \Staq\Util::isStack( $controller ) ) {
 				$str .= \Staq\Util::stack_sub_query( $controller );
 			} else {
-				$str .= \UObject::convert_to_class( $controller );
+				$str .= \UObject::convertToClass( $controller );
 			}
 			$str .= '::' . $this->callable[ 1 ];
 		} else {

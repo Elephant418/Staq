@@ -26,7 +26,7 @@ abstract class Util {
 	}
 
 	public static function file_extension( $path ) {
-		return \UString::substr_after_last( $path, '.' );
+		return \UString::substrAfterLast( $path, '.' );
 	}
 
 	public static function string_path_to_namespace( $path ) {
@@ -60,7 +60,7 @@ abstract class Util {
 	// STACK QUERY
 	public static function stack_query_pop( $string ) {
 		if ( \Staq\Util::is_stack_query_popable( $string ) ) {
-			$string = \UString::substr_before_last( $string, '\\' );
+			$string = \UString::substrBeforeLast( $string, '\\' );
 		} else {
 			$string = NULL;
 		}
@@ -75,18 +75,18 @@ abstract class Util {
 		return ( is_object( $stack ) && \Staq\Util::isStack( $stack ) );
 	}
 	public static function isStack( $stack, $query = 'Stack\\' ) {
-		\UObject::do_convert_to_class( $stack );
-		return \UString::is_start_with( $stack, $query );
+		\UObject::doConvertToClass( $stack );
+		return \UString::isStartWith( $stack, $query );
 	}
 	public static function stackQuery( $stack ) {
-		\UObject::do_convert_to_class( $stack );
+		\UObject::doConvertToClass( $stack );
 		if ( \Staq\Util::isStack( $stack ) ) {
 			return substr( $stack, strlen( 'Stack\\' ) );
 		}
 	}
 	public static function stack_sub_query( $stack, $separator = '\\' ) {
 		$query = \Staq\Util::stackQuery( $stack );
-		$sub_query = \UString::substr_after( $query, '\\' );
+		$sub_query = \UString::substrAfter( $query, '\\' );
 		return str_replace( '\\', $separator, $sub_query );
 	}
 	public static function stack_sub_query_text( $stack ) {
@@ -135,24 +135,24 @@ abstract class Util {
 
 	// STACKABLE CLASS
 	public static function is_stackable_class( $stackable ) {
-		\UObject::do_convert_to_class( $stackable );
+		\UObject::doConvertToClass( $stackable );
 		return ( \UString::has( $stackable, '\\Stack\\' ) );
 	}
 	public static function getStackableExtension( $stackable ) {
-		\UObject::do_convert_to_class( $stackable );
-		return ( \UString::substr_before( $stackable, '\\Stack\\' ) );
+		\UObject::doConvertToClass( $stackable );
+		return ( \UString::substrBefore( $stackable, '\\Stack\\' ) );
 	}
 	public static function getStackableQuery( $stackable ) {
-		\UObject::do_convert_to_class( $stackable );
-		return ( \UString::substr_after( $stackable, '\\Stack\\' ) );
+		\UObject::doConvertToClass( $stackable );
+		return ( \UString::substrAfter( $stackable, '\\Stack\\' ) );
 	}
 	public static function isParentStack( $stackable ) {
-		\UObject::do_convert_to_class( $stackable );
-		return ( \UString::is_end_with( $stackable, '\\__Parent' ) );
+		\UObject::doConvertToClass( $stackable );
+		return ( \UString::isEndWith( $stackable, '\\__Parent' ) );
 	}
 	public static function getParentStackQuery( $stackable ) {
-		\UObject::do_convert_to_class( $stackable );
+		\UObject::doConvertToClass( $stackable );
 		$query = \Staq\Util::getStackableQuery( $stackable );
-		return ( \UString::substr_before( $query, '\\__Parent' ) );
+		return ( \UString::substrBefore( $query, '\\__Parent' ) );
 	}
 }

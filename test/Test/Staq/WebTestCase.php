@@ -55,7 +55,7 @@ class WebTestCase extends StaqTestCase {
 	 *************************************************************************/
 	public function is_error_document( $code = 404 ) {
 		foreach( headers_list( ) as $header ) {
-			if ( \UString::is_start_with( $header, 'HTTP/1.1 ' . $code ) ) {
+			if ( \UString::isStartWith( $header, 'HTTP/1.1 ' . $code ) ) {
 				return TRUE;
 			}
 		}
@@ -64,7 +64,7 @@ class WebTestCase extends StaqTestCase {
 
 	public function is_redirection( $url ) {
 		foreach( headers_list( ) as $header ) {
-			if ( \UString::is_start_with( $header, 'Location: ' . $url ) ) {
+			if ( \UString::isStartWith( $header, 'Location: ' . $url ) ) {
 				return TRUE;
 			}
 		}

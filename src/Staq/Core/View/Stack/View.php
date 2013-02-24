@@ -29,13 +29,13 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	}
 	public function by_name( $name, $prefix = NULL ) {
 		$class = [ 'Stack\\View' ];
-		\UString::do_not_start_with( $prefix, [ '\\', '_' ] );
-		\UString::do_not_end_with( $prefix, [ '\\', '_' ] );
+		\UString::doNotStartWith( $prefix, [ '\\', '_' ] );
+		\UString::doNotEndWith( $prefix, [ '\\', '_' ] );
 		if ( ! empty( $prefix ) ) {
 			$class[ ] = $prefix;
 		}
-		\UString::do_not_start_with( $name, [ '\\', '_' ] );
-		\UString::do_not_end_with( $name, [ '\\', '_' ] );
+		\UString::doNotStartWith( $name, [ '\\', '_' ] );
+		\UString::doNotEndWith( $name, [ '\\', '_' ] );
 		if ( ! empty( $name ) ) {
 			$class[ ] = $name;
 		}
@@ -67,7 +67,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 				break;
 			} 
 			if ( \UString::has( $template, '/' ) ) {
-				$template = \UString::substr_before_last( $template, '/' ) . '.html';
+				$template = \UString::substrBeforeLast( $template, '/' ) . '.html';
 			} else {
 				$template = 'index.html';
 				break;
@@ -109,7 +109,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	}
 	protected function extend_twig( ) {
 		$public = function( $path ) {
-			\UString::do_start_with( $path, '/' );
+			\UString::doStartWith( $path, '/' );
 			return \Staq::App()->get_base_uri( ) . $path;
 		};
 		$route = function( $controller, $action ) use ( $public ) {

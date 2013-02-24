@@ -100,7 +100,7 @@ class Setting {
 	}
 
 	protected function parse_from_string( $setting_file_name ) {
-		\UString::do_substr_before( $setting_file_name, '.' );
+		\UString::doSubstrBefore( $setting_file_name, '.' );
 		if ( ! $this->has_cache( $setting_file_name ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );
 			$stack = 'Stack\\' . \Staq\Util::string_path_to_namespace( $setting_file_name );
@@ -134,7 +134,7 @@ class Setting {
 					if ( $path ) {
 						$file_paths[ ] = $path;
 					}
-					$file_name = \UString::substr_before_last( $file_name, '.' );
+					$file_name = \UString::substrBeforeLast( $file_name, '.' );
 				}
 			}
 		}
@@ -145,7 +145,7 @@ class Setting {
 		$file_names = [ ];
 		do {
 			$file_names[ ] = $file_name;
-			$file_name = \UString::substr_before_last( $file_name, '/' );
+			$file_name = \UString::substrBeforeLast( $file_name, '/' );
 		} while( ! empty( $file_name ) );
 		return $file_names;
 	}

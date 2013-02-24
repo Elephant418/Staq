@@ -27,7 +27,7 @@ class PublicFile extends PublicFile\__Parent {
 		if ( 
 			empty( $real_path ) || 
 			is_dir( $real_path ) || 
-			\UString::is_end_with( $real_path, '.php' )
+			\UString::isEndWith( $real_path, '.php' )
 		) {
 			return NULL;
 		}
@@ -56,7 +56,7 @@ class PublicFile extends PublicFile\__Parent {
 	}
 
 	protected function get_content_type( $file_path ) {
-		$extension = \UString::substr_after_last( $file_path, '.' );
+		$extension = \UString::substrAfterLast( $file_path, '.' );
 		if ( in_array( $extension, [ 'html', 'css' ] ) ) {
 			$content_type = 'text/' . $extension;
 		} else if ( $extension === 'js' ) {

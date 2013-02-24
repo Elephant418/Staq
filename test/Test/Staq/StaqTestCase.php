@@ -21,8 +21,8 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase {
 	public function __construct( ) {
 
 		// Initialize project namespace
-		$project_name = \UObject::get_class_name( $this );
-		\UString::do_not_end_with( $project_name, 'Test' );
+		$project_name = \UObject::getClassName( $this );
+		\UString::doNotEndWith( $project_name, 'Test' );
 		$this->project_namespace .= $project_name;
 	}
 

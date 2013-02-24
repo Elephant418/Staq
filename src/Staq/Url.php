@@ -46,18 +46,18 @@ class Url {
 
 	public function from_string( $string ) {
 		$return = new $this;
-		if ( \UString::is_start_with( $string, [ 'http://', 'https://', '//' ] ) ) {
-			\UString::do_substr_after( $string, '//' );
-			$return->host = \UString::substr_before( $string, [ '/', ':' ] );
-			\UString::do_not_start_with( $string, $return->host );
+		if ( \UString::isStartWith( $string, [ 'http://', 'https://', '//' ] ) ) {
+			\UString::doSubstrAfter( $string, '//' );
+			$return->host = \UString::substrBefore( $string, [ '/', ':' ] );
+			\UString::doNotStartWith( $string, $return->host );
 			$return->port = 80;
 		}
-		if ( \UString::is_start_with( $string, ':' ) ) {
-			\UString::do_not_start_with( $string, ':' );
-			$return->port = intval( \UString::do_substr_after( $string, '/' ) );
+		if ( \UString::isStartWith( $string, ':' ) ) {
+			\UString::doNotStartWith( $string, ':' );
+			$return->port = intval( \UString::doSubstrAfter( $string, '/' ) );
 		}
-		\UString::do_not_end_with( $string, '/' );
-		\UString::do_start_with( $string, '/' );
+		\UString::doNotEndWith( $string, '/' );
+		\UString::doStartWith( $string, '/' );
 		$return->uri = $string;
 		return $return;
 	}
@@ -75,7 +75,7 @@ class Url {
 			$return->port = '80';
 		}
 		if ( isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
-			$return->uri = \UString::substr_before( $_SERVER[ 'REQUEST_URI' ], '?' );
+			$return->uri = \UString::substrBefore( $_SERVER[ 'REQUEST_URI' ], '?' );
 		} else {
 			$return->uri = '/';
 		}
@@ -108,7 +108,7 @@ class Url {
 		return ( 
 			( is_null( $this->host ) || $this->host === $url->host ) &&
 			( is_null( $this->port ) || $this->port === $url->port ) &&
-			( is_null( $this->uri  ) || \UString::is_start_with( $url->uri, $this->uri )  )
+			( is_null( $this->uri  ) || \UString::isStartWith( $url->uri, $this->uri )  )
 		);
 	}
 

@@ -93,9 +93,9 @@ class Request {
 				throw new \Stack\Exception\Database( 'Error with the SQL request : ' . $this->request, $statement->errorInfo( ) );
 			}
 		
-			if ( \UString::is_start_with( $this->request, [ 'SELECT', 'SHOW', 'DESCRIBE', 'EXPLAIN' ] ) ) {
+			if ( \UString::isStartWith( $this->request, [ 'SELECT', 'SHOW', 'DESCRIBE', 'EXPLAIN' ] ) ) {
 				$result = $statement->fetchAll( \PDO::FETCH_ASSOC );
-			} else if ( \UString::is_start_with( $this->request, "INSERT" ) ) {
+			} else if ( \UString::isStartWith( $this->request, "INSERT" ) ) {
 				$result = TRUE;
 				$id = $this->PDObject->lastInsertId( );
 				if ( $id == '0' ) {

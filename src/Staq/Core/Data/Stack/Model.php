@@ -69,7 +69,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	  INITIALIZATION          
 	 *************************************************************************/
 	public function by_data( $data ) {
-		\UArray::do_convert_to_array( $data );
+		\UArray::doConvertToArray( $data );
 		$model = new $this;
 		$model->id = $this->entity->extract_id( $data );
 		foreach ( $data as $name => $seed ) {
