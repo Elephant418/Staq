@@ -14,7 +14,7 @@ class Setting {
 	 *************************************************************************/
 	static public $initialized = FALSE;
 	static public $cache = [ ]; 
-	static public $cache_file;
+	static public $cacheFile;
 
 
 
@@ -28,10 +28,10 @@ class Setting {
 	}
 	
 	protected function initialize( ) {
-		if ( $path = \Staq::App()->get_path( 'cache/', TRUE ) ) {
-			static::$cache_file = $path . '/setting.' . \Staq::App()->get_platform( ) . '.php';
-			if ( is_file( static::$cache_file ) ) {
-				require( static::$cache_file );
+		if ( $path = \Staq::App()->getPath( 'cache/', TRUE ) ) {
+			static::$cacheFile = $path . '/setting.' . \Staq::App()->getPlatform( ) . '.php';
+			if ( is_file( static::$cacheFile ) ) {
+				require( static::$cacheFile );
 				if ( is_array( $cache ) ) {
 					static::$cache = $cache;
 				}
@@ -46,40 +46,40 @@ class Setting {
 	/*************************************************************************
 	  CACHE METHODS              
 	 *************************************************************************/
-	public function clear_cache( ) {
+	public function clearCache( ) {
 		static::$cache = [ ];
-		static::$cache_file = NULL;
+		static::$cacheFile = NULL;
 		$this->initialize( );
 		return $this;
 	}
 
-	protected function has_cache( $setting_file_name ) {
-		return isset( static::$cache[ $setting_file_name ] );
+	protected function hasCache( $settingFileName ) {
+		return isset( static::$cache[ $settingFileName ] );
 	}
 
-	protected function add_cache( $setting_file_name, $settings ) {
+	protected function addCache( $settingFileName, $settings ) {
 		$settings = $settings->getArrayCopy( );
-		static::$cache[ $setting_file_name ] = $settings;
+		static::$cache[ $settingFileName ] = $settings;
 		if ( \Staq::App( )->isInitialized( ) ) {
 			$setting = ( new $this )->parse( 'Application' );
 			if ( $setting->getAsBoolean( 'cache.setting' ) ) {
 				if ( 
-					! static::$cache_file ||
-					! $handle = @fopen( static::$cache_file, 'a' )
+					! static::$cacheFile ||
+					! $handle = @fopen( static::$cacheFile, 'a' )
 				) {
 					return NULL;
 				}
-				if ( 0 == filesize( static::$cache_file ) ) {
+				if ( 0 == filesize( static::$cacheFile ) ) {
 					fwrite( $handle, '<?php' . PHP_EOL . '$cache = array( );' . PHP_EOL );
 				}
-				fwrite( $handle, '$cache["' . $setting_file_name . '"] = ' . var_export( $settings, TRUE ) . ';' . PHP_EOL );	
+				fwrite( $handle, '$cache["' . $settingFileName . '"] = ' . var_export( $settings, TRUE ) . ';' . PHP_EOL );	
 				fclose($handle);
 			}
 		}
 	}
 
-	protected function get_cache( $setting_file_name ) {
-		return new \Pixel418\Iniliq\ArrayObject( static::$cache[ $setting_file_name ] );
+	protected function getCache( $settingFileName ) {
+		return new \Pixel418\Iniliq\ArrayObject( static::$cache[ $settingFileName ] );
 	}
 
 
@@ -89,64 +89,64 @@ class Setting {
 	 *************************************************************************/
 	public function parse( $mixed ) {
 		if ( \Staq\Util::isStack( $mixed ) ) {
-			return $this->parse_from_stack( $mixed );
+			return $this->parseFromStack( $mixed );
 		}
-		return $this->parse_fromString( $mixed );
+		return $this->parseFromString( $mixed );
 	}
 
-	protected function parse_from_stack( $stack ) {
-		$setting_file_name = $this->get_setting_file_name_from_stack( $stack );
-		return $this->parse_fromString( $setting_file_name );
+	protected function parseFromStack( $stack ) {
+		$settingFileName = $this->getSettingFileNameFromStack( $stack );
+		return $this->parseFromString( $settingFileName );
 	}
 
-	protected function parse_fromString( $setting_file_name ) {
-		\UString::doSubstrBefore( $setting_file_name, '.' );
-		if ( ! $this->has_cache( $setting_file_name ) ) {
-			$file_paths = $this->get_file_paths( $setting_file_name );
-			$stack = 'Stack\\' . \Staq\Util::convertPathToNamespace( $setting_file_name );
+	protected function parseFromString( $settingFileName ) {
+		\UString::doSubstrBefore( $settingFileName, '.' );
+		if ( ! $this->hasCache( $settingFileName ) ) {
+			$filePaths = $this->getFilePaths( $settingFileName );
+			$stack = 'Stack\\' . \Staq\Util::convertPathToNamespace( $settingFileName );
 			foreach( \Staq\Util::getStackDefinition( $stack ) as $class ) {
 				if ( isset( $class::$setting ) ) {
-					array_unshift( $file_paths, $class::$setting );
+					array_unshift( $filePaths, $class::$setting );
 				}
 			}
-			$settings = ( new \Pixel418\Iniliq\Parser )->parse( $file_paths );
-			$this->add_cache( $setting_file_name, $settings );
+			$settings = ( new \Pixel418\Iniliq\Parser )->parse( $filePaths );
+			$this->addCache( $settingFileName, $settings );
 		}
-		return $this->get_cache( $setting_file_name );
+		return $this->getCache( $settingFileName );
 	}
 
-	protected function get_setting_file_name_from_stack( $stack ) {
-		$setting_file_name = \Staq\Util::getStackQuery( $stack );
-		return \Staq\Util::convertNamespaceToPath( $setting_file_name );
+	protected function getSettingFileNameFromStack( $stack ) {
+		$settingFileName = \Staq\Util::getStackQuery( $stack );
+		return \Staq\Util::convertNamespaceToPath( $settingFileName );
 	}
 
-	protected function get_file_paths( $full_setting_file_name ) {
-		$file_names = $this->get_file_names( $full_setting_file_name );
-		$platform_name = \Staq::App()->get_platform( );
-		$file_paths = [ ];
-		foreach ( \Staq::App()->get_extensions( ) as $extension ) {
-			foreach( $file_names as $file_name ) {
-				if ( $platform_name ) {
-					$file_name .= '.' . $platform_name;
+	protected function getFilePaths( $fullSettingFileName ) {
+		$fileNames = $this->getFileNames( $fullSettingFileName );
+		$platformName = \Staq::App()->getPlatform( );
+		$filePaths = [ ];
+		foreach ( \Staq::App()->getExtensions( ) as $extension ) {
+			foreach( $fileNames as $fileName ) {
+				if ( $platformName ) {
+					$fileName .= '.' . $platformName;
 				}
-				while ( $file_name ) {
-					$path = realpath( $extension . '/setting/' . $file_name . '.ini' );
+				while ( $fileName ) {
+					$path = realpath( $extension . '/setting/' . $fileName . '.ini' );
 					if ( $path ) {
-						$file_paths[ ] = $path;
+						$filePaths[ ] = $path;
 					}
-					$file_name = \UString::substrBeforeLast( $file_name, '.' );
+					$fileName = \UString::substrBeforeLast( $fileName, '.' );
 				}
 			}
 		}
-		return array_reverse( $file_paths );
+		return array_reverse( $filePaths );
 	}
 
-	protected function get_file_names( $file_name ) {
-		$file_names = [ ];
+	protected function getFileNames( $fileName ) {
+		$fileNames = [ ];
 		do {
-			$file_names[ ] = $file_name;
-			$file_name = \UString::substrBeforeLast( $file_name, '/' );
-		} while( ! empty( $file_name ) );
-		return $file_names;
+			$fileNames[ ] = $fileName;
+			$fileName = \UString::substrBeforeLast( $fileName, '/' );
+		} while( ! empty( $fileName ) );
+		return $fileNames;
 	}
 }

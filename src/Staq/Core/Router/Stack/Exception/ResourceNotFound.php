@@ -12,19 +12,19 @@ class ResourceNotFound extends ResourceNotFound\__Parent {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $default_code    = 404;
+	protected $defaultCode    = 404;
 
 
 
 	/*************************************************************************
 	  CONSTRUCTOR
 	 *************************************************************************/
-	public function by_uri( $uri = NULL ) {
+	public function byUri( $uri = NULL ) {
 		$this->message = 'Resource not found for the uri "' . $uri . '"';
 		return $this;
 	}
 
-	public function by_exception( $exception = NULL ) {
+	public function byException( $exception = NULL ) {
 		$this->message = 'Resource not found for the ' . $exception;
 		return $this;
 	}

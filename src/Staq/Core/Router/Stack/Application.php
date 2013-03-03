@@ -20,20 +20,20 @@ class Application extends Application\__Parent {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function get_controller( $name ) {
-		return $this->router->get_controller( $name );
+	public function getController( $name ) {
+		return $this->router->getController( $name );
 	}
 
-	public function get_uri( $controller, $action, $parameters ) {
-		return $this->router->get_uri( $controller, $action, $parameters );
+	public function getUri( $controller, $action, $parameters ) {
+		return $this->router->getUri( $controller, $action, $parameters );
 	}
 
-	public function get_current_uri( ) {
-		return $this->router->get_current_uri( );
+	public function getCurrentUri( ) {
+		return $this->router->getCurrentUri( );
 	}
 
-	public function get_last_exception( ) {
-		return $this->router->get_last_exception( );
+	public function getLastException( ) {
+		return $this->router->getLastException( );
 	}
 	
 
@@ -57,7 +57,7 @@ class Application extends Application\__Parent {
 		$this->router = new \Stack\Router( );
 		if ( isset( $_SERVER[ 'REQUEST_URI' ] ) ) {
 			$uri = \UString::substrBefore( $_SERVER[ 'REQUEST_URI' ], '?' );
-			\UString::doNotStartWith( $uri, $this->base_uri );
+			\UString::doNotStartWith( $uri, $this->baseUri );
 			\UString::doStartWith( $uri, '/' );
 			$this->router->set_uri( $uri );
 		}

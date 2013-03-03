@@ -13,7 +13,7 @@ class Application {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $extensions;
-	protected $base_uri;
+	protected $baseUri;
 	protected $platform;
 	protected $initialized = FALSE;
 
@@ -22,7 +22,7 @@ class Application {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function get_extensions( $file = NULL ) {
+	public function getExtensions( $file = NULL ) {
 		$extensions = $this->extensions;
 		if ( ! empty( $file ) ) {
 			\UString::doStartWith( $file, DIRECTORY_SEPARATOR );
@@ -36,22 +36,22 @@ class Application {
 		return $extensions;
 	}
 
-	public function get_file_path( $file = NULL ) {
-		$paths = $this->get_extensions( $file );
+	public function getFilePath( $file = NULL ) {
+		$paths = $this->getExtensions( $file );
 		if ( ! empty( $paths ) ) {
 			return reset( $paths );
 		}
 	}
 
-	public function get_extension_namespaces( ) {
+	public function getExtensionNamespaces( ) {
 		return array_keys( $this->extensions );
 	}
 
-	public function get_namespace( ) {
-		return reset( $this->get_extension_namespaces( ) );
+	public function getNamespace( ) {
+		return reset( $this->getExtensionNamespaces( ) );
 	}
 
-	public function get_path( $file = NULL, $create = FALSE ) {
+	public function getPath( $file = NULL, $create = FALSE ) {
 		$path = reset( $this->extensions );
 		if ( ! empty( $file ) ) {
 			\UString::doStartWith( $file, DIRECTORY_SEPARATOR );
@@ -67,11 +67,11 @@ class Application {
 		return $path;
 	}
 
-	public function get_base_uri( ) {
-		return $this->base_uri;
+	public function getBaseUri( ) {
+		return $this->baseUri;
 	}
 
-	public function get_platform( ) {
+	public function getPlatform( ) {
 		return $this->platform;
 	}
 
@@ -90,10 +90,10 @@ class Application {
 		return $this;
 	}
 
-	public function set_base_uri( $base_uri ) {
-		\UString::doStartWith( $base_uri, '/' );
-		\UString::doNotEndWith( $base_uri, '/' );
-		$this->base_uri = $base_uri;
+	public function setBaseUri( $baseUri ) {
+		\UString::doStartWith( $baseUri, '/' );
+		\UString::doNotEndWith( $baseUri, '/' );
+		$this->baseUri = $baseUri;
 		return $this;
 	}
 
@@ -102,23 +102,23 @@ class Application {
 	/*************************************************************************
 	  INITIALIZATION             
 	 *************************************************************************/
-	public function __construct( $extensions, $base_uri, $platform ) {
+	public function __construct( $extensions, $baseUri, $platform ) {
 		$this->extensions = $extensions;
-		$this->set_base_uri( $base_uri );
+		$this->setBaseUri( $baseUri );
 		$this->platform   = $platform;
 	}
 
 	public function initialize( ) {
 		$settings = ( new \Stack\Setting )
-			->clear_cache( )
+			->clearCache( )
 			->parse( $this );
 
 		// Display errors
-		$display_errors = 0;
+		$displayErrors = 0;
 		if ( $settings->getAsBoolean( 'error.display_errors' ) ) {
-			$display_errors = 1;
+			$displayErrors = 1;
 		}
-		ini_set( 'display_errors', $display_errors );
+		ini_set( 'display_errors', $displayErrors );
 
 		// Level reporting
 		$level = $settings->get( 'error.error_reporting' );

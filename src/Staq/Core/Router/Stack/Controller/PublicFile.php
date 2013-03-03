@@ -22,8 +22,8 @@ class PublicFile extends PublicFile\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function action_view( ) {
-		$path = \Staq::App()->get_current_uri( );
-		$real_path = \Staq::App()->get_file_path( '/public' . $path );
+		$path = \Staq::App()->getCurrentUri( );
+		$real_path = \Staq::App()->getFilePath( '/public' . $path );
 		if ( 
 			empty( $real_path ) || 
 			is_dir( $real_path ) || 

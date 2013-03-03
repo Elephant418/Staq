@@ -12,8 +12,8 @@ class Exception extends \Exception {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $default_message = NULL;
-	protected $default_code    = 0;
+	protected $defaultMessage = NULL;
+	protected $defaultCode    = 0;
 
 
 
@@ -21,26 +21,14 @@ class Exception extends \Exception {
 	  CONSTRUCTOR
 	 *************************************************************************/
 	public function __construct( $message = NULL, $code = NULL, \Exception $previous = NULL ) {
-		if ( is_null( $message ) ) $message = $this->default_message;
+		if ( is_null( $message ) ) $message = $this->defaultMessage;
 		if ( is_null( $message ) ) $message = \Staq\Util::getStackSubQueryText( $this );
-		if ( is_null( $code ) )    $code    = $this->default_code;
+		if ( is_null( $code ) )    $code    = $this->defaultCode;
 		parent::__construct( $message, $code, $previous );
 	}
-	public function from_previous( \Exception $previous ) {
+	public function fromPrevious( \Exception $previous ) {
 		$class = get_class( $this );
 		return new $class( NULL, NULL, $previous );
-	}
-
-
-
-	/*************************************************************************
-	  PUBLIC METHODS                   
-	 *************************************************************************/
-	public function get_message( ) {
-		return $this->getMessage( );
-	}
-	public function get_code( ) {
-		return $this->getCode( );
 	}
 }
 

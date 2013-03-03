@@ -137,8 +137,8 @@ class Url {
 	 *************************************************************************/
 	public function diffUri( $url ) {
 		if ( is_object( $url ) && ! empty( $url->uri ) ) {
-			$this->uri = \Supersoniq\substr_after( $this->uri, $url->uri );
-			\Supersoniq\must_starts_with( $this->uri, '/' );
+			$this->uri = \UString::substrAfter( $this->uri, $url->uri );
+			\UString::doStartWith( $this->uri, '/' );
 		}
 		return $this;
 	}

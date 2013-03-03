@@ -57,7 +57,7 @@ class Route {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function get_uri( $parameters ) {
+	public function getUri( $parameters ) {
 		$uri = $this->match_uri;
 		foreach ( $parameters as $name => $value ) {
 			if ( ! is_numeric( $name ) ) {
@@ -103,7 +103,7 @@ class Route {
 		}
 		foreach ( $this->aliases_uri as $alias ) {
 			if ( $this->is_uri_match( $uri, $alias ) ) {
-				return $this->get_uri( $this->parameters );
+				return $this->getUri( $this->parameters );
 			}
 		}
 		return FALSE;
@@ -114,6 +114,7 @@ class Route {
 		$result = FALSE;
 		foreach ( $this->match_exceptions as $match_exception ) {
 			if ( is_numeric( $match_exception ) ) {
+				echo $exception->getCode( ) . ' == ' . $match_exception;
 				if( $exception->getCode( ) == $match_exception ) {
 					$result = TRUE;
 				}
@@ -160,7 +161,7 @@ class Route {
 
 	protected function get_parameter_from_exception( $exception ) {
 		$parameters = [ ];
-		$parameters[ 'code' ]      = $exception->get_code( );
+		$parameters[ 'code' ]      = $exception->getCode( );
 		$parameters[ 'exception' ] = $exception;
 		if ( \Staq\Util::isStack( $exception ) ) {
 			$parameters[ 'query' ] = \Staq\Util::getStackQuery( $exception );

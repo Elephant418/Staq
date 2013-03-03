@@ -66,7 +66,7 @@ class ViewTest extends WebTestCase {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
-			->set_base_uri( '/prefix/path' )
+			->setBaseUri( '/prefix/path' )
 			->addController( '/*', function( ) {
 				return new \Stack\View\Extension\PublicFilter;
 			} )
@@ -78,7 +78,7 @@ class ViewTest extends WebTestCase {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
-			->set_base_uri( 'prefix/path/' )
+			->setBaseUri( 'prefix/path/' )
 			->addController( '/*', function( ) {
 				return new \Stack\View\Extension\PublicFunction;
 			} )
@@ -90,7 +90,7 @@ class ViewTest extends WebTestCase {
 		$this->get_request_url( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
-			->set_base_uri( '/prefix/path/' )
+			->setBaseUri( '/prefix/path/' )
 			->addController( '/*', function( ) {
 				return new \Stack\View\Extension\RouteFunction;
 			} )

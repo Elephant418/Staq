@@ -12,7 +12,7 @@ abstract class Application {
 	/*************************************************************************
 	  STATIC SHORTHAND METHODS                 
 	 *************************************************************************/
-	public static function create( $path = 'Staq\Core\Ground', $base_uri = NULL, $platform = 'prod' ) {
-		return ( new \Staq\Server )->createApplication( $path, $base_uri, $platform );
+	public static function create( $path = 'Staq\Core\Ground', $baseUri = NULL, $platform = 'prod' ) {
+		return ( new \Staq\Server )->createApplication( $path, $baseUri, $platform );
 	}
 }

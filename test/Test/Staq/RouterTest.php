@@ -69,8 +69,9 @@ class RouterTest extends WebTestCase {
 	}
 
 	public function test_anonymous_controller__conditionnal_controller( ) {
-		\Staq::App()->addController( '/*', function( ) {
-				if ( \Staq::App()->get_current_uri( ) == '/coco' ) {
+		\Staq::App()
+			->addController( '/*', function( ) {
+				if ( \Staq::App()->getCurrentUri( ) == '/coco' ) {
 					return NULL;
 				}
 			})

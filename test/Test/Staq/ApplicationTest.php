@@ -35,18 +35,18 @@ class ApplicationTest extends StaqTestCase {
 	public function test_empty_project__extensions( ) {
 		$app = \Staq\App::create( )
 			->setPlatform( 'local' );
-		$this->assertEquals( $this->starter_namespaces, $app->get_extension_namespaces( ) );
+		$this->assertEquals( $this->starter_namespaces, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_empty_project__platform__default( ) {
 		$app = \Staq\App::create( );
-		$this->assertEquals( 'prod', $app->get_platform( ) );
+		$this->assertEquals( 'prod', $app->getPlatform( ) );
 	}
 
 	public function test_empty_project__platform__setted( ) {
 		$app = \Staq\App::create( )
 			->setPlatform( 'local' );
-		$this->assertEquals( 'local', $app->get_platform( ) );
+		$this->assertEquals( 'local', $app->getPlatform( ) );
 	}
 
 	public function test_no_configuration__extensions( ) {
@@ -54,7 +54,7 @@ class ApplicationTest extends StaqTestCase {
 		$app = \Staq\App::create( $project_namespace )
 			->setPlatform( 'local' );
 		$expected = $this->append_project_namespace( 'NoConfiguration' );
-		$this->assertEquals( $expected, $app->get_extension_namespaces( ) );
+		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_simple_configuration__extensions( ) {
@@ -62,7 +62,7 @@ class ApplicationTest extends StaqTestCase {
 		$app = \Staq\App::create( $project_namespace )
 			->setPlatform( 'local' );
 		$expected = $this->append_project_namespace( 'SimpleConfiguration' );
-		$this->assertEquals( $expected, $app->get_extension_namespaces( ) );
+		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_extend_no_configuration__extensions( ) {
@@ -70,7 +70,7 @@ class ApplicationTest extends StaqTestCase {
 		$app = \Staq\App::create( $project_namespace )
 			->setPlatform( 'local' );
 		$expected = $this->append_project_namespace( 'ExtendNoConfiguration', 'NoConfiguration' );
-		$this->assertEquals( $expected, $app->get_extension_namespaces( ) );
+		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_without_starter__extensions( ) {
@@ -78,7 +78,7 @@ class ApplicationTest extends StaqTestCase {
 		$app = \Staq\App::create( $project_namespace )
 			->setPlatform( 'local' );
 		$expected = [ $project_namespace, 'Staq\Core\Ground' ];
-		$this->assertEquals( $expected, $app->get_extension_namespaces( ) );
+		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 

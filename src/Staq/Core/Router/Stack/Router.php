@@ -23,15 +23,15 @@ class Router {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function get_current_uri( ) {
+	public function getCurrentUri( ) {
 		return end( $this->uris );
 	}
 
-	public function get_last_exception( ) {
+	public function getLastException( ) {
 		return end( $this->exceptions );
 	}
 
-	public function get_controller( $name ) {
+	public function getController( $name ) {
 		if ( isset( $this->controllers[ $name ] ) ) {
 			return $this->controllers[ $name ];
 		}
@@ -43,10 +43,10 @@ class Router {
 		}
 	}
 
-	public function get_uri( $controller, $action, $parameters ) {
+	public function getUri( $controller, $action, $parameters ) {
 		$route = $this->get_route( $controller, $action );
 		if ( $route ) {
-			return $route->get_uri( $parameters );
+			return $route->getUri( $parameters );
 		}
 		return '#unknownroute';
 	}
@@ -158,23 +158,23 @@ class Router {
 
 	protected function throw_404( $exception = NULL ) {
 		if ( is_null( $exception ) ) {
-			throw ( new \Stack\Exception\ResourceNotFound )->by_uri( $this->get_current_uri( ) );
+			throw ( new \Stack\Exception\ResourceNotFound )->byUri( $this->getCurrentUri( ) );
 		} else {
-			throw ( new \Stack\Exception\ResourceNotFound )->by_exception( $exception );
+			throw ( new \Stack\Exception\ResourceNotFound )->byException( $exception );
 		}
 	}
 
 	protected function get_active_routes( $exception = NULL ) {
 		if ( is_null( $exception ) ) {
-			$uri = $this->get_current_uri( );
-			$active_routes = $this->get_active_routes_by_uri( $uri );
+			$uri = $this->getCurrentUri( );
+			$active_routes = $this->get_active_routes_byUri( $uri );
 		} else {
-			$active_routes = $this->get_active_routes_by_exception( $exception );
+			$active_routes = $this->get_active_routes_byException( $exception );
 		}
 		return $active_routes;
 	}
 
-	protected function get_active_routes_by_uri( $uri ) {
+	protected function get_active_routes_byUri( $uri ) {
 		$active_routes = [ ];
 		foreach ( $this->routes as $controller => $routes ) {
 			foreach ( $routes as $action => $route ) {
@@ -193,7 +193,7 @@ class Router {
 		return $active_routes;
 	}
 
-	protected function get_active_routes_by_exception( $exception ) {
+	protected function get_active_routes_byException( $exception ) {
 		$active_routes = [ ];
 		foreach ( $this->routes as $controller => $routes ) {
 			foreach ( $routes as $action => $route ) {

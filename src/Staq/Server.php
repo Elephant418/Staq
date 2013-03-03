@@ -43,9 +43,9 @@ class Server {
 		return $this;
 	}
 
-	public function addPlatform( $platform_name, $listenings = '/' ) {
+	public function addPlatform( $platformName, $listenings = '/' ) {
 		$this->doFormatListenings( $listenings );
-		$this->platforms[ $platform_name ] = $listenings;
+		$this->platforms[ $platformName ] = $listenings;
 		return $this;
 	}
 
@@ -59,9 +59,9 @@ class Server {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function createApplication( $namespace = 'Staq\Core\Ground', $base_uri = NULL, $platform = 'prod' ) {
-		if ( empty( $base_uri ) ) {
-			$base_uri = $this->getDefaultBaseUri( );
+	public function createApplication( $namespace = 'Staq\Core\Ground', $baseUri = NULL, $platform = 'prod' ) {
+		if ( empty( $baseUri ) ) {
+			$baseUri = $this->getDefaultBaseUri( );
 		}
 		$extensions = $this->findExtensions( $namespace );
 		if ( ! is_null( static::$autoloader ) ) {
@@ -69,7 +69,7 @@ class Server {
 		}
 		static::$autoloader = new \Staq\Autoloader( $extensions );
 		spl_autoload_register( array( static::$autoloader, 'autoload' ) );
-		static::$application = new \Stack\Application( $extensions, $base_uri, $platform );
+		static::$application = new \Stack\Application( $extensions, $baseUri, $platform );
 		static::$application->initialize( );
 		return static::$application;
 	}
@@ -80,12 +80,12 @@ class Server {
 
 	public function launchCurrentApplication( ) {
 	 	$this->addDefaultEnvironment( );
-		$base_uri  = '';
+		$baseUri  = '';
 		$request   = ( new \Staq\Url )->byServer( );
-		$platform  = $this->getCurrentPlatform( $request, $base_uri );
-		$namespace = $this->getCurrentApplicationName( $request, $base_uri );
-		\UString::doStartWith( $base_uri, '/' );
-		return $this->createApplication( $namespace, $base_uri, $platform );
+		$platform  = $this->getCurrentPlatform( $request, $baseUri );
+		$namespace = $this->getCurrentApplicationName( $request, $baseUri );
+		\UString::doStartWith( $baseUri, '/' );
+		return $this->createApplication( $namespace, $baseUri, $platform );
 	}
 
 
@@ -93,25 +93,25 @@ class Server {
 	/*************************************************************************
 	  APPLICATION SWITCH SETTINGS             
 	 *************************************************************************/
-	protected function getCurrentPlatform( $request, &$base_uri ) {
+	protected function getCurrentPlatform( $request, &$baseUri ) {
 		foreach ( $this->platforms as $platform => $listenings ) {
 			foreach ( $listenings as $listening ) {
 				if ( $listening->match( $request ) ) {
-					$base_uri .= $listening->uri;
-					\UString::doNotEndWith( $base_uri, '/' );
+					$baseUri .= $listening->uri;
+					\UString::doNotEndWith( $baseUri, '/' );
 					return $platform;
 				}
 			}
 		}
 	}
 
-	protected function getCurrentApplicationName( $request, &$base_uri ) {
+	protected function getCurrentApplicationName( $request, &$baseUri ) {
 		foreach ( $this->applications as $application => $listenings ) {
 			foreach ( $listenings as $listening ) {
-				$listening->uri = $base_uri . $listening->uri;
+				$listening->uri = $baseUri . $listening->uri;
 				if ( $listening->match( $request ) ) {
-					$base_uri = $listening->uri;
-					\UString::doNotEndWith( $base_uri, '/' );
+					$baseUri = $listening->uri;
+					\UString::doNotEndWith( $baseUri, '/' );
 					return $application;
 				}
 			}
@@ -119,16 +119,16 @@ class Server {
 	}
 
 	protected function getDefaultBaseUri( ) {
-		$base_uri = NULL;
+		$baseUri = NULL;
 		if ( isset( $_SERVER[ 'DOCUMENT_ROOT' ] ) && isset( $_SERVER[ 'SCRIPT_FILENAME' ] ) ) {
 			if ( \UString::isStartWith( $_SERVER[ 'SCRIPT_FILENAME' ], $_SERVER[ 'DOCUMENT_ROOT' ] ) ) {
-				$base_uri = \UString::notStartWith( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
+				$baseUri = \UString::notStartWith( dirname( $_SERVER[ 'SCRIPT_FILENAME' ] ), $_SERVER[ 'DOCUMENT_ROOT' ] );
 			}
 		}
-		if ( empty( $base_uri ) ) {
-			$base_uri = '/';
+		if ( empty( $baseUri ) ) {
+			$baseUri = '/';
 		}
-		return $base_uri;
+		return $baseUri;
 	}
 
 	protected function addDefaultEnvironment( ) {
@@ -145,16 +145,16 @@ class Server {
 		$this->initializeNamespaces( );
 		$files = [  ];
 		$namespaces = [ $namespace, 'Staq\Core\Ground' ];
-		$new_namespaces = [ $namespace, 'Staq\Core\Ground' ];
-		while ( count( $new_namespaces ) > 0 ) {
-			$new_extensions = $this->formatExtensionsFromNamespaces( $new_namespaces );
-			foreach ( $new_extensions as $extension ) {
+		$newNamespaces = [ $namespace, 'Staq\Core\Ground' ];
+		while ( count( $newNamespaces ) > 0 ) {
+			$newExtensions = $this->formatExtensionsFromNamespaces( $newNamespaces );
+			foreach ( $newExtensions as $extension ) {
 				$files[ ] = $extension . '/setting/Application.ini';
 			}
 			$ini = ( new \Pixel418\Iniliq\Parser )->parse( array_reverse( $files ) );
-			$fetch_namespaces = array_reverse( $ini->getAsArray( 'extension.list' ) );
-			$new_namespaces = array_diff( $fetch_namespaces, $namespaces );
-			$namespaces = array_merge( $namespaces, $fetch_namespaces );
+			$fetchNamespaces = array_reverse( $ini->getAsArray( 'extension.list' ) );
+			$newNamespaces = array_diff( $fetchNamespaces, $namespaces );
+			$namespaces = array_merge( $namespaces, $fetchNamespaces );
 		}
 		$namespaces = \UArray::reverseMergeUnique( $namespaces, [ ] );
 		return $this->formatExtensionsFromNamespaces( $namespaces );
@@ -163,11 +163,11 @@ class Server {
 	protected function initializeNamespaces( ) {
 		if ( empty( $this->namespaces ) ) {
 			if ( \UString::has( __DIR__, '/vendor/' ) ) {
-				$base_dir = \UString::substrBeforeLast( __DIR__, '/vendor/' );
+				$baseDir = \UString::substrBeforeLast( __DIR__, '/vendor/' );
 			} else {
-				$base_dir = __DIR__ . '/../..';
+				$baseDir = __DIR__ . '/../..';
 			}
-			$this->namespaces = ( require( $base_dir . '/vendor/composer/autoload_namespaces.php' ) );
+			$this->namespaces = ( require( $baseDir . '/vendor/composer/autoload_namespaces.php' ) );
 		}
 	}
 
@@ -185,13 +185,13 @@ class Server {
 	}
 
 	protected function findExtensionPath( $namespace ) {
-		foreach ( $this->namespaces as $base_namespace => $base_paths ) {
-            if ( \UString::isStartWith( $namespace, $base_namespace ) ) {
-				\UArray::doConvertToArray( $base_paths );
-				foreach ( $base_paths as $base_path ) {
+		foreach ( $this->namespaces as $baseNamespace => $basePaths ) {
+            if ( \UString::isStartWith( $namespace, $baseNamespace ) ) {
+				\UArray::doConvertToArray( $basePaths );
+				foreach ( $basePaths as $basePath ) {
         			$path = str_replace( '\\', DIRECTORY_SEPARATOR, $namespace );
-                	\UString::doEndWith( $base_path, DIRECTORY_SEPARATOR );
-	            	$path = $base_path . $path;
+                	\UString::doEndWith( $basePath, DIRECTORY_SEPARATOR );
+	            	$path = $basePath . $path;
 	                if ( is_dir( $path ) ) {
 	                    return $path;
 	                }

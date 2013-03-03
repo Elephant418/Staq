@@ -48,7 +48,7 @@ abstract class Util {
 		die( );
 	}
 	public static function httpRedirectUri( $uri ) {
-		\Staq\Util::httpRedirect( \Staq::App()->get_base_uri( ) . substr( $uri, 1 ) );
+		\Staq\Util::httpRedirect( \Staq::App()->getBaseUri( ) . substr( $uri, 1 ) );
 	}
 
 
