@@ -7,7 +7,7 @@ namespace Staq\Util\Auth\Stack\Model;
 
 class User extends User\__Parent {
 
-	public function by_login( $login ) {
-		return $this->by_field( 'login', $login );
+	public function byLogin( $login ) {
+		return $this->byField( 'login', $login );
 	}
 }

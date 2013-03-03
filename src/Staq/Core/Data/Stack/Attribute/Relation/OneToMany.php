@@ -13,16 +13,16 @@ class OneToMany extends OneToMany\__Parent {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $model;
-	protected $remote_models = NULL;
-	protected $remote_class_type;
-	protected $remote_attribute_name;
+	protected $remoteModels = NULL;
+	protected $remoteClassType;
+	protected $remoteAttributeName;
 
 
 
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function init_bySetting( $model, $setting ) {
+	public function initBySetting( $model, $setting ) {
 		$this->model = $model;
 		if ( is_array( $setting ) ) {
 			if ( ! isset( $setting[ 'remote_class_type' ] ) ) {
@@ -31,8 +31,8 @@ class OneToMany extends OneToMany\__Parent {
 			if ( ! isset( $setting[ 'remote_attribute_name' ] ) ) {
 				throw new \Stack\Exception\MissingSetting( '"remote_attribute_name" missing for the OneToMany relation.');
 			} 
-			$this->remote_class_type = $setting[ 'remote_class_type' ];
-			$this->remote_attribute_name = $setting[ 'remote_attribute_name' ];
+			$this->remoteClassType = $setting[ 'remote_class_type' ];
+			$this->remoteAttributeName = $setting[ 'remote_attribute_name' ];
 		}
 	}
 
@@ -42,17 +42,17 @@ class OneToMany extends OneToMany\__Parent {
 	  PUBLIC USER METHODS             
 	 *************************************************************************/
 	public function get( ) {
-		if ( is_null( $this->remote_models ) ) {
-			$request = [ $this->remote_attribute_name => $this->model->id ];
-			$class = $this->get_remote_class( );
-			$this->remote_models = ( new $class )->fetch( $request );
+		if ( is_null( $this->remoteModels ) ) {
+			$request = [ $this->remoteAttributeName => $this->model->id ];
+			$class = $this->getRemoteClass( );
+			$this->remoteModels = ( new $class )->fetch( $request );
 		}
-		return $this->remote_models;
+		return $this->remoteModels;
 	}
 
-	public function set( $remote_models ) {
+	public function set( $remoteModels ) {
 		// TODO: Manage to keep old ones to delete it.
-		return $this->remote_models = $remote_models;
+		return $this->remoteModels = $remoteModels;
 	}
 
 
@@ -60,11 +60,11 @@ class OneToMany extends OneToMany\__Parent {
 	/*************************************************************************
 	  PUBLIC DATABASE METHODS             
 	 *************************************************************************/
-	public function get_seed( ) {
+	public function getSeed( ) {
 		return NULL;
 	}
 
-	public function set_seed( $seed ) {
+	public function setSeed( $seed ) {
 	}
 
 
@@ -72,7 +72,7 @@ class OneToMany extends OneToMany\__Parent {
 	/*************************************************************************
 	  PROTECTED METHODS             
 	 *************************************************************************/
-	protected function get_remote_class( ) {
-		return $class = 'Stack\\Model\\' . $this->remote_class_type;
+	protected function getRemoteClass( ) {
+		return $class = 'Stack\\Model\\' . $this->remoteClassType;
 	}	
 }

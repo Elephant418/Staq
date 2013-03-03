@@ -3,12 +3,12 @@
 {% block content %}
 	<h1>Login</h1>
 	<form method="post" action="{{ route( 'Auth', 'login' ) }}">
-		{% if current_user %}
+		{% if currentUser %}
 			<div class="notice">
 				You are logged !
 			</div>
 		{% else %}
-			{% if bad_credentials %}
+			{% if badCredentials %}
 				<div class="error">
 					Bad credentials
 				</div>

@@ -21,13 +21,13 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	 *************************************************************************/
 	public function __construct( ) {
 		\Twig_Autoloader::register( );
-		$loader = $this->get_twig_environment_loader( );
-		$params = $this->get_twig_environment_parameters( );
+		$loader = $this->getTwigEnvironmentLoader( );
+		$params = $this->getTwigEnvironmentParameters( );
 		$this->twig = new \Twig_Environment( $loader, $params );
-		$this->extend_twig( );
-		$this->init_default_variables( );
+		$this->extendTwig( );
+		$this->initDefaultVariables( );
 	}
-	public function by_name( $name, $prefix = NULL ) {
+	public function byName( $name, $prefix = NULL ) {
 		$class = [ 'Stack\\View' ];
 		\UString::doNotStartWith( $prefix, [ '\\', '_' ] );
 		\UString::doNotEndWith( $prefix, [ '\\', '_' ] );
@@ -50,12 +50,12 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	 *************************************************************************/
 	public function render( ) {
 		if ( ! empty( $_GET ) ) {
-			$this->entry_get( );
+			$this->entryGet( );
 		}
 		if ( ! empty( $_POST ) ) {
-			$this->entry_post( );
+			$this->entryPost( );
 		}
-		$this->add_variables( );
+		$this->addVariables( );
 		$template = $this->loadTemplate( );
 		return $template->render( $this->getArrayCopy( ) );
 	}
@@ -81,11 +81,11 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	/*************************************************************************
 	  OVERRIDABLE METHODS              
 	 *************************************************************************/
-	public function entry_get( ) {
+	public function entryGet( ) {
 	}
-	public function entry_post( ) {
+	public function entryPost( ) {
 	}
-	public function add_variables( ) {
+	public function addVariables( ) {
 	}
 
 
@@ -94,20 +94,20 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	/*************************************************************************
 	  PRIVATE METHODS              
 	 *************************************************************************/
-	protected function get_twig_environment_loader( ) {
+	protected function getTwigEnvironmentLoader( ) {
 		return new \Twig_Loader_Filesystem( \Staq::App()->getExtensions( 'template' ) );
 	}
-	protected function get_twig_environment_parameters( ) {
+	protected function getTwigEnvironmentParameters( ) {
 		$params = [ ];
 		$settings = ( new \Stack\Setting )->parse( 'Application.ini' );
 		if ( $settings->getAsBoolean( 'cache.twig' ) ) {
-			if ( $cache_path = \Staq::App()->getPath( 'cache/twig/', TRUE ) ) {
-				$params[ 'cache' ] = $cache_path;
+			if ( $cachePath = \Staq::App()->getPath( 'cache/twig/', TRUE ) ) {
+				$params[ 'cache' ] = $cachePath;
 			}
 		}
 		return $params;
 	}
-	protected function extend_twig( ) {
+	protected function extendTwig( ) {
 		$public = function( $path ) {
 			\UString::doStartWith( $path, '/' );
 			return \Staq::App()->getBaseUri( ) . $path;
@@ -134,6 +134,6 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		$route_function = new \Twig_SimpleFunction( 'route_model', $route_model );
 		$this->twig->addFunction( $route_function );
 	}
-	protected function init_default_variables( ) {
+	protected function initDefaultVariables( ) {
 	}
 }

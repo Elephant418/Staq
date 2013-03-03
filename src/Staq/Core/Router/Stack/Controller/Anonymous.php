@@ -19,8 +19,8 @@ class Anonymous extends Anonymous\__Parent {
 	/*************************************************************************
 	  CONSTRUCTOR             
 	 *************************************************************************/
-	public function __construct( $match_uri, $callable ) {
-		$this->routes = [ new \Stack\Route( $callable, $match_uri ) ];
+	public function __construct( $uri, $callable ) {
+		$this->routes = [ new \Stack\Route( $callable, $uri ) ];
 	}
 }
 

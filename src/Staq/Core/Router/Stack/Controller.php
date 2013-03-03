@@ -39,7 +39,7 @@ class Controller implements \Stack\IController {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function actionView( ) {
-		return ( new \Stack\View )->by_name( \Staq\Util::getStackSubQuery( $this ) );
+		return ( new \Stack\View )->byName( \Staq\Util::getStackSubQuery( $this ) );
 	}
 
 

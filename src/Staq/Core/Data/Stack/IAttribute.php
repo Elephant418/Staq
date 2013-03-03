@@ -21,7 +21,7 @@ interface IAttribute {
 	/*************************************************************************
 	  PUBLIC DATABASE METHODS             
 	 *************************************************************************/
-	public function get_seed( );
+	public function getSeed( );
 
-	public function set_seed( $seed );
+	public function setSeed( $seed );
 }

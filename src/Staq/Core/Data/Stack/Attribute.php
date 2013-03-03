@@ -29,10 +29,10 @@ class Attribute implements \Stack\IAttribute {
 		if ( strtolower( $class ) != strtolower( get_class( $this ) ) ) {
 			return ( new $class )->bySetting( $model, $setting );
 		}
-		$this->init_bySetting( $model, $setting );
+		$this->initBySetting( $model, $setting );
 		return $this;
 	}
-	public function init_bySetting( $model, $setting ) {
+	public function initBySetting( $model, $setting ) {
 	}
 
 
@@ -53,11 +53,11 @@ class Attribute implements \Stack\IAttribute {
 	/*************************************************************************
 	  PUBLIC DATABASE METHODS             
 	 *************************************************************************/
-	public function get_seed( ) {
+	public function getSeed( ) {
 		return $this->seed;
 	}
 
-	public function set_seed( $seed ) {
+	public function setSeed( $seed ) {
 		$this->seed = $seed;
 	}
 

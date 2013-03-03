@@ -39,12 +39,12 @@ class DataTest extends StaqTestCase {
 	  VARCHAR SCUD TEST METHODS			 
 	 *************************************************************************/
 	public function test_select__no_match( ) {
-		$user = ( new \Stack\Model\User )->by_id( 1664 );
+		$user = ( new \Stack\Model\User )->byId( 1664 );
 		$this->assertFalse( $user->exists( ) );
 	}
 
 	public function test_select__match( ) {
-		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user = ( new \Stack\Model\User )->byId( 1 );
 		$this->assertTrue( $user->exists( ) );
 		$this->assertEquals( 'Thomas', $user[ 'name' ] );
 	}
@@ -111,27 +111,27 @@ class DataTest extends StaqTestCase {
 		$this->assertTrue( $user->exists( ) );
 		$id = $user->id;
 		unset( $user );
-		$user = ( new \Stack\Model\User )->by_id( $id );
+		$user = ( new \Stack\Model\User )->byId( $id );
 		$this->assertTrue( $user->exists( ) );
 		$this->assertEquals( 'Christophe', $user[ 'name' ] );
 	}
 
 	public function test_update( ) {
-		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user = ( new \Stack\Model\User )->byId( 1 );
 		$this->assertEquals( 'Thomas', $user[ 'name' ] );
 		$user[ 'name' ] = 'Antoine';
 		$user->save( );
 		unset( $user );
-		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user = ( new \Stack\Model\User )->byId( 1 );
 		$this->assertEquals( 'Antoine', $user[ 'name' ] );
 	}
 
 	public function test_delete( ) {
-		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user = ( new \Stack\Model\User )->byId( 1 );
 		$user->delete( );
 		$this->assertFalse( $user->exists( ) );
 		unset( $user );
-		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user = ( new \Stack\Model\User )->byId( 1 );
 		$this->assertFalse( $user->exists( ) );
 	}
 
@@ -142,14 +142,14 @@ class DataTest extends StaqTestCase {
 	  MANY TO ONE RELATION SCUD TEST METHODS			 
 	 *************************************************************************/
 	public function test_select_relation__many_to_one__no_match( ) {
-		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$article = ( new \Stack\Model\Article )->byId( 3 );
 		$this->assertTrue( $article->exists( ) );
 		$this->assertEquals( 'Dataq', $article[ 'title' ] );
 		$this->assertNull( $article[ 'author' ] );
 	}
 
 	public function test_select_relation__many_to_one__match( ) {
-		$article = ( new \Stack\Model\Article )->by_id( 1 );
+		$article = ( new \Stack\Model\Article )->byId( 1 );
 		$this->assertTrue( $article->exists( ) );
 		$this->assertEquals( 'Staq', $article[ 'title' ] );
 		$this->assertEquals( 'Stack\\Model\\User', get_class( $article[ 'author' ] ) );
@@ -157,18 +157,18 @@ class DataTest extends StaqTestCase {
 	}
 
 	public function test_update_relation__many_to_one__exception( ) {
-		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$article = ( new \Stack\Model\Article )->byId( 3 );
 		$this->setExpectedException( 'Stack\\Exception\\NotRightInput' );
 		$article[ 'author' ] = 2;
 	}
 
 	public function test_update_relation__many_to_one__valid( ) {
-		$article = ( new \Stack\Model\Article )->by_id( 3 );
-		$user    = ( new \Stack\Model\User    )->by_id( 2 );
+		$article = ( new \Stack\Model\Article )->byId( 3 );
+		$user    = ( new \Stack\Model\User    )->byId( 2 );
 		$article[ 'author' ] = $user;
 		$article->save( );
 		unset( $article, $user );
-		$article = ( new \Stack\Model\Article )->by_id( 3 );
+		$article = ( new \Stack\Model\Article )->byId( 3 );
 		$user = $article[ 'author' ];
 		$this->assertTrue( $user->exists( ) );
 		$this->assertEquals( 'Romaric', $user[ 'name' ] );
@@ -181,14 +181,14 @@ class DataTest extends StaqTestCase {
 	  ONE TO MANY RELATION SCUD TEST METHODS			 
 	 *************************************************************************/
 	public function test_select_relation__one_to_many__no_match( ) {
-		$user = ( new \Stack\Model\User )->by_id( 2 );
+		$user = ( new \Stack\Model\User )->byId( 2 );
 		$this->assertTrue( $user->exists( ) );
 		$this->assertEquals( 'Romaric', $user[ 'name' ] );
 		$this->assertEquals( [ ], $user[ 'articles' ] );
 	}
 
 	public function test_select_relation__one_to_many__match( ) {
-		$user = ( new \Stack\Model\User )->by_id( 1 );
+		$user = ( new \Stack\Model\User )->byId( 1 );
 		$this->assertTrue( $user->exists( ) );
 		$this->assertEquals( 'Thomas', $user[ 'name' ] );
 		$this->assertEquals( 2, count( $user[ 'articles' ] ) );

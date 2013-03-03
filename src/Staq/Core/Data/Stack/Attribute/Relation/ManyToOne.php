@@ -12,18 +12,18 @@ class ManyToOne extends ManyToOne\__Parent {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $remote_model;
-	protected $remote_class_type;
+	protected $remoteModel;
+	protected $remoteClassType;
 
 
 
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function init_bySetting( $model, $setting ) {
+	public function initBySetting( $model, $setting ) {
 		if ( is_array( $setting ) ) {
 			if ( isset( $setting[ 'remote_class_type' ] ) ) {
-				$this->remote_class_type = $setting[ 'remote_class_type' ];
+				$this->remoteClassType = $setting[ 'remote_class_type' ];
 			} 
 		}
 	}
@@ -34,23 +34,23 @@ class ManyToOne extends ManyToOne\__Parent {
 	  PUBLIC USER METHODS             
 	 *************************************************************************/
 	public function get( ) {
-		if ( is_null( $this->remote_model ) && isset( $this->seed ) ) {
-			$class = $this->get_remote_class( );
-			$this->remote_model = ( new $class )->by_id( $this->seed );
+		if ( is_null( $this->remoteModel ) && isset( $this->seed ) ) {
+			$class = $this->getRemoteClass( );
+			$this->remoteModel = ( new $class )->byId( $this->seed );
 		}
-		return $this->remote_model;
+		return $this->remoteModel;
 	}
 
 	public function set( $model ) {
-		if ( ! \Staq\Util::isStack( $model, $this->get_remote_class( ) ) ) {
-			$message = 'Input of type "' . $this->get_remote_class( ) . '", but "' . gettype( $model ) . '" given.';
+		if ( ! \Staq\Util::isStack( $model, $this->getRemoteClass( ) ) ) {
+			$message = 'Input of type "' . $this->getRemoteClass( ) . '", but "' . gettype( $model ) . '" given.';
 			throw new \Stack\Exception\NotRightInput( $message );
 		}
 		if ( ! $model->exists( ) ) {
 			$this->seed = NULL;
-			$this->remote_model = NULL;
+			$this->remoteModel = NULL;
 		} else {
-			$this->remote_model = $model;
+			$this->remoteModel = $model;
 			$this->seed = $model->id;
 		}
 	}
@@ -60,13 +60,13 @@ class ManyToOne extends ManyToOne\__Parent {
 	/*************************************************************************
 	  PUBLIC DATABASE METHODS             
 	 *************************************************************************/
-	public function get_seed( ) {
+	public function getSeed( ) {
 		return $this->seed;
 	}
 
-	public function set_seed( $seed ) {
+	public function setSeed( $seed ) {
 		$this->seed = $seed;
-		$this->remote_model = NULL;
+		$this->remoteModel = NULL;
 	}
 
 
@@ -74,7 +74,7 @@ class ManyToOne extends ManyToOne\__Parent {
 	/*************************************************************************
 	  PROTECTED METHODS             
 	 *************************************************************************/
-	protected function get_remote_class( ) {
-		return $class = 'Stack\\Model\\' . $this->remote_class_type;
+	protected function getRemoteClass( ) {
+		return $class = 'Stack\\Model\\' . $this->remoteClassType;
 	}	
 }

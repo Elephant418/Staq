@@ -13,7 +13,7 @@ class Auth extends Auth\__Parent {
 	 ATTRIBUTES
 	 *************************************************************************/
 	const CRYPT_SEED = 'dacz:;,aafapojn';
-	static public $current_user;
+	static public $currentUser;
 	public static $setting = [
 		'route.inscription.uri'  => '/inscription',
 		'route.login.uri'        => '/login',
@@ -26,11 +26,11 @@ class Auth extends Auth\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action_inscription( ) {
+	public function actionInscription( ) {
 		$code = ''; 
 		$login = ''; 
-		$bad_credentials = FALSE;
-		$bad_code = FALSE;
+		$badCredentials = FALSE;
+		$badCode = FALSE;
 		if ( isset( $_POST[ 'inscription' ][ 'login' ] ) ) {
 			$login = $_POST[ 'inscription' ][ 'login' ];
 			if ( isset( $_POST[ 'inscription' ][ 'code' ] ) ) {
@@ -41,7 +41,7 @@ class Auth extends Auth\__Parent {
 				if ( in_array( $code, $match ) ) {
 					if ( isset( $_POST[ 'inscription' ][ 'password' ] ) ) {
 						$password = $_POST[ 'inscription' ][ 'password' ];
-						$password = $this->encrypt_password( $password );
+						$password = $this->encryptPassword( $password );
 						$user = ( new \Stack\Model\User )
 							->set( 'login', $login )
 							->set( 'password', $password )
@@ -52,43 +52,43 @@ class Auth extends Auth\__Parent {
 						} catch ( \PDOException $e ) { }
 						if ( $saved ) {
 							$this->login( $user );
-							\Staq\Util::httpRedirect( $this->get_redirect_uri( ) );
+							\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 						} else {
-							$bad_credentials = TRUE;
+							$badCredentials = TRUE;
 						}
 					}
 				} else {
-					$bad_code = TRUE;
+					$badCode = TRUE;
 				}
 			}
 		}
 		$page = new \Stack\View\Auth\Inscription;
 		$page[ 'login' ]    = $login;
 		$page[ 'code' ]     = $code;
-		$page[ 'redirect' ] = $this->get_redirect_uri( );
-		$page[ 'bad_code' ] = $bad_code;
-		$page[ 'bad_credentials' ] = $bad_credentials;
+		$page[ 'redirect' ] = $this->getRedirectUri( );
+		$page[ 'badCode' ] = $badCode;
+		$page[ 'badCredentials' ] = $badCredentials;
 		return $page;
 	}
 
-	public function action_login( ) {
+	public function actionLogin( ) {
 		$login = ''; 
-		$bad_credentials = FALSE;
+		$badCredentials = FALSE;
 		if ( isset( $_POST[ 'login' ][ 'login' ] ) ) {
 			$login = $_POST[ 'login' ][ 'login' ];
 			if ( isset( $_POST[ 'login' ][ 'password' ] ) ) {
 				$password = $_POST[ 'login' ][ 'password' ];
 				if ( $this->login( $login, $password ) ) {
-					\Staq\Util::httpRedirect( $this->get_redirect_uri( ) );
+					\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 				} else {
-					$bad_credentials = TRUE;
+					$badCredentials = TRUE;
 				}
 			}
 		}
 		$page = new \Stack\View\Auth\Login;
 		$page[ 'login' ] = $login;
-		$page[ 'redirect' ] = $this->get_redirect_uri( );
-		$page[ 'bad_credentials' ] = $bad_credentials;
+		$page[ 'redirect' ] = $this->getRedirectUri( );
+		$page[ 'badCredentials' ] = $badCredentials;
 		return $page;
 	}
 
@@ -102,7 +102,7 @@ class Auth extends Auth\__Parent {
 	/*************************************************************************
 	  PROTECTED METHODS           
 	 *************************************************************************/
-	protected function get_redirect_uri( ) {
+	protected function getRedirectUri( ) {
 		if ( isset( $_POST[ 'redirect' ] ) ) {
 			return $_POST[ 'redirect' ];
 		}
@@ -117,56 +117,56 @@ class Auth extends Auth\__Parent {
 	/*************************************************************************
 	  UTIL METHODS           
 	 *************************************************************************/
-	public function current_user( ) {
+	public function currentUser( ) {
 
 		// Already initialized
-		if ( ! is_null( static::$current_user ) ) {
-		    return static::$current_user;
+		if ( ! is_null( static::$currentUser ) ) {
+		    return static::$currentUser;
 		}
 
 		// Find the current user
-		if ( ! isset( $_SESSION[ 'Staq' ][ 'logged_user' ] ) ) {
+		if ( ! isset( $_SESSION[ 'Staq' ][ 'loggedUser' ] ) ) {
 		    $user = FALSE;
 		} else {
-			$user = ( new \Stack\Model\User )->by_id( $_SESSION[ 'Staq' ][ 'logged_user' ] );
+			$user = ( new \Stack\Model\User )->byId( $_SESSION[ 'Staq' ][ 'loggedUser' ] );
 			if ( ! $user->exists( ) ) {
 				$user = FALSE;
 			}
 		}
-		static::$current_user = $user;
-		return static::$current_user;
+		static::$currentUser = $user;
+		return static::$currentUser;
 	}
 
 	public function login( $user, $password = NULL ) {
 		if ( ! is_object( $user ) ) {
-			$user = ( new \Stack\Model\User )->by_login( $user );
+			$user = ( new \Stack\Model\User )->byLogin( $user );
 		}
 		if ( ! $user->exists( ) ) {
 			return FALSE;
 		}
 		if ( ! is_null( $password ) ) {
-			$password = $this->encrypt_password( $password );
+			$password = $this->encryptPassword( $password );
 			if ( $user->password !== $password ) {
 				return FALSE;
 			}
 		}
-		$_SESSION[ 'Staq' ][ 'logged_user' ] = $user->id;
-		static::$current_user = $user;
+		$_SESSION[ 'Staq' ][ 'loggedUser' ] = $user->id;
+		static::$currentUser = $user;
 		return TRUE;
 	}
 
-	public function is_logged( ) {
-		return ( $this->current_user( ) !== FALSE );
+	public function isLogged( ) {
+		return ( $this->currentUser( ) !== FALSE );
 	}
 
 	public function logout( ) {
-		if ( isset( $_SESSION[ 'Staq' ][ 'logged_user' ] ) ) {
-			unset( $_SESSION[ 'Staq' ][ 'logged_user' ] );
+		if ( isset( $_SESSION[ 'Staq' ][ 'loggedUser' ] ) ) {
+			unset( $_SESSION[ 'Staq' ][ 'loggedUser' ] );
 		}
-		static::$current_user = NULL;
+		static::$currentUser = NULL;
 	}
 
-	public function encrypt_password( $password ) {
+	public function encryptPassword( $password ) {
 		return sha1( static::CRYPT_SEED . $password );
 	}
 }

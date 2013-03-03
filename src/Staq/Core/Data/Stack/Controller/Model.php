@@ -10,16 +10,16 @@ class Model extends Model\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function actionList( ) {
-		$models = $this->new_model( )->all( );
-		$page = ( new \Stack\View )->by_name( $this->model_name( ), 'Model_List' );
+		$models = $this->newModel( )->all( );
+		$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_List' );
 		$page[ 'content'  ] = $models;
 		return $page;
 	}
 
 	public function actionView( $id ) {
-		$model = $this->new_model( )->by_id( $id );
+		$model = $this->newModel( )->byId( $id );
 		if ( $model->exists( ) ) {
-			$page = ( new \Stack\View )->by_name( $this->model_name( ), 'Model_View' );
+			$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_View' );
 			$page[ 'content'  ] = $model;
 			return $page;
 		}
@@ -30,16 +30,16 @@ class Model extends Model\__Parent {
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
-	protected function model_name( ) {
-		return \Staq\Util::getStackSubQuery( $this->model_class( ) );
+	protected function modelName( ) {
+		return \Staq\Util::getStackSubQuery( $this->modelClass( ) );
 	}
 
-	protected function model_class( ) {
+	protected function modelClass( ) {
 		return 'Stack\\' . \Staq\Util::getStackSubQuery( $this );
 	}
 
-	protected function new_model( ) {
-		$class = $this->model_class( );
+	protected function newModel( ) {
+		$class = $this->modelClass( );
 		return new $class;
 	}
 }

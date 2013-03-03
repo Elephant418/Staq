@@ -17,9 +17,9 @@ interface IModel {
 	/*************************************************************************
 	  INITIALIZATION          
 	 *************************************************************************/
-	public function by_data( $data );
+	public function byData( $data );
 
-	public function by_id( $id );
+	public function byId( $id );
 
 	public function all( );
 
@@ -31,13 +31,13 @@ interface IModel {
 
 	public function save( );
 
-	public function extract_seeds( );
+	public function extractSeeds( );
 
 
 	/*************************************************************************
 	  SPECIFIC MODEL ACCESSOR METHODS				   
 	 *************************************************************************/
-	public function get_attribute( $index );
+	public function getAttribute( $index );
 
 	public function get( $index );
 

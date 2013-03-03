@@ -12,13 +12,13 @@ class Entity implements \Stack\IEntity {
 	  ATTRIBUTES                 
 	 *************************************************************************/
 	public static $setting = [
-		'database.id_field' => 'id',
+		'database.idField' => 'id',
 		'database.fields'   => [ 'id' ]
 	];
 	protected $settings;
 	protected $name;
 	protected $table;
-	protected $id_field;
+	protected $idField;
 	protected $fields;
 
 
@@ -30,7 +30,7 @@ class Entity implements \Stack\IEntity {
 		$this->settings = ( new \Stack\Setting )->parse( $this );
 		$this->name     = strtolower( \Staq\Util::getStackSubQuery( $this, '_' ) );
 		$this->table    = $this->settings->get( 'database.table', $this->name );
-		$this->id_field = $this->settings[ 'database.id_field' ];
+		$this->idField  = $this->settings[ 'database.idField' ];
 		$this->fields   = $this->settings->getAsArray( 'database.fields' );
 	}
 
@@ -38,37 +38,37 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  FETCHING METHODS          
 	 *************************************************************************/
-	public function extract_id( &$data ) {
+	public function extractId( &$data ) {
 		$id = NULL;
-		if ( isset( $data[ $this->id_field ] ) ) {
-			$id = $data[ $this->id_field ];
-			unset( $data[ $this->id_field ] );
+		if ( isset( $data[ $this->idField ] ) ) {
+			$id = $data[ $this->idField ];
+			unset( $data[ $this->idField ] );
 		}
 		return $id;
 	}
 
-	public function get_data_by_id( $id ) {
-		return $this->get_data_by_fields( [ $this->id_field => $id ] );
+	public function getDataById( $id ) {
+		return $this->getDataByFields( [ $this->idField => $id ] );
 	}
 
-	public function get_data_by_fields( $where = [ ] ) {
-		$datas = $this->get_datas_by_fields( $where, 1 );
+	public function getDataByFields( $where = [ ] ) {
+		$datas = $this->getDatasByFields( $where, 1 );
 		if ( isset( $datas[ 0 ] ) ) {
 			return $datas[ 0 ];
 		}
 		return FALSE;
 	}
 
-	public function get_datas_by_fields( $where = [ ], $limit = NULL, $order = NULL ) {
+	public function getDatasByFields( $where = [ ], $limit = NULL, $order = NULL ) {
 		$parameters = [ ];
-		$sql = $this->get_base_select( ) . $this->get_clause_by_fields( $where, $parameters, $limit, $order );
+		$sql = $this->getBaseSelect( ) . $this->getClauseByFields( $where, $parameters, $limit, $order );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
 
-	public function delete_by_fields( $where ) {
+	public function deleteByFields( $where ) {
 		$parameters = [ ];
-		$sql = 'DELETE FROM ' . $this->table . $this->get_clause_by_fields( $where, $parameters );
+		$sql = 'DELETE FROM ' . $this->table . $this->getClauseByFields( $where, $parameters );
 		$request = new Request( $sql );
 		return $request->execute( $parameters );
 	}
@@ -84,7 +84,7 @@ class Entity implements \Stack\IEntity {
 			if ( ! $model->exists( ) ) {
 				return TRUE;
 			}
-			$sql .= ' WHERE ' . $this->id_field . '=:id';
+			$sql .= ' WHERE ' . $this->idField . '=:id';
 			$parameters[ ':id' ] = $model->id;
 		}
 		$request = new Request( $sql );
@@ -94,17 +94,17 @@ class Entity implements \Stack\IEntity {
 	public function save( $model ) {
 		if ( $model->exists( ) ) {
 			$sql = 'UPDATE ' . $this->table
-			. ' SET ' . $this->get_set_request( $model )
-			. ' WHERE `' . $this->id_field . '` = :' . $this->id_field . ' ;';
+			. ' SET ' . $this->getSetRequest( $model )
+			. ' WHERE `' . $this->idField . '` = :' . $this->idField . ' ;';
 			$request = new Request( $sql );
-			$request->execute_one( $this->get_bind_params( $model ) );
+			$request->execute_one( $this->getBindParams( $model ) );
 			return $model->id;
 		} else {
 			$sql = 'INSERT INTO ' . $this->table
 			. ' (`' . implode( '`, `', $this->fields ) . '`) VALUES'
 			. ' (:' . implode( ', :', $this->fields ) . ');';
 			$request = new Request( $sql );
-			$request->execute_one( $this->get_bind_params( $model ) );
+			$request->execute_one( $this->getBindParams( $model ) );
 			return $request->get_last_insert_id( );
 		}
 	}
@@ -113,41 +113,41 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  PRIVATE METHODS
 	 *************************************************************************/
-	protected function get_base_select( ) {
-		return 'SELECT ' . $this->get_base_selector( ) . ' FROM ' . $this->get_base_table( );
+	protected function getBaseSelect( ) {
+		return 'SELECT ' . $this->getBaseSelector( ) . ' FROM ' . $this->getBaseTable( );
 	}
 
-	protected function get_base_selector( ) {
+	protected function getBaseSelector( ) {
 		$fields = array_map( function( $field ) {
 			return $this->table . '.' . $field;
 		}, $this->fields);
 		return implode( ', ', $fields );
 	}
 
-	protected function get_base_table( ) {
+	protected function getBaseTable( ) {
 		return $this->table;
 	}
 
-	protected function get_clause_by_fields( $request, &$parameters, $limit = NULL, $order = NULL ) {
+	protected function getClauseByFields( $request, &$parameters, $limit = NULL, $order = NULL ) {
 		$where = [ ];
 		if ( is_array( $request ) ) {
-			foreach ( $request as $field_name => $field_value ) {
-				if ( is_numeric( $field_name ) ) {
-					if ( is_string( $field_value ) ) {
-						$where[ ] = $field_value;
+			foreach ( $request as $fieldName => $fieldValue ) {
+				if ( is_numeric( $fieldName ) ) {
+					if ( is_string( $fieldValue ) ) {
+						$where[ ] = $fieldValue;
 					} else if (
-						is_array( $field_value ) &&
-						isset( $field_value[ 0 ] ) &&
-						isset( $field_value[ 1 ] ) &&
-						isset( $field_value[ 2 ] ) 
+						is_array( $fieldValue ) &&
+						isset( $fieldValue[ 0 ] ) &&
+						isset( $fieldValue[ 1 ] ) &&
+						isset( $fieldValue[ 2 ] ) 
 					) {
-						$where[ ] = $this->get_clause_condition( $parameters, $field_value[ 0 ], $field_value[ 1 ], $field_value[ 2 ] );
+						$where[ ] = $this->getClauseCondition( $parameters, $fieldValue[ 0 ], $fieldValue[ 1 ], $fieldValue[ 2 ] );
 					}
 				} else {
-					if ( ! \UString::has( $field_name, '.' ) ) {
-						$field_name = $this->table . '.' . $field_name;
+					if ( ! \UString::has( $fieldName, '.' ) ) {
+						$fieldName = $this->table . '.' . $fieldName;
 					}
-					$where[ ] = $this->get_clause_condition( $parameters, $field_name, '=', $field_value );
+					$where[ ] = $this->getClauseCondition( $parameters, $fieldName, '=', $fieldValue );
 				}
 			}
 		}
@@ -164,50 +164,50 @@ class Entity implements \Stack\IEntity {
 		return $sql . ';';
 	}
 
-	protected function get_clause_condition( &$parameters, $field_name, $operator, $field_value ) {
+	protected function getClauseCondition( &$parameters, $fieldName, $operator, $fieldValue ) {
 		$condition = NULL;	
-		$parameter_name = 'key' . count( $parameters );
-		if ( is_array( $field_value ) ) {
+		$parameterName = 'key' . count( $parameters );
+		if ( is_array( $fieldValue ) ) {
 			$condition_parameters = [ ];
-			foreach( $field_value as $key => $value ) {
+			foreach( $fieldValue as $key => $value ) {
 				$condition_parameters[ ':' . 'key_' . ( count( $parameters ) + $key ) ] = $value;
 			}
 			$condition = implode( ', ', array_keys( $condition_parameters ) );
-			$condition = $field_name . ' IN ( ' . $condition . ' )';
+			$condition = $fieldName . ' IN ( ' . $condition . ' )';
 			$parameters = array_merge( $parameters, $condition_parameters );
 		} else {
-			$condition = $field_name . ' ' . $operator . ' :' . $parameter_name;
-			$parameters[ ':' . $parameter_name ] = $field_value;
+			$condition = $fieldName . ' ' . $operator . ' :' . $parameterName;
+			$parameters[ ':' . $parameterName ] = $fieldValue;
 		}
 		return $condition;
 	}
 
-	protected function get_set_request( ) {
+	protected function getSetRequest( ) {
 		$request = [ ];
-		foreach ( $this->fields as $field_name ) {
-			if ( $field_name != $this->id_field ) {
-				$request[ ] = '`' . $field_name . '` = :' . $field_name;
+		foreach ( $this->fields as $fieldName ) {
+			if ( $fieldName != $this->idField ) {
+				$request[ ] = '`' . $fieldName . '` = :' . $fieldName;
 			}
 		}
 		return implode( ', ', $request );
 	}
 
-	protected function get_bind_params( $model ) {
-		$data = $this->get_current_data( $model );
+	protected function getBindParams( $model ) {
+		$data = $this->getCurrentData( $model );
 		$bind_params = [ ];
-		foreach ( $this->fields as $field_name ) {
-			$field_value = NULL;
-			if ( isset( $data[ $field_name ] ) ) {
-				$field_value = $data[ $field_name ];
+		foreach ( $this->fields as $fieldName ) {
+			$fieldValue = NULL;
+			if ( isset( $data[ $fieldName ] ) ) {
+				$fieldValue = $data[ $fieldName ];
 			}
-			$bind_params[  $field_name ] = $field_value;
+			$bind_params[  $fieldName ] = $fieldValue;
 		}
 		return $bind_params;
 	}
 
-	protected function get_current_data( $model ) {
-		$data = $model->extract_seeds( );
-		$data[ $this->id_field ] = $model->id;
+	protected function getCurrentData( $model ) {
+		$data = $model->extractSeeds( );
+		$data[ $this->idField ] = $model->id;
 		return $data;
 		// DO: Manage serializes extra fields here ;)
 	}

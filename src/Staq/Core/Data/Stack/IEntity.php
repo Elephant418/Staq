@@ -11,15 +11,15 @@ interface IEntity {
 	/*************************************************************************
 	  FETCHING METHODS          
 	 *************************************************************************/
-	public function extract_id( &$data );
+	public function extractId( &$data );
 
-	public function get_data_by_id( $id );
+	public function getDataById( $id );
 
-	public function get_data_by_fields( $fields = [ ] );
+	public function getDataByFields( $fields = [ ] );
 
-	public function get_datas_by_fields( $fields = [ ] );
+	public function getDatasByFields( $fields = [ ] );
 
-	public function delete_by_fields( $fields );
+	public function deleteByFields( $fields );
 
 
 	/*************************************************************************
