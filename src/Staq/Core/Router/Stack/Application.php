@@ -59,7 +59,7 @@ class Application extends Application\__Parent {
 			$uri = \UString::substrBefore( $_SERVER[ 'REQUEST_URI' ], '?' );
 			\UString::doNotStartWith( $uri, $this->baseUri );
 			\UString::doStartWith( $uri, '/' );
-			$this->router->set_uri( $uri );
+			$this->router->setUri( $uri );
 		}
 	}
 

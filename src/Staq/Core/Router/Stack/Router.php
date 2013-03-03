@@ -37,14 +37,14 @@ class Router {
 		}
 	}
 
-	public function get_route( $controller, $action ) {
+	public function getRoute( $controller, $action ) {
 		if ( isset( $this->routes[ $controller ][ $action ] ) ) {
 			return $this->routes[ $controller ][ $action ];
 		}
 	}
 
 	public function getUri( $controller, $action, $parameters ) {
-		$route = $this->get_route( $controller, $action );
+		$route = $this->getRoute( $controller, $action );
 		if ( $route ) {
 			return $route->getUri( $parameters );
 		}
@@ -56,7 +56,7 @@ class Router {
 	/*************************************************************************
 	  SETTER          
 	 *************************************************************************/
-	public function set_uri( $uri ) {
+	public function setUri( $uri ) {
 		if ( in_array( $uri, $this->uris, TRUE ) ) {
 			throw new \Exception( 'Redirecting loop detected' );
 		}
@@ -64,11 +64,11 @@ class Router {
 		return $this;
 	}
 
-	protected function add_routes( $controller_name, $routes, $prepend = FALSE ) {
+	protected function addRoutes( $controllerName, $routes, $prepend = FALSE ) {
 		if ( $prepend ) {
-			$this->routes = array_merge_recursive( [ $controller_name => $routes ], $this->routes );
+			$this->routes = array_merge_recursive( [ $controllerName => $routes ], $this->routes );
 		} else {
-			$this->routes[ $controller_name ] = $routes;
+			$this->routes[ $controllerName ] = $routes;
 		}
 	}
 
@@ -77,22 +77,22 @@ class Router {
 	/*************************************************************************
 	  CONSTRUCTOR             
 	 *************************************************************************/
-	public function initialize( $anonymous_controllers ) {
+	public function initialize( $anonymousControllers ) {
 		$this->setting = ( new \Stack\Setting )->parse( $this );
-		$this->initialize_controllers( );
-		$this->initialize_anonymous_controllers( $anonymous_controllers );
+		$this->initializeControllers( );
+		$this->initializeAnonymousControllers( $anonymousControllers );
 	}
-	protected function initialize_controllers( ) {
+	protected function initializeControllers( ) {
 		$names = $this->setting[ 'controller' ];
-		foreach ( array_reverse( $names ) as $controller_name ) {
+		foreach ( array_reverse( $names ) as $controllerName ) {
 			$routes = [ ];
-			$controller_class = '\\Stack\Controller\\' . $controller_name;
-			$controller = new $controller_class( );
+			$controllerClass = '\\Stack\Controller\\' . $controllerName;
+			$controller = new $controllerClass( );
 			if ( 
 				$this->setting[ 'mode' ] == 'global' ||
 				$this->setting[ 'mode' ] == 'mixed'
 			) {
-				$selector = 'route.' . strtolower( str_replace( '\\', '_', $controller_name ) );
+				$selector = 'route.' . strtolower( str_replace( '\\', '_', $controllerName ) );
 				foreach ( $this->setting->getAsArray( $selector ) as $action => $setting ) {
 					$routes[ $action ] = ( new \Stack\Route )->bySetting( $controller, $action, $setting );
 				}
@@ -103,15 +103,15 @@ class Router {
 			) {
 				$routes = $controller->getRoutes( );
 			}
-			$this->add_routes( $controller_name, $routes );
-			$this->controllers[ $controller_name ] = $controller;
+			$this->addRoutes( $controllerName, $routes );
+			$this->controllers[ $controllerName ] = $controller;
 		}
 	}
-	protected function initialize_anonymous_controllers( $anonymous_controllers ) {
+	protected function initializeAnonymousControllers( $anonymousControllers ) {
 		$class = new \ReflectionClass( 'Stack\\Controller\\Anonymous' );
-		foreach ( $anonymous_controllers as $arguments ) {
+		foreach ( $anonymousControllers as $arguments ) {
 			$anonymous = $class->newInstanceArgs( $arguments );
-			$this->add_routes( 'Anonymous', $anonymous->getRoutes( ), TRUE );
+			$this->addRoutes( 'Anonymous', $anonymous->getRoutes( ), TRUE );
 		}
 	}
 
@@ -120,7 +120,7 @@ class Router {
 	  PUBLIC METHODS             
 	 *************************************************************************/
 	public function resolve( ) {
-		return $this->resolve_current_uri( );
+		return $this->resolveCurrentUri( );
 	}
 
 
@@ -128,12 +128,12 @@ class Router {
 	/*************************************************************************
 	  PRIVATE METHODS             
 	 *************************************************************************/
-	protected function resolve_current_uri( $exception = NULL ) {
+	protected function resolveCurrentUri( $exception = NULL ) {
 		try {
-			$active_routes = $this->get_active_routes( $exception );
-			foreach ( $active_routes as $controller => $routes ) {
+			$activeRoutes = $this->getActiveRoutes( $exception );
+			foreach ( $activeRoutes as $controller => $routes ) {
 				foreach ( $routes as $action => $route ) {
-					$result = $this->call_controller( $controller, $action, $route );
+					$result = $this->callController( $controller, $action, $route );
 					if ( $result === TRUE ) {
 						return NULL;
 					} else if ( ! is_null( $result ) ) {
@@ -141,14 +141,14 @@ class Router {
 					}
 				}
 			}
-			$this->throw_404( $exception );
+			$this->throw404( $exception );
 		} catch( \Exception $exception ) {
-			$this->prevent_exception_boucle( $exception );
-			return $this->resolve_current_uri( $exception );
+			$this->preventExceptionLoop( $exception );
+			return $this->resolveCurrentUri( $exception );
 		}
 	}
 
-	protected function call_controller( $controller, $action, $route ) {
+	protected function callController( $controller, $action, $route ) {
 		return $route->callAction( );
 	}
 
@@ -156,7 +156,7 @@ class Router {
 		return $result;
 	}
 
-	protected function throw_404( $exception = NULL ) {
+	protected function throw404( $exception = NULL ) {
 		if ( is_null( $exception ) ) {
 			throw ( new \Stack\Exception\ResourceNotFound )->byUri( $this->getCurrentUri( ) );
 		} else {
@@ -164,51 +164,51 @@ class Router {
 		}
 	}
 
-	protected function get_active_routes( $exception = NULL ) {
+	protected function getActiveRoutes( $exception = NULL ) {
 		if ( is_null( $exception ) ) {
 			$uri = $this->getCurrentUri( );
-			$active_routes = $this->get_active_routes_byUri( $uri );
+			$activeRoutes = $this->getActiveRoutesByUri( $uri );
 		} else {
-			$active_routes = $this->get_active_routes_byException( $exception );
+			$activeRoutes = $this->getActiveRoutesByException( $exception );
 		}
-		return $active_routes;
+		return $activeRoutes;
 	}
 
-	protected function get_active_routes_byUri( $uri ) {
-		$active_routes = [ ];
+	protected function getActiveRoutesByUri( $uri ) {
+		$activeRoutes = [ ];
 		foreach ( $this->routes as $controller => $routes ) {
 			foreach ( $routes as $action => $route ) {
 				if ( $result = $route->isRouteCatchUri( $uri ) ) {
 					if ( $result === TRUE ) {
-						if ( ! isset( $active_routes[ $controller ] ) ) {
-							$active_routes[ $controller ] = [ ];
+						if ( ! isset( $activeRoutes[ $controller ] ) ) {
+							$activeRoutes[ $controller ] = [ ];
 						}
-						$active_routes[ $controller ][ $action ] = $route;
+						$activeRoutes[ $controller ][ $action ] = $route;
 					} else {
 						\Staq\Util::httpRedirectUri( $result );
 					}
 				}
 			}
 		}
-		return $active_routes;
+		return $activeRoutes;
 	}
 
-	protected function get_active_routes_byException( $exception ) {
-		$active_routes = [ ];
+	protected function getActiveRoutesByException( $exception ) {
+		$activeRoutes = [ ];
 		foreach ( $this->routes as $controller => $routes ) {
 			foreach ( $routes as $action => $route ) {
 				if ( $route->isRouteCatchException( $exception ) ) {
-					if ( ! isset( $active_routes[ $controller ] ) ) {
-						$active_routes[ $controller ] = [ ];
+					if ( ! isset( $activeRoutes[ $controller ] ) ) {
+						$activeRoutes[ $controller ] = [ ];
 					}
-					$active_routes[ $controller ][ $action ] = $route;
+					$activeRoutes[ $controller ][ $action ] = $route;
 				}
 			}
 		}
-		return $active_routes;
+		return $activeRoutes;
 	}
 
-	protected function prevent_exception_boucle( $exception ) {
+	protected function preventExceptionLoop( $exception ) {
 		if ( \Staq\Util::isStack( $exception ) ) {			
 			$name = \Staq\Util::getStackQuery( $exception );
 		} else {
