@@ -25,12 +25,12 @@ class Request {
 		return $this->last_insert_id;
 	}
 	
-	public function get_PDObject( ) {
+	public function getPDObject( ) {
 		$this->connect( );
 		return $this->PDObject;
 	}
 	
-	public function get_request( ) {
+	public function getRequest( ) {
 		return $this->request;
 	}
 
@@ -39,7 +39,7 @@ class Request {
 	/*************************************************************************
 	  SETTER                   
 	 *************************************************************************/
-	public function set_PDObject( $PDObject ) {
+	public function setPDObject( $PDObject ) {
 		$this->PDObject = $PDObject;
 		return $this;
 	}

@@ -17,14 +17,14 @@ class Date extends Date\__Parent {
 	}
 
 	public function set( $value ) {
-		if ( static::is_valid( $value ) ) {
+		if ( static::isValid( $value ) ) {
             $this->seed = $value;
 		} else if ( is_a( $value, 'DateTime' ) ) {
 			$this->seed = $value->format( 'Y-m-d' );
 		}
 	}
 
-	public static function is_valid( $value ) {
+	public static function isValid( $value ) {
 		if ( is_string( $value ) ) {
 			if ( preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $value, $matches ) ) {
 		        if ( checkdate( $matches[ 2 ], $matches[ 3 ], $matches[ 1 ] ) ) {
