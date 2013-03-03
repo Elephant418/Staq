@@ -21,17 +21,17 @@ class PublicFile extends PublicFile\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action_view( ) {
+	public function actionView( ) {
 		$path = \Staq::App()->getCurrentUri( );
-		$real_path = \Staq::App()->getFilePath( '/public' . $path );
+		$realPath = \Staq::App()->getFilePath( '/public' . $path );
 		if ( 
-			empty( $real_path ) || 
-			is_dir( $real_path ) || 
-			\UString::isEndWith( $real_path, '.php' )
+			empty( $realPath ) || 
+			is_dir( $realPath ) || 
+			\UString::isEndWith( $realPath, '.php' )
 		) {
 			return NULL;
 		}
-		$this->render_static_file( $real_path );
+		$this->renderStaticFile( $realPath );
 		return TRUE;
 	}
 
@@ -40,44 +40,44 @@ class PublicFile extends PublicFile\__Parent {
 	/*************************************************************************
 	  PRIVATE METHODS				   
 	 *************************************************************************/
-	protected function render_static_file( $file_path ) {
-		$resource     = fopen( $file_path, 'rb' );
+	protected function renderStaticFile( $filePath ) {
+		$resource     = fopen( $filePath, 'rb' );
 		if ( ! headers_sent( ) ) {
-			$content_type = $this->get_content_type( $file_path );
-			$cache_time   = $this->get_public_file_cache_time( );
-			$control      = ( $cache_time > 0 ) ? 'public' : 'private'; 
+			$contentType = $this->getContentType( $filePath );
+			$cacheTime   = $this->getPublicFileCacheTime( );
+			$control      = ( $cacheTime > 0 ) ? 'public' : 'private'; 
 			header( 'Pragma: public' );
-			header( 'Content-Type: ' . $content_type . '; charset: UTF-8' );
-			header( 'Content-Length: ' . filesize( $file_path ) );
-			header( 'Cache-Control: max-age=' . ( $cache_time - time( ) ) . ', pre-check=' . ( $cache_time - time( ) ) . ', ' . $control, true );
-			header( 'Expires: ' . gmdate( 'D, d M Y H:i:s \G\M\T', $cache_time ), true );
+			header( 'Content-Type: ' . $contentType . '; charset: UTF-8' );
+			header( 'Content-Length: ' . filesize( $filePath ) );
+			header( 'Cache-Control: max-age=' . ( $cacheTime - time( ) ) . ', pre-check=' . ( $cacheTime - time( ) ) . ', ' . $control, true );
+			header( 'Expires: ' . gmdate( 'D, d M Y H:i:s \G\M\T', $cacheTime ), true );
 		}
 		fpassthru( $resource );
 	}
 
-	protected function get_content_type( $file_path ) {
-		$extension = \UString::substrAfterLast( $file_path, '.' );
+	protected function getContentType( $filePath ) {
+		$extension = \UString::substrAfterLast( $filePath, '.' );
 		if ( in_array( $extension, [ 'html', 'css' ] ) ) {
-			$content_type = 'text/' . $extension;
+			$contentType = 'text/' . $extension;
 		} else if ( $extension === 'js' ) {
-			$content_type = 'text/javascript';
+			$contentType = 'text/javascript';
 		} else if ( $extension === 'ico' ) {
-			$content_type = 'image/png';
+			$contentType = 'image/png';
 		} else {
 			$finfo        = finfo_open( FILEINFO_MIME_TYPE );
-			$content_type = finfo_file( $finfo, $file_path );
+			$contentType = finfo_file( $finfo, $filePath );
 			finfo_close( $finfo );
 		}
-		return $content_type;
+		return $contentType;
 	}    
 
-	protected function get_public_file_cache_time( ) {
+	protected function getPublicFileCacheTime( ) {
 		$setting = ( new \Stack\Setting )->parse( 'Application' );
-		$public_file_cache = $setting[ 'cache.public_file_cache' ];
-		if ( ! $public_file_cache_time = strtotime( $public_file_cache ) ) {
-			$public_file_cache_time = strtotime( '+1 hour' );
+		$publicFileCache = $setting[ 'cache.public_file_cache' ];
+		if ( ! $publicFileCache = strtotime( $publicFileCache ) ) {
+			$publicFileCache = strtotime( '+1 hour' );
 		}
-		return $public_file_cache_time;
+		return $publicFileCache;
 	}
 
 }

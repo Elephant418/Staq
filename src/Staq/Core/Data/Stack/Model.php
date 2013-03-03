@@ -51,7 +51,7 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	}
 
 	protected function add_attribute( $name, $setting ) {
-		$attribute = ( new \Stack\Attribute )->by_setting( $this, $setting );
+		$attribute = ( new \Stack\Attribute )->bySetting( $this, $setting );
 		$this->schema_attribute_names[ ] = $name;
 		parent::offsetSet( $name, $attribute );
 	}

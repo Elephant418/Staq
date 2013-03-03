@@ -22,7 +22,7 @@ class Error extends Error\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action_view( $code ) {
+	public function actionView( $code ) {
 		if ( ! headers_sent( ) ) {
 			if ( $code == '403' ) {
 				header( 'HTTP/1.1 403 Forbidden' );

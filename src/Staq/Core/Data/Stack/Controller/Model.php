@@ -9,14 +9,14 @@ class Model extends Model\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action_list( ) {
+	public function actionList( ) {
 		$models = $this->new_model( )->all( );
 		$page = ( new \Stack\View )->by_name( $this->model_name( ), 'Model_List' );
 		$page[ 'content'  ] = $models;
 		return $page;
 	}
 
-	public function action_view( $id ) {
+	public function actionView( $id ) {
 		$model = $this->new_model( )->by_id( $id );
 		if ( $model->exists( ) ) {
 			$page = ( new \Stack\View )->by_name( $this->model_name( ), 'Model_View' );

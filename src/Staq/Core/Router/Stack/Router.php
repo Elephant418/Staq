@@ -94,14 +94,14 @@ class Router {
 			) {
 				$selector = 'route.' . strtolower( str_replace( '\\', '_', $controller_name ) );
 				foreach ( $this->setting->getAsArray( $selector ) as $action => $setting ) {
-					$routes[ $action ] = ( new \Stack\Route )->by_setting( $controller, $action, $setting );
+					$routes[ $action ] = ( new \Stack\Route )->bySetting( $controller, $action, $setting );
 				}
 			}
 			if ( 
 				$this->setting[ 'mode' ] == 'distributed' ||
 				( $this->setting[ 'mode' ] == 'mixed' && empty( $routes ) )
 			) {
-				$routes = $controller->get_routes( );
+				$routes = $controller->getRoutes( );
 			}
 			$this->add_routes( $controller_name, $routes );
 			$this->controllers[ $controller_name ] = $controller;
@@ -111,7 +111,7 @@ class Router {
 		$class = new \ReflectionClass( 'Stack\\Controller\\Anonymous' );
 		foreach ( $anonymous_controllers as $arguments ) {
 			$anonymous = $class->newInstanceArgs( $arguments );
-			$this->add_routes( 'Anonymous', $anonymous->get_routes( ), TRUE );
+			$this->add_routes( 'Anonymous', $anonymous->getRoutes( ), TRUE );
 		}
 	}
 
@@ -149,7 +149,7 @@ class Router {
 	}
 
 	protected function call_controller( $controller, $action, $route ) {
-		return $route->call_action( );
+		return $route->callAction( );
 	}
 
 	protected function render( $result ) {
@@ -178,7 +178,7 @@ class Router {
 		$active_routes = [ ];
 		foreach ( $this->routes as $controller => $routes ) {
 			foreach ( $routes as $action => $route ) {
-				if ( $result = $route->is_route_catch_uri( $uri ) ) {
+				if ( $result = $route->isRouteCatchUri( $uri ) ) {
 					if ( $result === TRUE ) {
 						if ( ! isset( $active_routes[ $controller ] ) ) {
 							$active_routes[ $controller ] = [ ];
@@ -197,7 +197,7 @@ class Router {
 		$active_routes = [ ];
 		foreach ( $this->routes as $controller => $routes ) {
 			foreach ( $routes as $action => $route ) {
-				if ( $route->is_route_catch_exception( $exception ) ) {
+				if ( $route->isRouteCatchException( $exception ) ) {
 					if ( ! isset( $active_routes[ $controller ] ) ) {
 						$active_routes[ $controller ] = [ ];
 					}

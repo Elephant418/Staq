@@ -22,7 +22,7 @@ class OneToMany extends OneToMany\__Parent {
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function init_by_setting( $model, $setting ) {
+	public function init_bySetting( $model, $setting ) {
 		$this->model = $model;
 		if ( is_array( $setting ) ) {
 			if ( ! isset( $setting[ 'remote_class_type' ] ) ) {

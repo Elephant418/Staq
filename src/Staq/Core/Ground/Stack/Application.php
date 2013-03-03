@@ -56,13 +56,13 @@ class Application {
 		if ( ! empty( $file ) ) {
 			\UString::doStartWith( $file, DIRECTORY_SEPARATOR );
 			$path .= $file;
-			$real_path = realpath( $path );
-			if ( $real_path == FALSE && $create ) {
+			$realPath = realpath( $path );
+			if ( $realPath == FALSE && $create ) {
 				if ( @mkdir( $path, 0755, TRUE ) ) {
-					$real_path = realpath( $path );
+					$realPath = realpath( $path );
 				}
 			}
-			$path = $real_path;
+			$path = $realPath;
 		}
 		return $path;
 	}

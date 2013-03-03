@@ -13,9 +13,9 @@ class Route {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $callable;
-	protected $match_uri;
-	protected $match_exceptions = [ ];
-	protected $aliases_uri      = [ ];
+	protected $uri;
+	protected $exceptions = [ ];
+	protected $aliases      = [ ];
 	protected $parameters       = [ ];
 
 
@@ -23,17 +23,19 @@ class Route {
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function __construct( $callable = NULL, $match_uri = NULL, $match_exceptions = [ ] , $aliases_uri = [ ] ) {
-		\UArray::doConvertToArray( $match_exceptions );
-		\UArray::doConvertToArray( $aliases_uri );
-		$this->callable         = $callable;
-		$this->match_uri        = $match_uri;
-		$this->match_exceptions = $match_exceptions;
-		$this->aliases_uri      = $aliases_uri;
+	public function __construct( $callable = NULL, $uri = NULL, $exceptions = [ ] , $aliases = [ ] ) {
+		\UArray::doConvertToArray( $exceptions );
+		\UArray::doConvertToArray( $aliases );
+		$this->callable   = $callable;
+		$this->uri        = $uri;
+		$this->exceptions = $exceptions;
+		$this->aliases    = $aliases;
 	}
 	
-	public function by_setting( $controller, $action, $setting ) {
-		\UString::doStartWith( $action, 'action_' );
+	public function bySetting( $controller, $action, $setting ) {
+		if ( ! \UString::isStartWith( $action, 'action' ) ) {
+			$action = 'action' . ucfirst( $action );
+		}
 		$callable = [ $controller, $action ];
 		if ( ! is_callable( $callable ) ) {
 			$message = get_class( $controller ) . '::' .$action . ' is not callable';
@@ -58,7 +60,7 @@ class Route {
 	  PUBLIC METHODS             
 	 *************************************************************************/
 	public function getUri( $parameters ) {
-		$uri = $this->match_uri;
+		$uri = $this->uri;
 		foreach ( $parameters as $name => $value ) {
 			if ( ! is_numeric( $name ) ) {
 				$uri = str_replace( ':' . $name, $value, $uri );
@@ -75,7 +77,7 @@ class Route {
 		return $uri;
 	}
 
-	public function call_action( ) {
+	public function callAction( ) {
 		if ( is_array( $this->callable ) ) {
 			$reflection = new \ReflectionMethod( $this->callable[ 0 ], $this->callable[ 1 ] );
 		} else {
@@ -97,22 +99,22 @@ class Route {
 		return call_user_func_array( $this->callable, $parameters );
 	}
 
-	public function is_route_catch_uri( $uri ) {
-		if ( $this->is_uri_match( $uri, $this->match_uri ) ) {
+	public function isRouteCatchUri( $uri ) {
+		if ( $this->isUriMatch( $uri, $this->uri ) ) {
 			return TRUE;
 		}
-		foreach ( $this->aliases_uri as $alias ) {
-			if ( $this->is_uri_match( $uri, $alias ) ) {
+		foreach ( $this->aliases as $alias ) {
+			if ( $this->isUriMatch( $uri, $alias ) ) {
 				return $this->getUri( $this->parameters );
 			}
 		}
 		return FALSE;
 	}
 
-	public function is_route_catch_exception( $exception ) {
+	public function isRouteCatchException( $exception ) {
 		$parameters = [ ];
 		$result = FALSE;
-		foreach ( $this->match_exceptions as $match_exception ) {
+		foreach ( $this->exceptions as $match_exception ) {
 			if ( is_numeric( $match_exception ) ) {
 				echo $exception->getCode( ) . ' == ' . $match_exception;
 				if( $exception->getCode( ) == $match_exception ) {
@@ -127,7 +129,7 @@ class Route {
 			} 
 		}
 		if ( $result ) {
-			$parameters = $this->get_parameter_from_exception( $exception );
+			$parameters = $this->getParametersFromException( $exception );
 		}
 		$this->parameters = $parameters;
 		return $result;
@@ -138,7 +140,7 @@ class Route {
 	/*************************************************************************
 	  PROTECTED METHODS             
 	 *************************************************************************/
-	protected function is_uri_match( $uri, $refer ) {
+	protected function isUriMatch( $uri, $refer ) {
 		$pattern = str_replace( [ '.', '+', '?' ],  [ '\.', '\+', '\?' ], $refer ); 
 		$pattern = preg_replace( '#\*#', '.*', $pattern );
 		$pattern = preg_replace( '#\(([^)]*)\)#', '(?:\1)?', $pattern ); 
@@ -159,7 +161,7 @@ class Route {
 		return $result;
 	}
 
-	protected function get_parameter_from_exception( $exception ) {
+	protected function getParametersFromException( $exception ) {
 		$parameters = [ ];
 		$parameters[ 'code' ]      = $exception->getCode( );
 		$parameters[ 'exception' ] = $exception;
@@ -179,7 +181,7 @@ class Route {
 	  DEBUG METHODS             
 	 *************************************************************************/
 	public function __toString( ) {
-		$str = 'Route( ' . $this->match_uri . ' => ';
+		$str = 'Route( ' . $this->uri . ' => ';
 		if ( is_array( $this->callable ) ) {
 			$controller = $this->callable[ 0 ];
 			if ( \Staq\Util::isStack( $controller ) ) {

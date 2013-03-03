@@ -12,8 +12,8 @@ class Error extends Error\__Parent {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action_view( $code ) {
-		parent::action_view( $code );
+	public function actionView( $code ) {
+		parent::actionView( $code );
 		$page = new \Stack\View\Error;
 		$page[ 'code' ] = $code;
 		$page[ 'message' ] = '';

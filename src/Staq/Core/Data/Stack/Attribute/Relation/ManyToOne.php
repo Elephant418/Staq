@@ -20,7 +20,7 @@ class ManyToOne extends ManyToOne\__Parent {
 	/*************************************************************************
 	  CONSTRUCTOR            
 	 *************************************************************************/
-	public function init_by_setting( $model, $setting ) {
+	public function init_bySetting( $model, $setting ) {
 		if ( is_array( $setting ) ) {
 			if ( isset( $setting[ 'remote_class_type' ] ) ) {
 				$this->remote_class_type = $setting[ 'remote_class_type' ];

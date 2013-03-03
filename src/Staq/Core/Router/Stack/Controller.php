@@ -20,7 +20,7 @@ class Controller implements \Stack\IController {
 	/*************************************************************************
 	  GETTER
 	 *************************************************************************/
-	public function get_routes( ) {
+	public function getRoutes( ) {
 		return $this->routes;
 	}
 
@@ -30,7 +30,7 @@ class Controller implements \Stack\IController {
 	  CONSTRUCTOR             
 	 *************************************************************************/
 	public function __construct( ) {
-		$this->initialize_routes( );
+		$this->initializeRoutes( );
 	}
 
 
@@ -38,7 +38,7 @@ class Controller implements \Stack\IController {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function action_view( ) {
+	public function actionView( ) {
 		return ( new \Stack\View )->by_name( \Staq\Util::getStackSubQuery( $this ) );
 	}
 
@@ -47,10 +47,10 @@ class Controller implements \Stack\IController {
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
-	protected function initialize_routes( ) {
+	protected function initializeRoutes( ) {
 		$setting = ( new \Stack\Setting )->parse( $this );
 		foreach ( $setting->getAsArray( 'route' ) as $action => $setting ) {
-			$this->routes[ $action ] = ( new \Stack\Route )->by_setting( $this, $action, $setting );
+			$this->routes[ $action ] = ( new \Stack\Route )->bySetting( $this, $action, $setting );
 		}
 	}
 }
