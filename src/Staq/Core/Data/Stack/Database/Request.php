@@ -21,7 +21,7 @@ class Request {
 	/*************************************************************************
 	  GETTER                   
 	 *************************************************************************/
-	public function get_last_insert_id( ) {
+	public function getLastInsertId( ) {
 		return $this->last_insert_id;
 	}
 	
@@ -44,7 +44,7 @@ class Request {
 		return $this;
 	}
 	
-	public function set_request( $request ) {
+	public function setRequest( $request ) {
 		$this->request = $request;
 		return $this;
 	}
@@ -55,7 +55,7 @@ class Request {
 	  CONSTRUCTOR                   
 	 *************************************************************************/
 	public function __construct( $request = '' ) {
-		$this->set_request( $request );
+		$this->setRequest( $request );
 	}
 	
 	
@@ -63,7 +63,7 @@ class Request {
 	/*************************************************************************
 	  PUBLIC METHODS                   
 	 *************************************************************************/
-	public function execute_one( $arguments = array( ) ) {
+	public function executeOne( $arguments = array( ) ) {
 		$result = $this->execute( $arguments );
 		if ( is_array( $result ) && count( $result ) > 0 ) {
 			$result = $result[ 0 ];
@@ -113,7 +113,7 @@ class Request {
 		return $result;
 	}
 
-	public function require_database( $name = NULL ) {
+	public function requireDatabase( $name = NULL ) {
 		if ( is_null( $name ) ) {
 			$ini  = ( new \Stack\Setting )->parse( 'Database' );
 			$name = $ini[ 'access.name' ];
@@ -125,7 +125,7 @@ class Request {
 		return $this;
 	}
 
-	public function load_mysql_file( $file ) {
+	public function loadMysqlFile( $file ) {
 		$requests = file_get_contents( $file );
 		$requests = explode( ';', $requests );
 		foreach ( $requests as $request ) {
@@ -134,7 +134,7 @@ class Request {
 			$request = trim( $request );
 			if ( ! empty( $request ) ) {
 				( new \Stack\Database\Request )
-					->set_request( $request )
+					->setRequest( $request )
 					->execute( );
 			}
 		}

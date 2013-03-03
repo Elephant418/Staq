@@ -12,7 +12,7 @@ class ViewTest extends WebTestCase {
 	  TEST METHODS             
 	 *************************************************************************/
 	public function test_text_templating__no_variable( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
@@ -23,7 +23,7 @@ class ViewTest extends WebTestCase {
 	}
 
 	public function test_text_templating__inherit( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
@@ -34,7 +34,7 @@ class ViewTest extends WebTestCase {
 	}
 
 	public function test_text_templating__complex( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
@@ -45,7 +45,7 @@ class ViewTest extends WebTestCase {
 	}
 
 	public function test_text_templating__one_variable( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
@@ -63,7 +63,7 @@ class ViewTest extends WebTestCase {
 	  TWIG EXTENSION TEST METHODS             
 	 *************************************************************************/
 	public function test_public_filter( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->setBaseUri( '/prefix/path' )
@@ -75,7 +75,7 @@ class ViewTest extends WebTestCase {
 	}
 
 	public function test_public_function( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->setBaseUri( 'prefix/path/' )
@@ -87,7 +87,7 @@ class ViewTest extends WebTestCase {
 	}
 
 	public function test_route_function( ) {
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->setBaseUri( '/prefix/path/' )

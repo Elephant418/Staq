@@ -11,7 +11,7 @@ class WebTestCase extends StaqTestCase {
 	/*************************************************************************
 	 URL SIMULATE METHODS
 	 *************************************************************************/
-	public function get_request_url( $url, $method = 'GET' ) {
+	public function getRequestUrl( $url, $method = 'GET' ) {
 		$_SERVER[ 'REQUEST_METHOD' ] = $method;
 		$infos = parse_url( $url );
 		$_SERVER[ 'HTTP_HOST' ] = $infos[ 'host' ];
@@ -23,7 +23,7 @@ class WebTestCase extends StaqTestCase {
 	}
 
 	public function post_request_url( $url, $post = [ ] ) {
-		$this->get_request_url( $url, 'POST' );
+		$this->getRequestUrl( $url, 'POST' );
 		$_POST = $post;
 	}
 

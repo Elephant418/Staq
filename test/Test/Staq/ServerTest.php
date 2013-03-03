@@ -19,8 +19,8 @@ class ServerTest extends WebTestCase {
 	/*************************************************************************
 	  UTIL METHODS             
 	 *************************************************************************/
-	public function append_project_namespace( $name ) {
-		$names = array_map( [ $this, 'get_project_class' ], func_get_args( ) );
+	public function appendProjectNamespace( $name ) {
+		$names = array_map( [ $this, 'getProjectClass' ], func_get_args( ) );
 		return array_merge( $names, $this->starter_namespaces );
 	}
 
@@ -41,7 +41,7 @@ class ServerTest extends WebTestCase {
 	 *************************************************************************/
 	protected function setUp( ) {
 		parent::setUp( );
-		$this->get_request_url( 'http://localhost/' );
+		$this->getRequestUrl( 'http://localhost/' );
 	}
 
 
@@ -71,37 +71,37 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_no_configuration__extensions( ) {
-		$project_namespace = $this->get_project_class( 'NoConfiguration' );
+		$project_namespace = $this->getProjectClass( 'NoConfiguration' );
 		$app = ( new \Staq\Server )
 			->addApplication( $project_namespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
-		$expected = $this->append_project_namespace( 'NoConfiguration' );
+		$expected = $this->appendProjectNamespace( 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_simple_configuration__extensions( ) {
-		$project_namespace = $this->get_project_class( 'SimpleConfiguration' );
+		$project_namespace = $this->getProjectClass( 'SimpleConfiguration' );
 		$app = ( new \Staq\Server )
 			->addApplication( $project_namespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
-		$expected = $this->append_project_namespace( 'SimpleConfiguration' );
+		$expected = $this->appendProjectNamespace( 'SimpleConfiguration' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_extend_no_configuration__extensions( ) {
-		$project_namespace = $this->get_project_class( 'ExtendNoConfiguration' );
+		$project_namespace = $this->getProjectClass( 'ExtendNoConfiguration' );
 		$app = ( new \Staq\Server )
 			->addApplication( $project_namespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
-		$expected = $this->append_project_namespace( 'ExtendNoConfiguration', 'NoConfiguration' );
+		$expected = $this->appendProjectNamespace( 'ExtendNoConfiguration', 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_without_starter__extensions( ) {
-		$project_namespace = $this->get_project_class( 'WithoutStarter' );
+		$project_namespace = $this->getProjectClass( 'WithoutStarter' );
 		$app = ( new \Staq\Server )
 			->addApplication( $project_namespace, '/' )
 			->addPlatform( 'local' )
@@ -117,7 +117,7 @@ class ServerTest extends WebTestCase {
 	  PLATFORM SWITCHER TEST METHODS             
 	 *************************************************************************/
 	public function test_platform_switcher__default( ) {
-		$this->get_request_url( 'http://localhost/' );
+		$this->getRequestUrl( 'http://localhost/' );
 		$app = ( new \Staq\Server )
 			->addPlatform( 'local', '/local')
 			->addPlatform( 'remote', '//example.com')
@@ -127,7 +127,7 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_platform_switcher__path( ) {
-		$this->get_request_url( 'http://localhost/local/bou' );
+		$this->getRequestUrl( 'http://localhost/local/bou' );
 		$app = ( new \Staq\Server )
 			->addPlatform( 'local', '/local')
 			->addPlatform( 'remote', '//example.com')
@@ -139,7 +139,7 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_platform_switcher__domain( ) {
-		$this->get_request_url( 'http://example.com/lievre/tortue' );
+		$this->getRequestUrl( 'http://example.com/lievre/tortue' );
 		$app = ( new \Staq\Server )
 			->addPlatform( 'local', '/local')
 			->addPlatform( 'remote', '//example.com')
@@ -151,7 +151,7 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_platform_switcher__port( ) {
-		$this->get_request_url( 'http://localhost:8020/lievre/tortue' );
+		$this->getRequestUrl( 'http://localhost:8020/lievre/tortue' );
 		$app = ( new \Staq\Server )
 			->addPlatform( 'local', '/local')
 			->addPlatform( 'remote', '//example.com')
@@ -169,47 +169,47 @@ class ServerTest extends WebTestCase {
 	  APPLICATION SWITCHER TEST METHODS             
 	 *************************************************************************/
 	public function test_application_switcher__default( ) {
-		$this->get_request_url( 'http://localhost/' );
+		$this->getRequestUrl( 'http://localhost/' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
-			->addApplication( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
-			->addApplication( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'SimpleConfiguration' ), '//example.com')
+			->addApplication( $this->getProjectClass( 'WithoutStarter' ), ':8020')
 			->launch( );
 		$this->assertEquals( 'Staq\\App\\Starter', $app->getNamespace( ) );
 	}
 
 	public function test_application_switcher__path( ) {
-		$this->get_request_url( 'http://localhost/noconf/bou' );
+		$this->getRequestUrl( 'http://localhost/noconf/bou' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
-			->addApplication( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
-			->addApplication( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'SimpleConfiguration' ), '//example.com')
+			->addApplication( $this->getProjectClass( 'WithoutStarter' ), ':8020')
 			->launch( );
-		$this->assertEquals( $this->get_project_class( 'NoConfiguration' ), $app->getNamespace( ) );
+		$this->assertEquals( $this->getProjectClass( 'NoConfiguration' ), $app->getNamespace( ) );
 		$this->assertEquals( '/noconf', $app->getBaseUri( ) );
 		$this->assertEquals( '/bou'  , $app->getCurrentUri( ) );
 	}
 
 	public function test_application_switcher__domain( ) {
-		$this->get_request_url( 'http://example.com/lievre/tortue' );
+		$this->getRequestUrl( 'http://example.com/lievre/tortue' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
-			->addApplication( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
-			->addApplication( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'SimpleConfiguration' ), '//example.com')
+			->addApplication( $this->getProjectClass( 'WithoutStarter' ), ':8020')
 			->launch( );
-		$this->assertEquals( $this->get_project_class( 'SimpleConfiguration' ), $app->getNamespace( ) );
+		$this->assertEquals( $this->getProjectClass( 'SimpleConfiguration' ), $app->getNamespace( ) );
 		$this->assertEquals( '', $app->getBaseUri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->getCurrentUri( ) );
 	}
 
 	public function test_application_switcher__port( ) {
-		$this->get_request_url( 'http://localhost:8020/lievre/tortue' );
+		$this->getRequestUrl( 'http://localhost:8020/lievre/tortue' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
-			->addApplication( $this->get_project_class( 'SimpleConfiguration' ), '//example.com')
-			->addApplication( $this->get_project_class( 'WithoutStarter' ), ':8020')
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'SimpleConfiguration' ), '//example.com')
+			->addApplication( $this->getProjectClass( 'WithoutStarter' ), ':8020')
 			->launch( );
-		$this->assertEquals( $this->get_project_class( 'WithoutStarter' ), $app->getNamespace( ) );
+		$this->assertEquals( $this->getProjectClass( 'WithoutStarter' ), $app->getNamespace( ) );
 		$this->assertEquals( '', $app->getBaseUri( ) );
 		$this->assertEquals( '/lievre/tortue'  , $app->getCurrentUri( ) );
 	}
@@ -221,9 +221,9 @@ class ServerTest extends WebTestCase {
 	  APPLICATION & PLATFORM SWITCHER TEST METHODS             
 	 *************************************************************************/
 	public function test_application_n_platform_switcher__default( ) {
-		$this->get_request_url( 'http://localhost/bou' );
+		$this->getRequestUrl( 'http://localhost/bou' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
 			->addPlatform( 'local', '/local')
 			->launch( );
 		$this->assertEquals( 'Staq\\App\\Starter', $app->getNamespace( ) );
@@ -232,20 +232,20 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_application_n_platform_switcher__match_application( ) {
-		$this->get_request_url( 'http://localhost/noconf/bou' );
+		$this->getRequestUrl( 'http://localhost/noconf/bou' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
 			->addPlatform( 'local', '/local')
 			->launch( );
-		$this->assertEquals( $this->get_project_class( 'NoConfiguration' ), $app->getNamespace( ) );
+		$this->assertEquals( $this->getProjectClass( 'NoConfiguration' ), $app->getNamespace( ) );
 		$this->assertEquals( 'prod', $app->getPlatform( ) );
 		$this->assertEquals( '/bou', $app->getCurrentUri( ) );
 	}
 
 	public function test_application_n_platform_switcher__match_platform( ) {
-		$this->get_request_url( 'http://localhost/local/bou' );
+		$this->getRequestUrl( 'http://localhost/local/bou' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
 			->addPlatform( 'local', '/local')
 			->launch( );
 		$this->assertEquals( 'Staq\\App\\Starter', $app->getNamespace( ) );
@@ -254,12 +254,12 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_application_n_platform_switcher__match_application_n_platform( ) {
-		$this->get_request_url( 'http://localhost/local/noconf/bou' );
+		$this->getRequestUrl( 'http://localhost/local/noconf/bou' );
 		$app = ( new \Staq\Server )
-			->addApplication( $this->get_project_class( 'NoConfiguration' ), '/noconf' )
+			->addApplication( $this->getProjectClass( 'NoConfiguration' ), '/noconf' )
 			->addPlatform( 'local', '/local')
 			->launch( );
-		$this->assertEquals( $this->get_project_class( 'NoConfiguration' ), $app->getNamespace( ) );
+		$this->assertEquals( $this->getProjectClass( 'NoConfiguration' ), $app->getNamespace( ) );
 		$this->assertEquals( 'local', $app->getPlatform( ) );
 		$this->assertEquals( '/bou' , $app->getCurrentUri( ) );
 	}

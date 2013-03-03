@@ -14,7 +14,7 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	protected function setUp( ) {
 		parent::setUp( );
-		$this->get_request_url( 'http://localhost/coco' );
+		$this->getRequestUrl( 'http://localhost/coco' );
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' );
 	}
@@ -86,7 +86,7 @@ class RouterTest extends WebTestCase {
 	  PUBLIC FILE CONTROLLER TEST METHODS             
 	 *************************************************************************/
 	public function test_public_controller__match( ) {
-		$this->get_request_url( 'http://localhost/static.txt' );
+		$this->getRequestUrl( 'http://localhost/static.txt' );
 		\Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' )
 			->run( );

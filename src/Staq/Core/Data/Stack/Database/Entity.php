@@ -88,7 +88,7 @@ class Entity implements \Stack\IEntity {
 			$parameters[ ':id' ] = $model->id;
 		}
 		$request = new Request( $sql );
-		return $request->execute_one( $parameters );
+		return $request->executeOne( $parameters );
 	}
 
 	public function save( $model ) {
@@ -97,15 +97,15 @@ class Entity implements \Stack\IEntity {
 			. ' SET ' . $this->getSetRequest( $model )
 			. ' WHERE `' . $this->idField . '` = :' . $this->idField . ' ;';
 			$request = new Request( $sql );
-			$request->execute_one( $this->getBindParams( $model ) );
+			$request->executeOne( $this->getBindParams( $model ) );
 			return $model->id;
 		} else {
 			$sql = 'INSERT INTO ' . $this->table
 			. ' (`' . implode( '`, `', $this->fields ) . '`) VALUES'
 			. ' (:' . implode( ', :', $this->fields ) . ');';
 			$request = new Request( $sql );
-			$request->execute_one( $this->getBindParams( $model ) );
-			return $request->get_last_insert_id( );
+			$request->executeOne( $this->getBindParams( $model ) );
+			return $request->getLastInsertId( );
 		}
 	}
 

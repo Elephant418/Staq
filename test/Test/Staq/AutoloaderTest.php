@@ -12,7 +12,6 @@ class AutoloaderTest extends StaqTestCase {
 	  TEST METHODS             
 	 *************************************************************************/
 	public function test_unexisting_class__simple( ) {
-		// $project_namespace = $this->get_project_namespace( 'NoConfiguration' );
 		$app = \Staq\App::create( )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Unexisting\Coco;
@@ -33,7 +32,7 @@ class AutoloaderTest extends StaqTestCase {
 			->setPlatform( 'local' );
 		$stack = new \Stack\Existing\Coco;
 		$this->assertEquals( 1, \Staq\Util::getStackHeight( $stack ) );
-		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
+		$this->assertTrue( is_a( $stack, $this->getProjectStackClass( 'Existing\\Coco' ) ) );
 	}
 
 	public function test_existing_class__complex( ) {
@@ -41,7 +40,7 @@ class AutoloaderTest extends StaqTestCase {
 			->setPlatform( 'local' );
 		$stack = new \Stack\Existing\Coco\Des\Bois;
 		$this->assertEquals( 1, \Staq\Util::getStackHeight( $stack ) );
-		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Existing\\Coco' ) ) );
+		$this->assertTrue( is_a( $stack, $this->getProjectStackClass( 'Existing\\Coco' ) ) );
 	}
 
 	public function test_controller_class__unexisting( ) {
@@ -55,7 +54,7 @@ class AutoloaderTest extends StaqTestCase {
 		$app = \Staq\App::create( $this->project_namespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Controller\Existing\Coco;
-		$this->assertTrue( is_a( $stack, $this->get_project_stack_class( 'Controller\\Existing\\Coco' ) ) );
+		$this->assertTrue( is_a( $stack, $this->getProjectStackClass( 'Controller\\Existing\\Coco' ) ) );
 	}
 
 	public function test_controller_class__extending( ) {
