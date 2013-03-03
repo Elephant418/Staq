@@ -34,24 +34,24 @@ class Server {
 	/*************************************************************************
 	  SETTER METHODS                   
 	 *************************************************************************/
-	public function add_application( $namespace, $listenings = NULL ) {
+	public function addApplication( $namespace, $listenings = NULL ) {
 		if ( is_null( $listenings ) ) {
-			$listenings = $this->get_default_base_uri( );
+			$listenings = $this->getDefaultBaseUri( );
 		}
-		$this->do_format_listenings( $listenings );
+		$this->doFormatListenings( $listenings );
 		$this->applications[ $namespace ] = $listenings;
 		return $this;
 	}
 
-	public function add_platform( $platform_name, $listenings = '/' ) {
-		$this->do_format_listenings( $listenings );
+	public function addPlatform( $platform_name, $listenings = '/' ) {
+		$this->doFormatListenings( $listenings );
 		$this->platforms[ $platform_name ] = $listenings;
 		return $this;
 	}
 
-	protected function do_format_listenings( &$listenings ) {
+	protected function doFormatListenings( &$listenings ) {
 		\UArray::doConvertToArray( $listenings );
-		$listenings = ( new \Staq\Url )->from_array( $listenings );
+		$listenings = ( new \Staq\Url )->fromArray( $listenings );
 	}
 
 
@@ -61,9 +61,9 @@ class Server {
 	 *************************************************************************/
 	public function createApplication( $namespace = 'Staq\Core\Ground', $base_uri = NULL, $platform = 'prod' ) {
 		if ( empty( $base_uri ) ) {
-			$base_uri = $this->get_default_base_uri( );
+			$base_uri = $this->getDefaultBaseUri( );
 		}
-		$extensions = $this->find_extensions( $namespace );
+		$extensions = $this->findExtensions( $namespace );
 		if ( ! is_null( static::$autoloader ) ) {
 			spl_autoload_unregister( array( static::$autoloader, 'autoload' ) );
 		}
@@ -75,15 +75,15 @@ class Server {
 	}
 
 	public function launch( ) {
-		return $this->launch_current_application( );
+		return $this->launchCurrentApplication( );
 	}
 
-	public function launch_current_application( ) {
-	 	$this->add_default_environment( );
+	public function launchCurrentApplication( ) {
+	 	$this->addDefaultEnvironment( );
 		$base_uri  = '';
-		$request   = ( new \Staq\Url )->by_server( );
-		$platform  = $this->get_current_platform( $request, $base_uri );
-		$namespace = $this->get_current_application_name( $request, $base_uri );
+		$request   = ( new \Staq\Url )->byServer( );
+		$platform  = $this->getCurrentPlatform( $request, $base_uri );
+		$namespace = $this->getCurrentApplicationName( $request, $base_uri );
 		\UString::doStartWith( $base_uri, '/' );
 		return $this->createApplication( $namespace, $base_uri, $platform );
 	}
@@ -93,7 +93,7 @@ class Server {
 	/*************************************************************************
 	  APPLICATION SWITCH SETTINGS             
 	 *************************************************************************/
-	protected function get_current_platform( $request, &$base_uri ) {
+	protected function getCurrentPlatform( $request, &$base_uri ) {
 		foreach ( $this->platforms as $platform => $listenings ) {
 			foreach ( $listenings as $listening ) {
 				if ( $listening->match( $request ) ) {
@@ -105,7 +105,7 @@ class Server {
 		}
 	}
 
-	protected function get_current_application_name( $request, &$base_uri ) {
+	protected function getCurrentApplicationName( $request, &$base_uri ) {
 		foreach ( $this->applications as $application => $listenings ) {
 			foreach ( $listenings as $listening ) {
 				$listening->uri = $base_uri . $listening->uri;
@@ -118,7 +118,7 @@ class Server {
 		}
 	}
 
-	protected function get_default_base_uri( ) {
+	protected function getDefaultBaseUri( ) {
 		$base_uri = NULL;
 		if ( isset( $_SERVER[ 'DOCUMENT_ROOT' ] ) && isset( $_SERVER[ 'SCRIPT_FILENAME' ] ) ) {
 			if ( \UString::isStartWith( $_SERVER[ 'SCRIPT_FILENAME' ], $_SERVER[ 'DOCUMENT_ROOT' ] ) ) {
@@ -131,9 +131,9 @@ class Server {
 		return $base_uri;
 	}
 
-	protected function add_default_environment( ) {
-	 	$this->add_application( 'Staq\Core\Ground' );
-	 	$this->add_platform( 'prod', '/' );
+	protected function addDefaultEnvironment( ) {
+	 	$this->addApplication( 'Staq\Core\Ground' );
+	 	$this->addPlatform( 'prod', '/' );
 	}
 
 
@@ -141,13 +141,13 @@ class Server {
 	/*************************************************************************
 	  EXTENSIONS PARSING SETTINGS             
 	 *************************************************************************/
-	protected function find_extensions( $namespace ) {
-		$this->initialize_namespaces( );
+	protected function findExtensions( $namespace ) {
+		$this->initializeNamespaces( );
 		$files = [  ];
 		$namespaces = [ $namespace, 'Staq\Core\Ground' ];
 		$new_namespaces = [ $namespace, 'Staq\Core\Ground' ];
 		while ( count( $new_namespaces ) > 0 ) {
-			$new_extensions = $this->format_extensions_from_namespaces( $new_namespaces );
+			$new_extensions = $this->formatExtensionsFromNamespaces( $new_namespaces );
 			foreach ( $new_extensions as $extension ) {
 				$files[ ] = $extension . '/setting/Application.ini';
 			}
@@ -157,10 +157,10 @@ class Server {
 			$namespaces = array_merge( $namespaces, $fetch_namespaces );
 		}
 		$namespaces = \UArray::reverseMergeUnique( $namespaces, [ ] );
-		return $this->format_extensions_from_namespaces( $namespaces );
+		return $this->formatExtensionsFromNamespaces( $namespaces );
 	}
 
-	protected function initialize_namespaces( ) {
+	protected function initializeNamespaces( ) {
 		if ( empty( $this->namespaces ) ) {
 			if ( \UString::has( __DIR__, '/vendor/' ) ) {
 				$base_dir = \UString::substrBeforeLast( __DIR__, '/vendor/' );
@@ -171,11 +171,11 @@ class Server {
 		}
 	}
 
-	protected function format_extensions_from_namespaces( $extensions ) {
+	protected function formatExtensionsFromNamespaces( $extensions ) {
 		\UArray::doConvertToArray( $extensions );
 		foreach ( $extensions as $key => $namespace ) {
-			$this->do_format_extension_namespace( $namespace );
-			$path = $this->find_extension_path( $namespace );
+			$this->doFormatExtensionNamespace( $namespace );
+			$path = $this->findExtensionPath( $namespace );
 			unset( $extensions[ $key ] );
 			if ( ! empty( $path ) ) {
 				$extensions[ $namespace ] = $path;
@@ -184,7 +184,7 @@ class Server {
 		return $extensions;
 	}
 
-	protected function find_extension_path( $namespace ) {
+	protected function findExtensionPath( $namespace ) {
 		foreach ( $this->namespaces as $base_namespace => $base_paths ) {
             if ( \UString::isStartWith( $namespace, $base_namespace ) ) {
 				\UArray::doConvertToArray( $base_paths );
@@ -200,7 +200,7 @@ class Server {
         }
 	}
 
-	protected function do_format_extension_namespace( &$namespace ) {
+	protected function doFormatExtensionNamespace( &$namespace ) {
 		$namespace = str_replace( DIRECTORY_SEPARATOR, '\\', $namespace );
 		\UString::doNotStartWith( $namespace, '\\' );
 		\UString::doNotEndWith( $namespace, '\\' );

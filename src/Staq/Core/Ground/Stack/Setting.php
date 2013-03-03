@@ -91,15 +91,15 @@ class Setting {
 		if ( \Staq\Util::isStack( $mixed ) ) {
 			return $this->parse_from_stack( $mixed );
 		}
-		return $this->parse_from_string( $mixed );
+		return $this->parse_fromString( $mixed );
 	}
 
 	protected function parse_from_stack( $stack ) {
 		$setting_file_name = $this->get_setting_file_name_from_stack( $stack );
-		return $this->parse_from_string( $setting_file_name );
+		return $this->parse_fromString( $setting_file_name );
 	}
 
-	protected function parse_from_string( $setting_file_name ) {
+	protected function parse_fromString( $setting_file_name ) {
 		\UString::doSubstrBefore( $setting_file_name, '.' );
 		if ( ! $this->has_cache( $setting_file_name ) ) {
 			$file_paths = $this->get_file_paths( $setting_file_name );

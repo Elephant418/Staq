@@ -26,17 +26,17 @@ class Url {
 			return $mixed;
 		}
 		if ( is_array( $mixed ) ) {
-			return $this->from_array( $mixed );
+			return $this->fromArray( $mixed );
 		}
 		if ( is_string( $mixed ) ) {
-			return $this->from_string( $mixed );
+			return $this->fromString( $mixed );
 		}
 		if ( is_null( $mixed ) ) {
-			return $this->from_string( '/' );
+			return $this->fromString( '/' );
 		}
 	}
 
-	public function from_array( $array ) {
+	public function fromArray( $array ) {
 		$return = [ ];
 		foreach( $array as $item ) {
 			$return[ ] = $this->from( $item );
@@ -44,7 +44,7 @@ class Url {
 		return $return;
 	}
 
-	public function from_string( $string ) {
+	public function fromString( $string ) {
 		$return = new $this;
 		if ( \UString::isStartWith( $string, [ 'http://', 'https://', '//' ] ) ) {
 			\UString::doSubstrAfter( $string, '//' );
@@ -62,7 +62,7 @@ class Url {
 		return $return;
 	}
 
-	public function by_server( ) {
+	public function byServer( ) {
 		$return = new $this;
 		if ( isset( $_SERVER[ 'SERVER_NAME' ] ) ) {
 			$return->host = $_SERVER[ 'SERVER_NAME' ];
@@ -87,10 +87,10 @@ class Url {
 	  ACCESSOR METHODS                   
 	 *************************************************************************/
 	public function __toString( ) {
-		return $this->to_string( );
+		return $this->toString( );
 	}
 
-	public function to_string( ) {
+	public function toString( ) {
 		$url = '';
 		if ( isset( $this->host ) ) {
 			$url .= 'http://' . $this->host;
@@ -125,7 +125,7 @@ class Url {
 			if ( isset( $url->port ) ) {
 				unset( $url->port );
 			}
-			$this->diff_uri( $url );
+			$this->diffUri( $url );
 		}
 		return $this;
 	}
@@ -135,7 +135,7 @@ class Url {
 	/*************************************************************************
 	  URI TREATMENT METHODS                   
 	 *************************************************************************/
-	public function diff_uri( $url ) {
+	public function diffUri( $url ) {
 		if ( is_object( $url ) && ! empty( $url->uri ) ) {
 			$this->uri = \Supersoniq\substr_after( $this->uri, $url->uri );
 			\Supersoniq\must_starts_with( $this->uri, '/' );
@@ -143,12 +143,12 @@ class Url {
 		return $this;
 	}
 
-	public function reset_uri( ) {
+	public function resetUri( ) {
 		$this->uri = '';
 		return $this;
 	}
 
-	public function add_uri( $url ) {
+	public function addUri( $url ) {
 		if ( is_object( $url ) && isset( $url->uri ) ) {
 			$this->uri .= $url->uri;
 		}

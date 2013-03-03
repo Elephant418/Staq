@@ -31,11 +31,6 @@ class Auth extends Auth\__Parent {
 		$login = ''; 
 		$bad_credentials = FALSE;
 		$bad_code = FALSE;
-		if ( isset( $_POST[ 'inscription' ][ 'redirect' ] ) ) {
-			$origin = $_POST[ 'inscription' ][ 'redirect' ];
-		} else {
-			$origin = \Staq::App()->get_current_uri( );
-		}
 		if ( isset( $_POST[ 'inscription' ][ 'login' ] ) ) {
 			$login = $_POST[ 'inscription' ][ 'login' ];
 			if ( isset( $_POST[ 'inscription' ][ 'code' ] ) ) {
@@ -54,10 +49,10 @@ class Auth extends Auth\__Parent {
 						$saved = FALSE;
 						try {
 							$saved = $user->save( );
-						} catch ( \Exception $e ) { }
+						} catch ( \PDOException $e ) { }
 						if ( $saved ) {
 							$this->login( $user );
-							\Staq\Util::httpRedirect( $origin );
+							\Staq\Util::httpRedirect( $this->get_redirect_uri( ) );
 						} else {
 							$bad_credentials = TRUE;
 						}
@@ -70,7 +65,7 @@ class Auth extends Auth\__Parent {
 		$page = new \Stack\View\Auth\Inscription;
 		$page[ 'login' ]    = $login;
 		$page[ 'code' ]     = $code;
-		$page[ 'redirect' ] = $origin;
+		$page[ 'redirect' ] = $this->get_redirect_uri( );
 		$page[ 'bad_code' ] = $bad_code;
 		$page[ 'bad_credentials' ] = $bad_credentials;
 		return $page;
@@ -79,17 +74,12 @@ class Auth extends Auth\__Parent {
 	public function action_login( ) {
 		$login = ''; 
 		$bad_credentials = FALSE;
-		if ( isset( $_POST[ 'login' ][ 'redirect' ] ) ) {
-			$origin = $_POST[ 'login' ][ 'redirect' ];
-		} else {
-			$origin = \Staq::App()->get_current_uri( );
-		}
 		if ( isset( $_POST[ 'login' ][ 'login' ] ) ) {
 			$login = $_POST[ 'login' ][ 'login' ];
 			if ( isset( $_POST[ 'login' ][ 'password' ] ) ) {
 				$password = $_POST[ 'login' ][ 'password' ];
 				if ( $this->login( $login, $password ) ) {
-					\Staq\Util::httpRedirect( $origin );
+					\Staq\Util::httpRedirect( $this->get_redirect_uri( ) );
 				} else {
 					$bad_credentials = TRUE;
 				}
@@ -97,7 +87,7 @@ class Auth extends Auth\__Parent {
 		}
 		$page = new \Stack\View\Auth\Login;
 		$page[ 'login' ] = $login;
-		$page[ 'redirect' ] = $origin;
+		$page[ 'redirect' ] = $this->get_redirect_uri( );
 		$page[ 'bad_credentials' ] = $bad_credentials;
 		return $page;
 	}
@@ -105,6 +95,21 @@ class Auth extends Auth\__Parent {
 	public function action_logout( ) {
 		$this->logout( );
 		\Staq\Util::httpRedirect( '/' . \Staq::App()->get_base_uri( ) );
+	}
+
+
+
+	/*************************************************************************
+	  PROTECTED METHODS           
+	 *************************************************************************/
+	protected function get_redirect_uri( ) {
+		if ( isset( $_POST[ 'redirect' ] ) ) {
+			return $_POST[ 'redirect' ];
+		}
+		if ( isset( $_GET[ 'redirect' ] ) ) {
+			return $_GET[ 'redirect' ];
+		}
+		return \Staq::App()->get_current_uri( );
 	}
 
 
