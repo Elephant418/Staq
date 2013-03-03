@@ -13,7 +13,7 @@ class ViewTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_text_templating__no_variable( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
 				return new \Stack\View;
@@ -24,7 +24,7 @@ class ViewTest extends WebTestCase {
 
 	public function test_text_templating__inherit( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
 				return new \Stack\View\Some\Path\That\No\Body\Knows;
@@ -35,7 +35,7 @@ class ViewTest extends WebTestCase {
 
 	public function test_text_templating__complex( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
 				return new \Stack\View\Inherited\Template;
@@ -46,7 +46,7 @@ class ViewTest extends WebTestCase {
 
 	public function test_text_templating__one_variable( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->addController( '/*', function( ) {
 				$page = new \Stack\View;
@@ -64,7 +64,7 @@ class ViewTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_public_filter( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->setBaseUri( '/prefix/path' )
 			->addController( '/*', function( ) {
@@ -76,7 +76,7 @@ class ViewTest extends WebTestCase {
 
 	public function test_public_function( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->setBaseUri( 'prefix/path/' )
 			->addController( '/*', function( ) {
@@ -88,7 +88,7 @@ class ViewTest extends WebTestCase {
 
 	public function test_route_function( ) {
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->setBaseUri( '/prefix/path/' )
 			->addController( '/*', function( ) {

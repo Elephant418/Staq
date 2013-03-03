@@ -12,7 +12,7 @@ class NotImplementedYet extends NotImplementedYet\__Parent {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	protected $default_code    = 500;
+	protected $defaultCode    = 500;
 }
 
 ?>

@@ -13,7 +13,7 @@ class ApplicationTest extends StaqTestCase {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $starter_namespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
+	public $starterNamespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
 
 
 
@@ -23,7 +23,7 @@ class ApplicationTest extends StaqTestCase {
 	 *************************************************************************/
 	public function appendProjectNamespace( $name ) {
 		$names = array_map( [ $this, 'getProjectClass' ], func_get_args( ) );
-		return array_merge( $names, $this->starter_namespaces );
+		return array_merge( $names, $this->starterNamespaces );
 	}
 
 
@@ -35,7 +35,7 @@ class ApplicationTest extends StaqTestCase {
 	public function test_empty_project__extensions( ) {
 		$app = \Staq\App::create( )
 			->setPlatform( 'local' );
-		$this->assertEquals( $this->starter_namespaces, $app->getExtensionNamespaces( ) );
+		$this->assertEquals( $this->starterNamespaces, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_empty_project__platform__default( ) {
@@ -50,34 +50,34 @@ class ApplicationTest extends StaqTestCase {
 	}
 
 	public function test_no_configuration__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'NoConfiguration' );
-		$app = \Staq\App::create( $project_namespace )
+		$projectNamespace = $this->getProjectClass( 'NoConfiguration' );
+		$app = \Staq\App::create( $projectNamespace )
 			->setPlatform( 'local' );
 		$expected = $this->appendProjectNamespace( 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_simple_configuration__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'SimpleConfiguration' );
-		$app = \Staq\App::create( $project_namespace )
+		$projectNamespace = $this->getProjectClass( 'SimpleConfiguration' );
+		$app = \Staq\App::create( $projectNamespace )
 			->setPlatform( 'local' );
 		$expected = $this->appendProjectNamespace( 'SimpleConfiguration' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_extend_no_configuration__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'ExtendNoConfiguration' );
-		$app = \Staq\App::create( $project_namespace )
+		$projectNamespace = $this->getProjectClass( 'ExtendNoConfiguration' );
+		$app = \Staq\App::create( $projectNamespace )
 			->setPlatform( 'local' );
 		$expected = $this->appendProjectNamespace( 'ExtendNoConfiguration', 'NoConfiguration' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_without_starter__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'WithoutStarter' );
-		$app = \Staq\App::create( $project_namespace )
+		$projectNamespace = $this->getProjectClass( 'WithoutStarter' );
+		$app = \Staq\App::create( $projectNamespace )
 			->setPlatform( 'local' );
-		$expected = [ $project_namespace, 'Staq\Core\Ground' ];
+		$expected = [ $projectNamespace, 'Staq\Core\Ground' ];
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 

@@ -11,7 +11,7 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase {
 	/*************************************************************************
 	  ATTRIBUTES
 	 *************************************************************************/
-	public $project_namespace = 'Test\\Staq\\Project\\';
+	public $projectNamespace = 'Test\\Staq\\Project\\';
 
 
 
@@ -21,9 +21,9 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase {
 	public function __construct( ) {
 
 		// Initialize project namespace
-		$project_name = \UObject::getClassName( $this );
-		\UString::doNotEndWith( $project_name, 'Test' );
-		$this->project_namespace .= $project_name;
+		$projectName = \UObject::getClassName( $this );
+		\UString::doNotEndWith( $projectName, 'Test' );
+		$this->projectNamespace .= $projectName;
 	}
 
 
@@ -32,7 +32,7 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase {
 	  UTIL METHODS             
 	 *************************************************************************/
 	public function getProjectClass( $name ) {
-		return $this->project_namespace . '\\' . $name;
+		return $this->projectNamespace . '\\' . $name;
 	}
 
 	public function getProjectStackClass( $name ) {

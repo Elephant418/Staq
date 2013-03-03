@@ -15,7 +15,7 @@ class RouterTest extends WebTestCase {
 	protected function setUp( ) {
 		parent::setUp( );
 		$this->getRequestUrl( 'http://localhost/coco' );
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 	}
 
@@ -87,7 +87,7 @@ class RouterTest extends WebTestCase {
 	 *************************************************************************/
 	public function test_public_controller__match( ) {
 		$this->getRequestUrl( 'http://localhost/static.txt' );
-		\Staq\App::create( $this->project_namespace )
+		\Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' )
 			->run( );
         $this->expectOutputHtmlContent( 'This is an example of static file' );

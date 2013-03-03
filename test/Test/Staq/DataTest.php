@@ -21,7 +21,7 @@ class DataTest extends StaqTestCase {
 	  GLOBAL METHODS			 
 	 *************************************************************************/
 	protected function setUp( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		( new \Stack\Database\Request )
 			->requireDatabase( )

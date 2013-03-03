@@ -14,7 +14,7 @@ class Request {
 	 *************************************************************************/
 	protected $request;
 	protected $PDObject;
-	protected $last_insert_id = false;
+	protected $lastInsertId = false;
 
 
 
@@ -22,7 +22,7 @@ class Request {
 	  GETTER                   
 	 *************************************************************************/
 	public function getLastInsertId( ) {
-		return $this->last_insert_id;
+		return $this->lastInsertId;
 	}
 	
 	public function getPDObject( ) {
@@ -103,7 +103,7 @@ class Request {
 					$id = FALSE;
 					$result = FALSE;
 				}
-				$this->last_insert_id = $id;
+				$this->lastInsertId = $id;
 			}
 			
 		} catch ( PDOException $exception ) {

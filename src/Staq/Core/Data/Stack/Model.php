@@ -160,17 +160,17 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		}
 	}
  
-	public function set( $index, $new_val ) {
-		$this->offsetSet( $index, $new_val );
+	public function set( $index, $newVal ) {
+		$this->offsetSet( $index, $newVal );
 		return $this;
 	}
  
-	public function offsetSet( $index, $new_val ) {
+	public function offsetSet( $index, $newVal ) {
 		$attribute = $this->getAttribute( $index );
 		if ( \Staq\Util::isStack( $attribute, 'Stack\\Attribute' ) ) {
-			$attribute->set( $new_val );
+			$attribute->set( $newVal );
 		} else {
-			parent::offsetSet( $index, $new_val );
+			parent::offsetSet( $index, $newVal );
 		}
 	}
  

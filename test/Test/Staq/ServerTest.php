@@ -11,7 +11,7 @@ class ServerTest extends WebTestCase {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $starter_namespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
+	public $starterNamespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
 
 
 
@@ -21,7 +21,7 @@ class ServerTest extends WebTestCase {
 	 *************************************************************************/
 	public function appendProjectNamespace( $name ) {
 		$names = array_map( [ $this, 'getProjectClass' ], func_get_args( ) );
-		return array_merge( $names, $this->starter_namespaces );
+		return array_merge( $names, $this->starterNamespaces );
 	}
 
 
@@ -30,7 +30,7 @@ class ServerTest extends WebTestCase {
 	  CONSTRUCTOR
 	 *************************************************************************/
 	public function __construct( ) {
-		$this->project_namespace .= 'Application';
+		$this->projectNamespace .= 'Application';
 	}
 
 
@@ -54,7 +54,7 @@ class ServerTest extends WebTestCase {
 		$app = ( new \Staq\Server )
 			->addPlatform( 'local' )
 			->launch( );
-		$this->assertEquals( $this->starter_namespaces, $app->getExtensionNamespaces( ) );
+		$this->assertEquals( $this->starterNamespaces, $app->getExtensionNamespaces( ) );
 	}
 
 	public function test_empty_project__platform__default( ) {
@@ -71,9 +71,9 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_no_configuration__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'NoConfiguration' );
+		$projectNamespace = $this->getProjectClass( 'NoConfiguration' );
 		$app = ( new \Staq\Server )
-			->addApplication( $project_namespace, '/' )
+			->addApplication( $projectNamespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
 		$expected = $this->appendProjectNamespace( 'NoConfiguration' );
@@ -81,9 +81,9 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_simple_configuration__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'SimpleConfiguration' );
+		$projectNamespace = $this->getProjectClass( 'SimpleConfiguration' );
 		$app = ( new \Staq\Server )
-			->addApplication( $project_namespace, '/' )
+			->addApplication( $projectNamespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
 		$expected = $this->appendProjectNamespace( 'SimpleConfiguration' );
@@ -91,9 +91,9 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_extend_no_configuration__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'ExtendNoConfiguration' );
+		$projectNamespace = $this->getProjectClass( 'ExtendNoConfiguration' );
 		$app = ( new \Staq\Server )
-			->addApplication( $project_namespace, '/' )
+			->addApplication( $projectNamespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
 		$expected = $this->appendProjectNamespace( 'ExtendNoConfiguration', 'NoConfiguration' );
@@ -101,12 +101,12 @@ class ServerTest extends WebTestCase {
 	}
 
 	public function test_without_starter__extensions( ) {
-		$project_namespace = $this->getProjectClass( 'WithoutStarter' );
+		$projectNamespace = $this->getProjectClass( 'WithoutStarter' );
 		$app = ( new \Staq\Server )
-			->addApplication( $project_namespace, '/' )
+			->addApplication( $projectNamespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
-		$expected = [ $project_namespace, 'Staq\Core\Ground' ];
+		$expected = [ $projectNamespace, 'Staq\Core\Ground' ];
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 

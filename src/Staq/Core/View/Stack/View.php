@@ -117,22 +117,22 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 			$uri = \Staq::App()->getUri( $controller, $action, $parameters );
 			return $public( $uri );
 		};
-		$route_model_action = function( $action, $model ) use ( $route ) {
+		$routeModelAction = function( $action, $model ) use ( $route ) {
 			return $route( \Staq\Util::getStackQuery( $model ), $action, $model->id );
 		};
-		$route_model = function( $model ) use ( $route_model_action ) {
-			return $route_model_action( 'view', $model );
+		$routeModel = function( $model ) use ( $routeModelAction ) {
+			return $routeModelAction( 'view', $model );
 		};
-		$public_filter = new \Twig_SimpleFilter( 'public', $public );
-		$this->twig->addFilter( $public_filter );
-		$public_function = new \Twig_SimpleFunction( 'public', $public );
-		$this->twig->addFunction( $public_function );
-		$route_function = new \Twig_SimpleFunction( 'route', $route );
-		$this->twig->addFunction( $route_function );
-		$route_function = new \Twig_SimpleFunction( 'route_model_*', $route_model_action );
-		$this->twig->addFunction( $route_function );
-		$route_function = new \Twig_SimpleFunction( 'route_model', $route_model );
-		$this->twig->addFunction( $route_function );
+		$publicFilter = new \Twig_SimpleFilter( 'public', $public );
+		$this->twig->addFilter( $publicFilter );
+		$publicFunction = new \Twig_SimpleFunction( 'public', $public );
+		$this->twig->addFunction( $publicFunction );
+		$routeFunction = new \Twig_SimpleFunction( 'route', $route );
+		$this->twig->addFunction( $routeFunction );
+		$routeFunction = new \Twig_SimpleFunction( 'route_model_*', $routeModelAction );
+		$this->twig->addFunction( $routeFunction );
+		$routeFunction = new \Twig_SimpleFunction( 'route_model', $routeModel );
+		$this->twig->addFunction( $routeFunction );
 	}
 	protected function initDefaultVariables( ) {
 	}

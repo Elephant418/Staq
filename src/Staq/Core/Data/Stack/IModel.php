@@ -41,5 +41,5 @@ interface IModel {
 
 	public function get( $index );
 
-	public function set( $index, $new_val );
+	public function set( $index, $newVal );
 }

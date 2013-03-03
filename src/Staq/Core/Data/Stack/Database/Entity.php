@@ -168,13 +168,13 @@ class Entity implements \Stack\IEntity {
 		$condition = NULL;	
 		$parameterName = 'key' . count( $parameters );
 		if ( is_array( $fieldValue ) ) {
-			$condition_parameters = [ ];
+			$conditionParameters = [ ];
 			foreach( $fieldValue as $key => $value ) {
-				$condition_parameters[ ':' . 'key_' . ( count( $parameters ) + $key ) ] = $value;
+				$conditionParameters[ ':' . 'key_' . ( count( $parameters ) + $key ) ] = $value;
 			}
-			$condition = implode( ', ', array_keys( $condition_parameters ) );
+			$condition = implode( ', ', array_keys( $conditionParameters ) );
 			$condition = $fieldName . ' IN ( ' . $condition . ' )';
-			$parameters = array_merge( $parameters, $condition_parameters );
+			$parameters = array_merge( $parameters, $conditionParameters );
 		} else {
 			$condition = $fieldName . ' ' . $operator . ' :' . $parameterName;
 			$parameters[ ':' . $parameterName ] = $fieldValue;
@@ -194,15 +194,15 @@ class Entity implements \Stack\IEntity {
 
 	protected function getBindParams( $model ) {
 		$data = $this->getCurrentData( $model );
-		$bind_params = [ ];
+		$bindParams = [ ];
 		foreach ( $this->fields as $fieldName ) {
 			$fieldValue = NULL;
 			if ( isset( $data[ $fieldName ] ) ) {
 				$fieldValue = $data[ $fieldName ];
 			}
-			$bind_params[  $fieldName ] = $fieldValue;
+			$bindParams[  $fieldName ] = $fieldValue;
 		}
-		return $bind_params;
+		return $bindParams;
 	}
 
 	protected function getCurrentData( $model ) {

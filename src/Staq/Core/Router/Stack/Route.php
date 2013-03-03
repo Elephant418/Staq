@@ -114,17 +114,17 @@ class Route {
 	public function isRouteCatchException( $exception ) {
 		$parameters = [ ];
 		$result = FALSE;
-		foreach ( $this->exceptions as $match_exception ) {
-			if ( is_numeric( $match_exception ) ) {
-				echo $exception->getCode( ) . ' == ' . $match_exception;
-				if( $exception->getCode( ) == $match_exception ) {
+		foreach ( $this->exceptions as $matchException ) {
+			if ( is_numeric( $matchException ) ) {
+				echo $exception->getCode( ) . ' == ' . $matchException;
+				if( $exception->getCode( ) == $matchException ) {
 					$result = TRUE;
 				}
 			} else if ( \Staq\Util::isStack( $exception ) ) {
-				if( \Staq\Util::getStackSubQuery( $exception ) === $match_exception ) {
+				if( \Staq\Util::getStackSubQuery( $exception ) === $matchException ) {
 					$result = TRUE;
 				}
-			} else if( get_class( $exception ) === $match_exception ) {
+			} else if( get_class( $exception ) === $matchException ) {
 				$result = TRUE;
 			} 
 		}

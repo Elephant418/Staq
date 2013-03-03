@@ -28,7 +28,7 @@ class AutoloaderTest extends StaqTestCase {
 	}
 
 	public function test_existing_class__simple( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Existing\Coco;
 		$this->assertEquals( 1, \Staq\Util::getStackHeight( $stack ) );
@@ -36,7 +36,7 @@ class AutoloaderTest extends StaqTestCase {
 	}
 
 	public function test_existing_class__complex( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Existing\Coco\Des\Bois;
 		$this->assertEquals( 1, \Staq\Util::getStackHeight( $stack ) );
@@ -44,35 +44,35 @@ class AutoloaderTest extends StaqTestCase {
 	}
 
 	public function test_controller_class__unexisting( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Controller\Unexisting;
 		$this->assertTrue( is_a( $stack, 'Staq\Core\Router\Stack\Controller' ) );
 	}
 
 	public function test_controller_class__existing( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Controller\Existing\Coco;
 		$this->assertTrue( is_a( $stack, $this->getProjectStackClass( 'Controller\\Existing\\Coco' ) ) );
 	}
 
 	public function test_controller_class__extending( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Controller\Existing\Coco;
 		$this->assertTrue( is_a( $stack, 'Staq\Core\Router\Stack\Controller' ) );
 	}
 
 	public function test_exception_class__existing( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Exception;
 		$this->assertTrue( is_a( $stack, 'Staq\Core\Ground\Stack\Exception' ) );
 	}
 
 	public function test_exception_class__extending( ) {
-		$app = \Staq\App::create( $this->project_namespace )
+		$app = \Staq\App::create( $this->projectNamespace )
 			->setPlatform( 'local' );
 		$stack = new \Stack\Exception;
 		$this->assertTrue( is_a( $stack, 'Exception' ) );

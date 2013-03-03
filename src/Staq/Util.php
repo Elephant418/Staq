@@ -86,12 +86,12 @@ abstract class Util {
 	}
 	public static function getStackSubQuery( $stack, $separator = '\\' ) {
 		$query = \Staq\Util::getStackQuery( $stack );
-		$sub_query = \UString::substrAfter( $query, '\\' );
-		return str_replace( '\\', $separator, $sub_query );
+		$subQuery = \UString::substrAfter( $query, '\\' );
+		return str_replace( '\\', $separator, $subQuery );
 	}
 	public static function getStackSubQueryText( $stack ) {
-		$sub_query = \Staq\Util::getStackSubQuery( $stack );
-		return str_replace( [ '\\', '_' ], ' ', $sub_query );
+		$subQuery = \Staq\Util::getStackSubQuery( $stack );
+		return str_replace( [ '\\', '_' ], ' ', $subQuery );
 	}
 	public static function getStackDefinition( $stack ) {
 		if ( \Staq\Util::isStack( $stack ) ) {
@@ -124,13 +124,13 @@ abstract class Util {
 		return $list;
 	}
 	public static function getDeclaredStackClasses( ) {
-		$stack_classes = [ ];
+		$stackClasses = [ ];
 		foreach ( get_declared_classes( ) as $class ) {
 			if ( \Staq\Util::isStack( $class ) ) {
-				$stack_classes[ ] = $class;
+				$stackClasses[ ] = $class;
 			}
 		}
-		return $stack_classes;
+		return $stackClasses;
 	}
 
 	// STACKABLE CLASS
