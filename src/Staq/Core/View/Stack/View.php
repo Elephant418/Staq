@@ -63,7 +63,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		$template = strtolower( \Staq\Util::getStackSubQuery( $this, '/' ) ) . '.html';
 		$template = str_replace( '_', '/', $template );
 		while ( TRUE ) {
-			if ( \Staq::App()->getFilePath( 'template/' . $template ) ) {
+			if ( \Staq::App()->getFilePath( 'template/view/' . $template ) ) {
 				break;
 			} 
 			if ( \UString::has( $template, '/' ) ) {
@@ -73,7 +73,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 				break;
 			}
 		}
-		return $this->twig->loadTemplate( $template );
+		return $this->twig->loadTemplate( 'view/' . $template );
 	}
 
 
