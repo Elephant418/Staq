@@ -19,9 +19,7 @@
   <body>
     {% block body %}
       {% for notification in UINotification %}
-        <div class="alert alert-{{ notification.type }}">
-          {{ notification.message }}
-        </div>
+        {% include 'part/alert-message.html' with notification only %}
       {% endfor %}
       {% block content %}
       {% endblock %}

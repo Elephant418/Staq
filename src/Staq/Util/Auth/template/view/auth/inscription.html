@@ -6,18 +6,16 @@
 		<p>You are already logged</p>
 	{% else %}
 		<form method="post" action="{{ route( 'Auth', 'inscription' ) }}">
-		    {% for error in formErrors.title %}
-		    	<div class="alert alert-error">{{ error }}</div>
-		    {% endfor %}
+			
+    		{% include 'part/alert-errors.html' with { 'errors': formErrors.login } only %}
 			<label>Login: <input type="text" name="inscription[login]" value="{{ form.login }}" /></label>
-		    {% for error in formErrors.password %}
-		    	<div class="alert alert-error">{{ error }}</div>
-		    {% endfor %}
+
+    		{% include 'part/alert-errors.html' with { 'errors': formErrors.password } only %}
 			<label>Password: <input type="password" name="inscription[password]" /></label>
-		    {% for error in formErrors.code %}
-		    	<div class="alert alert-error">{{ error }}</div>
-		    {% endfor %}
+
+    		{% include 'part/alert-errors.html' with { 'errors': formErrors.code } only %}
 			<label>Code Beta: <input type="text" name="inscription[code]" value="{{ form.code }}" /></label>
+
 			<input type="hidden" name="redirect" value="{{ redirect }}" />
 			<button type="submit">Inscription</button>
 		</form>

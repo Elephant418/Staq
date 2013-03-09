@@ -37,7 +37,7 @@ class Auth extends Auth\__Parent {
 			->addField( 'inscription.code', 'code' )
 			->addConstraint( 'code', 'required' )
 			->addConstraint( 'code', function( $field ) use( $codes ){
-				return in_array( $fields, $codes );
+				return in_array( $field, $codes );
 			}, 'Bad Code' );
 
 		$values = $form->getValues( );
@@ -67,23 +67,26 @@ class Auth extends Auth\__Parent {
 	}
 
 	public function actionLogin( ) {
-		$login = ''; 
-		$badCredentials = FALSE;
-		if ( isset( $_POST[ 'login' ][ 'login' ] ) ) {
-			$login = $_POST[ 'login' ][ 'login' ];
-			if ( isset( $_POST[ 'login' ][ 'password' ] ) ) {
-				$password = $_POST[ 'login' ][ 'password' ];
-				if ( $this->login( $login, $password ) ) {
-					\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
-				} else {
-					$badCredentials = TRUE;
-				}
+		$form = ( new \Stack\Util\FormHelper )
+			->addField( 'inscription.login', 'login' )
+			->addConstraint( 'login', 'required' )
+			->addField( 'inscription.password', 'password' )
+			->addConstraint( 'password', 'required' );
+
+		$values = $form->getValues( );
+		if ( $form->isValid( ) ) {
+			if ( $this->login( $login, $password ) ) {
+				Notif::success( 'You are now connected as ' . $values[ 'login' ] );
+				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
+			} else {
+				Notif::error( 'Wrong credentials' );
 			}
 		}
+
 		$page = new \Stack\View\Auth\Login;
-		$page[ 'login' ] = $login;
+		$page[ 'form' ] = $values;
+		$page[ 'formErrors' ] = $form->getErrors( );
 		$page[ 'redirect' ] = $this->getRedirectUri( );
-		$page[ 'badCredentials' ] = $badCredentials;
 		return $page;
 	}
 
