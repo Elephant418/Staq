@@ -16,7 +16,6 @@ class FormHelper {
 	protected $fields = array( );
 	protected $values = array( );
 	protected $constraints = array( );
-	protected $messages = array( );
 	protected $errors = array( );
 	protected $isTreated = FALSE;
 	protected $isActif = FALSE;
@@ -31,10 +30,10 @@ class FormHelper {
 		$fields = func_get_args( );
 		foreach ( $fields as $fieldPath ) {
 			if ( \UString::has( $fieldPath, ' as ' ) ) {
-				$fieldPath = UString::substrBefore( $fieldPath, ' as ' );
-				$fieldName = UString::substrAfter( $fieldPath, ' as ' );
+				$fieldName = \UString::substrAfter( $fieldPath, ' as ' );
+				$fieldPath = \UString::substrBefore( $fieldPath, ' as ' );
 			} else {
-				$fieldName = $fieldPath;
+				$fieldName = NULL;
 			}
 			$this->addField( $fieldPath, $fieldName );
 		}
@@ -42,14 +41,16 @@ class FormHelper {
 	}
 
 	public function addField( $fieldPath, $fieldName = NULL ) {
+		$this->errors[ $fieldPath ] = array( );
+		$this->values[ $fieldPath ] = NULL;
 		if ( is_null( $fieldName ) ) {
 			$fieldName = $fieldPath;
+		} else {
+			$this->values[ $fieldName ] = NULL;
+			$this->errors[ $fieldName ] = array( );
 		}
 		$this->fields[ $fieldPath ] = $fieldName;
-		$this->values[ $fieldPath ] = NULL;
-		$this->constraints[ $fieldPath ] = array( );
-		$this->messages[ $fieldPath ] = array( );
-		$this->error[ $fieldPath ] = array( );
+		$this->constraints[ $fieldName ] = array( );
 		return $this;
 	}
 	
@@ -57,6 +58,9 @@ class FormHelper {
 		$constraint = new \Stack\Util\FormConstraint( $constraint, $errorMessage );
 		\UArray::doConvertToArray( $fields );
 		foreach ( $fields as $field ) {
+			if ( $this->isFieldPath( $field ) ) {
+				$field = $this->getFieldName( $field );
+			}
 			if ( ! isset( $this->constraints[ $field ] ) ) {
 				throw new \Exception( 'Unknown form field: ' . $field );
 			}
@@ -82,7 +86,7 @@ class FormHelper {
 
 	public function getErrors( ) {
 		$this->treat( );
-		return $this->messages;
+		return $this->errors;
 	}
 
 
@@ -99,6 +103,11 @@ class FormHelper {
 				$this->isActif = TRUE;
 				$value = \Pixel418\Iniliq::getDeepSelector( $_POST, $path );
 				$this->values[ $name ] = $value;
+				if ( $this->isFieldName( $name ) ) {
+					$this->values[ $this->getFieldPath( $name ) ][ ] = $value;
+				} else if ( $this->isFieldPath( $name ) ) {
+					$this->values[ $this->getFieldName( $name ) ][ ] = $value;
+				}
 			}
 		}
 	}
@@ -112,13 +121,30 @@ class FormHelper {
 			return NULL;
 		}
 		$this->isValid = TRUE;
-		foreach( $this->constraints as $field => $constraints ) {
-			foreach( $constraints as $constraint ) {
+		foreach( $this->fields as $field ) {
+			foreach( $this->constraints[ $field ] as $constraint ) {
 				if ( ! $constraint->test( $this->values[ $field ] ) ) {
-					$this->messages[ $field ][ ] = $constraint->getMessage( );
+					$this->errors[ $field ][ ] = $constraint->getMessage( );
+					if ( $this->isFieldName( $field ) ) {
+						$this->errors[ $this->getFieldPath( $field ) ][ ] = $constraint->getMessage( );
+					} else if ( $this->isFieldPath( $field ) ) {
+						$this->errors[ $this->getFieldName( $field ) ][ ] = $constraint->getMessage( );
+					}
 					$this->isValid = FALSE;
 				}
 			}
 		}
+	}
+	protected function isFieldPath( $field ) {
+		return ( isset( $this->fields[ $field ] ) && $this->fields[ $field ] != $field );
+	}
+	protected function isFieldName( $field ) {
+		return ( in_array( $field, $this->fields ) && ! isset( $this->fields[ $field ] ) );
+	}
+	protected function getFieldName( $fieldPath ) {
+		return $this->fields[ $fieldPath ];
+	}
+	protected function getFieldPath( $fieldName ) {
+		return array_search( $fieldName, $this->fields );
 	}
 }
