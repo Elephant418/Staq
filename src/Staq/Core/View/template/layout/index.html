@@ -18,6 +18,11 @@
   </head>
   <body>
     {% block body %}
+      {% for notification in UINotification %}
+        <div class="alert alert-{{ notification.type }}">
+          {{ notification.message }}
+        </div>
+      {% endfor %}
       {% block content %}
       {% endblock %}
     {% endblock %}
