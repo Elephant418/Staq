@@ -116,7 +116,6 @@ class Route {
 		$result = FALSE;
 		foreach ( $this->exceptions as $matchException ) {
 			if ( is_numeric( $matchException ) ) {
-				echo $exception->getCode( ) . ' == ' . $matchException;
 				if( $exception->getCode( ) == $matchException ) {
 					$result = TRUE;
 				}
