@@ -12,7 +12,7 @@ class FormConstraint {
 	  ATTIBUTES
 	 *************************************************************************/
 	protected $function = array( );
-	protected $message = ;
+	protected $message;
 
 
 
@@ -21,16 +21,16 @@ class FormConstraint {
 	 *************************************************************************/
 	public function __construct( $constraint = NULL, $message = NULL ) {
 		if ( is_string( $constraint ) ) {
-			$callable = array( $this, 'constraint' . ucfirst( $constraint ) );
-			if ( is_callable( $callable ) {
-				$constraint = $callable;
-			}
 			$property = 'message' . ucfirst( $constraint );
 			if ( isset( $this->$property ) ) {
 				$this->message = $this->$property;
 			}
+			$callable = array( $this, 'constraint' . ucfirst( $constraint ) );
+			if ( is_callable( $callable ) ) {
+				$constraint = $callable;
+			}
 		}
-		if ( is_function( $constraint ) ) {
+		if ( is_callable( $constraint ) ) {
 			$this->function = $constraint;
 		} else {
 			throw new \Exception( 'Undefined constraint: ' . $constraint );
@@ -46,7 +46,8 @@ class FormConstraint {
 	  GETTER METHODS
 	 *************************************************************************/
 	public function test( $field ) {
-		return ( $this->function( $field ) !== FALSE );
+		$anonymous = $this->function;
+		return ( $anonymous( $field ) !== FALSE );
 	}
 	public function getMessage( ) {
 		return $this->message;
@@ -57,8 +58,13 @@ class FormConstraint {
 	/*************************************************************************
 	  CONSTRAINT METHODS
 	 *************************************************************************/
-	protected $messageRequired = 'Field required';
-	protected function constraintRequired( $field ) {
-		return ( ! is_null( $field ) &&  $field != '' );
+	protected $messageRequired = 'This field is required';
+	protected function constraintRequired( $value ) {
+		return ( ! is_null( $value ) &&  $value != '' );
+	}
+
+	protected $messageValidUrl = 'This field must be a valid url';
+	protected function constraintValidUrl( $value ) {
+		return filter_var( $value, FILTER_VALIDATE_URL );
 	}
 }

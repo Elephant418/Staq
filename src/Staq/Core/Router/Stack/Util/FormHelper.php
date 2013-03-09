@@ -29,7 +29,7 @@ class FormHelper {
 	 *************************************************************************/
 	public function setFields( ) {
 		$fields = func_get_args( );
-		foreach ( $this->fields as $fieldPath ) {
+		foreach ( $fields as $fieldPath ) {
 			if ( \UString::has( $fieldPath, ' as ' ) ) {
 				$fieldPath = UString::substrBefore( $fieldPath, ' as ' );
 				$fieldName = UString::substrAfter( $fieldPath, ' as ' );
@@ -54,7 +54,7 @@ class FormHelper {
 	}
 	
 	public function addConstraint( $fields, $constraint, $errorMessage = NULL ) {
-		$constraint = \Stack\FormConstraint( $constraint, $errorMessage );
+		$constraint = new \Stack\Util\FormConstraint( $constraint, $errorMessage );
 		\UArray::doConvertToArray( $fields );
 		foreach ( $fields as $field ) {
 			if ( ! isset( $this->constraints[ $field ] ) ) {
@@ -91,7 +91,7 @@ class FormHelper {
 	  PRIVATE METHODS
 	 *************************************************************************/
 	protected function initSubmitedValues( ) {
-		if ( $this->treated ) {
+		if ( $this->isTreated ) {
 			return NULL;
 		}
 		foreach( $this->fields as $path => $name ) {
@@ -103,18 +103,18 @@ class FormHelper {
 		}
 	}
 	protected function treat( ) {
-		if ( $this->treated ) {
+		if ( $this->isTreated ) {
 			return NULL;
 		}
 		$this->initSubmitedValues( );
-		$this->treated = TRUE;
+		$this->isTreated = TRUE;
 		if ( ! $this->isActif ) {
 			return NULL;
 		}
 		$this->isValid = TRUE;
 		foreach( $this->constraints as $field => $constraints ) {
 			foreach( $constraints as $constraint ) {
-				if ( ! $constraint->test( $this->fields[ $field ] ) ) {
+				if ( ! $constraint->test( $this->values[ $field ] ) ) {
 					$this->messages[ $field ][ ] = $constraint->getMessage( );
 					$this->isValid = FALSE;
 				}
