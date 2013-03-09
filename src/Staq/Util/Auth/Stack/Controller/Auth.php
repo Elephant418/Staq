@@ -11,6 +11,15 @@ class Auth extends Auth\__Parent {
 
 
 	/*************************************************************************
+	 CONSTANTS
+	 *************************************************************************/
+	const MSG_INSCRIPTION_VALID = 'You are now connected as %s.';
+	const MSG_INSCRIPTION_KO = 'This username is not free.';
+	const MSG_LOGIN_VALID = 'You are now connected as %s.';
+	const MSG_LOGIN_KO = 'Wrong credentials.';
+
+
+	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
 	const CRYPT_SEED = 'dacz:;,aafapojn';
@@ -54,10 +63,10 @@ class Auth extends Auth\__Parent {
 			}
 			if ( $saved ) {
 				$this->login( $user );
-				Notif::success( 'You are now connected as ' . $values[ 'login' ] );
+				Notif::success( sprintf( static::MSG_INSCRIPTION_VALID, $values[ 'login' ] );
 				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 			} else {
-				Notif::error( 'This username is not free' );
+				Notif::error( static::MSG_INSCRIPTION_KO );
 			}
 		}
 		$page = new \Stack\View\Auth\Inscription;
@@ -77,10 +86,10 @@ class Auth extends Auth\__Parent {
 		$values = $form->getValues( );
 		if ( $form->isValid( ) ) {
 			if ( $this->login( $values[ 'login' ], $values[ 'password' ] ) ) {
-				Notif::success( 'You are now connected as ' . $values[ 'login' ] );
+				Notif::success( sprintf( static::MSG_LOGIN_VALID, $values[ 'login' ] );
 				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 			} else {
-				Notif::error( 'Wrong credentials' );
+				Notif::error( static::MSG_LOGIN_KO );
 			}
 		}
 
