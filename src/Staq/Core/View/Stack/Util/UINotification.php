@@ -2,7 +2,7 @@
 
 /* This file is part of the Ubiq project, which is under MIT license */
 
-namespace Staq\Core\Router\Stack\Util;
+namespace Staq\Core\View\Stack\Util;
 
 class UINotification {
 

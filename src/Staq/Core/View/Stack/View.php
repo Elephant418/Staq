@@ -81,11 +81,12 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	/*************************************************************************
 	  OVERRIDABLE METHODS              
 	 *************************************************************************/
-	public function entryGet( ) {
+	protected function entryGet( ) {
 	}
-	public function entryPost( ) {
+	protected function entryPost( ) {
 	}
-	public function addVariables( ) {
+	protected function addVariables( ) {
+		$this[ 'UINotification' ] = \Stack\Util\UINotification::pull( );
 	}
 
 
