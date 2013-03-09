@@ -18,9 +18,18 @@ class UINotification {
 
 
 	/*************************************************************************
-	  CONSTRUCTOR METHODS				   
+	  PUSH METHODS				   
 	 *************************************************************************/
-	public function __construct( $message, $type = 'info' ) {
+	public static function info( $message) {
+		static::push( $message, static::INFO );
+	}
+	public static function success( $message) {
+		static::push( $message, static::SUCCESS );
+	}
+	public static function error( $message ) {
+		static::push( $message, static::ERROR );
+	}
+	public static function push( $message, $type = 'info' ) {
 		$info = array( 'message' => $message, 'type' => $type );
 		if ( ! isset( $_SESSION[ 'Staq' ][ 'UINotification' ] ) ) {
 			$_SESSION[ 'Staq' ][ 'UINotification' ] = array( );
@@ -31,7 +40,7 @@ class UINotification {
 
 
 	/*************************************************************************
-	  STATIC METHODS				   
+	  PULL METHODS				   
 	 *************************************************************************/
 	public static function pull( ) {
 		$messages = array( );
