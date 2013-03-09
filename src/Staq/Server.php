@@ -64,16 +64,14 @@ class Server {
 			$baseUri = $this->getDefaultBaseUri( );
 		}
 		if ( empty( $platform ) ) {
-			if ( PHP_SAPI == 'cli' ) {
-				global $argv;
+			$platform = 'prod';
+			if ( \Staq\Util::isCli( ) ) {
 				if ( ! isset( $argv[ 1 ] ) ) {
 					echo 'You must specify a platform.' . PHP_EOL;
 					echo 'Ex: ' . $argv[ 0 ] . ' local' . PHP_EOL;
 					die;
 				}
 				$platform = $argv[ 1 ];
-			} else {
-				$platform = 'prod';
 			}
 		}
 		$extensions = $this->findExtensions( $namespace );

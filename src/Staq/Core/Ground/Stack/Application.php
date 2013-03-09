@@ -48,7 +48,8 @@ class Application {
 	}
 
 	public function getNamespace( ) {
-		return reset( $this->getExtensionNamespaces( ) );
+		$extensions = $this->getExtensionNamespaces( );
+		return reset( $extensions );
 	}
 
 	public function getPath( $file = NULL, $create = FALSE ) {
@@ -115,15 +116,19 @@ class Application {
 
 		// Display errors
 		$displayErrors = 0;
-		if ( $settings->getAsBoolean( 'error.display_errors' ) ) {
+		if ( $settings->getAsBoolean( 'error.display_errors' ) || \Staq\Util::isCli( ) ) {
 			$displayErrors = 1;
 		}
 		ini_set( 'display_errors', $displayErrors );
 
 		// Level reporting
-		$level = $settings->get( 'error.error_reporting' );
-		if ( ! is_numeric ( $level ) ) {
-			$level = 0;
+		if ( \Staq\Util::isCli( ) ) {
+			$level = E_ALL & ~( E_STRICT);
+		} else {
+			$level = $settings->get( 'error.error_reporting' );
+			if ( ! is_numeric ( $level ) ) {
+				$level = 0;
+			}
 		}
 		error_reporting( $level );
 		
