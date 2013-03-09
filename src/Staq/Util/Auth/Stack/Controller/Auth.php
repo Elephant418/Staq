@@ -63,7 +63,7 @@ class Auth extends Auth\__Parent {
 			}
 			if ( $saved ) {
 				$this->login( $user );
-				Notif::success( sprintf( static::MSG_INSCRIPTION_VALID, $values[ 'login' ] );
+				Notif::success( sprintf( static::MSG_INSCRIPTION_VALID, $values[ 'login' ] ) );
 				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 			} else {
 				Notif::error( static::MSG_INSCRIPTION_KO );
@@ -86,7 +86,7 @@ class Auth extends Auth\__Parent {
 		$values = $form->getValues( );
 		if ( $form->isValid( ) ) {
 			if ( $this->login( $values[ 'login' ], $values[ 'password' ] ) ) {
-				Notif::success( sprintf( static::MSG_LOGIN_VALID, $values[ 'login' ] );
+				Notif::success( sprintf( static::MSG_LOGIN_VALID, $values[ 'login' ] ) );
 				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 			} else {
 				Notif::error( static::MSG_LOGIN_KO );
