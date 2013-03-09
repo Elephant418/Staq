@@ -99,9 +99,9 @@ class FormHelper {
 			return NULL;
 		}
 		foreach( $this->fields as $path => $name ) {
-			if ( \Pixel418\Iniliq::hasDeepSelector( $_POST, $path ) ) {
+			if ( \UArray::hasDeepSelector( $_POST, $path ) ) {
 				$this->isActif = TRUE;
-				$value = \Pixel418\Iniliq::getDeepSelector( $_POST, $path );
+				$value = \UArray::getDeepSelector( $_POST, $path );
 				$this->values[ $name ] = $value;
 				if ( $this->isFieldName( $name ) ) {
 					$this->values[ $this->getFieldPath( $name ) ][ ] = $value;
