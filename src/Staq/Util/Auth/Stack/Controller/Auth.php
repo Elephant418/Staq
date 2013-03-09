@@ -68,9 +68,9 @@ class Auth extends Auth\__Parent {
 
 	public function actionLogin( ) {
 		$form = ( new \Stack\Util\FormHelper )
-			->addField( 'inscription.login', 'login' )
+			->addField( 'login.login', 'login' )
 			->addConstraint( 'login', 'required' )
-			->addField( 'inscription.password', 'password' )
+			->addField( 'login.password', 'password' )
 			->addConstraint( 'password', 'required' );
 
 		$values = $form->getValues( );
