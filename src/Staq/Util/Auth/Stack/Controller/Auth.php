@@ -48,6 +48,7 @@ class Auth extends Auth\__Parent {
 				->set( 'password', $password )
 				->set( 'code', $values[ 'code' ] );
 			try {
+				$saved = FALSE;
 				$saved = $user->save( );
 			} catch ( \PDOException $e ) {
 			}
@@ -75,7 +76,7 @@ class Auth extends Auth\__Parent {
 
 		$values = $form->getValues( );
 		if ( $form->isValid( ) ) {
-			if ( $this->login( $login, $password ) ) {
+			if ( $this->login( $values[ 'login' ], $values[ 'password' ] ) ) {
 				Notif::success( 'You are now connected as ' . $values[ 'login' ] );
 				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
 			} else {
