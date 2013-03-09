@@ -59,9 +59,21 @@ class Server {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function createApplication( $namespace = 'Staq\Core\Ground', $baseUri = NULL, $platform = 'prod' ) {
+	public function createApplication( $namespace = 'Staq\Core\Ground', $baseUri = NULL, $platform = NULL ) {
 		if ( empty( $baseUri ) ) {
 			$baseUri = $this->getDefaultBaseUri( );
+		}
+		if ( empty( $platform ) ) {
+			if ( PHP_SAPI == 'cli' ) {
+				if ( ! isset( $argv[ 1 ] ) ) {
+					echo 'You must specify a platform.' . PHP_EOL;
+					echo 'Ex: ' . $argv[ 0 ] . ' local' . PHP_EOL;
+					die;
+				}
+				$platform = $argv[ 1 ];
+			} else {
+				$platform = 'prod';
+			}
 		}
 		$extensions = $this->findExtensions( $namespace );
 		if ( ! is_null( static::$autoloader ) ) {
