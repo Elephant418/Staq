@@ -2,27 +2,24 @@
 
 {% block content %}
 	<h1>Inscription</h1>
-	<form method="post" action="{{ route( 'Auth', 'inscription' ) }}">
-		{% if currentUser %}
-			<div class="notice">
-				You are logged !
-			</div>
-		{% else %}
-			{% if badCredentials %}
-				<div class="error">
-					Bad credentials
-				</div>
-			{% endif %}
-			{% if badCode %}
-				<div class="error">
-					Code beta invalid
-				</div>
-			{% endif %}
-			<label>Login: <input type="text" name="inscription[login]" value="{{ login }}" /></label>
+	{% if currentUser %}
+		<p>You are already logged</p>
+	{% else %}
+		<form method="post" action="{{ route( 'Auth', 'inscription' ) }}">
+		    {% for error in formErrors.title %}
+		    	<div class="alert alert-error">{{ error }}</div>
+		    {% endfor %}
+			<label>Login: <input type="text" name="inscription[login]" value="{{ form.login }}" /></label>
+		    {% for error in formErrors.password %}
+		    	<div class="alert alert-error">{{ error }}</div>
+		    {% endfor %}
 			<label>Password: <input type="password" name="inscription[password]" /></label>
-			<label>Code Beta: <input type="text" name="inscription[code]" value="{{ code }}" /></label>
+		    {% for error in formErrors.code %}
+		    	<div class="alert alert-error">{{ error }}</div>
+		    {% endfor %}
+			<label>Code Beta: <input type="text" name="inscription[code]" value="{{ form.code }}" /></label>
 			<input type="hidden" name="redirect" value="{{ redirect }}" />
 			<button type="submit">Inscription</button>
-		{% endif %}
-	</form>
+		</form>
+	{% endif %}
 {% endblock %}

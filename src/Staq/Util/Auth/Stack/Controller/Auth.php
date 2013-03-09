@@ -2,8 +2,9 @@
 
 /* This file is part of the Staq project, which is under MIT license */
 
-
 namespace Staq\Util\Auth\Stack\Controller;
+
+use \Stack\Util\UINotification as Notif;
 
 class Auth extends Auth\__Parent {
 
@@ -27,47 +28,41 @@ class Auth extends Auth\__Parent {
 	  ACTION METHODS           
 	 *************************************************************************/
 	public function actionInscription( ) {
-		$code = ''; 
-		$login = ''; 
-		$badCredentials = FALSE;
-		$badCode = FALSE;
-		if ( isset( $_POST[ 'inscription' ][ 'login' ] ) ) {
-			$login = $_POST[ 'inscription' ][ 'login' ];
-			if ( isset( $_POST[ 'inscription' ][ 'code' ] ) ) {
-				$code = $_POST[ 'inscription' ][ 'code' ];
-				$match = ( new \Stack\Setting )
-					->parse( $this )
-					->getAsArray( 'code' );
-				if ( in_array( $code, $match ) ) {
-					if ( isset( $_POST[ 'inscription' ][ 'password' ] ) ) {
-						$password = $_POST[ 'inscription' ][ 'password' ];
-						$password = $this->encryptPassword( $password );
-						$user = ( new \Stack\Model\User )
-							->set( 'login', $login )
-							->set( 'password', $password )
-							->set( 'code', $code );
-						$saved = FALSE;
-						try {
-							$saved = $user->save( );
-						} catch ( \PDOException $e ) { }
-						if ( $saved ) {
-							$this->login( $user );
-							\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
-						} else {
-							$badCredentials = TRUE;
-						}
-					}
-				} else {
-					$badCode = TRUE;
-				}
+		$codes = $this->getCodes( );
+		$form = ( new \Stack\Util\FormHelper )
+			->addField( 'inscription.login', 'login' )
+			->addConstraint( 'login', 'required' )
+			->addField( 'inscription.password', 'password' )
+			->addConstraint( 'password', 'required' )
+			->addField( 'inscription.code', 'code' )
+			->addConstraint( 'code', 'required' )
+			->addConstraint( 'code', function( $field ) use( $codes ){
+				return in_array( $fields, $codes );
+			}, 'Bad Code' );
+
+		$values = $form->getValues( );
+		if ( $form->isValid( ) ) {
+			$password = $this->encryptPassword( $values[ 'password' ] );
+			$user = ( new \Stack\Model\User )
+				->set( 'login', $values[ 'login' ] )
+				->set( 'password', $password )
+				->set( 'code', $values[ 'code' ] );
+			try {
+				$saved = $user->save( );
+			} catch ( \PDOException $e ) {
+			}
+			if ( $saved ) {
+				$this->login( $user );
+				Notif::success( 'You are now connected as ' . $values[ 'login' ] );
+				\Staq\Util::httpRedirect( $this->getRedirectUri( ) );
+			} else {
+				Notif::error( 'This username is not free' );
 			}
 		}
 		$page = new \Stack\View\Auth\Inscription;
-		$page[ 'login' ]    = $login;
-		$page[ 'code' ]     = $code;
+		$page[ 'form' ] = $values;
+		$page[ 'formErrors' ] = $form->getErrors( );
 		$page[ 'redirect' ] = $this->getRedirectUri( );
-		$page[ 'badCode' ] = $badCode;
-		$page[ 'badCredentials' ] = $badCredentials;
 		return $page;
 	}
 
@@ -110,6 +105,12 @@ class Auth extends Auth\__Parent {
 			return $_GET[ 'redirect' ];
 		}
 		return \Staq::App()->getCurrentUri( );
+	}
+
+	protected function getCodes( ) {
+		return ( new \Stack\Setting )
+			->parse( $this )
+			->getAsArray( 'code' );
 	}
 
 
