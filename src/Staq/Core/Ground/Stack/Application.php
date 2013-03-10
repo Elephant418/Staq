@@ -22,8 +22,8 @@ class Application {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function query(  ) {
-		// GLOBAL SELECTOR, READY TO BE EXTENDED
+	public function getController( $name ) {
+		throw new \Exception( 'There is no controller without Router. Please add the Staq/Core/Router extension.');
 	}
 
 	public function getExtensions( $file = NULL ) {

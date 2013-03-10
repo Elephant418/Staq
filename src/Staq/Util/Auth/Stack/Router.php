@@ -17,7 +17,7 @@ class Router extends Router\__Parent {
 		$exclude = ( $this->setting[ 'auth.mode' ] == 'exclude' );
 		$inner   = in_array( $controller, $controllers );
 		if ( $exclude xor $inner ) {
-			if ( ! \Staq::App( 'Auth' )->isLogged( ) ) {
+			if ( ! \Staq::Ctrl( 'Auth' )->isLogged( ) ) {
 				throw new \Stack\Exception\NotAllowed( );
 			}
 		}

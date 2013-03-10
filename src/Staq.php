@@ -17,11 +17,11 @@ class Staq {
 	}
 
 	public static function Application( ) {
-		$app = \Staq\Server::$application;
-		if ( count( func_get_args( ) ) === 0 ) {
-			return $app;
-		}
-		return call_user_func_array( [ $app, 'query' ], func_get_args( ) );
+		return \Staq\Server::$application;
+	}
+
+	public static function Ctrl( $name ) {
+		return static::Application( )->getController( $name );
 	}
 
 }

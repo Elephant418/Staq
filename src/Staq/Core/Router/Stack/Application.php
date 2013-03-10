@@ -20,9 +20,6 @@ class Application extends Application\__Parent {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
-	public function query( $name ) {
-		return $this->getController( $name );
-	}
 	public function getController( $name ) {
 		return $this->router->getController( $name );
 	}
