@@ -3,6 +3,12 @@
 {% block content %}
 <h1>{{ currentModelType }} {{ model.id }}</h1>
 
+	{% for name, value in model %}
+		<p class="attribute">
+			<b>{{ name }}</b> : {{ model[name] }}
+		</p>
+	{% endfor %}
+
 	<div class="action">
 		<a class="btn" href="{{ route_model_list( model ) }}"><i class="icon-th-list"></i> List</a>
 		<a class="btn" href="{{ route_model_edit( model ) }}"><i class="icon-pencil"></i> Edit</a>

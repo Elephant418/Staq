@@ -37,6 +37,17 @@ class Model {
 
 	public function actionEdit( $id ) {
 		$model = $this->newModel( )->byId( $id );
+		if ( isset( $_POST[ 'model' ] ) ) {
+			foreach ( $_POST[ 'model' ] as $name => $value ) {
+				$model->set( $name, $value );
+			}
+			if ( $model->save( ) ) {
+				Notif::success( 'Model saved.' );
+			} else {
+				Notif::error( 'Model not saved.' );
+			}
+			$this->redirectView( $model );
+		}
 		if ( $model->exists( ) ) {
 			$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_Edit' );
 			$page[ 'currentModelType' ] = $this->modelName( );
@@ -51,11 +62,24 @@ class Model {
 			->delete( );
 		if ( $model->exists( ) ) {
 			Notif::error( 'Model not deleted.' );
-			\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'view', [ 'id' => $model->id ] ) );
+			$this->redirectView( $model );
 		} else {
 			Notif::success( 'Model deleted.' );
-			\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'list' ) );
+			$this->redirectList( );
 		}
+	}
+
+
+
+	/*************************************************************************
+	  REDIRECT METHODS           
+	 *************************************************************************/
+	protected function redirectView( $model ) {
+		\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'view', [ 'id' => $model->id ] ) );
+	}
+
+	protected function redirectList( ) {
+			\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'list' ) );
 	}
 
 
