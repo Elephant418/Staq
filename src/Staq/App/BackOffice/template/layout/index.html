@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="{{ '/twbootstrap/bootstrap-responsive.css'|public }}">
 {% endblock %}
 
+{% block title %}Admin{% endblock %}
+
 {% block body %}
   {% block navbar %}
     <div class="navbar navbar-fixed-top">
@@ -21,8 +23,8 @@
           <a class="brand" href="{{ '/'|public }}">Admin</a>
           <div class="nav-collapse">
             <ul class="nav">
-              {% for controller in controllers %}
-                <li><a href="{{ route( controller.name, controller.action ) }}">{{ controller.label }}</a></li>
+              {% for model in modelTypes %}
+                <li><a href="{{ route( 'Model\\' ~ model, 'list' ) }}">{{ model }}</a></li>
               {% endfor %}
             </ul>
 

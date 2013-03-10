@@ -14,9 +14,9 @@ class View extends View\__Parent {
 	 *************************************************************************/
 	protected function addVariables( ) {
 		parent::addVariables( );
-		$controllers = ( new \Stack\Setting )
+		$modelTypes = ( new \Stack\Setting )
 			->parse( 'BackOffice' )
-			->get( 'controllers' );
-		$this[ 'controllers' ] = $controllers;
+			->get( 'model' );
+		$this[ 'modelTypes' ] = $modelTypes;
 	}
 }

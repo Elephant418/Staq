@@ -1,8 +1,8 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-	<h1>List {{ modelType }}</h1>
-	{% if models|length %}
+	<h1>{{ currentModelType }} list</h1>
+	{% if models|length == 0 %}
 		<p><em>There is no elements to display</em></p>
 	{% else %}
 		<table class="table table-bordered table-striped table-data">
@@ -12,13 +12,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>
-						<a href="{{ model.id }}?>">
-							{{ model.id }}
-						</a>
-					</td>
-				</tr>
+				{% for model in models %}
+					<tr>
+						<td>
+							<a href="{{ route( 'Model\\' ~ currentModelType, 'view', model.id )  }}">
+								{{ model.id }}
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	{% endif %}
