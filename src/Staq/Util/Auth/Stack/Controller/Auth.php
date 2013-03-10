@@ -17,6 +17,7 @@ class Auth extends Auth\__Parent {
 	const MSG_INSCRIPTION_KO = 'This username is not free.';
 	const MSG_LOGIN_VALID = 'You are now connected as %s.';
 	const MSG_LOGIN_KO = 'Wrong credentials.';
+	const MSG_LOGOUT_VALID = 'You are now deconnected.';
 
 
 	/*************************************************************************
@@ -102,6 +103,7 @@ class Auth extends Auth\__Parent {
 
 	public function actionLogout( ) {
 		$this->logout( );
+		Notif::info( static::MSG_LOGOUT_VALID );
 		\Staq\Util::httpRedirect( '/' . \Staq::App()->getBaseUri( ) );
 	}
 
