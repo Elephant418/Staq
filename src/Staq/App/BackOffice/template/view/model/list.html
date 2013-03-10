@@ -1,0 +1,25 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+	<h1>List {{ modelType }}</h1>
+	{% if models|length %}
+		<p><em>There is no elements to display</em></p>
+	{% else %}
+		<table class="table table-bordered table-striped table-data">
+			<thead>
+				<tr>
+					<th>Id</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>
+						<a href="{{ model.id }}?>">
+							{{ model.id }}
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	{% endif %}
+{% endblock %}
