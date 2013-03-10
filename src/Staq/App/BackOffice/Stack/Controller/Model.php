@@ -35,8 +35,39 @@ class Model {
 		}
 	}
 
+	public function actionCreate( ) {
+		$model = $this->newModel( );
+		return $this->genericActionEdit( $model );
+	}
+
 	public function actionEdit( $id ) {
 		$model = $this->newModel( )->byId( $id );
+		if ( $model->exists( ) ) {
+			return $this->genericActionEdit( $model );
+		}
+	}
+
+	public function actionDelete( $id ) {
+		$model = $this->newModel( )
+			->byId( $id );
+		if ( $model->exists( ) ) {
+			$model->delete( );
+			if ( $model->exists( ) ) {
+				Notif::error( 'Model not deleted.' );
+				$this->redirectView( $model );
+			} else {
+				Notif::success( 'Model deleted.' );
+				$this->redirectList( );
+			}
+		}
+	}
+
+
+
+	/*************************************************************************
+	  REDIRECT METHODS           
+	 *************************************************************************/
+	protected function genericActionEdit( $model ) {
 		if ( isset( $_POST[ 'model' ] ) ) {
 			foreach ( $_POST[ 'model' ] as $name => $value ) {
 				$model->set( $name, $value );
@@ -48,25 +79,10 @@ class Model {
 			}
 			$this->redirectView( $model );
 		}
-		if ( $model->exists( ) ) {
-			$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_Edit' );
-			$page[ 'currentModelType' ] = $this->modelName( );
-			$page[ 'model' ] = $model;
-			return $page;
-		}
-	}
-
-	public function actionDelete( $id ) {
-		$model = $this->newModel( )
-			->byId( $id )
-			->delete( );
-		if ( $model->exists( ) ) {
-			Notif::error( 'Model not deleted.' );
-			$this->redirectView( $model );
-		} else {
-			Notif::success( 'Model deleted.' );
-			$this->redirectList( );
-		}
+		$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_Edit' );
+		$page[ 'currentModelType' ] = $this->modelName( );
+		$page[ 'model' ] = $model;
+		return $page;
 	}
 
 
