@@ -13,6 +13,7 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 	  ATTRIBUTES              
 	 *************************************************************************/
 	protected $twig;
+	protected $debug = FALSE;
 
 
 
@@ -106,6 +107,10 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 				$params[ 'cache' ] = $cachePath;
 			}
 		}
+		if ( $settings->getAsBoolean( 'error.display_errors' ) ) {
+			$this->debug = TRUE;
+			$params[ 'debug' ] = TRUE;
+		}
 		return $params;
 	}
 	protected function extendTwig( ) {
@@ -134,6 +139,9 @@ class View extends \Pixel418\Iniliq\ArrayObject {
 		$this->twig->addFunction( $routeFunction );
 		$routeFunction = new \Twig_SimpleFunction( 'route_model', $routeModel );
 		$this->twig->addFunction( $routeFunction );
+		if ( $this->debug ) {
+			$this->twig->addExtension(new \Twig_Extension_Debug());
+		}
 	}
 	protected function initDefaultVariables( ) {
 	}
