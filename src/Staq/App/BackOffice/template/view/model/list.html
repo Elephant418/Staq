@@ -16,7 +16,7 @@
 					<tr>
 						{% for field in fields %}
 							<td>
-								<a href="{{ route( 'Model\\' ~ currentModelType, 'view', model.id )  }}">
+								<a href="{{ route_model( model )  }}">
 									{{ attribute( model, field ) }}
 								</a>
 							</td>

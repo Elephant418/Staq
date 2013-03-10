@@ -43,8 +43,12 @@
   {% endblock %}
 
   <div class="container">
+    {% for notification in UINotification %}
+      {% include 'part/alert-message.html' with notification only %}
+    {% endfor %}
     {% block content %}
     {% endblock %}
+  </div>
 {% endblock %}
 
 {% block scripts %}

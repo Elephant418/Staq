@@ -2,6 +2,8 @@
 
 namespace Staq\App\BackOffice\Stack\Controller;
 
+use \Stack\Util\UINotification as Notif;
+
 class Model {
 
 
@@ -27,8 +29,32 @@ class Model {
 		$model = $this->newModel( )->byId( $id );
 		if ( $model->exists( ) ) {
 			$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_View' );
-			$page[ 'content'  ] = $model;
+			$page[ 'currentModelType' ] = $this->modelName( );
+			$page[ 'model' ] = $model;
 			return $page;
+		}
+	}
+
+	public function actionEdit( $id ) {
+		$model = $this->newModel( )->byId( $id );
+		if ( $model->exists( ) ) {
+			$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_Edit' );
+			$page[ 'currentModelType' ] = $this->modelName( );
+			$page[ 'model' ] = $model;
+			return $page;
+		}
+	}
+
+	public function actionDelete( $id ) {
+		$model = $this->newModel( )
+			->byId( $id )
+			->delete( );
+		if ( $model->exists( ) ) {
+			Notif::error( 'Model not deleted.' );
+			\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'view', [ 'id' => $model->id ] ) );
+		} else {
+			Notif::success( 'Model deleted.' );
+			\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'list' ) );
 		}
 	}
 
