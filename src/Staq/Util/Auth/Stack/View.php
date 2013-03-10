@@ -14,6 +14,6 @@ class View extends View\__Parent {
 	 *************************************************************************/
 	protected function addVariables( ) {
 		parent::addVariables( );
-		$this[ 'currentUser' ] = \Staq::App()->getController( 'Auth' )->currentUser( );
+		$this[ 'currentUser' ] = \Staq::App( 'Auth' )->currentUser( );
 	}
 }

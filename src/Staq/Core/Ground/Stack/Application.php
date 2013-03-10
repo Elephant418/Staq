@@ -22,6 +22,10 @@ class Application {
 	/*************************************************************************
 	  GETTER             
 	 *************************************************************************/
+	public function query(  ) {
+		// GLOBAL SELECTOR, READY TO BE EXTENDED
+	}
+
 	public function getExtensions( $file = NULL ) {
 		$extensions = $this->extensions;
 		if ( ! empty( $file ) ) {

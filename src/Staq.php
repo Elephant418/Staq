@@ -17,7 +17,11 @@ class Staq {
 	}
 
 	public static function Application( ) {
-		return \Staq\Server::$application;
+		$app = \Staq\Server::$application;
+		if ( count( func_get_args( ) ) === 0 ) {
+			return $app;
+		}
+		return call_user_func_array( [ $app, 'query' ], func_get_args( ) );
 	}
 
 }
