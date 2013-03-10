@@ -14,11 +14,13 @@
 			<tbody>
 				{% for model in models %}
 					<tr>
-						<td>
-							<a href="{{ route( 'Model\\' ~ currentModelType, 'view', model.id )  }}">
-								{{ model.id }}
-							</a>
-						</td>
+						{% for field in fields %}
+							<td>
+								<a href="{{ route( 'Model\\' ~ currentModelType, 'view', model.id )  }}">
+									{{ attribute( model, field ) }}
+								</a>
+							</td>
+						{% endfor %}
 					</tr>
 				{% endfor %}
 			</tbody>

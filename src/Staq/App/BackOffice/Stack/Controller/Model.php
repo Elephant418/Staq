@@ -11,7 +11,14 @@ class Model {
 	 *************************************************************************/
 	public function actionList( ) {
 		$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_List' );
-		$page[ 'currentModelType'  ] = $this->modelName( );
+		$fields = ( new \Stack\Setting )
+			->parse( 'BackOffice' )
+			->get( 'list.' . $this->modelName( ) );
+		if ( empty( $fields ) ) {
+			$fields = [ 'id' ];
+		}
+		$page[ 'fields' ] = $fields;
+		$page[ 'currentModelType' ] = $this->modelName( );
 		$page[ 'models' ] = $this->newModel( )->all( );
 		return $page;
 	}
