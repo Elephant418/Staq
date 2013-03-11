@@ -23,8 +23,8 @@
           <a class="brand" href="{{ '/'|public }}">Admin</a>
           <div class="nav-collapse">
             <ul class="nav">
-              {% for model in modelTypes %}
-                <li><a href="{{ route( 'Model\\' ~ model, 'list' ) }}">{{ model }}</a></li>
+              {% for modelType in modelTypes %}
+                <li><a href="{{ route( 'Model', 'list', modelType ) }}">{{ modelType }}</a></li>
               {% endfor %}
             </ul>
 

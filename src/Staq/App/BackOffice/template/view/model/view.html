@@ -10,8 +10,8 @@
 	{% endfor %}
 
 	<div class="action">
-		<a class="btn" href="{{ route_model_list( model ) }}"><i class="icon-th-list"></i> List</a>
-		<a class="btn" href="{{ route_model_edit( model ) }}"><i class="icon-pencil"></i> Edit</a>
-		<a class="btn btn-danger" href="{{ route_model_delete( model ) }}" onclick="return confirm( 'Do you want to delete ?')"><i class="icon-remove"></i> Delete</a>
+		<a class="btn" href="{{ route( 'Model', 'list', currentModelType ) }}"><i class="icon-th-list"></i> List</a>
+		<a class="btn" href="{{ route( 'Model', 'edit', currentModelType, model.id ) }}"><i class="icon-pencil"></i> Edit</a>
+		<a class="btn btn-danger" href="{{ route( 'Model', 'delete', currentModelType, model.id ) }}" onclick="return confirm( 'Do you want to delete ?')"><i class="icon-remove"></i> Delete</a>
 	</div>
 {% endblock %}

@@ -11,53 +11,52 @@ class Model {
 	/*************************************************************************
 	  ACTION METHODS           
 	 *************************************************************************/
-	public function actionList( ) {
-		$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_List' );
+	public function actionList( $type ) {
+		$page = ( new \Stack\View )->byName( $type, 'Model_List' );
 		$fields = ( new \Stack\Setting )
 			->parse( 'BackOffice' )
-			->get( 'list.' . $this->modelName( ) );
+			->get( 'list.' . $type );
 		if ( empty( $fields ) ) {
 			$fields = [ 'id' ];
 		}
 		$page[ 'fields' ] = $fields;
-		$page[ 'currentModelType' ] = $this->modelName( );
-		$page[ 'models' ] = $this->newModel( )->all( );
+		$page[ 'currentModelType' ] = $type;
+		$page[ 'models' ] = $this->newModel( $type )->all( );
 		return $page;
 	}
 
-	public function actionView( $id ) {
-		$model = $this->newModel( )->byId( $id );
+	public function actionView( $type, $id ) {
+		$model = $this->newModel( $type )->byId( $id );
 		if ( $model->exists( ) ) {
-			$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_View' );
-			$page[ 'currentModelType' ] = $this->modelName( );
+			$page = ( new \Stack\View )->byName( $type, 'Model_View' );
+			$page[ 'currentModelType' ] = $type;
 			$page[ 'model' ] = $model;
 			return $page;
 		}
 	}
 
-	public function actionCreate( ) {
-		$model = $this->newModel( );
-		return $this->genericActionEdit( $model );
+	public function actionCreate( $type ) {
+		$model = $this->newModel( $type );
+		return $this->genericActionEdit( $type, $model );
 	}
 
-	public function actionEdit( $id ) {
-		$model = $this->newModel( )->byId( $id );
+	public function actionEdit( $type, $id ) {
+		$model = $this->newModel( $type )->byId( $id );
 		if ( $model->exists( ) ) {
-			return $this->genericActionEdit( $model );
+			return $this->genericActionEdit( $type, $model );
 		}
 	}
 
-	public function actionDelete( $id ) {
-		$model = $this->newModel( )
-			->byId( $id );
+	public function actionDelete( $type, $id ) {
+		$model = $this->newModel( $type )->byId( $id );
 		if ( $model->exists( ) ) {
 			$model->delete( );
 			if ( $model->exists( ) ) {
 				Notif::error( 'Model not deleted.' );
-				$this->redirectView( $model );
+				$this->redirectView( $type, $model );
 			} else {
 				Notif::success( 'Model deleted.' );
-				$this->redirectList( );
+				$this->redirectList( $type );
 			}
 		}
 	}
@@ -67,7 +66,7 @@ class Model {
 	/*************************************************************************
 	  REDIRECT METHODS           
 	 *************************************************************************/
-	protected function genericActionEdit( $model ) {
+	protected function genericActionEdit( $type, $model ) {
 		if ( isset( $_POST[ 'model' ] ) ) {
 			foreach ( $_POST[ 'model' ] as $name => $value ) {
 				$model->set( $name, $value );
@@ -77,10 +76,10 @@ class Model {
 			} else {
 				Notif::error( 'Model not saved.' );
 			}
-			$this->redirectView( $model );
+			$this->redirectView( $type, $model );
 		}
-		$page = ( new \Stack\View )->byName( $this->modelName( ), 'Model_Edit' );
-		$page[ 'currentModelType' ] = $this->modelName( );
+		$page = ( new \Stack\View )->byName( $type, 'Model_Edit' );
+		$page[ 'currentModelType' ] = $type;
 		$page[ 'model' ] = $model;
 		return $page;
 	}
@@ -90,12 +89,17 @@ class Model {
 	/*************************************************************************
 	  REDIRECT METHODS           
 	 *************************************************************************/
-	protected function redirectView( $model ) {
-		\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'view', [ 'id' => $model->id ] ) );
+	protected function redirectView( $type, $model ) {
+		$params = [ ];
+		$params[ 'type' ] = $type;
+		$params[ 'id' ] = $model->id;
+		\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'view', $params ) );
 	}
 
-	protected function redirectList( ) {
-			\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'list' ) );
+	protected function redirectList( $type ) {
+		$params = [ ];
+		$params[ 'type' ] = $type;
+		\Staq\Util::httpRedirectUri( \Staq::App()->getUri( $this, 'list', $params ) );
 	}
 
 
@@ -103,16 +107,12 @@ class Model {
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
-	protected function modelName( ) {
-		return \Staq\Util::getStackSubQuery( $this->modelClass( ) );
+	protected function modelClass( $type ) {
+		return 'Stack\\Model\\' . $type;
 	}
 
-	protected function modelClass( ) {
-		return 'Stack\\' . \Staq\Util::getStackSubQuery( $this );
-	}
-
-	protected function newModel( ) {
-		$class = $this->modelClass( );
+	protected function newModel( $type ) {
+		$class = $this->modelClass( $type );
 		return new $class;
 	}
 }
