@@ -11,7 +11,7 @@ class ServerTest extends WebTestCase {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $starterNamespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
+	public $starterNamespaces = [ 'Staq\\App\\Starter', 'Staq\\Core\\View', 'Staq\\Core\\Router', 'Staq\\Core\\Ground', 'Pixel418\\Iniliq' ];
 
 
 
@@ -106,7 +106,8 @@ class ServerTest extends WebTestCase {
 			->addApplication( $projectNamespace, '/' )
 			->addPlatform( 'local' )
 			->launch( );
-		$expected = [ $projectNamespace, 'Staq\Core\Ground' ];
+		$expected = $this->appendProjectNamespace( 'WithoutStarter' );
+		\UArray::doRemoveValue( $expected, 'Staq\\App\\Starter' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 

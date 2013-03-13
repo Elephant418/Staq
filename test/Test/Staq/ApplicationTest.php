@@ -13,7 +13,7 @@ class ApplicationTest extends StaqTestCase {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
-	public $starterNamespaces = [ 'Staq\App\Starter', 'Staq\Core\View', 'Staq\Core\Router', 'Staq\Core\Ground' ];
+	public $starterNamespaces = [ 'Staq\\App\\Starter', 'Staq\\Core\\View', 'Staq\\Core\\Router', 'Staq\\Core\\Ground', 'Pixel418\\Iniliq' ];
 
 
 
@@ -77,7 +77,8 @@ class ApplicationTest extends StaqTestCase {
 		$projectNamespace = $this->getProjectClass( 'WithoutStarter' );
 		$app = \Staq\App::create( $projectNamespace )
 			->setPlatform( 'local' );
-		$expected = [ $projectNamespace, 'Staq\Core\Ground' ];
+		$expected = $this->appendProjectNamespace( 'WithoutStarter' );
+		\UArray::doRemoveValue( $expected, 'Staq\\App\\Starter' );
 		$this->assertEquals( $expected, $app->getExtensionNamespaces( ) );
 	}
 

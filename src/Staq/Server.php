@@ -155,19 +155,18 @@ class Server {
 	protected function findExtensions( $namespace ) {
 		$this->initializeNamespaces( );
 		$files = [  ];
+		$old = [ ];
 		$namespaces = [ $namespace, 'Staq\Core\Ground' ];
-		$newNamespaces = [ $namespace, 'Staq\Core\Ground' ];
-		while ( count( $newNamespaces ) > 0 ) {
-			$newExtensions = $this->formatExtensionsFromNamespaces( $newNamespaces );
-			foreach ( $newExtensions as $extension ) {
+		while ( array_diff( $namespaces, $old ) ) {
+			$extensions = $this->formatExtensionsFromNamespaces( $namespaces );
+			foreach ( $extensions as $extension ) {
 				$files[ ] = $extension . '/setting/Application.ini';
 			}
-			$ini = ( new \Pixel418\Iniliq\Parser )->parse( array_reverse( $files ) );
-			$fetchNamespaces = array_reverse( $ini->getAsArray( 'extension.list' ) );
-			$newNamespaces = array_diff( $fetchNamespaces, $namespaces );
-			$namespaces = array_merge( $namespaces, $fetchNamespaces );
+			$ini = ( new \Pixel418\Iniliq\IniParser )->parse( array_reverse( $files ) );
+			$old = $namespaces;
+			$namespaces = array_reverse( $ini->getAsArray( 'extension.list' ) );
+			$namespaces = \UArray::reverseMergeUnique( $old, $namespaces );
 		}
-		$namespaces = \UArray::reverseMergeUnique( $namespaces, [ ] );
 		return $this->formatExtensionsFromNamespaces( $namespaces );
 	}
 

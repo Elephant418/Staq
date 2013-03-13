@@ -5,7 +5,7 @@
 
 namespace Staq\Core\View\Stack;
 
-class View extends \Pixel418\Iniliq\ArrayObject {
+class View extends \Stack\Util\ArrayObject {
 
 
 
