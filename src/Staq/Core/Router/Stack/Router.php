@@ -38,6 +38,9 @@ class Router {
 	}
 
 	public function getRoute( $controller, $action ) {
+		if ( is_object( $controller ) ) {
+			$controller = \Staq\Util::getStackSubQuery( $controller );
+		}
 		if ( isset( $this->routes[ $controller ][ $action ] ) ) {
 			return $this->routes[ $controller ][ $action ];
 		}

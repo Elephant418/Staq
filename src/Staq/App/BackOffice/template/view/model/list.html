@@ -1,8 +1,18 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-	<h1>List {{ modelType }}</h1>
-	{% if models|length %}
+	<h1>{{ currentModelType }} list</h1>
+
+	<div class="action">
+		<div class="btn-toolbar">
+			<div class="btn-group">
+				<a class="btn" href="{{ route( 'Model', 'create', currentModelType )  }}"><i class="icon-plus-sign"></i> Create</a>
+				<a class="btn" href="javascript:window.print( );"><i class="icon-print"></i> Print</a>
+			</div>
+		</div>
+	</div>
+
+	{% if models|length == 0 %}
 		<p><em>There is no elements to display</em></p>
 	{% else %}
 		<table class="table table-bordered table-striped table-data">
@@ -12,13 +22,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td>
-						<a href="{{ model.id }}?>">
-							{{ model.id }}
-						</a>
-					</td>
-				</tr>
+				{% for model in models %}
+					<tr>
+						{% for field in fields %}
+							<td>
+								<a href="{{ route( 'Model', 'view', currentModelType, model.id )  }}">
+									{{ attribute( model, field ) }}
+								</a>
+							</td>
+						{% endfor %}
+					</tr>
+				{% endfor %}
 			</tbody>
 		</table>
 	{% endif %}

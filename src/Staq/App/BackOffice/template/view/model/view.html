@@ -1,0 +1,17 @@
+{% extends "layout/index.html" %}
+
+{% block content %}
+<h1>{{ currentModelType }} {{ model.id }}</h1>
+
+	{% for name, value in model %}
+		<p class="attribute">
+			<b>{{ name }}</b> : {{ model[name] }}
+		</p>
+	{% endfor %}
+
+	<div class="action">
+		<a class="btn" href="{{ route( 'Model', 'list', currentModelType ) }}"><i class="icon-th-list"></i> List</a>
+		<a class="btn" href="{{ route( 'Model', 'edit', currentModelType, model.id ) }}"><i class="icon-pencil"></i> Edit</a>
+		<a class="btn btn-danger" href="{{ route( 'Model', 'delete', currentModelType, model.id ) }}" onclick="return confirm( 'Do you want to delete ?')"><i class="icon-remove"></i> Delete</a>
+	</div>
+{% endblock %}

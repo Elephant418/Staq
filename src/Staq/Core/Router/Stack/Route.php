@@ -59,7 +59,7 @@ class Route {
 	/*************************************************************************
 	  PUBLIC METHODS             
 	 *************************************************************************/
-	public function getUri( $parameters ) {
+	public function getUri( $parameters = [ ] ) {
 		$uri = $this->uri;
 		foreach ( $parameters as $name => $value ) {
 			if ( ! is_numeric( $name ) ) {
