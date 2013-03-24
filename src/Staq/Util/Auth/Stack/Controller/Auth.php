@@ -73,11 +73,11 @@ class Auth extends Auth\__Parent
     {
         $form = $this->getInscriptionForm();
         if ($form->isValid()) {
-            $password = $this->encryptPassword($form->getFieldValue('password'));
+            $password = $this->encryptPassword($form->get('password'));
             $user = (new \Stack\Model\User)
-                ->set('login', $form->getFieldValue('login'))
+                ->set('login', $form->get('login'))
                 ->set('password', $password)
-                ->set('code', $form->getFieldValue('code'));
+                ->set('code', $form->get('code'));
             try {
                 $saved = FALSE;
                 $saved = $user->save();
@@ -85,7 +85,7 @@ class Auth extends Auth\__Parent
             }
             if ($saved) {
                 $this->login($user);
-                Notif::success(sprintf(static::MSG_INSCRIPTION_VALID, $values['login']));
+                Notif::success(sprintf(static::MSG_INSCRIPTION_VALID, $form->get('login')));
                 \Staq\Util::httpRedirectUri($this->getRedirectUri());
             } else {
                 Notif::error(static::MSG_INSCRIPTION_KO);
