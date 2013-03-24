@@ -10,4 +10,5 @@ test/resource/Test/Staq/Project/*/*/cache/
 .buildpath
 .project
 .settings
+.idea
 
