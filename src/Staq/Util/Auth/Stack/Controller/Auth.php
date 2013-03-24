@@ -39,8 +39,10 @@ class Auth extends Auth\__Parent
     public function getInscriptionForm()
     {
         $codes = $this->getCodes();
-        \Stack\Util\FormFilter::addCustomFilter('existing_code', function ($field) use ($codes) {
-            return in_array($field, $codes);
+        \Stack\Util\FormFilter::addCustomFilter('existing_code', function ($options) use ($codes) {
+            return function ($field) use ($codes) {
+                return in_array($field, $codes);
+            };
         });
         return (new \Stack\Util\FormHelper)
             ->addField('login', 'inscription.login')
