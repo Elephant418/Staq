@@ -22,6 +22,9 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	public function exists( ) {
 		return ( $this->id !== NULL );
 	}
+    public function name( ) {
+        return $this->id;
+    }
 
 
 
@@ -55,6 +58,10 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		$this->schemaAttributeNames[ ] = $name;
 		parent::offsetSet( $name, $attribute );
 	}
+
+    protected function hasAttribute( $name ) {
+        return ( in_array( $name, $this->schemaAttributeNames ) );
+    }
 
 	public function keys( ) {
 		return array_keys( $this->getArrayCopy( ) );

@@ -50,6 +50,14 @@ class OneToMany extends OneToMany\__Parent {
 		return $this->remoteModels;
 	}
 
+    public function getIds( ) {
+        $ids = [];
+        foreach ( $this->get( ) as $model ) {
+            $ids[] = $model->id;
+        }
+        return $ids;
+    }
+
 	public function set( $remoteModels ) {
 		// TODO: Manage to keep old ones to delete it.
 		return $this->remoteModels = $remoteModels;
@@ -77,11 +85,6 @@ class OneToMany extends OneToMany\__Parent {
         return ( new $class )->all( );
     }
 
-
-
-    /*************************************************************************
-    PUBLIC METHODS
-     *************************************************************************/
     public function getRemoteModel( ) {
         $class = $this->getRemoteClass( );
         return new $class;

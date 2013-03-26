@@ -1,5 +1,5 @@
 {% if attribute.get().exists() %}
     <a href="{{ route( 'Model', 'view', attribute.getRemoteModelType(), attribute.get().id )  }}">
-        View
+        {{ attribute.get().name() }}
     </a>
 {% endif %}
