@@ -23,7 +23,9 @@ class Password extends Password\__Parent {
 	}
 
 	public function set( $value ) {
-        $this->seed = $this->encryptPassword($value);
+        if ( !empty( $value)) {
+            $this->seed = $this->encryptPassword($value);
+        }
 	}
 
 	public function compare( $password ) {
