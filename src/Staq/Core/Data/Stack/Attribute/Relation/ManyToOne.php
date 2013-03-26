@@ -13,7 +13,7 @@ class ManyToOne extends ManyToOne\__Parent {
 	 ATTRIBUTES
 	 *************************************************************************/
 	protected $remoteModel;
-	protected $remoteClassType;
+	protected $remoteModelType;
 
 
 
@@ -23,7 +23,7 @@ class ManyToOne extends ManyToOne\__Parent {
 	public function initBySetting( $model, $setting ) {
 		if ( is_array( $setting ) ) {
 			if ( isset( $setting[ 'remote_class_type' ] ) ) {
-				$this->remoteClassType = $setting[ 'remote_class_type' ];
+				$this->remoteModelType = $setting[ 'remote_class_type' ];
 			} 
 		}
 	}
@@ -42,7 +42,11 @@ class ManyToOne extends ManyToOne\__Parent {
 	}
 
 	public function set( $model ) {
-		if ( ! \Staq\Util::isStack( $model, $this->getRemoteClass( ) ) ) {
+        if ( empty( $model ) ) {
+            $model = $this->getRemoteModel( );
+        } else if ( is_numeric( $model ) ) {
+            $model = $this->getRemoteModel( )->byId( $model );
+        } else if ( ! \Staq\Util::isStack( $model, $this->getRemoteClass( ) ) ) {
 			$message = 'Input of type "' . $this->getRemoteClass( ) . '", but "' . gettype( $model ) . '" given.';
 			throw new \Stack\Exception\NotRightInput( $message );
 		}
@@ -53,6 +57,7 @@ class ManyToOne extends ManyToOne\__Parent {
 			$this->remoteModel = $model;
 			$this->seed = $model->id;
 		}
+        return $this;
 	}
 
 
@@ -71,10 +76,23 @@ class ManyToOne extends ManyToOne\__Parent {
 
 
 
-	/*************************************************************************
-	  PROTECTED METHODS             
-	 *************************************************************************/
-	protected function getRemoteClass( ) {
-		return $class = 'Stack\\Model\\' . $this->remoteClassType;
-	}	
+    /*************************************************************************
+    PUBLIC METHODS
+     *************************************************************************/
+    public function getRelatedModels( ) {
+        return $this->getRemoteModel( )->all( );
+    }
+
+    public function getRemoteModel( ) {
+        $class = $this->getRemoteClass( );
+        return new $class;
+    }
+
+    public function getRemoteModelType( ) {
+        return $this->remoteModelType;
+    }
+
+	public function getRemoteClass( ) {
+		return $class = 'Stack\\Model\\' . $this->remoteModelType;
+	}
 }

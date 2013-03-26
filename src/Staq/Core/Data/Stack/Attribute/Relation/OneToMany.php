@@ -14,7 +14,7 @@ class OneToMany extends OneToMany\__Parent {
 	 *************************************************************************/
 	protected $model;
 	protected $remoteModels = NULL;
-	protected $remoteClassType;
+	protected $remoteModelType;
 	protected $remoteAttributeName;
 
 
@@ -31,7 +31,7 @@ class OneToMany extends OneToMany\__Parent {
 			if ( ! isset( $setting[ 'remote_attribute_name' ] ) ) {
 				throw new \Stack\Exception\MissingSetting( '"remote_attribute_name" missing for the OneToMany relation.');
 			} 
-			$this->remoteClassType = $setting[ 'remote_class_type' ];
+			$this->remoteModelType = $setting[ 'remote_class_type' ];
 			$this->remoteAttributeName = $setting[ 'remote_attribute_name' ];
 		}
 	}
@@ -69,10 +69,29 @@ class OneToMany extends OneToMany\__Parent {
 
 
 
-	/*************************************************************************
-	  PROTECTED METHODS             
-	 *************************************************************************/
-	protected function getRemoteClass( ) {
-		return $class = 'Stack\\Model\\' . $this->remoteClassType;
-	}	
+    /*************************************************************************
+    PUBLIC METHODS
+     *************************************************************************/
+    public function getRelatedModels( ) {
+        $class = $this->getRemoteClass( );
+        return ( new $class )->all( );
+    }
+
+
+
+    /*************************************************************************
+    PUBLIC METHODS
+     *************************************************************************/
+    public function getRemoteModel( ) {
+        $class = $this->getRemoteClass( );
+        return new $class;
+    }
+
+    public function getRemoteModelType( ) {
+        return $this->remoteModelType;
+    }
+
+    public function getRemoteClass( ) {
+        return $class = 'Stack\\Model\\' . $this->remoteModelType;
+    }
 }

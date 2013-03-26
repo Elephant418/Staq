@@ -59,11 +59,6 @@ class Auth extends Auth\__Parent
 
     public function getLoginForm()
     {
-        \Stack\Util\FormFilter::addCustomFilter('free_username', function ($options) use ($codes) {
-            return function ($field) use ($codes) {
-                return in_array($field, $codes);
-            };
-        });
         return (new \Stack\Util\FormHelper)
             ->addField('login', 'login.login')
             ->addFilter('login', FILTER_SANITIZE_STRING)

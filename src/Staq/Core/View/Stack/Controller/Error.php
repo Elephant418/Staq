@@ -16,7 +16,7 @@ class Error extends Error\__Parent {
 		parent::actionView( $code );
         $message = '';
         $exception = \Staq::App()->getLastException();
-        if ($exception) {
+        if ($exception && \Staq::App()->settings->getAsBoolean('error.display_errors')) {
             $message = $exception->getMessage();
         }
 		$page = new \Stack\View\Error;
