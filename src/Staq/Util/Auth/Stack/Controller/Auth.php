@@ -47,6 +47,9 @@ class Auth extends Auth\__Parent
             ->addField('login', 'inscription.login')
             ->addFilter('login', FILTER_SANITIZE_STRING)
             ->addFilter('login', 'required', 'This field is required')
+            ->addFilter('login', FILTER_VALIDATE_REGEXP, 'This field must contains only letters, numbers and underscore (_)', ['regexp'=>'/^[a-zA-Z0-9_]*$/'])
+            ->addFilter('login', 'min_length', 'This field must contains at least 4 characters', ['length'=>'4'])
+            ->addFilter('login', 'max_length', 'This field must contains less than 20 characters', ['length'=>'19'])
             ->addField('password', 'inscription.password')
             ->addFilter('password', 'required', 'This field is required')
             ->addField('code', 'inscription.code')
@@ -56,6 +59,11 @@ class Auth extends Auth\__Parent
 
     public function getLoginForm()
     {
+        \Stack\Util\FormFilter::addCustomFilter('free_username', function ($options) use ($codes) {
+            return function ($field) use ($codes) {
+                return in_array($field, $codes);
+            };
+        });
         return (new \Stack\Util\FormHelper)
             ->addField('login', 'login.login')
             ->addFilter('login', FILTER_SANITIZE_STRING)
@@ -75,7 +83,7 @@ class Auth extends Auth\__Parent
             $user = (new \Stack\Model\User)
                 ->set('login', $form->get('login'))
                 ->set('password', $form->get('password'))
-                ->set('code', $form->get('code'));
+                ->set('code_beta', $form->get('code'));
             try {
                 $saved = FALSE;
                 $saved = $user->save();

@@ -19,7 +19,7 @@ class Password extends Password\__Parent {
 	  PUBLIC USER METHODS             
 	 *************************************************************************/
 	public function get( ) {
-		return 'An anonymous hashed password';
+		return '';
 	}
 
 	public function set( $value ) {
