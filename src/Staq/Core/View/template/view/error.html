@@ -3,4 +3,7 @@
 {% block content %}
 	<h1>Error {{ code }}</h1>
 	<p>Sorry, but this is an error page.</p>
+    {% if message %}
+        <pre>{{ message }}</pre>
+    {% endif %}
 {% endblock %}

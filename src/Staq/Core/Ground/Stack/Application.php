@@ -12,6 +12,7 @@ class Application {
 	/*************************************************************************
 	 ATTRIBUTES
 	 *************************************************************************/
+    public $settings;
 	protected $extensions;
 	protected $baseUri;
 	protected $platform;
@@ -114,13 +115,13 @@ class Application {
 	}
 
 	public function initialize( ) {
-		$settings = ( new \Stack\Setting )
+		$this->settings = ( new \Stack\Setting )
 			->clearCache( )
 			->parse( $this );
 
 		// Display errors
 		$displayErrors = 0;
-		if ( $settings->getAsBoolean( 'error.display_errors' ) || \Staq\Util::isCli( ) ) {
+		if ( $this->settings->getAsBoolean( 'error.display_errors' ) || \Staq\Util::isCli( ) ) {
 			$displayErrors = 1;
 		}
 		ini_set( 'display_errors', $displayErrors );
@@ -129,7 +130,7 @@ class Application {
 		if ( \Staq\Util::isCli( ) ) {
 			$level = E_ALL & ~( E_STRICT);
 		} else {
-			$level = $settings->get( 'error.error_reporting' );
+			$level = $this->settings->get( 'error.error_reporting' );
 			if ( ! is_numeric ( $level ) ) {
 				$level = 0;
 			}

@@ -14,9 +14,14 @@ class Error extends Error\__Parent {
 	 *************************************************************************/
 	public function actionView( $code ) {
 		parent::actionView( $code );
+        $message = '';
+        $exception = \Staq::App()->getLastException();
+        if ($exception) {
+            $message = $exception->getMessage();
+        }
 		$page = new \Stack\View\Error;
 		$page[ 'code' ] = $code;
-		$page[ 'message' ] = '';
+		$page[ 'message' ] = $message;
 		return $page;
 	}
 
