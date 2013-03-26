@@ -97,6 +97,10 @@ abstract class Util {
 			return substr( $stack, strlen( 'Stack\\' ) );
 		}
 	}
+    public static function getStackType( $stack ) {
+        $query = static::getStackQuery( $stack );
+        return \UString::substrBefore($query, '\\');
+    }
 	public static function getStackSubQuery( $stack, $separator = '\\' ) {
 		$query = \Staq\Util::getStackQuery( $stack );
 		$subQuery = \UString::substrAfter( $query, '\\' );

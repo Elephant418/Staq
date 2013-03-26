@@ -23,7 +23,6 @@ class Auth extends Auth\__Parent
     /*************************************************************************
     ATTRIBUTES
      *************************************************************************/
-    const CRYPT_SEED = 'dacz:;,aafapojn';
     static public $currentUser;
     public static $setting = [
         'route.inscription.uri' => '/inscription',
@@ -73,10 +72,9 @@ class Auth extends Auth\__Parent
     {
         $form = $this->getInscriptionForm();
         if ($form->isValid()) {
-            $password = $this->encryptPassword($form->get('password'));
             $user = (new \Stack\Model\User)
                 ->set('login', $form->get('login'))
-                ->set('password', $password)
+                ->set('password', $form->get('password'))
                 ->set('code', $form->get('code'));
             try {
                 $saved = FALSE;
@@ -177,8 +175,7 @@ class Auth extends Auth\__Parent
             return FALSE;
         }
         if (!is_null($password)) {
-            $password = $this->encryptPassword($password);
-            if ($user->password !== $password) {
+            if (!$user->getAttribute('password')->compare($password)) {
                 return FALSE;
             }
         }
@@ -198,11 +195,6 @@ class Auth extends Auth\__Parent
             unset($_SESSION['Staq']['loggedUser']);
         }
         static::$currentUser = NULL;
-    }
-
-    public function encryptPassword($password)
-    {
-        return sha1(static::CRYPT_SEED . $password);
     }
 }
 

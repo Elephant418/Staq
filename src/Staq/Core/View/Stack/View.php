@@ -61,20 +61,7 @@ class View extends \Stack\Util\ArrayObject {
 		return $template->render( $this->getArrayCopy( ) );
 	}
 	public function loadTemplate( ) {
-		$template = strtolower( \Staq\Util::getStackSubQuery( $this, '/' ) ) . '.html';
-		$template = str_replace( '_', '/', $template );
-		while ( TRUE ) {
-			if ( \Staq::App()->getFilePath( 'template/view/' . $template ) ) {
-				break;
-			} 
-			if ( \UString::has( $template, '/' ) ) {
-				$template = \UString::substrBeforeLast( $template, '/' ) . '.html';
-			} else {
-				$template = 'index.html';
-				break;
-			}
-		}
-		return $this->twig->loadTemplate( 'view/' . $template );
+		return $this->twig->loadTemplate( static::findTemplate( $this ) );
 	}
 
 
@@ -90,6 +77,31 @@ class View extends \Stack\Util\ArrayObject {
 		$this[ 'UINotification' ] = \Stack\Util\UINotification::pull( );
 	}
 
+
+
+    /*************************************************************************
+    STATIC METHODS
+     *************************************************************************/
+    public static function findTemplate( $stack, $action = NULL ) {
+        $template = strtolower( \Staq\Util::getStackSubQuery( $stack, '/' ) ) . '.html';
+        $template = str_replace( '_', '/', $template );
+        if ( !empty( $action ) ) {
+            $template = $action . '/' . $template;
+        }
+        $folder = strtolower( \Staq\Util::getStackType( $stack ) );
+        while ( TRUE ) {
+            if ( \Staq::App()->getFilePath( 'template/' . $folder . '/' . $template ) ) {
+                break;
+            }
+            if ( \UString::has( $template, '/' ) ) {
+                $template = \UString::substrBeforeLast( $template, '/' ) . '.html';
+            } else {
+                $template = 'index.html';
+                break;
+            }
+        }
+        return $folder . '/' . $template;
+    }
 
 
 
@@ -129,6 +141,9 @@ class View extends \Stack\Util\ArrayObject {
 		$routeModel = function( $model ) use ( $routeModelAction ) {
 			return $routeModelAction( 'view', $model );
 		};
+        $find = function( $stack, $action = 'view' ) use ( $routeModelAction ) {
+            return ;
+        };
 		$publicFilter = new \Twig_SimpleFilter( 'public', $public );
 		$this->twig->addFilter( $publicFilter );
 		$publicFunction = new \Twig_SimpleFunction( 'public', $public );
@@ -139,6 +154,8 @@ class View extends \Stack\Util\ArrayObject {
 		$this->twig->addFunction( $routeFunction );
 		$routeFunction = new \Twig_SimpleFunction( 'route_model', $routeModel );
 		$this->twig->addFunction( $routeFunction );
+        $findFunction = new \Twig_SimpleFunction( 'find_template', array(get_class($this), 'findTemplate' ) );
+        $this->twig->addFunction( $findFunction );
 		if ( $this->debug ) {
 			$this->twig->addExtension(new \Twig_Extension_Debug());
 		}

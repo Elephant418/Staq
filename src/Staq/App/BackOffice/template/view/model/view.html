@@ -4,8 +4,10 @@
 <h1>{{ currentModelType }} {{ model.id }}</h1>
 
 	{% for name, value in model %}
+        {% set attribute = model.getAttribute(name) %}
 		<p class="attribute">
-			<b>{{ name }}</b> : {{ model[name] }}
+			<b>{{ name }}</b> :
+            {% include find_template( attribute, 'view' ) with { 'attribute': attribute } only %}
 		</p>
 	{% endfor %}
 
