@@ -27,7 +27,7 @@ class Auth extends Auth\__Parent
     public static $setting = [
         'route.inscription.uri' => '/inscription',
         'route.login.uri' => '/login',
-        'route.login.exceptions' => 'NotAllowed',
+        'route.login.exceptions' => 'MustBeLogged',
         'route.logout.uri' => '/logout'
     ];
 

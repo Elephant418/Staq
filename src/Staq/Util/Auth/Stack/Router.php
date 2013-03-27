@@ -15,11 +15,16 @@ class Router extends Router\__Parent {
 	protected function callController( $controller, $action, $route ) {
 		$controllers = $this->setting->getAsArray( 'auth.controller' );
 		$exclude = ( $this->setting[ 'auth.mode' ] == 'exclude' );
+        $level = $this->setting->get( 'auth.level', 0);
 		$inner   = in_array( $controller, $controllers );
 		if ( $exclude xor $inner ) {
 			if ( ! \Staq::Ctrl( 'Auth' )->isLogged( ) ) {
-				throw new \Stack\Exception\NotAllowed( );
+				throw new \Stack\Exception\MustBeLogged( );
 			}
+            $user = \Staq::Ctrl( 'Auth' )->currentUser();
+            if ( $user->getAttribute('right')->getSeed() < $level) {
+                throw new \Stack\Exception\NotAllowed( );
+            }
 		}
 		return parent::callController( $controller, $action, $route );
 	}
