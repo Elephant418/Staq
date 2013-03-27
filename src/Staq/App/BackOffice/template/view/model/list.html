@@ -27,7 +27,12 @@
 						{% for field in fields %}
 							<td>
 								<a href="{{ route( 'Model', 'view', currentModelType, model.id )  }}">
-									{{ attribute( model, field ) }}
+									{% set attribute = attribute( model, field ) %}
+                                    {% if attribute.id %}
+                                        {{ attribute.name() }}
+                                    {% else %}
+                                        {{ attribute }}
+                                    {% endif %}
 								</a>
 							</td>
 						{% endfor %}
