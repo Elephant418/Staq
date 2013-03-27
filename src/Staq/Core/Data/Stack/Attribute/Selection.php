@@ -44,7 +44,7 @@ class Selection extends Selection\__Parent
 
     public function set($value)
     {
-        $key = array_search($this->options, $value, TRUE);
+        $key = array_search($value, $this->options, TRUE);
         if ($key !== FALSE) {
             $this->seed = $key;
         }
