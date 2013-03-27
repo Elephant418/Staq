@@ -104,9 +104,14 @@ class Model extends \ArrayObject implements \Stack\IModel {
 	}
 
 	public function fetch( $fields = [ ], $limit = NULL, $order = NULL ) {
-		$datas = $this->entity->getDatasByFields( $fields, $limit, $order );
-		return $this->getListByDatas( $datas );
+        $data = $this->entity->getDatasByFields( $fields, $limit, $order );
+		return $this->getListByDatas( $data );
 	}
+
+    public function fetchOne( $fields = [ ], $order = NULL ) {
+        $data = $this->entity->getDataByFields( $fields, 1, $order );
+        return $this->byData( $data );
+    }
 
 	public function deleteAll( ) {
 		return $this->entity->delete( );
