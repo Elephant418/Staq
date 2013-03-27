@@ -49,15 +49,15 @@
     {% block content %}
     {% endblock %}
   </div>
-{% endblock %}
 
 {% block scripts %}
-  <script src="/twbootstrap/jquery.js"></script>
-  <script src="/twbootstrap/bootstrap-dropdown.js"></script>
-    <script src="/twbootstrap/bootstrap-transition.js"></script>
-    <script src="/twbootstrap/bootstrap-collapse.js"></script>
-  <script src="/chosen/chosen.jquery.min.js"></script>
-  <script>
-    $(".attribute select").chosen();
-  </script>
+<script src="{{ public('/twbootstrap/jquery.js') }}"></script>
+<script src="{{ public('/twbootstrap/bootstrap-dropdown.js') }}"></script>
+<script src="{{ public('/twbootstrap/bootstrap-transition.js') }}"></script>
+<script src="{{ public('/twbootstrap/bootstrap-collapse.js') }}"></script>
+<script src="{{ public('/chosen/chosen.jquery.min.js') }}"></script>
+<script>
+    $(".controls select").chosen();
+</script>
+{% endblock %}
 {% endblock %}
