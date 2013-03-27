@@ -13,7 +13,7 @@ class Selection extends Selection\__Parent
     ATTRIBUTES
      *************************************************************************/
     protected $options;
-    protected $allowNull;
+    protected $allowNull = TRUE;
 
 
     /*************************************************************************
@@ -25,6 +25,9 @@ class Selection extends Selection\__Parent
             $setting = new \Stack\Util\ArrayObject($setting);
             $this->options = $setting->getAsArray('options');
             $this->allowNull = $setting->getAsBoolean('allowNull', TRUE);
+        }
+        if (!$this->allowNull && empty($this->options)) {
+            throw new \Exception('No options defined for the selection attribute');
         }
     }
 
@@ -50,6 +53,17 @@ class Selection extends Selection\__Parent
         }
     }
 
+
+    /*************************************************************************
+    PUBLIC DATABASE METHODS
+     *************************************************************************/
+    public function getSeed()
+    {
+        if ($this->allowNull || !is_null($this->seed)) {
+            return $this->seed;
+        }
+        return reset(array_keys($this->options));
+    }
 
     /*************************************************************************
     PUBLIC METHODS
