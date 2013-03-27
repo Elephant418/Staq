@@ -1,7 +1,7 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-<h1>{{ currentModelType }} {{ model.id }}</h1>
+<h1>{{ currentModelType }} : {{ model.name() }}</h1>
 
 	{% for name, value in model %}
         {% set attribute = model.getAttribute(name) %}
