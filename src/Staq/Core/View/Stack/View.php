@@ -135,8 +135,12 @@ class View extends \Stack\Util\ArrayObject {
 			$uri = \Staq::App()->getUri( $controller, $action, $parameters );
 			return $public( $uri );
 		};
-		$routeModelAction = function( $action, $model ) use ( $route ) {
-			return $route( \Staq\Util::getStackQuery( $model ), $action, $model->id );
+		$routeModelAction = function( $action, $model ) use ( $route, $public ) {
+            $controllerName = \Staq\Util::getStackQuery( $model );
+            $controller = \Staq::Ctrl($controllerName);
+            $parameters = $controller->getRouteAttributes( $model );
+            $uri = \Staq::App()->getUri( $controller, $action, $parameters );
+            return $public( $uri );
 		};
 		$routeModel = function( $model ) use ( $routeModelAction ) {
 			return $routeModelAction( 'view', $model );

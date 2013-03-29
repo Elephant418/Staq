@@ -143,7 +143,7 @@ class Route {
 		$pattern = str_replace( [ '.', '+', '?' ],  [ '\.', '\+', '\?' ], $refer ); 
 		$pattern = preg_replace( '#\*#', '.*', $pattern );
 		$pattern = preg_replace( '#\(([^)]*)\)#', '(?:\1)?', $pattern ); 
-		$pattern = preg_replace( '#\:(\w+)#', '(?<\1>\w+)', $pattern ); 
+		$pattern = preg_replace( '#\:(\w+)#', '(?<\1>[^?/.]+)', $pattern );
 		$pattern = '#^' . $pattern . '/?$#';
 		$parameters = [ ];
 		$result = preg_match( $pattern, $uri, $parameters );

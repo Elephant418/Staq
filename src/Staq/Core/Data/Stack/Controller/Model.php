@@ -27,6 +27,18 @@ class Model extends Model\__Parent {
 
 
 
+    /*************************************************************************
+    PUBLIC METHODS
+     *************************************************************************/
+    public function getRouteAttributes( $model ) {
+        $attributes = [];
+        $attributes['id'] = $model->id;
+        $attributes['name'] = $model->name();
+        return $attributes;
+    }
+
+
+
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
