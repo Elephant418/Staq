@@ -45,17 +45,17 @@ class Model extends Model\__Parent
      *************************************************************************/
     protected function getModelName()
     {
-        return \Staq\Util::getStackSubSubQuery($this->modelClass());
+        return \Staq\Util::getStackSubSubQuery($this);
     }
 
     protected function getModelClass()
     {
-        return 'Stack\\Model\\' . \Staq\Util::getStackSubQuery($this);
+        return 'Stack\\Model\\' . $this->getModelName();
     }
 
     protected function getEntityClass()
     {
-        return 'Stack\\Entity\\' . \Staq\Util::getStackSubQuery($this);
+        return 'Stack\\Entity\\' . $this->getModelName();
     }
 
     protected function getNewModel()
