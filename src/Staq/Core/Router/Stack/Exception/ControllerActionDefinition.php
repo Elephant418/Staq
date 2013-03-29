@@ -5,14 +5,14 @@
 
 namespace Staq\Core\Router\Stack\Exception;
 
-class ControllerActionDefinition extends ControllerActionDefinition\__Parent {
+class ControllerActionDefinition extends ControllerActionDefinition\__Parent
+{
 
 
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	protected $defaultCode = 500;
+    /*************************************************************************
+    ATTRIBUTES
+     *************************************************************************/
+    protected $defaultCode = 500;
 }
 
 ?>

@@ -5,4 +5,6 @@
 
 namespace Staq;
 
-abstract class App extends Application { }
+abstract class App extends Application
+{
+}

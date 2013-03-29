@@ -5,27 +5,28 @@
 
 namespace Staq\Core\Data\Stack;
 
-interface IEntity {
+interface IEntity
+{
 
 
-	/*************************************************************************
-	  FETCHING METHODS          
-	 *************************************************************************/
-    public function fetchById( $id );
+    /*************************************************************************
+    FETCHING METHODS
+     *************************************************************************/
+    public function fetchById($id);
 
-    public function fetchByField( $field, $value );
+    public function fetchByField($field, $value);
 
-    public function fetchAll( $order = NULL );
+    public function fetchAll($order = NULL);
 
-    public function extractId( &$data );
+    public function extractId(&$data);
 
-    public function deleteByFields( $where );
+    public function deleteByFields($where);
 
 
-	/*************************************************************************
-	  PUBLIC DATABASE REQUEST
-	 *************************************************************************/
-	public function delete( $model );
+    /*************************************************************************
+    PUBLIC DATABASE REQUEST
+     *************************************************************************/
+    public function delete($model);
 
-	public function save( $model );
+    public function save($model);
 }

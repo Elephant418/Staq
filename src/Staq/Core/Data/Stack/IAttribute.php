@@ -3,25 +3,24 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack ;
+namespace Staq\Core\Data\Stack;
 
-interface IAttribute {
-
-
-
-	/*************************************************************************
-	  PUBLIC USER METHODS             
-	 *************************************************************************/
-	public function get( );
-
-	public function set( $value );
+interface IAttribute
+{
 
 
+    /*************************************************************************
+    PUBLIC USER METHODS
+     *************************************************************************/
+    public function get();
 
-	/*************************************************************************
-	  PUBLIC DATABASE METHODS             
-	 *************************************************************************/
-	public function getSeed( );
+    public function set($value);
 
-	public function setSeed( $seed );
+
+    /*************************************************************************
+    PUBLIC DATABASE METHODS
+     *************************************************************************/
+    public function getSeed();
+
+    public function setSeed($seed);
 }

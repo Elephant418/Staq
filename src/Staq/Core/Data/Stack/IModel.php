@@ -5,37 +5,38 @@
 
 namespace Staq\Core\Data\Stack;
 
-interface IModel {
+interface IModel
+{
 
 
-	/*************************************************************************
-	  GETTER                 
-	 *************************************************************************/
-	public function exists( );
+    /*************************************************************************
+    GETTER
+     *************************************************************************/
+    public function exists();
 
 
-	/*************************************************************************
-	  INITIALIZATION
-	 *************************************************************************/
-	public function byData( $data );
+    /*************************************************************************
+    INITIALIZATION
+     *************************************************************************/
+    public function byData($data);
 
 
-	/*************************************************************************
-	  PUBLIC DATABASE REQUEST
-	 *************************************************************************/
-	public function delete( );
+    /*************************************************************************
+    PUBLIC DATABASE REQUEST
+     *************************************************************************/
+    public function delete();
 
-	public function save( );
+    public function save();
 
-	public function extractSeeds( );
+    public function extractSeeds();
 
 
-	/*************************************************************************
-	  SPECIFIC MODEL ACCESSOR METHODS				   
-	 *************************************************************************/
-	public function getAttribute( $index );
+    /*************************************************************************
+    SPECIFIC MODEL ACCESSOR METHODS
+     *************************************************************************/
+    public function getAttribute($index);
 
-	public function get( $index );
+    public function get($index);
 
-	public function set( $index, $newVal );
+    public function set($index, $newVal);
 }

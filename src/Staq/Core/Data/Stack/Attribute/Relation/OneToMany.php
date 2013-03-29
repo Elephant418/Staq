@@ -5,91 +5,97 @@
 
 namespace Staq\Core\Data\Stack\Attribute\Relation;
 
-class OneToMany extends OneToMany\__Parent {
+class OneToMany extends OneToMany\__Parent
+{
 
 
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	protected $model;
-	protected $remoteModels = NULL;
-	protected $remoteModelType;
-	protected $remoteAttributeName;
-
+    /*************************************************************************
+    ATTRIBUTES
+     *************************************************************************/
+    protected $model;
+    protected $remoteModels = NULL;
+    protected $remoteModelType;
+    protected $remoteAttributeName;
 
 
-	/*************************************************************************
-	  CONSTRUCTOR            
-	 *************************************************************************/
-	public function initBySetting( $model, $setting ) {
-		$this->model = $model;
-		if ( is_array( $setting ) ) {
-			if ( ! isset( $setting[ 'remote_class_type' ] ) ) {
-				throw new \Stack\Exception\MissingSetting( '"remote_class_type" missing for the OneToMany relation.');
-			} 
-			if ( ! isset( $setting[ 'remote_attribute_name' ] ) ) {
-				throw new \Stack\Exception\MissingSetting( '"remote_attribute_name" missing for the OneToMany relation.');
-			} 
-			$this->remoteModelType = $setting[ 'remote_class_type' ];
-			$this->remoteAttributeName = $setting[ 'remote_attribute_name' ];
-		}
-	}
+    /*************************************************************************
+    CONSTRUCTOR
+     *************************************************************************/
+    public function initBySetting($model, $setting)
+    {
+        $this->model = $model;
+        if (is_array($setting)) {
+            if (!isset($setting['remote_class_type'])) {
+                throw new \Stack\Exception\MissingSetting('"remote_class_type" missing for the OneToMany relation.');
+            }
+            if (!isset($setting['remote_attribute_name'])) {
+                throw new \Stack\Exception\MissingSetting('"remote_attribute_name" missing for the OneToMany relation.');
+            }
+            $this->remoteModelType = $setting['remote_class_type'];
+            $this->remoteAttributeName = $setting['remote_attribute_name'];
+        }
+    }
 
 
+    /*************************************************************************
+    PUBLIC USER METHODS
+     *************************************************************************/
+    public function get()
+    {
+        $class = $this->getRemoteClass();
+        return (new $class)->entity->fetchByRelated($this->remoteAttributeName, $this->model);
+    }
 
-	/*************************************************************************
-	  PUBLIC USER METHODS             
-	 *************************************************************************/
-	public function get( ) {
-        $class = $this->getRemoteClass( );
-        return ( new $class )->entity->fetchByRelated( $this->remoteAttributeName, $this->model );
-	}
-
-    public function getIds( ) {
+    public function getIds()
+    {
         $ids = [];
-        foreach ( $this->get( ) as $model ) {
+        foreach ($this->get() as $model) {
             $ids[] = $model->id;
         }
         return $ids;
     }
 
-	public function set( $remoteModels ) {
-		// Do nothing here :'(
-	}
+    public function set($remoteModels)
+    {
+        // Do nothing here :'(
+    }
 
 
+    /*************************************************************************
+    PUBLIC DATABASE METHODS
+     *************************************************************************/
+    public function getSeed()
+    {
+        return NULL;
+    }
 
-	/*************************************************************************
-	  PUBLIC DATABASE METHODS             
-	 *************************************************************************/
-	public function getSeed( ) {
-		return NULL;
-	}
-
-	public function setSeed( $seed ) {
-	}
-
+    public function setSeed($seed)
+    {
+    }
 
 
     /*************************************************************************
     PUBLIC METHODS
      *************************************************************************/
-    public function getRelatedModels( ) {
-        $class = $this->getRemoteClass( );
-        return ( new $class )->fetchAll( );
+    public function getRelatedModels()
+    {
+        $class = $this->getRemoteClass();
+        return (new $class)->fetchAll();
     }
 
-    public function getRemoteModel( ) {
-        $class = $this->getRemoteClass( );
+    public function getRemoteModel()
+    {
+        $class = $this->getRemoteClass();
         return new $class;
     }
 
-    public function getRemoteModelType( ) {
+    public function getRemoteModelType()
+    {
         return $this->remoteModelType;
     }
 
-    public function getRemoteClass( ) {
+    public function getRemoteClass()
+    {
         return $class = 'Stack\\Model\\' . $this->remoteModelType;
     }
 }

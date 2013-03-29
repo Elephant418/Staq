@@ -5,18 +5,19 @@
 
 namespace Staq\App\BackOffice\Stack;
 
-class View extends View\__Parent {
+class View extends View\__Parent
+{
 
 
-
-	/*************************************************************************
-	  PRIVATE METHODS              
-	 *************************************************************************/
-	protected function addVariables( ) {
-		parent::addVariables( );
-		$modelTypes = ( new \Stack\Setting )
-			->parse( 'BackOffice' )
-			->get( 'model' );
-		$this[ 'modelTypes' ] = $modelTypes;
-	}
+    /*************************************************************************
+    PRIVATE METHODS
+     *************************************************************************/
+    protected function addVariables()
+    {
+        parent::addVariables();
+        $modelTypes = (new \Stack\Setting)
+            ->parse('BackOffice')
+            ->get('model');
+        $this['modelTypes'] = $modelTypes;
+    }
 }

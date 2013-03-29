@@ -3,9 +3,10 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Util\Auth\Stack\Attribute ;
+namespace Staq\Util\Auth\Stack\Attribute;
 
-class Password extends Password\__Parent {
+class Password extends Password\__Parent
+{
 
 
     /*************************************************************************
@@ -14,25 +15,26 @@ class Password extends Password\__Parent {
     const CRYPT_SEED = 'dacz:;,aafapojn';
 
 
+    /*************************************************************************
+    PUBLIC USER METHODS
+     *************************************************************************/
+    public function get()
+    {
+        return '';
+    }
 
-	/*************************************************************************
-	  PUBLIC USER METHODS             
-	 *************************************************************************/
-	public function get( ) {
-		return '';
-	}
-
-	public function set( $value ) {
-        if ( !empty( $value)) {
+    public function set($value)
+    {
+        if (!empty($value)) {
             $this->seed = $this->encryptPassword($value);
         }
-	}
+    }
 
-	public function compare( $password ) {
+    public function compare($password)
+    {
         $password = $this->encryptPassword($password);
-        return ( $this->seed === $password );
-	}
-
+        return ($this->seed === $password);
+    }
 
 
     /*************************************************************************

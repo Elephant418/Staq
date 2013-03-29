@@ -18,57 +18,73 @@
   Brian Kennish <byoogle@gmail.com>
 */
 #disconnect-popup * {
-	font-size: small;
-	font-weight: normal;
-	font-family: Arial, sans-serif;
-	line-height: 12px;
-	color: black;
-	background: transparent;
-	text-shadow: none;
-	z-index: 2147483647;
+    font-size: small;
+    font-weight: normal;
+    font-family: Arial, sans-serif;
+    line-height: 12px;
+    color: black;
+    background: transparent;
+    text-shadow: none;
+    z-index: 2147483647;
 }
 
-#disconnect-popup, #disconnect-popup #services td { text-align: center }
+#disconnect-popup, #disconnect-popup #services td {
+    text-align: center
+}
 
-#disconnect-popup, #disconnect-popup #search { font-size: x-small }
+#disconnect-popup, #disconnect-popup #search {
+    font-size: x-small
+}
 
 #disconnect-popup {
-  margin: 0;
-  width: 140px;
-  font-family: Arial, sans-serif;
-  z-index: 2147483647;
+    margin: 0;
+    width: 140px;
+    font-family: Arial, sans-serif;
+    z-index: 2147483647;
 }
 
 #disconnect-popup table {
-  margin-left: auto;
-  margin-right: auto;
-  border-collapse: collapse
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse
 }
 
-#disconnect-popup input { margin-left: 0 }
+#disconnect-popup input {
+    margin-left: 0
+}
 
-#disconnect-popup :link, #disconnect-popup :visited { color: #003ea8 }
+#disconnect-popup :link, #disconnect-popup :visited {
+    color: #003ea8
+}
 
-#disconnect-popup .deactivated { color: graytext }
+#disconnect-popup .deactivated {
+    color: graytext
+}
 
-#disconnect-popup .mouseover { background: #f4f6fc }
+#disconnect-popup .mouseover {
+    background: #f4f6fc
+}
 
 #disconnect-popup #services {
-  color: #333;
-  font-size: small
+    color: #333;
+    font-size: small
 }
 
 #disconnect-popup #services tr {
-  border: solid #edeff5;
-  border-width: thin 0;
-  cursor: pointer
+    border: solid #edeff5;
+    border-width: thin 0;
+    cursor: pointer
 }
 
-#disconnect-popup #services tr:first-child { display: none }
+#disconnect-popup #services tr:first-child {
+    display: none
+}
 
-#disconnect-popup #services td { padding: 3px 0 3px 6px }
+#disconnect-popup #services td {
+    padding: 3px 0 3px 6px
+}
 
 #disconnect-popup #services td:last-child {
-  padding-right: 6px;
-  width: 100%
+    padding-right: 6px;
+    width: 100%
 }

@@ -5,25 +5,26 @@
 
 namespace Staq\Core\View\Stack\Controller;
 
-class Error extends Error\__Parent {
+class Error extends Error\__Parent
+{
 
 
-
-	/*************************************************************************
-	  ACTION METHODS           
-	 *************************************************************************/
-	public function actionView( $code ) {
-		parent::actionView( $code );
+    /*************************************************************************
+    ACTION METHODS
+     *************************************************************************/
+    public function actionView($code)
+    {
+        parent::actionView($code);
         $message = '';
         $exception = \Staq::App()->getLastException();
         if ($exception && \Staq::App()->settings->getAsBoolean('error.display_errors')) {
             $message = $exception->getMessage();
         }
-		$page = new \Stack\View\Error;
-		$page[ 'code' ] = $code;
-		$page[ 'message' ] = $message;
-		return $page;
-	}
+        $page = new \Stack\View\Error;
+        $page['code'] = $code;
+        $page['message'] = $message;
+        return $page;
+    }
 
 }
 

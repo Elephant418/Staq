@@ -3,17 +3,19 @@
 {% block content %}
 <h1>{{ currentModelType }} : {{ model.name() }}</h1>
 
-	{% for name, value in model %}
-        {% set attribute = model.getAttribute(name) %}
-		<p class="attribute">
-			<b>{{ name }}</b> :
-            {% include find_template( attribute, 'view' ) with { 'attribute': attribute } only %}
-		</p>
-	{% endfor %}
+{% for name, value in model %}
+{% set attribute = model.getAttribute(name) %}
+<p class="attribute">
+    <b>{{ name }}</b> :
+    {% include find_template( attribute, 'view' ) with { 'attribute': attribute } only %}
+</p>
+{% endfor %}
 
-	<div class="action">
-		<a class="btn" href="{{ route( 'Model', 'list', currentModelType ) }}"><i class="icon-th-list"></i> List</a>
-		<a class="btn" href="{{ route( 'Model', 'edit', currentModelType, model.id ) }}"><i class="icon-pencil"></i> Edit</a>
-		<a class="btn btn-danger" href="{{ route( 'Model', 'delete', currentModelType, model.id ) }}" onclick="return confirm( 'Do you want to delete ?')"><i class="icon-remove"></i> Delete</a>
-	</div>
+<div class="action">
+    <a class="btn" href="{{ route( 'Model', 'list', currentModelType ) }}"><i class="icon-th-list"></i> List</a>
+    <a class="btn" href="{{ route( 'Model', 'edit', currentModelType, model.id ) }}"><i class="icon-pencil"></i>
+        Edit</a>
+    <a class="btn btn-danger" href="{{ route( 'Model', 'delete', currentModelType, model.id ) }}"
+       onclick="return confirm( 'Do you want to delete ?')"><i class="icon-remove"></i> Delete</a>
+</div>
 {% endblock %}

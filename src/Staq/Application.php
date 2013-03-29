@@ -5,14 +5,15 @@
 
 namespace Staq;
 
-abstract class Application {
+abstract class Application
+{
 
 
-
-	/*************************************************************************
-	  STATIC SHORTHAND METHODS                 
-	 *************************************************************************/
-	public static function create( $path = 'Staq\Core\Ground', $baseUri = NULL, $platform = NULL ) {
-		return ( new \Staq\Server )->createApplication( $path, $baseUri, $platform );
-	}
+    /*************************************************************************
+    STATIC SHORTHAND METHODS
+     *************************************************************************/
+    public static function create($path = 'Staq\Core\Ground', $baseUri = NULL, $platform = NULL)
+    {
+        return (new \Staq\Server)->createApplication($path, $baseUri, $platform);
+    }
 }

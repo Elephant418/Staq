@@ -1,54 +1,55 @@
 {% extends "layout/base.html" %}
 
 {% block stylesheets %}
-  <link rel="stylesheet" href="{{ '/twbootstrap/bootstrap.css'|public }}">
-  <link rel="stylesheet" href="{{ '/dataTables/DT_bootstrap.css'|public }}">
-  <link rel="stylesheet" href="{{ '/chosen/chosen.css'|public }}">
-  <link rel="stylesheet" href="{{ '/bootstrap.css'|public }}">
-  <link rel="stylesheet" href="{{ '/twbootstrap/bootstrap-responsive.css'|public }}">
+<link rel="stylesheet" href="{{ '/twbootstrap/bootstrap.css'|public }}">
+<link rel="stylesheet" href="{{ '/dataTables/DT_bootstrap.css'|public }}">
+<link rel="stylesheet" href="{{ '/chosen/chosen.css'|public }}">
+<link rel="stylesheet" href="{{ '/bootstrap.css'|public }}">
+<link rel="stylesheet" href="{{ '/twbootstrap/bootstrap-responsive.css'|public }}">
 {% endblock %}
 
 {% block title %}Admin{% endblock %}
 
 {% block body %}
-  {% block navbar %}
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
         <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="{{ '/'|public }}">Admin</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-              {% for modelType in modelTypes %}
-                <li><a href="{{ route( 'Model', 'list', modelType ) }}">{{ modelType }}</a></li>
-              {% endfor %}
-            </ul>
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="{{ '/'|public }}">Admin</a>
 
-            <ul class="nav pull-right">
-              {% if currentUser %}
-                <li><a href="{{ route( 'Auth', 'logout' ) }}">Disconnect</a></li>
-              {% else %}
-                <li><a href="{{ route( 'Auth', 'login' ) }}">Connect</a></li>
-              {% endif %}
-            </ul>
+            <div class="nav-collapse">
+                <ul class="nav">
+                    {% for modelType in modelTypes %}
+                    <li><a href="{{ route( 'Model', 'list', modelType ) }}">{{ modelType }}</a></li>
+                    {% endfor %}
+                </ul>
 
-          </div>
+                <ul class="nav pull-right">
+                    {% if currentUser %}
+                    <li><a href="{{ route( 'Auth', 'logout' ) }}">Disconnect</a></li>
+                    {% else %}
+                    <li><a href="{{ route( 'Auth', 'login' ) }}">Connect</a></li>
+                    {% endif %}
+                </ul>
+
+            </div>
         </div>
-      </div>
     </div>
-  {% endblock %}
+</div>
+{% endblock %}
 
-  <div class="container">
+<div class="container">
     {% for notification in UINotification %}
-      {% include 'part/alert-message.html' with notification only %}
+    {% include 'part/alert-message.html' with notification only %}
     {% endfor %}
     {% block content %}
     {% endblock %}
-  </div>
+</div>
 
 {% block scripts %}
 <script src="{{ public('/twbootstrap/jquery.js') }}"></script>

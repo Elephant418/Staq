@@ -1,11 +1,13 @@
 {% set ids = attribute.getIds() %}
 <select name="{{name}}" id="{{id}}" multiple="multiple">
-    <option value="" {% if related.exists() %}selected="selected"{% endif %} >
-        No selection
+    <option value=""
+    {% if related.exists() %}selected="selected"{% endif %} >
+    No selection
     </option>
     {% for model in attribute.getRelatedModels() %}
-        <option value="{{ model.id }}" {% if model.id in ids %}selected="selected"{% endif %} >
-            {{ model.name() }}
-        </option>
+    <option value="{{ model.id }}"
+    {% if model.id in ids %}selected="selected"{% endif %} >
+    {{ model.name() }}
+    </option>
     {% endfor %}
 </select>

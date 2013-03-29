@@ -3,29 +3,31 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Attribute ;
+namespace Staq\Core\Data\Stack\Attribute;
 
-class Boolean extends Boolean\__Parent {
+class Boolean extends Boolean\__Parent
+{
 
 
+    /*************************************************************************
+    PUBLIC USER METHODS
+     *************************************************************************/
+    public function get()
+    {
+        return ($this->seed !== 0);
+    }
 
-	/*************************************************************************
-	  PUBLIC USER METHODS             
-	 *************************************************************************/
-	public function get( ) {
-		return ($this->seed!==0);
-	}
-
-	public function set( $value ) {
-		$this->seed = $value?1:0;
-	}
-
+    public function set($value)
+    {
+        $this->seed = $value ? 1 : 0;
+    }
 
 
     /*************************************************************************
     PUBLIC DATABASE METHODS
      *************************************************************************/
-    public function setSeed( $seed ) {
+    public function setSeed($seed)
+    {
         $this->seed = (int)$seed;
     }
 }

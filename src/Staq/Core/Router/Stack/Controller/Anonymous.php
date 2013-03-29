@@ -5,23 +5,23 @@
 
 namespace Staq\Core\Router\Stack\Controller;
 
-class Anonymous extends Anonymous\__Parent {
+class Anonymous extends Anonymous\__Parent
+{
 
 
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	protected $callable;
-
+    /*************************************************************************
+    ATTRIBUTES
+     *************************************************************************/
+    protected $callable;
 
 
-	/*************************************************************************
-	  CONSTRUCTOR             
-	 *************************************************************************/
-	public function __construct( $uri, $callable ) {
-		$this->routes = [ new \Stack\Route( $callable, $uri ) ];
-	}
+    /*************************************************************************
+    CONSTRUCTOR
+     *************************************************************************/
+    public function __construct($uri, $callable)
+    {
+        $this->routes = [new \Stack\Route($callable, $uri)];
+    }
 }
 
 ?>

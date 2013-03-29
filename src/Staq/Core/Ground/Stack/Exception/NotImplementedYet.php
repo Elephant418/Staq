@@ -5,14 +5,14 @@
 
 namespace Staq\Core\Ground\Stack\Exception;
 
-class NotImplementedYet extends NotImplementedYet\__Parent {
+class NotImplementedYet extends NotImplementedYet\__Parent
+{
 
 
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	protected $defaultCode    = 500;
+    /*************************************************************************
+    ATTRIBUTES
+     *************************************************************************/
+    protected $defaultCode = 500;
 }
 
 ?>

@@ -5,16 +5,17 @@
 
 namespace Test\Staq\Project\Router\Stack\Controller;
 
-class Error extends Error\__Parent {
+class Error extends Error\__Parent
+{
 
 
-
-	/*************************************************************************
-	  ACTION METHODS           
-	 *************************************************************************/
-	public function actionView( $code ) {
-		return 'error ' . $code;
-	}
+    /*************************************************************************
+    ACTION METHODS
+     *************************************************************************/
+    public function actionView($code)
+    {
+        return 'error ' . $code;
+    }
 
 }
 

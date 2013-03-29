@@ -5,15 +5,16 @@
 
 namespace Staq\Util\Auth\Stack;
 
-class View extends View\__Parent {
+class View extends View\__Parent
+{
 
 
-
-	/*************************************************************************
-	  PRIVATE METHODS              
-	 *************************************************************************/
-	protected function addVariables( ) {
-		parent::addVariables( );
-		$this[ 'currentUser' ] = \Staq::Ctrl( 'Auth' )->currentUser( );
-	}
+    /*************************************************************************
+    PRIVATE METHODS
+     *************************************************************************/
+    protected function addVariables()
+    {
+        parent::addVariables();
+        $this['currentUser'] = \Staq::Ctrl('Auth')->currentUser();
+    }
 }

@@ -5,94 +5,99 @@
 
 namespace Staq\Core\Data\Stack\Attribute\Relation;
 
-class ManyToOne extends ManyToOne\__Parent {
+class ManyToOne extends ManyToOne\__Parent
+{
 
 
-
-	/*************************************************************************
-	 ATTRIBUTES
-	 *************************************************************************/
-	protected $remoteModel;
-	protected $remoteModelType;
-
+    /*************************************************************************
+    ATTRIBUTES
+     *************************************************************************/
+    protected $remoteModel;
+    protected $remoteModelType;
 
 
-	/*************************************************************************
-	  CONSTRUCTOR            
-	 *************************************************************************/
-	public function initBySetting( $model, $setting ) {
-		if ( is_array( $setting ) ) {
-			if ( isset( $setting[ 'remote_class_type' ] ) ) {
-				$this->remoteModelType = $setting[ 'remote_class_type' ];
-			} 
-		}
-	}
+    /*************************************************************************
+    CONSTRUCTOR
+     *************************************************************************/
+    public function initBySetting($model, $setting)
+    {
+        if (is_array($setting)) {
+            if (isset($setting['remote_class_type'])) {
+                $this->remoteModelType = $setting['remote_class_type'];
+            }
+        }
+    }
 
 
+    /*************************************************************************
+    PUBLIC USER METHODS
+     *************************************************************************/
+    public function get()
+    {
+        if (is_null($this->remoteModel) && isset($this->seed)) {
+            $class = $this->getRemoteClass();
+            $this->remoteModel = (new $class)->entity->fetchById($this->seed);
+        }
+        return $this->remoteModel;
+    }
 
-	/*************************************************************************
-	  PUBLIC USER METHODS             
-	 *************************************************************************/
-	public function get( ) {
-		if ( is_null( $this->remoteModel ) && isset( $this->seed ) ) {
-			$class = $this->getRemoteClass( );
-			$this->remoteModel = ( new $class )->entity->fetchById( $this->seed );
-		}
-		return $this->remoteModel;
-	}
-
-	public function set( $model ) {
-        if ( empty( $model ) ) {
-            $model = $this->getRemoteModel( );
-        } else if ( is_numeric( $model ) ) {
-            $model = $this->getRemoteModel( )->entity->fetchById( $model );
-        } else if ( ! \Staq\Util::isStack( $model, $this->getRemoteClass( ) ) ) {
-			$message = 'Input of type "' . $this->getRemoteClass( ) . '", but "' . gettype( $model ) . '" given.';
-			throw new \Stack\Exception\NotRightInput( $message );
-		}
-		if ( ! $model->exists( ) ) {
-			$this->seed = NULL;
-			$this->remoteModel = NULL;
-		} else {
-			$this->remoteModel = $model;
-			$this->seed = $model->id;
-		}
+    public function set($model)
+    {
+        if (empty($model)) {
+            $model = $this->getRemoteModel();
+        } else if (is_numeric($model)) {
+            $model = $this->getRemoteModel()->entity->fetchById($model);
+        } else if (!\Staq\Util::isStack($model, $this->getRemoteClass())) {
+            $message = 'Input of type "' . $this->getRemoteClass() . '", but "' . gettype($model) . '" given.';
+            throw new \Stack\Exception\NotRightInput($message);
+        }
+        if (!$model->exists()) {
+            $this->seed = NULL;
+            $this->remoteModel = NULL;
+        } else {
+            $this->remoteModel = $model;
+            $this->seed = $model->id;
+        }
         return $this;
-	}
+    }
 
 
+    /*************************************************************************
+    PUBLIC DATABASE METHODS
+     *************************************************************************/
+    public function getSeed()
+    {
+        return $this->seed;
+    }
 
-	/*************************************************************************
-	  PUBLIC DATABASE METHODS             
-	 *************************************************************************/
-	public function getSeed( ) {
-		return $this->seed;
-	}
-
-	public function setSeed( $seed ) {
-		$this->seed = $seed;
-		$this->remoteModel = NULL;
-	}
-
+    public function setSeed($seed)
+    {
+        $this->seed = $seed;
+        $this->remoteModel = NULL;
+    }
 
 
     /*************************************************************************
     PUBLIC METHODS
      *************************************************************************/
-    public function getRelatedModels( ) {
-        return $this->getRemoteModel( )->entity->fetchAll( );
+    public function getRelatedModels()
+    {
+        return $this->getRemoteModel()->entity->fetchAll();
     }
 
-    public function getRemoteModel( ) {
-        $class = $this->getRemoteClass( );
+    public function getRemoteModel()
+    {
+        $class = $this->getRemoteClass();
         return new $class;
     }
 
-    public function getRemoteModelType( ) {
+    public function getRemoteModelType()
+    {
         return $this->remoteModelType;
     }
 
-	public function getRemoteClass( ) {
-		return $class = 'Stack\\Model\\' . $this->remoteModelType;
-	}
+    public function getRemoteClass()
+    {
+        return $class = 'Stack\\Model\\' . $this->remoteModelType;
+    }
 }
