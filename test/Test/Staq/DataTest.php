@@ -161,12 +161,6 @@ class DataTest extends StaqTestCase {
 		$this->assertEquals( 'Thomas', $article[ 'author' ][ 'name' ] );
 	}
 
-	public function test_update_relation__many_to_one__exception( ) {
-		$article = ( new \Stack\Entity\Article )->fetchById( 3 );
-		$this->setExpectedException( 'Stack\\Exception\\NotRightInput' );
-		$article[ 'author' ] = 2;
-	}
-
 	public function test_update_relation__many_to_one__valid( ) {
 		$article = ( new \Stack\Entity\Article )->fetchById( 3 );
 		$user    = ( new \Stack\Entity\User )->fetchById( 2 );

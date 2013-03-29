@@ -43,7 +43,7 @@ class OneToMany extends OneToMany\__Parent {
 	 *************************************************************************/
 	public function get( $request = [], $limit = NULL, $order = NULL ) {
         $class = $this->getRemoteClass( );
-        return ( new $class )->entity->fetchByField( $this->remoteAttributeName, $this->model->id, $limit, $order );
+        return ( new $class )->entity->fetch( [ $this->remoteAttributeName => $this->model->id ], $limit, $order );
 	}
 
     public function getIds( ) {
