@@ -2,7 +2,12 @@
 
 namespace Test\Staq;
 
-require_once( __DIR__ . '/../../../vendor/autoload.php' );
+$autoload = '/../../../vendor/autoload.php';
+if ( is_file( __DIR__ . $autoload ) ) {
+    require_once( __DIR__ . $autoload );
+} else {
+    require_once( __DIR__ . '/../../../' . $autoload );
+}
 
 class ServerTest extends WebTestCase {
 

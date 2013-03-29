@@ -38,33 +38,26 @@ class Entity implements \Stack\IEntity {
 	/*************************************************************************
 	  FETCHING METHODS          
 	 *************************************************************************/
-	public function extractId( &$data ) {
-		$id = NULL;
-		if ( isset( $data[ $this->idField ] ) ) {
-			$id = $data[ $this->idField ];
-			unset( $data[ $this->idField ] );
-		}
-		return $id;
-	}
+    public function fetchById( $id ) {
+        return $this->fetchByField( $this->idField, $id );
+    }
 
-	public function getDataById( $id ) {
-		return $this->getDataByFields( [ $this->idField => $id ] );
-	}
+    public function fetchByField( $field, $value ) {
+        return $this->fetchOne( [ $field => $value ] );
+    }
 
-	public function getDataByFields( $where = [ ] ) {
-		$datas = $this->getDatasByFields( $where, 1 );
-		if ( isset( $datas[ 0 ] ) ) {
-			return $datas[ 0 ];
-		}
-		return FALSE;
-	}
+    public function fetchAll( $order = NULL ) {
+        return $this->fetch( [ ], NULL, $order );
+    }
 
-	public function getDatasByFields( $where = [ ], $limit = NULL, $order = NULL ) {
-		$parameters = [ ];
-		$sql = $this->getBaseSelect( ) . $this->getClauseByFields( $where, $parameters, $limit, $order );
-		$request = new Request( $sql );
-		return $request->execute( $parameters );
-	}
+    public function extractId( &$data ) {
+        $id = NULL;
+        if ( isset( $data[ $this->idField ] ) ) {
+            $id = $data[ $this->idField ];
+            unset( $data[ $this->idField ] );
+        }
+        return $id;
+    }
 
 	public function deleteByFields( $where ) {
 		$parameters = [ ];
@@ -111,8 +104,37 @@ class Entity implements \Stack\IEntity {
 
 	
 	/*************************************************************************
-	  PRIVATE METHODS
+	  PRIVATE FETCH METHODS
 	 *************************************************************************/
+    public function fetch( $fields = [ ], $limit = NULL, $order = NULL ) {
+        $data = $this->getDataList( $fields, $limit, $order );
+        return $this->resultAsModelList( $data );
+    }
+
+    public function fetchOne( $fields = [ ], $order = NULL ) {
+        $data = $this->getData( $fields, 1, $order );
+        return $this->resultAsModel( $data );
+    }
+
+    protected function getData( $where = [ ] ) {
+        $datas = $this->getDataList( $where, 1 );
+        if ( isset( $datas[ 0 ] ) ) {
+            return $datas[ 0 ];
+        }
+        return FALSE;
+    }
+
+    protected function getDataList( $where = [ ], $limit = NULL, $order = NULL ) {
+        $parameters = [ ];
+        $sql = $this->getBaseSelect( ) . $this->getClauseByFields( $where, $parameters, $limit, $order );
+        $request = new Request( $sql );
+        return $request->execute( $parameters );
+    }
+
+
+    /*************************************************************************
+    PRIVATE CORE METHODS
+     *************************************************************************/
 	protected function getBaseSelect( ) {
 		return 'SELECT ' . $this->getBaseSelector( ) . ' FROM ' . $this->getBaseTable( );
 	}
@@ -211,4 +233,22 @@ class Entity implements \Stack\IEntity {
 		return $data;
 		// DO: Manage serializes extra fields here ;)
 	}
+
+    protected function getModel( ) {
+        $modelClass = 'Stack\\Model\\' . \Staq\Util::getStackSubQuery($this);
+        return new $modelClass;
+    }
+
+    protected function resultAsModelList( $data ) {
+        $list = [ ];
+        $model = $this->getModel( );
+        foreach ( $data as $item ) {
+            $list[ ] = $model->byData( $item );
+        }
+        return $list;
+    }
+
+    protected function resultAsModel( $data ) {
+        return $this->getModel( )->byData( $data );
+    }
 }

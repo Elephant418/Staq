@@ -160,7 +160,7 @@ class Auth extends Auth\__Parent
         if (!isset($_SESSION['Staq']['loggedUser'])) {
             $user = FALSE;
         } else {
-            $user = (new \Stack\Model\User)->byId($_SESSION['Staq']['loggedUser']);
+            $user = (new \Stack\Entity\User)->fetchById($_SESSION['Staq']['loggedUser']);
             if (!$user->exists()) {
                 $user = FALSE;
             }

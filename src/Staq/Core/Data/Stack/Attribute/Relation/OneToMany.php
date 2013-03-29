@@ -42,9 +42,8 @@ class OneToMany extends OneToMany\__Parent {
 	  PUBLIC USER METHODS             
 	 *************************************************************************/
 	public function get( $request = [], $limit = NULL, $order = NULL ) {
-        $request = array_merge( $request, [ $this->remoteAttributeName => $this->model->id ] );
         $class = $this->getRemoteClass( );
-        return ( new $class )->fetch( $request, $limit, $order );
+        return ( new $class )->entity->fetchByField( $this->remoteAttributeName, $this->model->id, $limit, $order );
 	}
 
     public function getIds( ) {
@@ -78,7 +77,7 @@ class OneToMany extends OneToMany\__Parent {
      *************************************************************************/
     public function getRelatedModels( ) {
         $class = $this->getRemoteClass( );
-        return ( new $class )->all( );
+        return ( new $class )->fetchAll( );
     }
 
     public function getRemoteModel( ) {

@@ -11,15 +11,15 @@ interface IEntity {
 	/*************************************************************************
 	  FETCHING METHODS          
 	 *************************************************************************/
-	public function extractId( &$data );
+    public function fetchById( $id );
 
-	public function getDataById( $id );
+    public function fetchByField( $field, $value );
 
-	public function getDataByFields( $fields = [ ] );
+    public function fetchAll( $order = NULL );
 
-	public function getDatasByFields( $fields = [ ] );
+    public function extractId( &$data );
 
-	public function deleteByFields( $fields );
+    public function deleteByFields( $where );
 
 
 	/*************************************************************************

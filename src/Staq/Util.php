@@ -105,10 +105,16 @@ abstract class Util {
         $query = static::getStackQuery( $stack );
         return \UString::substrBefore($query, '\\');
     }
-	public static function getStackSubQuery( $stack, $separator = '\\' ) {
-		$query = \Staq\Util::getStackQuery( $stack );
-		$subQuery = \UString::substrAfter( $query, '\\' );
-		return str_replace( '\\', $separator, $subQuery );
+    public static function getStackSubQuery( $stack, $separator = '\\' ) {
+        $subQuery = \Staq\Util::getStackQuery( $stack );
+        \UString::doSubstrAfter( $subQuery, '\\' );
+        return str_replace( '\\', $separator, $subQuery );
+    }
+	public static function getStackSubSubQuery( $stack, $separator = '\\' ) {
+        $subQuery = \Staq\Util::getStackQuery( $stack );
+        \UString::doSubstrAfter( $subQuery, '\\' );
+        \UString::doSubstrAfter( $subQuery, '\\' );
+        return str_replace( '\\', $separator, $subQuery );
 	}
 	public static function getStackSubQueryText( $stack ) {
 		$subQuery = \Staq\Util::getStackSubQuery( $stack );

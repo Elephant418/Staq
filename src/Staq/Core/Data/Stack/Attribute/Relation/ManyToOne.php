@@ -36,7 +36,7 @@ class ManyToOne extends ManyToOne\__Parent {
 	public function get( ) {
 		if ( is_null( $this->remoteModel ) && isset( $this->seed ) ) {
 			$class = $this->getRemoteClass( );
-			$this->remoteModel = ( new $class )->byId( $this->seed );
+			$this->remoteModel = ( new $class )->entity->fetchById( $this->seed );
 		}
 		return $this->remoteModel;
 	}
@@ -45,7 +45,7 @@ class ManyToOne extends ManyToOne\__Parent {
         if ( empty( $model ) ) {
             $model = $this->getRemoteModel( );
         } else if ( is_numeric( $model ) ) {
-            $model = $this->getRemoteModel( )->byId( $model );
+            $model = $this->getRemoteModel( )->entity->fetchById( $model );
         } else if ( ! \Staq\Util::isStack( $model, $this->getRemoteClass( ) ) ) {
 			$message = 'Input of type "' . $this->getRemoteClass( ) . '", but "' . gettype( $model ) . '" given.';
 			throw new \Stack\Exception\NotRightInput( $message );
@@ -80,7 +80,7 @@ class ManyToOne extends ManyToOne\__Parent {
     PUBLIC METHODS
      *************************************************************************/
     public function getRelatedModels( ) {
-        return $this->getRemoteModel( )->all( );
+        return $this->getRemoteModel( )->entity->fetchAll( );
     }
 
     public function getRemoteModel( ) {

@@ -21,12 +21,12 @@ class Model {
 		}
 		$page[ 'fields' ] = $fields;
 		$page[ 'currentModelType' ] = $type;
-		$page[ 'models' ] = $this->newModel( $type )->all( );
+		$page[ 'models' ] = $this->getNewEntity( $type )->fetchAll( );
 		return $page;
 	}
 
 	public function actionView( $type, $id ) {
-		$model = $this->newModel( $type )->byId( $id );
+		$model = $this->getNewEntity( $type )->fetchById( $id );
 		if ( $model->exists( ) ) {
 			$page = ( new \Stack\View )->byName( $type, 'Model_View' );
 			$page[ 'currentModelType' ] = $type;
@@ -36,19 +36,19 @@ class Model {
 	}
 
 	public function actionCreate( $type ) {
-		$model = $this->newModel( $type );
+		$model = $this->getNewModel( $type );
 		return $this->genericActionEdit( $type, $model );
 	}
 
 	public function actionEdit( $type, $id ) {
-		$model = $this->newModel( $type )->byId( $id );
+		$model = $this->getNewEntity( $type )->fetchById( $id );
 		if ( $model->exists( ) ) {
 			return $this->genericActionEdit( $type, $model );
 		}
 	}
 
 	public function actionDelete( $type, $id ) {
-		$model = $this->newModel( $type )->byId( $id );
+		$model = $this->getNewEntity( $type )->fetchById( $id );
 		if ( $model->exists( ) ) {
 			$model->delete( );
 			if ( $model->exists( ) ) {
@@ -107,12 +107,21 @@ class Model {
 	/*************************************************************************
 	  PRIVATE METHODS           
 	 *************************************************************************/
-	protected function modelClass( $type ) {
-		return 'Stack\\Model\\' . $type;
+    protected function getModelClass( $type ) {
+        return 'Stack\\Model\\' . $type;
+    }
+
+	protected function getEntityClass( $type ) {
+		return 'Stack\\Entity\\' . $type;
 	}
 
-	protected function newModel( $type ) {
-		$class = $this->modelClass( $type );
+	protected function getNewModel( $type ) {
+		$class = $this->getModelClass( $type );
 		return new $class;
 	}
+
+    protected function getNewEntity( $type ) {
+        $class = $this->getEntityClass( $type );
+        return new $class;
+    }
 }

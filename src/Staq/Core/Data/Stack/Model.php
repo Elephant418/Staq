@@ -91,32 +91,6 @@ class Model extends \ArrayObject implements \Stack\IModel {
 		return $model;
 	}
 
-	public function byId( $id ) {
-		return $this->byField( 'id', $id );
-	}
-
-	protected function byField( $field, $value ) {
-		return $this->byData( $this->entity->getDataByFields( [ $field => $value ] ) );
-	}
-
-	public function all( $order = NULL ) {
-		return $this->fetch( [ ], NULL, $order );
-	}
-
-	public function fetch( $fields = [ ], $limit = NULL, $order = NULL ) {
-        $data = $this->entity->getDatasByFields( $fields, $limit, $order );
-		return $this->getListByDatas( $data );
-	}
-
-    public function fetchOne( $fields = [ ], $order = NULL ) {
-        $data = $this->entity->getDataByFields( $fields, 1, $order );
-        return $this->byData( $data );
-    }
-
-	public function deleteAll( ) {
-		return $this->entity->delete( );
-	}
-
 
 	/*************************************************************************
 	  PUBLIC DATABASE REQUEST
@@ -188,18 +162,6 @@ class Model extends \ArrayObject implements \Stack\IModel {
  
 	public function offsetUnset( $index ) {
 		$this->offsetSet( $index, NULL );
-	}
-
-
-	/*************************************************************************
-	  PRIVATE MEHODS                 
-	 *************************************************************************/
-	protected function getListByDatas( $datas ) {
-		$list = [ ];
-		foreach ( $datas as $data ) {
-			$list[ ] = $this->byData( $data );
-		}
-		return $list;
 	}
 
 
