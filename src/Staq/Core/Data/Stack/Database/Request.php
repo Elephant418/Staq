@@ -142,6 +142,7 @@ class Request
                     ->execute();
             }
         }
+        return $this;
     }
 
 
