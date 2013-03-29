@@ -51,6 +51,10 @@ abstract class Util {
 		\UString::doStartWith( $uri, '/' );
 		\Staq\Util::httpRedirect( \Staq::App()->getBaseUri( ) . $uri );
 	}
+    function smartUrlEncode($url) {
+        $revert = array('%21'=>'!', '%2A'=>'*', '%27'=>"'", '%28'=>'(', '%29'=>')');
+        return strtr(rawurlencode($url), $revert);
+    }
 
 
 

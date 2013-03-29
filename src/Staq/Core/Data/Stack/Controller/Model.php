@@ -33,7 +33,7 @@ class Model extends Model\__Parent {
     public function getRouteAttributes( $model ) {
         $attributes = [];
         $attributes['id'] = $model->id;
-        $attributes['name'] = $model->name();
+        $attributes['name'] = \Staq\Util::smartUrlEncode($model->name());
         return $attributes;
     }
 
