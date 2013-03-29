@@ -68,7 +68,7 @@ class DataTest extends StaqTestCase {
 	}
 
 	public function test_select__list_by_ids( ) {
-		$users = ( new \Stack\Entity\User )->fetch( [ 'id' => [ 1, 2 ] ] );
+		$users = ( new \Stack\Entity\User )->fetchByIds( [ 1, 2 ] );
 		$this->assertEquals( 2, count( $users ) );
 		$names = [ ];
 		foreach ( $users as $user ) {
@@ -79,26 +79,9 @@ class DataTest extends StaqTestCase {
 	}
 
 	public function test_select__list_by_ids_and_limit( ) {
-		$users = ( new \Stack\Entity\User )->fetch( [ 'id' => [ 1, 2 ] ], 1 );
+		$users = ( new \Stack\Entity\User )->fetchByIds( [ 1, 2 ], 1 );
 		$this->assertEquals( 1, count( $users ) );
 		$this->assertEquals( 'Thomas' , $users[ 0 ][ 'name' ] );
-	}
-
-	public function test_select__list_by_ids_and_limit_and_order( ) {
-		$users = ( new \Stack\Entity\User )->fetch( [ 'id' => [ 1, 2 ] ], 1, 'id DESC' );
-		$this->assertEquals( 1, count( $users ) );
-		$this->assertEquals( 'Romaric' , $users[ 0 ][ 'name' ] );
-	}
-
-	public function test_select__list_with_like_statement( ) {
-		$users = ( new \Stack\Entity\User )->fetch( [ [ 'name', 'LIKE', 'S%' ] ] );
-		$this->assertEquals( 2, count( $users ) );
-		$names = [ ];
-		foreach ( $users as $user ) {
-			$names[ $user->id ] = $user[ 'name' ];
-		}
-		$this->assertContains( 'Simon' , $names );
-		$this->assertContains( 'Sylvain', $names );
 	}
 
 	public function test_insert__exception( ) {

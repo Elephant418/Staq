@@ -9,7 +9,7 @@ class Entity implements \Stack\IEntity {
 
 
 	/*************************************************************************
-	  ATTRIBUTES                 
+	  ATTRIBUTES
 	 *************************************************************************/
 	public static $setting = [
 		'database.idField' => 'id',
@@ -36,7 +36,7 @@ class Entity implements \Stack\IEntity {
 
 
 	/*************************************************************************
-	  FETCHING METHODS          
+	  FETCHING METHODS
 	 *************************************************************************/
     public function fetchById( $id ) {
         return $this->fetchByField( $this->idField, $id );
@@ -46,8 +46,16 @@ class Entity implements \Stack\IEntity {
         return $this->fetchOne( [ $field => $value ] );
     }
 
-    public function fetchAll( $order = NULL ) {
-        return $this->fetch( [ ], NULL, $order );
+    public function fetchAll( $limit = NULL, $order = NULL ) {
+        return $this->fetch( [ ], $limit, $order );
+    }
+
+    public function fetchByIds( $ids, $limit=NULL ) {
+        return $this->fetch( [ $this->idField => $ids ], $limit );
+    }
+
+    public function fetchByRelated( $field, $related, $limit=NULL ) {
+        return $this->fetch( [ $field => $related->id ], $limit );
     }
 
     public function extractId( &$data ) {
@@ -102,16 +110,16 @@ class Entity implements \Stack\IEntity {
 		}
 	}
 
-	
+
 	/*************************************************************************
 	  PRIVATE FETCH METHODS
 	 *************************************************************************/
-    public function fetch( $fields = [ ], $limit = NULL, $order = NULL ) {
+    protected function fetch( $fields = [ ], $limit = NULL, $order = NULL ) {
         $data = $this->getDataList( $fields, $limit, $order );
         return $this->resultAsModelList( $data );
     }
 
-    public function fetchOne( $fields = [ ], $order = NULL ) {
+    protected function fetchOne( $fields = [ ], $order = NULL ) {
         $data = $this->getData( $fields, 1, $order );
         return $this->resultAsModel( $data );
     }
@@ -161,7 +169,7 @@ class Entity implements \Stack\IEntity {
 						is_array( $fieldValue ) &&
 						isset( $fieldValue[ 0 ] ) &&
 						isset( $fieldValue[ 1 ] ) &&
-						isset( $fieldValue[ 2 ] ) 
+						isset( $fieldValue[ 2 ] )
 					) {
 						$where[ ] = $this->getClauseCondition( $parameters, $fieldValue[ 0 ], $fieldValue[ 1 ], $fieldValue[ 2 ] );
 					}
@@ -187,7 +195,7 @@ class Entity implements \Stack\IEntity {
 	}
 
 	protected function getClauseCondition( &$parameters, $fieldName, $operator, $fieldValue ) {
-		$condition = NULL;	
+		$condition = NULL;
 		$parameterName = 'key' . count( $parameters );
 		if ( is_array( $fieldValue ) ) {
 			$conditionParameters = [ ];
