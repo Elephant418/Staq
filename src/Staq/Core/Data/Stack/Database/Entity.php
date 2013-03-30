@@ -148,7 +148,9 @@ class Entity implements \Stack\IEntity
     protected function getDataList($where = [], $limit = NULL, $order = NULL)
     {
         $parameters = [];
-        $sql = $this->getBaseSelect() . $this->getClauseByFields($where, $parameters, $limit, $order);
+        $sql = $this->getBaseSelect()
+            . $this->getClauseByFields($where, $parameters, $limit, $order)
+            . $this->getGroupBy();
         $request = new Request($sql);
         return $request->execute($parameters);
     }
@@ -168,6 +170,11 @@ class Entity implements \Stack\IEntity
             return $this->table . '.' . $field;
         }, $this->fields);
         return implode(', ', $fields);
+    }
+
+    protected function getGroupBy()
+    {
+        return '';
     }
 
     protected function getBaseTable()
