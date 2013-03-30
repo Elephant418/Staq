@@ -16,7 +16,7 @@ interface IEntity
 
     public function fetchByField($field, $value);
 
-    public function fetchAll($order = NULL);
+    public function fetchAll($limit);
 
     public function extractId(&$data);
 

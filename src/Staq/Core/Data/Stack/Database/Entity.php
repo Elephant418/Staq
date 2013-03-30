@@ -49,9 +49,9 @@ class Entity implements \Stack\IEntity
         return $this->fetchOne([$field => $value]);
     }
 
-    public function fetchAll($limit = NULL, $order = NULL)
+    public function fetchAll($limit = NULL, &$rows = FALSE)
     {
-        return $this->fetch([], $limit, $order);
+        return $this->fetch([], $limit, NULL, $rows);
     }
 
     public function fetchByIds($ids, $limit = NULL)
@@ -59,9 +59,9 @@ class Entity implements \Stack\IEntity
         return $this->fetch([$this->idField => $ids], $limit);
     }
 
-    public function fetchByRelated($field, $related, $limit = NULL)
+    public function fetchByRelated($field, $related, $limit = NULL, &$rows = FALSE)
     {
-        return $this->fetch([$field => $related->id], $limit);
+        return $this->fetch([$field => $related->id], $limit, NULL, $rows);
     }
 
     public function extractId(&$data)
@@ -124,12 +124,16 @@ class Entity implements \Stack\IEntity
     /*************************************************************************
     PRIVATE FETCH METHODS
      *************************************************************************/
-    protected function fetch($fields = [], $limit = NULL, $order = NULL )
+    protected function fetch($fields = [], $limit = NULL, $order = NULL, &$rows = FALSE)
     {
-        if ( $limit == 'count') {
+        if ($limit == 'count') {
             return $this->getCount($fields);
         }
-        $data = $this->getDataList($fields, $limit, $order);
+        $data = $this->getDataList($fields, $limit, $order, $rows !== FALSE);
+        var_dump($rows);
+        if ($rows !== FALSE) {
+            $rows = $this->fetchRows();
+        }
         return $this->resultAsModelList($data);
     }
 
@@ -137,6 +141,14 @@ class Entity implements \Stack\IEntity
     {
         $data = $this->getData($fields, 1, $order);
         return $this->resultAsModel($data);
+    }
+
+    protected function fetchRows()
+    {
+        $parameters = [];
+        $sql = 'SELECT FOUND_ROWS();';
+        $request = new Request($sql);
+        return reset($request->executeOne($parameters));
     }
 
     protected function getData($where = [])
@@ -151,19 +163,18 @@ class Entity implements \Stack\IEntity
     protected function getCount($where = [])
     {
         $parameters = [];
-        $sql = 'SELECT COUNT(*) FROM ' . $this->getBaseTable()
-            . $this->getClauseByFields($where, $parameters)
-            . $this->getGroupBy();
+        $sql = 'SELECT COUNT(*)'
+            . ' FROM ' . $this->getBaseTable()
+            . $this->getClauseByFields($where, $parameters);
         $request = new Request($sql);
-        return reset( $request->executeOne($parameters) );
+        return reset($request->executeOne($parameters));
     }
 
-    protected function getDataList($where = [], $limit = NULL, $order = NULL)
+    protected function getDataList($where = [], $limit = NULL, $order = NULL, $rows = FALSE)
     {
         $parameters = [];
-        $sql = $this->getBaseSelect()
-            . $this->getClauseByFields($where, $parameters, $limit, $order)
-            . $this->getGroupBy();
+        $sql = $this->getBaseSelect($rows)
+            . $this->getClauseByFields($where, $parameters, $limit, $order);
         $request = new Request($sql);
         return $request->execute($parameters);
     }
@@ -172,9 +183,14 @@ class Entity implements \Stack\IEntity
     /*************************************************************************
     PRIVATE CORE METHODS
      *************************************************************************/
-    protected function getBaseSelect()
+    protected function getBaseSelect($rows = FALSE)
     {
-        return 'SELECT ' . $this->getBaseSelector() . ' FROM ' . $this->getBaseTable();
+        $select = 'SELECT ';
+        if ($rows) {
+            $select .= 'SQL_CALC_FOUND_ROWS ';
+        }
+        $select .= $this->getBaseSelector() . ' FROM ' . $this->getBaseTable();
+        return $select;
     }
 
     protected function getBaseSelector()
@@ -223,6 +239,7 @@ class Entity implements \Stack\IEntity
         if (!empty($where)) {
             $sql .= ' WHERE ' . implode(' AND ', $where);
         }
+        $sql .= $this->getGroupBy();
         if (!is_null($order)) {
             $sql .= ' ORDER BY ' . $order;
         }
