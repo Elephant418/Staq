@@ -47,7 +47,7 @@ class Auth extends Auth\__Parent
             ->addField('login', 'inscription.login')
             ->addFilter('login', FILTER_SANITIZE_STRING)
             ->addFilter('login', 'required', 'This field is required')
-            ->addFilter('login', FILTER_VALIDATE_REGEXP, 'This field must contains only letters, numbers and underscore (_)', ['regexp' => '/^[a-zA-Z0-9_]*$/'])
+            ->addFilter('login', FILTER_VALIDATE_REGEXP, 'This field must contains only letters, numbers and dash', ['regexp' => '/^[a-zA-Z0-9-]*$/'])
             ->addFilter('login', 'min_length', 'This field must contains at least 4 characters', ['length' => '4'])
             ->addFilter('login', 'max_length', 'This field must contains less than 20 characters', ['length' => '19'])
             ->addField('password', 'inscription.password')
