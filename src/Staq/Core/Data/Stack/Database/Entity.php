@@ -130,7 +130,6 @@ class Entity implements \Stack\IEntity
             return $this->getCount($fields);
         }
         $data = $this->getDataList($fields, $limit, $order, $rows !== FALSE);
-        var_dump($rows);
         if ($rows !== FALSE) {
             $rows = $this->fetchRows();
         }
