@@ -13,19 +13,20 @@ class Page extends Page\__Parent
     ATTRIBUTES
      *************************************************************************/
     public static $setting = [
-        'route.view.uri' => '/(:page)'
+        'route.view.uri' => '/(:name)'
     ];
 
 
     /*************************************************************************
     ACTION METHODS
      *************************************************************************/
-    public function actionView($page='index')
+    public function actionView($name='index')
     {
-        $path = \Staq::App()->getFilePath('page/' . $page . '.html');
+        $path = \Staq::App()->getFilePath('page/' . $name . '.html');
         if ( $path !== FALSE ) {
             $page = new \Stack\View\Page;
             $page['content'] = file_get_contents($path);
+            $page['page'] = $name;
             return $page;
         }
     }
