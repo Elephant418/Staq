@@ -124,8 +124,11 @@ class Entity implements \Stack\IEntity
     /*************************************************************************
     PRIVATE FETCH METHODS
      *************************************************************************/
-    protected function fetch($fields = [], $limit = NULL, $order = NULL)
+    protected function fetch($fields = [], $limit = NULL, $order = NULL )
     {
+        if ( $limit == 'count') {
+            return $this->getCount($fields);
+        }
         $data = $this->getDataList($fields, $limit, $order);
         return $this->resultAsModelList($data);
     }
@@ -143,6 +146,16 @@ class Entity implements \Stack\IEntity
             return $datas[0];
         }
         return FALSE;
+    }
+
+    protected function getCount($where = [])
+    {
+        $parameters = [];
+        $sql = 'SELECT COUNT(*) FROM ' . $this->getBaseTable()
+            . $this->getClauseByFields($where, $parameters)
+            . $this->getGroupBy();
+        $request = new Request($sql);
+        return reset( $request->executeOne($parameters) );
     }
 
     protected function getDataList($where = [], $limit = NULL, $order = NULL)
