@@ -22,7 +22,6 @@ class Page extends Page\__Parent
      *************************************************************************/
     public function actionView($page='index')
     {
-        print_r( \Staq::App()->getExtensions());
         $path = \Staq::App()->getFilePath('page/' . $page . '.html');
         if ( $path !== FALSE ) {
             $page = new \Stack\View\Page;
