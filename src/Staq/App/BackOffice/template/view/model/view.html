@@ -1,7 +1,7 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-<h1>{{ currentModelType }} : {{ model.name() }}</h1>
+<h1>{{ controller }} : {{ model.name() }}</h1>
 
 {% for name, value in model %}
 {% set attribute = model.getAttribute(name) %}
@@ -12,10 +12,10 @@
 {% endfor %}
 
 <div class="action">
-    <a class="btn" href="{{ route( 'Model', 'list', currentModelType ) }}"><i class="icon-th-list"></i> List</a>
-    <a class="btn" href="{{ route( 'Model', 'edit', currentModelType, model.id ) }}"><i class="icon-pencil"></i>
+    <a class="btn" href="{{ route( 'Model', 'list', controller ) }}"><i class="icon-th-list"></i> List</a>
+    <a class="btn" href="{{ route( 'Model', 'edit', controller, model.id ) }}"><i class="icon-pencil"></i>
         Edit</a>
-    <a class="btn btn-danger" href="{{ route( 'Model', 'delete', currentModelType, model.id ) }}"
+    <a class="btn btn-danger" href="{{ route( 'Model', 'delete', controller, model.id ) }}"
        onclick="return confirm( 'Do you want to delete ?')"><i class="icon-remove"></i> Delete</a>
 </div>
 {% endblock %}

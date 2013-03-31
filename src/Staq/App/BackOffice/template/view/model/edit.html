@@ -1,7 +1,7 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-<h1>{{ currentModelType }} {{ model.id }}</h1>
+<h1>{{ controller }} {{ model.id }}</h1>
 
 <form method="post" class="form-horizontal">
 
@@ -19,7 +19,7 @@
 
     <div class="form-actions">
         <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Validate</button>
-        <a class="btn" href="{{ route( 'Model', 'view', currentModelType, model.id ) }}"><i class="icon-arrow-left"></i>
+        <a class="btn" href="{{ route( 'Model', 'view', controller, model.id ) }}"><i class="icon-arrow-left"></i>
             Cancel</a>
     </div>
 </form>

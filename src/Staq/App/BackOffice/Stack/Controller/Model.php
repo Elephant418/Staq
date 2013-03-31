@@ -21,7 +21,6 @@ class Model
             $fields = ['id'];
         }
         $view['fields'] = $fields;
-        $view['currentModelType'] = $type;
         $view['models'] = $this->getNewEntity($type)->fetchAll();
         return $view;
     }
@@ -31,7 +30,6 @@ class Model
         $model = $this->getNewEntity($type)->fetchById($id);
         if ($model->exists()) {
             $view = $this->createView('view', $type);
-            $view['currentModelType'] = $type;
             $view['model'] = $model;
             return $view;
         }
@@ -92,7 +90,6 @@ class Model
             $this->redirectView($type, $model);
         }
         $view = $this->createView('edit', $type);
-        $view['currentModelType'] = $type;
         $view['model'] = $model;
         return $view;
     }

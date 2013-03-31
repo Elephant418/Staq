@@ -1,12 +1,12 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-<h1>{{ currentModelType }} list</h1>
+<h1>{{ controller }} list</h1>
 
 <div class="action">
     <div class="btn-toolbar">
         <div class="btn-group">
-            <a class="btn" href="{{ route( 'Model', 'create', currentModelType )  }}"><i class="icon-plus-sign"></i>
+            <a class="btn" href="{{ route( 'Model', 'create', controller )  }}"><i class="icon-plus-sign"></i>
                 Create</a>
             <a class="btn" href="javascript:window.print( );"><i class="icon-print"></i> Print</a>
         </div>
@@ -27,7 +27,7 @@
     <tr>
         {% for field in fields %}
         <td>
-            <a href="{{ route( 'Model', 'view', currentModelType, model.id )  }}">
+            <a href="{{ route( 'Model', 'view', controller, model.id )  }}">
                 {% set attribute = attribute( model, field ) %}
                 {% if attribute.id %}
                 {{ attribute.name() }}
