@@ -80,7 +80,7 @@ class OneToMany extends OneToMany\__Parent
     public function getRelatedModels()
     {
         $class = $this->getRemoteClass();
-        return (new $class)->fetchAll();
+        return (new $class)->entity->fetchAll();
     }
 
     public function getRemoteModel()
