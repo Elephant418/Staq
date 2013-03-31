@@ -46,6 +46,14 @@ class Controller implements \Stack\IController
     /*************************************************************************
     PRIVATE METHODS
      *************************************************************************/
+    protected function createView($action='view')
+    {
+        $controller = \Staq\Util::getStackSubQuery($this);
+        $view = (new \Stack\View)->byName($action, $controller);
+        $view['controller'] = $controller;
+        $view['controllerAction'] = $action;
+        return $view;
+    }
     protected function initializeRoutes()
     {
         $setting = (new \Stack\Setting)->parse($this);

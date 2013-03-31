@@ -14,6 +14,10 @@ class Router extends Router\__Parent
      *************************************************************************/
     protected function callController($controller, $action, $route)
     {
+        $result = parent::callController($controller, $action, $route);
+        if ( $result === NULL ) {
+            return NULL;
+        }
         $controllers = $this->setting->getAsArray('auth.controller');
         $exclude = ($this->setting['auth.mode'] == 'exclude');
         $level = $this->setting->get('auth.level', 0);
@@ -27,6 +31,6 @@ class Router extends Router\__Parent
                 throw new \Stack\Exception\NotAllowed();
             }
         }
-        return parent::callController($controller, $action, $route);
+        return $result;
     }
 }

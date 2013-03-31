@@ -92,10 +92,10 @@ class Auth extends Auth\__Parent
                 Notif::error(static::MSG_INSCRIPTION_KO);
             }
         }
-        $page = new \Stack\View\Auth\Inscription;
-        $page['form'] = $form;
-        $page['redirect'] = $this->getRedirectUri();
-        return $page;
+        $view = $this->createView('inscription');
+        $view['form'] = $form;
+        $view['redirect'] = $this->getRedirectUri();
+        return $view;
     }
 
     public function actionLogin()
@@ -109,10 +109,10 @@ class Auth extends Auth\__Parent
                 Notif::error(static::MSG_LOGIN_KO);
             }
         }
-        $page = new \Stack\View\Auth\Login;
-        $page['form'] = $form;
-        $page['redirect'] = $this->getRedirectUri();
-        return $page;
+        $view = $this->createView('login');
+        $view['form'] = $form;
+        $view['redirect'] = $this->getRedirectUri();
+        return $view;
     }
 
     public function actionLogout()

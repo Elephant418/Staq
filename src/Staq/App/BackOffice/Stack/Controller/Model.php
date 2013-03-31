@@ -13,27 +13,27 @@ class Model
      *************************************************************************/
     public function actionList($type)
     {
-        $page = (new \Stack\View)->byName($type, 'Model_List');
+        $view = $this->createView('list', $type);
         $fields = (new \Stack\Setting)
             ->parse('BackOffice')
             ->get('list.' . $type);
         if (empty($fields)) {
             $fields = ['id'];
         }
-        $page['fields'] = $fields;
-        $page['currentModelType'] = $type;
-        $page['models'] = $this->getNewEntity($type)->fetchAll();
-        return $page;
+        $view['fields'] = $fields;
+        $view['currentModelType'] = $type;
+        $view['models'] = $this->getNewEntity($type)->fetchAll();
+        return $view;
     }
 
     public function actionView($type, $id)
     {
         $model = $this->getNewEntity($type)->fetchById($id);
         if ($model->exists()) {
-            $page = (new \Stack\View)->byName($type, 'Model_View');
-            $page['currentModelType'] = $type;
-            $page['model'] = $model;
-            return $page;
+            $view = $this->createView('view', $type);
+            $view['currentModelType'] = $type;
+            $view['model'] = $model;
+            return $view;
         }
     }
 
@@ -68,8 +68,16 @@ class Model
 
 
     /*************************************************************************
-    REDIRECT METHODS
+    PRIVATE METHODS
      *************************************************************************/
+    protected function createView($action, $type)
+    {
+        $view = (new \Stack\View)->byName($type, 'Model_' . ucfirst($action));
+        $view['controller'] = $type;
+        $view['controllerAction'] = $action;
+        return $view;
+    }
+
     protected function genericActionEdit($type, $model)
     {
         if (isset($_POST['model'])) {
@@ -83,10 +91,10 @@ class Model
             }
             $this->redirectView($type, $model);
         }
-        $page = (new \Stack\View)->byName($type, 'Model_Edit');
-        $page['currentModelType'] = $type;
-        $page['model'] = $model;
-        return $page;
+        $view = $this->createView('edit', $type);
+        $view['currentModelType'] = $type;
+        $view['model'] = $model;
+        return $view;
     }
 
 

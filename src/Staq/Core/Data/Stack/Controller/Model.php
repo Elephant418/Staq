@@ -12,18 +12,18 @@ class Model extends Model\__Parent
     public function actionList()
     {
         $models = $this->getNewEntity()->fetchAll();
-        $page = (new \Stack\View)->byName($this->getModelName(), 'Model_List');
-        $page['content'] = $models;
-        return $page;
+        $view = $this->createView('list');
+        $view['content'] = $models;
+        return $view;
     }
 
     public function actionView($id)
     {
         $model = $this->getNewEntity()->fetchById($id);
         if ($model->exists()) {
-            $page = (new \Stack\View)->byName($this->getModelName(), 'Model_View');
-            $page['content'] = $model;
-            return $page;
+            $view = $this->createView();
+            $view['content'] = $model;
+            return $view;
         }
     }
 
@@ -43,6 +43,14 @@ class Model extends Model\__Parent
     /*************************************************************************
     PRIVATE METHODS
      *************************************************************************/
+    protected function createView($action='view')
+    {
+        $view = (new \Stack\View)->byName($this->getModelName(), 'Model_' . ucfirst($action));
+        $view['controller'] = $this->getModelName();
+        $view['controllerAction'] = $action;
+        return $view;
+    }
+
     protected function getModelName()
     {
         return \Staq\Util::getStackSubSubQuery($this);

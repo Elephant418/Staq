@@ -90,7 +90,6 @@ class Model extends \ArrayObject implements \Stack\IModel
         \UArray::doConvertToArray($data);
         $model = new $this;
         $model->id = $this->entity->extractId($data);
-        $model->set('id', $model->id);
         foreach ($data as $name => $seed) {
             $attribute = $model->getAttribute($name);
             if (is_object($attribute)) {

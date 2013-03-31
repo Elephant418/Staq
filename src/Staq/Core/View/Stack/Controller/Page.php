@@ -23,10 +23,10 @@ class Page extends Page\__Parent
     public function actionView($name='index')
     {
         $path = \Staq::App()->getFilePath('page/' . $name . '.html');
-        if ( $path !== FALSE ) {
+        if (!empty($path)) {
             $page = new \Stack\View\Page;
             $page['content'] = file_get_contents($path);
-            $page['page'] = $name;
+            $page['page'] = ucfirst( $name );
             return $page;
         }
     }
