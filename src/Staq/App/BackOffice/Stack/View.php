@@ -15,9 +15,19 @@ class View extends View\__Parent
     protected function addVariables()
     {
         parent::addVariables();
-        $modelTypes = (new \Stack\Setting)
+        $groupModelTypes = (new \Stack\Setting)
             ->parse('BackOffice')
             ->get('model');
-        $this['modelTypes'] = $modelTypes;
+        foreach ( $groupModelTypes as $group => $modelTypes ) {
+            if ( !is_array( $modelTypes )) {
+                if (empty($modelTypes)){
+                    unset($groupModelTypes[$group]);
+                } else {
+                    \UArray::doRenameKey($groupModelTypes,$group,$modelTypes);
+                    $groupModelTypes[$modelTypes]=[$modelTypes];
+                }
+            }
+        }
+        $this['groupModelTypes'] = $groupModelTypes;
     }
 }

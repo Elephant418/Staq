@@ -14,6 +14,11 @@ class Date extends Date\__Parent
      *************************************************************************/
     public function get()
     {
+        return $this->seed;
+    }
+
+    public function getDateTime()
+    {
         return \DateTime::createFromFormat('Y-m-d', $this->seed);
     }
 

@@ -18,7 +18,7 @@ class Model
             ->parse('BackOffice')
             ->get('list.' . $type);
         if (empty($fields)) {
-            $fields = ['id'];
+            $fields = ['name()'];
         }
         $view['fields'] = $fields;
         $view['models'] = $this->getNewEntity($type)->fetchAll();

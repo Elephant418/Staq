@@ -19,7 +19,7 @@
 <table class="table table-bordered table-striped table-data">
     <thead>
     <tr>
-        <th>Id</th>
+        <th>Name</th>
     </tr>
     </thead>
     <tbody>
@@ -28,11 +28,15 @@
         {% for field in fields %}
         <td>
             <a href="{{ route( 'Model', 'view', controller, model.id )  }}">
-                {% set attribute = attribute( model, field ) %}
-                {% if attribute.id %}
-                {{ attribute.name() }}
+                {% if field == 'name()' %}
+                    {{ model.name() }}
                 {% else %}
-                {{ attribute }}
+                    {% set attribute = attribute( model, field ) %}
+                    {% if attribute.id %}
+                        {{ attribute.name() }}
+                    {% else %}
+                        {{ attribute }}
+                    {% endif %}
                 {% endif %}
             </a>
         </td>

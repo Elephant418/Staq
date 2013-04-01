@@ -24,13 +24,31 @@
 
             <div class="nav-collapse">
                 <ul class="nav">
-                    {% for modelType in modelTypes %}
-                    <li><a href="{{ route( 'Model', 'list', modelType ) }}">{{ modelType }}</a></li>
-                    {% endfor %}
+                    {% if currentUser %}
+                        {% for label, modelTypes in groupModelTypes %}
+                            {% if modelTypes|length <= 1 %}
+                                <li {% if controller == modelTypes[0] %}class="active"{% endif %}>
+                                    <a href="{{ route( 'Model', 'list', modelTypes[0] ) }}">{{ label }}</a>
+                                </li>
+                            {% else %}
+                                <li class="dropdown" {% if controller in modelTypes %}class="active"{% endif %}>
+                                    <a href="javascript:;" data-toggle="dropdown">{{ label }}</a>
+                                    <ul class="dropdown-menu">
+                                        {% for modelType in modelTypes %}
+                                            <li {% if controller == modelType %}class="active"{% endif %}>
+                                                <a href="{{ route( 'Model', 'list', modelType ) }}">{{ modelType }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </ul>
 
                 <ul class="nav pull-right">
                     {% if currentUser %}
+                    <li><a>{{ currentUser.name() }}</a></li>
                     <li><a href="{{ route( 'Auth', 'logout' ) }}">Disconnect</a></li>
                     {% else %}
                     <li><a href="{{ route( 'Auth', 'login' ) }}">Connect</a></li>

@@ -6,15 +6,17 @@
 <form method="post" class="form-horizontal">
 
     {% for name, value in model %}
-    {% set attribute = model.getAttribute(name) %}
-    <div class="control-group">
-        <label class="control-label" for="model_{{model.id}}_{{name}}">{{ name }}</label>
+        {% set attribute = model.getAttribute(name) %}
+        {% if attribute.__toString() %}
+            <div class="control-group">
+                <label class="control-label" for="model_{{model.id}}_{{name}}">{{ name }}</label>
 
-        <div class="controls">
-            {% include find_template( attribute, 'edit' ) with { 'attribute': attribute, 'id':
-            'model_'~model.id~'_'~name, 'name': 'model['~name~']' } only %}
-        </div>
-    </div>
+                <div class="controls">
+                    {% include find_template( attribute, 'edit' ) with { 'attribute': attribute, 'id':
+                    'model_'~model.id~'_'~name, 'name': 'model['~name~']' } only %}
+                </div>
+            </div>
+        {% endif %}
     {% endfor %}
 
     <div class="form-actions">
