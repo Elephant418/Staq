@@ -8,8 +8,8 @@ namespace Staq\Util\Auth\Stack\Entity;
 class User extends User\__Parent
 {
 
-    public function fetchByLogin($login)
+    public function fetchByLogin($login, $limit=NULL)
     {
-        return $this->fetchByField('login', $login);
+        return $this->fetchByField('login', $login, $limit);
     }
 }

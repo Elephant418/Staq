@@ -44,9 +44,9 @@ class Entity implements \Stack\IEntity
         return $this->fetchByField($this->idField, $id);
     }
 
-    public function fetchByField($field, $value)
+    public function fetchByField($field, $value, $limit=NULL)
     {
-        return $this->fetchOne([$field => $value]);
+        return $this->fetchOne([$field => $value], NULL, $limit);
     }
 
     public function fetchAll($limit = NULL, &$rows = FALSE)
@@ -136,8 +136,11 @@ class Entity implements \Stack\IEntity
         return $this->resultAsModelList($data);
     }
 
-    protected function fetchOne($fields = [], $order = NULL)
+    protected function fetchOne($fields = [], $order = NULL, $limit = NULL)
     {
+        if ($limit == 'count') {
+            return $this->getCount($fields);
+        }
         $data = $this->getData($fields, 1, $order);
         return $this->resultAsModel($data);
     }
