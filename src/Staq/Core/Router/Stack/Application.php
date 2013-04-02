@@ -59,6 +59,7 @@ class Application extends Application\__Parent
         $this->router = new \Stack\Router();
         if (isset($_SERVER['REQUEST_URI'])) {
             $uri = \UString::substrBefore($_SERVER['REQUEST_URI'], '?');
+            $uri = rawurldecode($uri);
             \UString::doNotStartWith($uri, $this->baseUri);
             \UString::doStartWith($uri, '/');
             $this->router->setUri($uri);
