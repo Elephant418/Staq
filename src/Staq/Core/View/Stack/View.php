@@ -154,8 +154,8 @@ class View extends \Stack\Util\ArrayObject
             if (is_dir($realPath)) {
                 throw new \Exception('Asset is a directory: '.$path);
             }
-            $hash = substr( md5(file_get_contents($realPath)), 18 );
-            $asset = \UString::substrBeforeLast($path,'.') . '.asset' . $hash . '.' . \UString::substrAfterLast($path,'.');
+            $hash = substr( md5(filemtime($realPath)), 22 );
+            $asset = 'asset' . $hash . '/' . $path;
             return $public($asset);
         };
         $route = function ($controller, $action) use ($public) {

@@ -41,15 +41,7 @@ class PublicFile extends PublicFile\__Parent
      *************************************************************************/
     protected function getPublicPath()
     {
-        $original = \Staq::App()->getCurrentUri();
-        $extension = \UString::substrAfterLast($original, '.');
-        $name = substr( $original, 0, -strlen($extension)-1);
-        $hash = \UString::substrAfterLast($name, '.');
-        $name = substr( $name, 0, -strlen($hash)-1);
-        if (\UString::isStartWith($hash, 'asset') && strlen($hash) == 19) {
-            return $name . '.' . $extension;
-        }
-        return $original;
+        return \Staq::App()->getCurrentUri();
     }
 
     protected function renderStaticFile($filePath)
