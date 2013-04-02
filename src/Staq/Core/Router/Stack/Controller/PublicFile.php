@@ -22,12 +22,12 @@ class PublicFile extends PublicFile\__Parent
      *************************************************************************/
     public function actionView()
     {
-        $path = \Staq::App()->getCurrentUri();
+        $path = $this->getPublicPath();
         $realPath = \Staq::App()->getFilePath('/public' . $path);
         if (
             empty($realPath) ||
             is_dir($realPath) ||
-            \UString::isEndWith($realPath, '.php')
+            \UString::isEndWith($realPath, '.php') /* TODO: Add to settings */
         ) {
             return NULL;
         }
@@ -39,6 +39,19 @@ class PublicFile extends PublicFile\__Parent
     /*************************************************************************
     PRIVATE METHODS
      *************************************************************************/
+    protected function getPublicPath()
+    {
+        $original = \Staq::App()->getCurrentUri();
+        $extension = \UString::substrAfterLast($original, '.');
+        $name = substr( $original, 0, -strlen($extension)-1);
+        $hash = \UString::substrAfterLast($name, '.');
+        $name = substr( $name, 0, -strlen($hash)-1);
+        if (\UString::isStartWith($hash, 'asset') && strlen($hash) == 19) {
+            return $name . '.' . $extension;
+        }
+        return $original;
+    }
+
     protected function renderStaticFile($filePath)
     {
         $resource = fopen($filePath, 'rb');

@@ -142,6 +142,22 @@ class View extends \Stack\Util\ArrayObject
             \UString::doStartWith($path, '/');
             return \Staq::App()->getBaseUri() . $path;
         };
+        $asset = function ($path) use ($public) {
+            $settings = (new \Stack\Setting)->parse('Application.ini');
+            if (!$settings->getAsBoolean('cache.asset')) {
+                return $public($path);
+            }
+            $realPath = \Staq::App()->getFilePath('/public/' . $path);
+            if (!$realPath) {
+                throw new \Exception('Asset not found: '.$path);
+            }
+            if (is_dir($realPath)) {
+                throw new \Exception('Asset is a directory: '.$path);
+            }
+            $hash = substr( md5(file_get_contents($realPath)), 18 );
+            $asset = \UString::substrBeforeLast($path,'.') . '.asset' . $hash . '.' . \UString::substrAfterLast($path,'.');
+            return $public($asset);
+        };
         $route = function ($controller, $action) use ($public) {
             $parameters = array_slice(func_get_args(), 2);
             $uri = \Staq::App()->getUri($controller, $action, $parameters);
@@ -164,6 +180,8 @@ class View extends \Stack\Util\ArrayObject
         $this->twig->addFilter($publicFilter);
         $publicFunction = new \Twig_SimpleFunction('public', $public);
         $this->twig->addFunction($publicFunction);
+        $assetFunction = new \Twig_SimpleFunction('asset', $asset);
+        $this->twig->addFunction($assetFunction);
         $routeFunction = new \Twig_SimpleFunction('route', $route);
         $this->twig->addFunction($routeFunction);
         $routeFunction = new \Twig_SimpleFunction('route_model_*', $routeModelAction);

@@ -210,9 +210,13 @@ class Entity implements \Stack\IEntity
         return $this->table;
     }
 
+    protected function getDefaultWhere() {
+        return [];
+    }
+
     protected function getClauseByFields($request, &$parameters, $limit = NULL, $order = NULL)
     {
-        $where = [];
+        $where = $this->getDefaultWhere();
         if (is_array($request)) {
             foreach ($request as $fieldName => $fieldValue) {
                 if (is_numeric($fieldName)) {

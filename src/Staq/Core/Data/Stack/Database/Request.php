@@ -76,7 +76,6 @@ class Request
 
     public function execute($arguments = array())
     {
-
         if (empty($this->request)) {
             throw new \Stack\Exception\Database('The SQL request is empty.');
         }
