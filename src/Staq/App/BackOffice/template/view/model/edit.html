@@ -7,7 +7,7 @@
 
     {% for name, value in model %}
         {% set attribute = model.getAttribute(name) %}
-        {% if attribute.__toString() %}
+        {% if attribute.editable %}
             <div class="control-group">
                 <label class="control-label" for="model_{{model.id}}_{{name}}">{{ name }}</label>
 

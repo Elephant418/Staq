@@ -12,6 +12,7 @@ class Attribute implements \Stack\IAttribute
     /*************************************************************************
     ATTRIBUTES
      *************************************************************************/
+    public $editable = TRUE;
     protected $seed;
 
 
@@ -48,7 +49,9 @@ class Attribute implements \Stack\IAttribute
 
     public function set($value)
     {
-        $this->seed = $value;
+        if ( $this->editable ) {
+            $this->seed = $value;
+        }
     }
 
 
