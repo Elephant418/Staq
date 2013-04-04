@@ -197,7 +197,7 @@ class Entity implements \Stack\IEntity
         if ($limit == 'count') {
             return $this->getCount($fields);
         }
-        $data = $this->getData($fields, 1, $order);
+        $data = $this->getData($fields, $order);
         return $this->resultAsModel($data);
     }
 
@@ -209,9 +209,9 @@ class Entity implements \Stack\IEntity
         return reset($request->executeOne($parameters));
     }
 
-    protected function getData($where = [])
+    protected function getData($where = [], $order)
     {
-        $datas = $this->getDataList($where, 1);
+        $datas = $this->getDataList($where, 1, $order);
         if (isset($datas[0])) {
             return $datas[0];
         }
