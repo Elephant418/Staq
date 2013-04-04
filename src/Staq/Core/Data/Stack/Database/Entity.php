@@ -264,6 +264,11 @@ class Entity implements \Stack\IEntity
         return '';
     }
 
+    protected function getDefaultOrder()
+    {
+        return '';
+    }
+
     protected function getBaseTable()
     {
         return $this->table;
@@ -303,7 +308,9 @@ class Entity implements \Stack\IEntity
             $sql .= ' WHERE ' . implode(' AND ', $where);
         }
         $sql .= $this->getGroupBy();
-        if (!is_null($order)) {
+        if (is_null($order)) {
+            $sql .= $this->getDefaultOrder();
+        } else {
             $sql .= ' ORDER BY ' . $order;
         }
         if (!is_null($limit)) {
