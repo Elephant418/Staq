@@ -1,5 +1,5 @@
 {% set ids = attribute.getIds() %}
-<select name="{{name}}" id="{{id}}" multiple="multiple">
+<select name="{{name}}[]" id="{{id}}" multiple="multiple">
     <option value=""
     {% if related.exists() %}selected="selected"{% endif %} >
     No selection

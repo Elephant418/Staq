@@ -12,6 +12,7 @@ class OneToMany extends OneToMany\__Parent
     /*************************************************************************
     ATTRIBUTES
      *************************************************************************/
+    protected $changed = FALSE;
     protected $model;
     protected $remoteModels = NULL;
     protected $remoteModelType;
@@ -42,8 +43,11 @@ class OneToMany extends OneToMany\__Parent
      *************************************************************************/
     public function get()
     {
-        $class = $this->getRemoteClass();
-        return (new $class)->entity->fetchByRelated($this->remoteAttributeName, $this->model);
+        if (is_null($this->remoteModels)) {
+            $class = $this->getRemoteClass();
+            $this->remoteModels = (new $class)->entity->fetchByRelated($this->remoteAttributeName, $this->model);
+        }
+        return $this->remoteModels;
     }
 
     public function getIds()
@@ -57,7 +61,23 @@ class OneToMany extends OneToMany\__Parent
 
     public function set($remoteModels)
     {
-        // Do nothing here :'(
+        $this->remoteModels = [];
+        $this->changed = TRUE;
+        \UArray::doConvertToArray($remoteModels);
+        foreach( $remoteModels as $model ) {
+            if (empty($model)) {
+                $remoteModel = $this->getRemoteModel();
+            } else if (is_numeric($model)) {
+                $model = $this->getRemoteModel()->entity->fetchById($model);
+            } else if (!\Staq\Util::isStack($model, $this->getRemoteClass())) {
+                $message = 'Input of type "' . $this->getRemoteClass() . '", but "' . gettype($model) . '" given.';
+                throw new \Stack\Exception\NotRightInput($message);
+            }
+            if ($model->exists()) {
+                $this->remoteModels[] = $model;
+            }
+        }
+        return $this;
     }
 
 
@@ -71,6 +91,18 @@ class OneToMany extends OneToMany\__Parent
 
     public function setSeed($seed)
     {
+    }
+
+
+    /*************************************************************************
+    HANDLER METHODS
+     *************************************************************************/
+    public function saveHandler()
+    {
+        if ($this->changed) {
+            $class = $this->getRemoteClass();
+            (new $class)->entity->updateRelated($this->remoteAttributeName, $this->getIds(), $this->model);
+        }
     }
 
 

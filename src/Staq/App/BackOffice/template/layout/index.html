@@ -24,7 +24,7 @@
 
             <div class="nav-collapse">
                 <ul class="nav">
-                    {% if currentUser %}
+                    {% if currentUser and currentUser.right == 'admin' %}
                         {% for label, modelTypes in groupModelTypes %}
                             {% if modelTypes|length <= 1 %}
                                 <li {% if controller == modelTypes[0] %}class="active"{% endif %}>

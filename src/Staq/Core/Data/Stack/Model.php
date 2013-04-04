@@ -117,6 +117,12 @@ class Model extends \ArrayObject implements \Stack\IModel
     public function save()
     {
         $this->id = $this->entity->save($this);
+        foreach($this->keys() as $name) {
+            $attribute = $this->getAttribute($name);
+            if (\Staq\Util::isStack($attribute, 'Stack\\Attribute')) {
+                $attribute->saveHandler();
+            }
+        }
         return $this;
     }
 

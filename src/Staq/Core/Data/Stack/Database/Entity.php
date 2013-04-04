@@ -82,6 +82,21 @@ class Entity implements \Stack\IEntity
         return $request->execute($parameters);
     }
 
+    public function updateRelated($field, $ids, $related)
+    {
+        $sql = 'UPDATE ' . $this->table
+            . ' SET ' . $field . '=' . $related->id
+            . ' WHERE ' . $this->idField . ' IN (' . implode( ', ', $ids ) . ')';
+        $request = new Request($sql);
+        $request->execute();
+        $sql = 'UPDATE ' . $this->table
+            . ' SET ' . $field . '=NULL'
+            . ' WHERE ' . $field . '=' . $related->id
+            . ' AND ' . $this->idField . ' NOT IN (' . implode( ', ', $ids ) . ')';
+        $request->setRequest($sql);
+        $request->execute();
+    }
+
 
     /*************************************************************************
     PUBLIC DATABASE REQUEST
