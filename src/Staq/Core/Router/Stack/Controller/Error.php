@@ -14,7 +14,7 @@ class Error extends Error\__Parent
      *************************************************************************/
     public static $setting = [
         'route.view.uri' => '/error/:code',
-        'route.view.exceptions' => ['403', '404', '500']
+        'route.view.exceptions' => ['403', '404', '500', 'PDOException']
     ];
 
 
