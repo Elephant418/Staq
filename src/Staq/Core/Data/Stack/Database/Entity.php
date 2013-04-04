@@ -111,10 +111,11 @@ class Entity implements \Stack\IEntity
         $existing = $this->fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related);
         $addIds = array_diff($ids, $existing);
         if (!empty($addIds)) {
-            $sql = 'INSERT INTO ' . $table . ' (' . $field . ', ' . $relatedField . ') VALUES';
+            $sql = array();
             foreach ($addIds as $addId) {
-                $sql .= ' (' . $addId . ', ' . $related->id . ')';
+                $sql[] = ' (' . $addId . ', ' . $related->id . ')';
             }
+            $sql = 'INSERT INTO ' . $table . ' (' . $field . ', ' . $relatedField . ') VALUES' . implode(',', $sql);
             $request = new Request($sql);
             $request->execute();
         }
