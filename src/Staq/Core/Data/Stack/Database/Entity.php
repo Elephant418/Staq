@@ -44,7 +44,7 @@ class Entity implements \Stack\IEntity
         return $this->fetchByField($this->idField, $id);
     }
 
-    public function fetchByField($field, $value, $limit=NULL)
+    public function fetchByField($field, $value, $limit = NULL)
     {
         return $this->fetchOne([$field => $value], NULL, $limit);
     }
@@ -56,6 +56,9 @@ class Entity implements \Stack\IEntity
 
     public function fetchByIds($ids, $limit = NULL)
     {
+        if (empty($ids)) {
+            return array();
+        }
         return $this->fetch([$this->idField => $ids], $limit);
     }
 
@@ -86,13 +89,13 @@ class Entity implements \Stack\IEntity
     {
         $sql = 'UPDATE ' . $this->table
             . ' SET ' . $field . '=' . $related->id
-            . ' WHERE ' . $this->idField . ' IN (' . implode( ', ', $ids ) . ')';
+            . ' WHERE ' . $this->idField . ' IN (' . implode(', ', $ids) . ')';
         $request = new Request($sql);
         $request->execute();
         $sql = 'UPDATE ' . $this->table
             . ' SET ' . $field . '=NULL'
             . ' WHERE ' . $field . '=' . $related->id
-            . ' AND ' . $this->idField . ' NOT IN (' . implode( ', ', $ids ) . ')';
+            . ' AND ' . $this->idField . ' NOT IN (' . implode(', ', $ids) . ')';
         $request->setRequest($sql);
         $request->execute();
     }
@@ -106,20 +109,20 @@ class Entity implements \Stack\IEntity
     public function updateRelatedThroughTable($table, $field, $relatedField, $ids, $related)
     {
         $existing = $this->fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related);
-        $addIds = array_diff( $ids, $existing );
-        if ( ! empty( $addIds ) ) {
+        $addIds = array_diff($ids, $existing);
+        if (!empty($addIds)) {
             $sql = 'INSERT INTO ' . $table . ' (' . $field . ', ' . $relatedField . ') VALUES';
-            foreach ( $addIds as $addId ) {
+            foreach ($addIds as $addId) {
                 $sql .= ' (' . $addId . ', ' . $related->id . ')';
             }
             $request = new Request($sql);
             $request->execute();
         }
-        $removeIds = array_diff( $existing, $ids );
-        if ( ! empty( $removeIds ) ) {
+        $removeIds = array_diff($existing, $ids);
+        if (!empty($removeIds)) {
             $sql = 'DELETE FROM ' . $table
                 . ' WHERE ' . $relatedField . '=' . $related->id
-                . ' AND ' . $field . ' IN (' . implode( ', ', $removeIds ) . ') ';
+                . ' AND ' . $field . ' IN (' . implode(', ', $removeIds) . ') ';
             $request = new Request($sql);
             $request->execute();
         }
@@ -127,11 +130,11 @@ class Entity implements \Stack\IEntity
 
     public function fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related)
     {
-        $sql = 'SELECT ' . $field .' FROM ' . $table
+        $sql = 'SELECT ' . $field . ' FROM ' . $table
             . ' WHERE ' . $relatedField . '=' . $related->id;
         $request = new Request($sql);
         $existing = $request->execute();
-        return array_keys( \UArray::keyBy($existing, 'equipe'));
+        return array_keys(\UArray::keyBy($existing, $field));
     }
 
 
@@ -265,7 +268,8 @@ class Entity implements \Stack\IEntity
         return $this->table;
     }
 
-    protected function getDefaultWhere() {
+    protected function getDefaultWhere()
+    {
         return [];
     }
 
