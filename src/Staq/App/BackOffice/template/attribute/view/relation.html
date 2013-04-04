@@ -1,5 +1,7 @@
-{% if attribute.get().exists() %}
-<a href="{{ route( 'Model', 'view', attribute.getRemoteModelType(), attribute.get().id )  }}">
-    {{ attribute.get().name() }}
-</a>
+{% for related in attribute.get() %}
+{% if related.exists() %}
+<a href="{{ route( 'Model', 'view', attribute.getRemoteModelType(), related.id )  }}">
+    {{ related.name() }}
+</a> -
 {% endif %}
+{% endfor %}

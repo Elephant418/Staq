@@ -1,12 +1,12 @@
-{% set related = attribute.get() %}
-<select name="{{name}}" id="{{id}}">
+{% set ids = attribute.getIds() %}
+<select name="{{name}}[]" id="{{id}}" multiple="multiple">
     <option value=""
     {% if related.exists() %}selected="selected"{% endif %} >
     No selection
     </option>
     {% for model in attribute.getRelatedModels() %}
     <option value="{{ model.id }}"
-    {% if related.id == model.id %}selected="selected"{% endif %} >
+    {% if model.id in ids %}selected="selected"{% endif %} >
     {{ model.name() }}
     </option>
     {% endfor %}
