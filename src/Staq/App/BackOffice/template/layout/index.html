@@ -3,9 +3,12 @@
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ '/twbootstrap/bootstrap.css'|public }}">
 <link rel="stylesheet" href="{{ '/dataTables/DT_bootstrap.css'|public }}">
-<link rel="stylesheet" href="{{ '/chosen/chosen.css'|public }}">
+<link rel="stylesheet" href="{{ '/select2/select2.css'|public }}">
 <link rel="stylesheet" href="{{ '/bootstrap.css'|public }}">
 <link rel="stylesheet" href="{{ '/twbootstrap/bootstrap-responsive.css'|public }}">
+<style>
+    .select2-container { min-width: 220px }
+</style>
 {% endblock %}
 
 {% block title %}Admin{% endblock %}
@@ -74,9 +77,9 @@
 <script src="{{ public('/twbootstrap/bootstrap-dropdown.js') }}"></script>
 <script src="{{ public('/twbootstrap/bootstrap-transition.js') }}"></script>
 <script src="{{ public('/twbootstrap/bootstrap-collapse.js') }}"></script>
-<script src="{{ public('/chosen/chosen.jquery.min.js') }}"></script>
+<script src="{{ public('/select2/select2.min.js') }}"></script>
 <script>
-    $(".controls select").chosen();
+    $(".controls select").select2();
 </script>
 {% endblock %}
 {% endblock %}

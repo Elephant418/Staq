@@ -16,7 +16,7 @@ class OneToMany extends OneToMany\__Parent
     protected $model;
     protected $remoteModels = NULL;
     protected $remoteModelType;
-    protected $remoteAttributeName;
+    protected $relatedAttributeName;
 
 
     /*************************************************************************
@@ -29,11 +29,11 @@ class OneToMany extends OneToMany\__Parent
             if (!isset($setting['remote_class_type'])) {
                 throw new \Stack\Exception\MissingSetting('"remote_class_type" missing for the OneToMany relation.');
             }
-            if (!isset($setting['remote_attribute_name'])) {
-                throw new \Stack\Exception\MissingSetting('"remote_attribute_name" missing for the OneToMany relation.');
+            if (!isset($setting['related_attribute_name'])) {
+                throw new \Stack\Exception\MissingSetting('"related_attribute_name" missing for the OneToMany relation.');
             }
             $this->remoteModelType = $setting['remote_class_type'];
-            $this->remoteAttributeName = $setting['remote_attribute_name'];
+            $this->relatedAttributeName = $setting['related_attribute_name'];
         }
     }
 
@@ -45,7 +45,7 @@ class OneToMany extends OneToMany\__Parent
     {
         if (is_null($this->remoteModels)) {
             $class = $this->getRemoteClass();
-            $this->remoteModels = (new $class)->entity->fetchByRelated($this->remoteAttributeName, $this->model);
+            $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model);
         }
         return $this->remoteModels;
     }
@@ -101,7 +101,7 @@ class OneToMany extends OneToMany\__Parent
     {
         if ($this->changed) {
             $class = $this->getRemoteClass();
-            (new $class)->entity->updateRelated($this->remoteAttributeName, $this->getIds(), $this->model);
+            (new $class)->entity->updateRelated($this->relatedAttributeName, $this->getIds(), $this->model);
         }
     }
 

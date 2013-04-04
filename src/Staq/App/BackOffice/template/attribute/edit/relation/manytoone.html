@@ -1,7 +1,7 @@
 {% set related = attribute.get() %}
 <select name="{{name}}" id="{{id}}">
     <option value=""
-    {% if related.exists() %}selected="selected"{% endif %} >
+    {% if not related %}selected="selected"{% endif %} >
     No selection
     </option>
     {% for model in attribute.getRelatedModels() %}
