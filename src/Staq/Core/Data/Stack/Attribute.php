@@ -82,6 +82,6 @@ class Attribute implements \Stack\IAttribute
      *************************************************************************/
     public function __toString()
     {
-        return \Staq\Util::getStackQuery($this) . '( ' . $this->seed . ' )';
+        return '' . $this->get();
     }
 }

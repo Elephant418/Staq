@@ -19,7 +19,9 @@
 <table class="table table-bordered table-striped table-data">
     <thead>
     <tr>
-        <th>Name</th>
+        {% for field in fields %}
+            <th>{{ field }}</th>
+        {% endfor %}
     </tr>
     </thead>
     <tbody>
@@ -31,12 +33,7 @@
                 {% if field == 'name()' %}
                     {{ model.name() }}
                 {% else %}
-                    {% set attribute = attribute( model, field ) %}
-                    {% if attribute.id %}
-                        {{ attribute.name() }}
-                    {% else %}
-                        {{ attribute }}
-                    {% endif %}
+                    {{ model.getAttribute( field ) }}
                 {% endif %}
             </a>
         </td>

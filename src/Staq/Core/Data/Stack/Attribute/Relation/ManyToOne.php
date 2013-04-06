@@ -100,4 +100,16 @@ class ManyToOne extends ManyToOne\__Parent
     {
         return $class = 'Stack\\Model\\' . $this->remoteModelType;
     }
+
+
+    /*************************************************************************
+    DEBUG METHODS
+     *************************************************************************/
+    public function __toString()
+    {
+        $related = $this->get();
+        if ( $related ) {
+            return '' . $related->name();
+        }
+    }
 }
