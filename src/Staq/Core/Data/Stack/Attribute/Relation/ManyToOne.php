@@ -111,5 +111,6 @@ class ManyToOne extends ManyToOne\__Parent
         if ( $related ) {
             return '' . $related->name();
         }
+        return '';
     }
 }
