@@ -87,16 +87,20 @@ class Entity implements \Stack\IEntity
 
     public function updateRelated($field, $ids, $related)
     {
-        $sql = 'UPDATE ' . $this->table
-            . ' SET ' . $field . '=' . $related->id
-            . ' WHERE ' . $this->idField . ' IN (' . implode(', ', $ids) . ')';
-        $request = new Request($sql);
-        $request->execute();
+        if (!empty($ids)) {
+            $sql = 'UPDATE ' . $this->table
+                . ' SET ' . $field . '=' . $related->id
+                . ' WHERE ' . $this->idField . ' IN (' . implode(', ', $ids) . ')';
+            $request = new Request($sql);
+            $request->execute();
+        }
         $sql = 'UPDATE ' . $this->table
             . ' SET ' . $field . '=NULL'
-            . ' WHERE ' . $field . '=' . $related->id
-            . ' AND ' . $this->idField . ' NOT IN (' . implode(', ', $ids) . ')';
-        $request->setRequest($sql);
+            . ' WHERE ' . $field . '=' . $related->id;
+        if (!empty($ids)) {
+            $sql .= ' AND ' . $this->idField . ' NOT IN (' . implode(', ', $ids) . ')';
+        }
+        $request = new Request($sql);
         $request->execute();
     }
 

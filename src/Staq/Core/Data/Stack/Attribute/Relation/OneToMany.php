@@ -73,7 +73,7 @@ class OneToMany extends OneToMany\__Parent
                 $message = 'Input of type "' . $this->getRemoteClass() . '", but "' . gettype($model) . '" given.';
                 throw new \Stack\Exception\NotRightInput($message);
             }
-            if ($model->exists()) {
+            if ($model && $model->exists()) {
                 $this->remoteModels[] = $model;
             }
         }

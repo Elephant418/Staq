@@ -51,12 +51,12 @@ class ManyToOne extends ManyToOne\__Parent
             $message = 'Input of type "' . $this->getRemoteClass() . '", but "' . gettype($model) . '" given.';
             throw new \Stack\Exception\NotRightInput($message);
         }
-        if (!$model->exists()) {
-            $this->seed = NULL;
-            $this->remoteModel = NULL;
-        } else {
+        if ($model && $model->exists()) {
             $this->remoteModel = $model;
             $this->seed = $model->id;
+        } else {
+            $this->seed = NULL;
+            $this->remoteModel = NULL;
         }
         return $this;
     }

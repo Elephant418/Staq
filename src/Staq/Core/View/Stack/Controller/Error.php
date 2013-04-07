@@ -18,7 +18,7 @@ class Error extends Error\__Parent
         $message = '';
         $exception = \Staq::App()->getLastException();
         if ($exception && \Staq::App()->settings->getAsBoolean('error.display_errors')) {
-            $message = $exception->getMessage();
+            $message = $exception->getMessage() . HTML_EOL . $exception->getTraceAsString();
         }
         $page = new \Stack\View\Error;
         $page['code'] = $code;

@@ -1,4 +1,5 @@
 {% set ids = attribute.getIds() %}
+<input type="hidden" name="{{name}}[]" value="0">
 <select name="{{name}}[]" id="{{id}}" multiple="multiple">
     <option value=""
     {% if related.exists() %}selected="selected"{% endif %} >
