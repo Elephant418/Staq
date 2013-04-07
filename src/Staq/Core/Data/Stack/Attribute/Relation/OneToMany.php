@@ -130,4 +130,17 @@ class OneToMany extends OneToMany\__Parent
     {
         return $class = 'Stack\\Model\\' . $this->remoteModelType;
     }
+
+
+    /*************************************************************************
+    DEBUG METHODS
+     *************************************************************************/
+    public function __toString()
+    {
+        $relateds = $this->get();
+        array_walk( $relateds, function(&$a) {
+            $a = $a->name();
+        });
+        return implode( ', ', $relateds );
+    }
 }

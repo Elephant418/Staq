@@ -77,4 +77,13 @@ class FetchAlias extends FetchAlias\__Parent
     {
         return $class = 'Stack\\Entity\\' . $this->remoteModelType;
     }
+
+
+    /*************************************************************************
+    DEBUG METHODS
+     *************************************************************************/
+    public function __toString()
+    {
+        return implode( ' - ', $this->get() );
+    }
 }

@@ -131,6 +131,9 @@ class Entity implements \Stack\IEntity
 
     public function fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related)
     {
+        if (!$related->exists() ) {
+            return array();
+        }
         $sql = 'SELECT ' . $field . ' FROM ' . $table
             . ' WHERE ' . $relatedField . '=' . $related->id;
         $request = new Request($sql);

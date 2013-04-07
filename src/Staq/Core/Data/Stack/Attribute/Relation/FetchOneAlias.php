@@ -7,4 +7,13 @@ namespace Staq\Core\Data\Stack\Attribute\Relation;
 
 class FetchOneAlias extends FetchAlias
 {
+
+
+    /*************************************************************************
+    DEBUG METHODS
+     *************************************************************************/
+    public function __toString()
+    {
+        return $this->get();
+    }
 }
