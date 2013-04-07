@@ -26,6 +26,11 @@ class Date extends Date\__Parent
         }
     }
 
+    public function setNow()
+    {
+        $this->seed = (new \DateTime)->format('Y-m-d');
+    }
+
     public static function isValid($value)
     {
         if (is_string($value)) {
