@@ -30,7 +30,7 @@ class Text extends Text\__Parent
             return $beginning;
         }
         $beginning = substr($beginning, 0, $limit);
-        return implode( '.', explode( '.', $beginning, -1) ) . '...';
+        return implode( '. ', explode( '. ', $beginning, -1) ) . '...';
     }
 
     public function set($value)
