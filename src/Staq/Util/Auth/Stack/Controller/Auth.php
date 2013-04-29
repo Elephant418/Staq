@@ -117,9 +117,13 @@ class Auth extends Auth\__Parent
 
     public function actionLogout()
     {
+        $redirect = '/';
+        if (isset($_GET['redirect'])) {
+            $redirect = $_GET['redirect'];
+        }
         $this->logout();
         Notif::info(static::MSG_LOGOUT_VALID);
-        \Staq\Util::httpRedirectUri('/');
+        \Staq\Util::httpRedirectUri($redirect);
     }
 
 
