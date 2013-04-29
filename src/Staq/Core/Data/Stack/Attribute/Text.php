@@ -23,14 +23,15 @@ class Text extends Text\__Parent
         return $paragraphs[0];
     }
 
-    public function getBeginning( $limit=300 )
+    public function getBeginning( $maximum=300, $minimum=200 )
     {
-        $beginning = $this->getFirstParagraph();
-        if ( strlen($beginning) <= $limit ) {
-            return $beginning;
+        $beginning = substr($this->seed, 0, $minimum);
+        $margin = substr($this->seed, $minimum, $maximum);
+        $part = trim( \UString::substrBeforeLast( $margin, [ '. ', '! ', '? '] ) );
+        if (empty($part)){
+            $part = trim( \UString::substrBeforeLast( $margin, [ ', ', '; ', ': '] ) );
         }
-        $beginning = substr($beginning, 0, $limit);
-        return trim( \UString::substrBeforeLast( $beginning, [ '. ', '!', '?'] ) ) . '...';
+        return $beginning.$part.'...';
     }
 
     public function set($value)
