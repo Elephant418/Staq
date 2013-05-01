@@ -1,7 +1,7 @@
 {% extends "layout/index.html" %}
 
 {% block content %}
-<h1>{{ controller }} {{ model.id }}</h1>
+<h1>{{ controller }} {{ model.name() }}</h1>
 
 <form method="post" class="form-horizontal">
 
