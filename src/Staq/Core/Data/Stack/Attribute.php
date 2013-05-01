@@ -14,6 +14,7 @@ class Attribute implements \Stack\IAttribute
      *************************************************************************/
     public $editable = TRUE;
     protected $seed;
+    protected $defaultSeed;
 
 
     /*************************************************************************
@@ -36,6 +37,11 @@ class Attribute implements \Stack\IAttribute
 
     public function initBySetting($model, $setting)
     {
+        if (is_array($setting)) {
+            if (isset($setting['default'])) {
+                $this->defaultSeed = $setting['default'];
+            }
+        }
     }
 
 
@@ -44,6 +50,9 @@ class Attribute implements \Stack\IAttribute
      *************************************************************************/
     public function get()
     {
+        if (is_null($this->seed)) {
+            return $this->defaultSeed;
+        }
         return $this->seed;
     }
 

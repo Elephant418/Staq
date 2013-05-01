@@ -14,7 +14,8 @@ class Boolean extends Boolean\__Parent
      *************************************************************************/
     public function get()
     {
-        return ($this->seed !== 0);
+        $seed = (int) parent::get();
+        return ($seed !== 0);
     }
 
     public function set($value)

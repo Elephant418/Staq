@@ -21,6 +21,7 @@ class Selection extends Selection\__Parent
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
+        parent::initBySetting($model, $setting);
         if (is_array($setting)) {
             $setting = new \Stack\Util\ArrayObject($setting);
             $this->options = $setting->getAsArray('options');

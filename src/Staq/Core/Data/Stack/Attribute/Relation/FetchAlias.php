@@ -23,6 +23,7 @@ class FetchAlias extends FetchAlias\__Parent
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
+        parent::initBySetting($model, $setting);
         $this->model = $model;
         if (is_array($setting)) {
             if (!isset($setting['remote_class_type'])) {

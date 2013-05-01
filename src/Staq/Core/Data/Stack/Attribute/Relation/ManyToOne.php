@@ -21,6 +21,7 @@ class ManyToOne extends ManyToOne\__Parent
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
+        parent::initBySetting($model, $setting);
         if (is_array($setting)) {
             if (isset($setting['remote_class_type'])) {
                 $this->remoteModelType = $setting['remote_class_type'];
