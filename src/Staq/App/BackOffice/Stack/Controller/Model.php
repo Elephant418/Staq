@@ -82,6 +82,7 @@ class Model
             foreach ($_POST['model'] as $name => $value) {
                 $model->set($name, $value);
             }
+            $this->saveHandler($model);
             if ($model->save()) {
                 Notif::success('Model saved.');
             } else {
@@ -92,6 +93,14 @@ class Model
         $view = $this->createView('edit', $type);
         $view['model'] = $model;
         return $view;
+    }
+
+
+    /*************************************************************************
+    HANDLER METHODS
+     *************************************************************************/
+    protected function saveHandler($model)
+    {
     }
 
 
