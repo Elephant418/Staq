@@ -69,6 +69,9 @@ class Attribute implements \Stack\IAttribute
      *************************************************************************/
     public function getSeed()
     {
+        if (is_null($this->seed)) {
+            return $this->defaultSeed;
+        }
         return $this->seed;
     }
 
