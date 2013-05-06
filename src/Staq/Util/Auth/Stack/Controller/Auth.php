@@ -4,6 +4,7 @@
 
 namespace Staq\Util\Auth\Stack\Controller;
 
+use \Stack\Util\Form;
 use \Stack\Util\UINotification as Notif;
 
 class Auth extends Auth\__Parent
@@ -38,33 +39,21 @@ class Auth extends Auth\__Parent
     public function getInscriptionForm()
     {
         $codes = $this->getCodes();
-        \Stack\Util\FormFilter::addCustomFilter('existing_code', function ($options) use ($codes) {
-            return function ($field) use ($codes) {
-                return in_array($field, $codes);
-            };
-        });
-        return (new \Stack\Util\FormHelper)
-            ->addField('login', 'inscription.login')
-            ->addFilter('login', FILTER_SANITIZE_STRING)
-            ->addFilter('login', 'required', 'This field is required')
-            ->addFilter('login', FILTER_VALIDATE_REGEXP, 'This field must contains only letters, numbers and dash', ['regexp' => '/^[a-zA-Z0-9-]*$/'])
-            ->addFilter('login', 'min_length', 'This field must contains at least 4 characters', ['length' => '4'])
-            ->addFilter('login', 'max_length', 'This field must contains less than 20 characters', ['length' => '19'])
-            ->addField('password', 'inscription.password')
-            ->addFilter('password', 'required', 'This field is required')
-            ->addField('code', 'inscription.code')
-            ->addFilter('code', 'required', 'This field is required')
-            ->addFilter('code', 'existing_code', 'This is not a valid beta code');
+        return (new Form)
+            ->addInput('login', 'string|required|min_length:4|max_length:19', 'inscription.login')
+                ->addInputFilter('login', 'validate_regexp:/^[a-zA-Z0-9-]*$/', 'This field must contains only letters, numbers and dash')
+            ->addInput('password', 'required', 'inscription.password')
+            ->addInput('code', 'required', 'inscription.code')
+                ->addInputFilter('code', 'validate_code', function ($field) use ($codes) {
+                    return in_array($field, $codes);
+                }, 'This is not a valid beta code');
     }
 
     public function getLoginForm()
     {
-        return (new \Stack\Util\FormHelper)
-            ->addField('login', 'login.login')
-            ->addFilter('login', FILTER_SANITIZE_STRING)
-            ->addFilter('login', 'required', 'This field is required')
-            ->addField('password', 'login.password')
-            ->addFilter('password', 'required', 'This field is required');
+        return (new Form)
+            ->addInput('login', 'string|required', 'login.login')
+            ->addInput('password', 'required', 'login.password');
     }
 
 
@@ -76,9 +65,9 @@ class Auth extends Auth\__Parent
         $form = $this->getInscriptionForm();
         if ($form->isValid()) {
             $user = (new \Stack\Model\User)
-                ->set('login', $form->get('login'))
-                ->set('password', $form->get('password'))
-                ->set('code_beta', $form->get('code'));
+                ->set('login', $form->login)
+                ->set('password', $form->password)
+                ->set('code_beta', $form->code);
             try {
                 $saved = FALSE;
                 $saved = $user->save();
@@ -86,7 +75,7 @@ class Auth extends Auth\__Parent
             }
             if ($saved) {
                 $this->login($user);
-                Notif::success(sprintf(static::MSG_INSCRIPTION_VALID, $form->get('login')));
+                Notif::success(sprintf(static::MSG_INSCRIPTION_VALID, $form->login));
                 \Staq\Util::httpRedirectUri($this->getRedirectUri());
             } else {
                 Notif::error(static::MSG_INSCRIPTION_KO);
@@ -102,8 +91,8 @@ class Auth extends Auth\__Parent
     {
         $form = $this->getLoginForm();
         if ($form->isValid()) {
-            if ($this->login($form->getFieldValue('login'), $form->getFieldValue('password'))) {
-                Notif::success(sprintf(static::MSG_LOGIN_VALID, $form->getFieldValue('login')));
+            if ($this->login($form->login, $form->password)) {
+                Notif::success(sprintf(static::MSG_LOGIN_VALID, $form->login));
                 \Staq\Util::httpRedirectUri($this->getRedirectUri());
             } else {
                 Notif::error(static::MSG_LOGIN_KO);

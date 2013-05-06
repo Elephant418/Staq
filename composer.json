@@ -16,7 +16,7 @@
         "twig/twig": "1.*",
         "pixel418/ubiq": "0.4.*",
         "pixel418/iniliq": "0.3.*",
-        "pixel418/eloq": "0.1.*",
+        "pixel418/eloq": "0.2.*",
         "php": ">=5.4.0"
     },
     "autoload": {
