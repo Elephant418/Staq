@@ -90,4 +90,14 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
         }
         return $this->fetchByIds(array_unique($ids));
     }
+
+
+    /* MODEL METHODS
+     *************************************************************************/
+    public function extractId(&$data)
+    {
+        if (isset($data[$this->idField])) {
+            return $data[$this->idField];
+        }
+    }
 }

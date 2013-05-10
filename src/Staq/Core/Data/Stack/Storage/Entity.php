@@ -9,19 +9,6 @@ class Entity
 {
 
 
-    /* PUBLIC METHODS
-     *************************************************************************/
-    public function extractId(&$data)
-    {
-        $id = NULL;
-        if (isset($data[$this->idField])) {
-            $id = $data[$this->idField];
-            unset($data[$this->idField]);
-        }
-        return $id;
-    }
-
-
     /* PRIVATE CORE METHODS
      *************************************************************************/
     protected function getModel()

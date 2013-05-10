@@ -133,8 +133,18 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     }
 
 
-    /* PUBLIC DATABASE REQUEST
+    /* MODEL METHODS
      *************************************************************************/
+    public function extractId(&$data)
+    {
+        $id = NULL;
+        if (isset($data[$this->idField])) {
+            $id = $data[$this->idField];
+            unset($data[$this->idField]);
+        }
+        return $id;
+    }
+
     public function delete($model = NULL)
     {
         $sql = 'DELETE FROM ' . $this->table;
