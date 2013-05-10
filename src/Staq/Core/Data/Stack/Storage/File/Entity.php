@@ -3,7 +3,7 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Entity;
+namespace Staq\Core\Data\Stack\Storage\File;
 
 use \Michelf\MarkdownExtra;
 
