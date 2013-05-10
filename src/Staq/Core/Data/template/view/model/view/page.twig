@@ -1,9 +1,9 @@
 {% extends "layout/index.twig" %}
 
-{% block title %}{{ page }}{% endblock %}
+{% block title %}{{ content.name }}{% endblock %}
 
 {% block content %}
     {% autoescape false %}
-        {{ content }}
+        {{ content.content }}
     {% endautoescape %}
 {% endblock %}
