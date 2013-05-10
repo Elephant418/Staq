@@ -3,9 +3,9 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Database;
+namespace Staq\Core\Data\Stack\Storage\Database;
 
-class Entity implements \Stack\IEntity
+class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEntity
 {
 
 
@@ -62,16 +62,6 @@ class Entity implements \Stack\IEntity
     public function fetchByRelated($field, $related, $limit = NULL, &$rows = FALSE)
     {
         return $this->fetch([$field => $related->id], $limit, NULL, $rows);
-    }
-
-    public function extractId(&$data)
-    {
-        $id = NULL;
-        if (isset($data[$this->idField])) {
-            $id = $data[$this->idField];
-            unset($data[$this->idField]);
-        }
-        return $id;
     }
 
     public function deleteByFields($where)
@@ -370,26 +360,5 @@ class Entity implements \Stack\IEntity
         $data[$this->idField] = $model->id;
         return $data;
         // DO: Manage serializes extra fields here ;)
-    }
-
-    protected function getModel()
-    {
-        $modelClass = 'Stack\\Model\\' . \Staq\Util::getStackSubQuery($this);
-        return new $modelClass;
-    }
-
-    protected function resultAsModelList($data)
-    {
-        $list = [];
-        $model = $this->getModel();
-        foreach ($data as $item) {
-            $list[] = $model->byData($item);
-        }
-        return $list;
-    }
-
-    protected function resultAsModel($data)
-    {
-        return $this->getModel()->byData($data);
     }
 }

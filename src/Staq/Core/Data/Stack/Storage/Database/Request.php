@@ -3,7 +3,7 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Database;
+namespace Staq\Core\Data\Stack\Storage\Database;
 
 class Request
 {
@@ -131,7 +131,7 @@ class Request
         foreach ($requests as $request) {
             $request = trim(preg_replace('@(/\*(.|[\r\n])*?\*/)|(--(.*|[\r\n]))@', '', $request));
             if (!empty($request)) {
-                (new \Stack\Database\Request)
+                (new \Stack\Storage\Database\Request)
                     ->setRequest($request)
                     ->execute();
             }

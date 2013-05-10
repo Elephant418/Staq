@@ -24,14 +24,14 @@ class DataTest extends StaqTestCase
     {
         $app = \Staq\App::create($this->projectNamespace)
             ->setPlatform('local');
-        (new \Stack\Database\Request)
+        (new \Stack\Storage\Database\Request)
             ->requireDatabase()
             ->loadMysqlFile($app->getPath('dataset/set.sql'));
     }
 
     protected function tearDown()
     {
-        (new \Stack\Database\Request)->loadMysqlFile(\Staq::App()->getPath('dataset/reset.sql'));
+        (new \Stack\Storage\Database\Request)->loadMysqlFile(\Staq::App()->getPath('dataset/reset.sql'));
     }
 
 

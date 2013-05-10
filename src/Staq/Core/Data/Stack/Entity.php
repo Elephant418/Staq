@@ -5,6 +5,6 @@
 
 namespace Staq\Core\Data\Stack;
 
-class Entity extends Database\Entity
+class Entity extends \Stack\Storage\Database\Entity
 {
 }
