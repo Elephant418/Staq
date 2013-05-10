@@ -47,6 +47,16 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
         return $this->resultAsModel($data);
     }
 
+    public function fetchByField($field, $value, $limit = NULL)
+    {
+        $models = $this->fetchAll();
+        \UArray::doFilterBy($models, $field, $value);
+        if ($limit) {
+            $models = array_slice($models, 0, $limit);
+        }
+        return $models;
+    }
+
     public function fetchByIds($ids)
     {
         $models = [];
