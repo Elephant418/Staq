@@ -1,0 +1,85 @@
+{% extends "layout/base.twig" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ '/twbootstrap/bootstrap.css'|public }}">
+<link rel="stylesheet" href="{{ '/dataTables/DT_bootstrap.css'|public }}">
+<link rel="stylesheet" href="{{ '/select2/select2.css'|public }}">
+<link rel="stylesheet" href="{{ '/bootstrap.css'|public }}">
+<link rel="stylesheet" href="{{ '/twbootstrap/bootstrap-responsive.css'|public }}">
+<style>
+    .select2-container { min-width: 220px }
+</style>
+{% endblock %}
+
+{% block title %}Admin{% endblock %}
+
+{% block body %}
+{% block navbar %}
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="{{ '/'|public }}">Admin</a>
+
+            <div class="nav-collapse">
+                <ul class="nav">
+                    {% if currentUser and currentUser.right == 'admin' %}
+                        {% for label, modelTypes in groupModelTypes %}
+                            {% if modelTypes|length <= 1 %}
+                                <li {% if controller == modelTypes[0] %}class="active"{% endif %}>
+                                    <a href="{{ route( 'Model', 'list', modelTypes[0] ) }}">{{ label }}</a>
+                                </li>
+                            {% else %}
+                                <li class="dropdown" {% if controller in modelTypes %}class="active"{% endif %}>
+                                    <a href="javascript:;" data-toggle="dropdown">{{ label }}</a>
+                                    <ul class="dropdown-menu">
+                                        {% for modelType in modelTypes %}
+                                            <li {% if controller == modelType %}class="active"{% endif %}>
+                                                <a href="{{ route( 'Model', 'list', modelType ) }}">{{ modelType }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </ul>
+
+                <ul class="nav pull-right">
+                    {% if currentUser %}
+                    <li><a>{{ currentUser.name() }}</a></li>
+                    <li><a href="{{ route( 'Auth', 'logout' ) }}">Disconnect</a></li>
+                    {% else %}
+                    <li><a href="{{ route( 'Auth', 'login' ) }}">Connect</a></li>
+                    {% endif %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<div class="container">
+    {% for notification in UINotification %}
+    {% include 'part/alert-message.twig' with notification only %}
+    {% endfor %}
+    {% block content %}
+    {% endblock %}
+</div>
+
+{% block scripts %}
+<script src="{{ public('/twbootstrap/jquery.js') }}"></script>
+<script src="{{ public('/twbootstrap/bootstrap-dropdown.js') }}"></script>
+<script src="{{ public('/twbootstrap/bootstrap-transition.js') }}"></script>
+<script src="{{ public('/twbootstrap/bootstrap-collapse.js') }}"></script>
+<script src="{{ public('/select2/select2.min.js') }}"></script>
+<script>
+    $(".controls select").select2();
+</script>
+{% endblock %}
+{% endblock %}

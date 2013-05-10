@@ -1,0 +1,10 @@
+{% extends "layout/index.twig" %}
+
+{% block content %}
+<h1>List</h1>
+<ul>
+    {% for item in content %}
+    <li>{{ item.name() }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

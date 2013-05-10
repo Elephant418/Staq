@@ -1,0 +1,46 @@
+{% extends "layout/index.twig" %}
+
+{% block content %}
+<h1>{{ controller }} list</h1>
+
+<div class="action">
+    <div class="btn-toolbar">
+        <div class="btn-group">
+            <a class="btn" href="{{ route( 'Model', 'create', controller )  }}"><i class="icon-plus-sign"></i>
+                Create</a>
+            <a class="btn" href="javascript:window.print( );"><i class="icon-print"></i> Print</a>
+        </div>
+    </div>
+</div>
+
+{% if models|length == 0 %}
+<p><em>There is no elements to display</em></p>
+{% else %}
+<table class="table table-bordered table-striped table-data">
+    <thead>
+    <tr>
+        {% for field in fields %}
+            <th>{{ field }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for model in models %}
+    <tr>
+        {% for field in fields %}
+        <td>
+            <a href="{{ route( 'Model', 'view', controller, model.id )  }}">
+                {% if field == 'name()' %}
+                    {{ model.name() }}
+                {% else %}
+                    {{ model.getAttribute( field ) }}
+                {% endif %}
+            </a>
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

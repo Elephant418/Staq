@@ -1,0 +1,28 @@
+{% extends "layout/index.twig" %}
+
+{% block content %}
+<h1>{{ controller }} {{ model.name() }}</h1>
+
+<form method="post" class="form-horizontal">
+
+    {% for name, value in model %}
+        {% set attribute = model.getAttribute(name) %}
+        {% if attribute.editable %}
+            <div class="control-group">
+                <label class="control-label" for="model_{{model.id}}_{{name}}">{{ name }}</label>
+
+                <div class="controls">
+                    {% include find_template( attribute, 'edit' ) with { 'attribute': attribute, 'id':
+                    'model_'~model.id~'_'~name, 'name': 'model['~name~']' } only %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit"><i class="icon-ok"></i> Validate</button>
+        <a class="btn" href="{{ route( 'Model', 'view', controller, model.id ) }}"><i class="icon-arrow-left"></i>
+            Cancel</a>
+    </div>
+</form>
+{% endblock %}

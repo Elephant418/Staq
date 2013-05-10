@@ -1,0 +1,15 @@
+{% set choice = attribute.get() %}
+<select name="{{name}}" id="{{id}}">
+    {% if attribute.allowNull() %}
+    <option value=""
+    {% if choice is null %}selected="selected"{% endif %} >
+    No selection
+    </option>
+    {% endif %}
+    {% for option in attribute.getOptions() %}
+    <option value="{{ option }}"
+    {% if option == choice %}selected="selected"{% endif %} >
+    {{ option }}
+    </option>
+    {% endfor %}
+</select>

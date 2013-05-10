@@ -1,0 +1,5 @@
+{% if attribute.get().exists() %}
+<a href="{{ route( 'Model', 'view', attribute.getRemoteModelType(), attribute.get().id )  }}">
+    {{ attribute.get().name() }}
+</a>
+{% endif %}

@@ -1,0 +1,50 @@
+body {
+    padding: 60px 0; /* 60px to make the container go all the way to the bottom of the topbar */
+}
+
+h1,
+.action {
+    margin-bottom: 18px;
+}
+
+.action.action-table {
+    margin-bottom: 0;
+}
+
+label b {
+    float: left;
+    padding-top: 5px;
+    text-align: right;
+    width: 140px;
+    display: block;
+    margin-bottom: 5px;
+    margin-right: 20px;
+}
+
+.print-only {
+    display: none;
+}
+
+@media print {
+    .action,
+    .navbar {
+        display: none;
+    }
+
+    a,
+    a:hover,
+    a:focus,
+    a:active {
+        color: #333333;
+    }
+
+    .print-only {
+        display: block;
+    }
+
+    .table td {
+        border-top: 1px solid #DDDDDD;
+        line-height: 18px;
+        padding: 4px;
+    }
+}

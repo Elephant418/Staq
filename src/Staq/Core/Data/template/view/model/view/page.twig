@@ -1,0 +1,9 @@
+{% extends "layout/index.twig" %}
+
+{% block title %}{{ content.name }}{% endblock %}
+
+{% block content %}
+    {% autoescape false %}
+        {{ content.content }}
+    {% endautoescape %}
+{% endblock %}
