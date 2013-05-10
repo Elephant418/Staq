@@ -15,6 +15,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
      *************************************************************************/
     protected $name;
     protected $idField = "name";
+    protected $extensions = ['json', 'md', 'html', 'php', 'txt'];
 
 
     /* CONSTRUCTOR
@@ -34,15 +35,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
     public function fetchById($id)
     {
         $data = [];
-        $folder = 'data/'.$this->name.'/'.$id;
-        $metaPath = \Staq::App()->getFilePath($folder.'.json');
-        if ($metaPath) {
-            $data = json_decode(file_get_contents($metaPath), TRUE);
-        }
-        $contentPath = \Staq::App()->getFilePath($folder.'.md');
-        if ($contentPath) {
-            $data[$this->idField] = $id;
-            $data['content'] = MarkdownExtra::defaultTransform(file_get_contents($contentPath));
+        foreach ($this->globDataFile($id) as $filename) {
+            // TODO merge it
+            $data = array_merge($data, $this->fetchFileData($filename));
         }
         return $this->resultAsModel($data);
     }
@@ -71,22 +66,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
 
     public function fetchAll($limit = NULL, &$rows = FALSE)
     {
-        $path = '/data/'.$this->name;
-        $folders = \Staq::App()->getExtensions();
-        array_walk($folders, function (&$a) use ($path) {
-            $a = realpath($a . $path);
-        });
-        $folders = array_filter($folders, function ($a) {
-            return (!empty($a));
-        });
         $ids = [];
-        foreach ($folders as $folder) {
-            foreach (glob($folder.'/*\.json') as $filename) {
-                $ids[] = \UString::substrBeforeLast(basename($filename), '.');
-            }
-            foreach (glob($folder.'/*\.md') as $filename) {
-                $ids[] = \UString::substrBeforeLast(basename($filename), '.');
-            }
+        foreach ($this->globDataFile('*') as $filename) {
+            $ids[] = \UString::substrBeforeLast(basename($filename), '.');
         }
         return $this->fetchByIds(array_unique($ids));
     }
@@ -99,5 +81,51 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
         if (isset($data[$this->idField])) {
             return $data[$this->idField];
         }
+    }
+
+
+    /* PROTECTED METHODS
+     *************************************************************************/
+    public function fetchFileData($filePath)
+    {
+        $data = [];
+        $data[$this->idField] = \UString::substrBeforeLast(basename($filePath), '.');
+        $extension = \UString::substrAfterLast(basename($filePath), '.');
+        if ($extension == 'json') {
+            $data = array_merge($data, json_decode(file_get_contents($filePath), TRUE));
+        } else if ($extension == 'md'){
+            $data['content'] = MarkdownExtra::defaultTransform(file_get_contents($filePath));
+        } else if ($extension == 'html'){
+            $data['content'] = file_get_contents($filePath);
+        } else if ($extension == 'php'){
+            ob_start();
+            include($filePath);
+            $content = ob_get_contents();
+            ob_end_clean();
+            $data['content'] = $content;
+        } else if ($extension == 'txt'){
+            $data['content'] = str_replace(PHP_EOL, HTML_EOL, htmlentities(file_get_contents($filePath)));
+        }
+        return $data;
+    }
+
+    public function globDataFile($pattern)
+    {
+        $path = '/data/'.$this->name;
+        $folders = \Staq::App()->getExtensions();
+        array_walk($folders, function (&$a) use ($path) {
+            $a = realpath($a . $path);
+        });
+        $folders = array_filter($folders, function ($a) {
+            return (!empty($a));
+        });
+        $files = [];
+        foreach ($folders as $folder) {
+            $extensions = implode(',', $this->extensions);
+            foreach (glob($folder.'/'.$pattern.'\.{'.$extensions.'}', GLOB_BRACE) as $filename) {
+                $files[] = $filename;
+            }
+        }
+        return $files;
     }
 }
