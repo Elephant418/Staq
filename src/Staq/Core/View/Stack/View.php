@@ -86,7 +86,7 @@ class View extends \Stack\Util\ArrayObject
      *************************************************************************/
     public static function findTemplate($stack, $action = NULL)
     {
-        $template = strtolower(\Staq\Util::getStackSubQuery($stack, '/')) . '.html';
+        $template = strtolower(\Staq\Util::getStackSubQuery($stack, '/')) . '.twig';
         $template = str_replace('_', '/', $template);
         if (!empty($action)) {
             $template = $action . '/' . $template;
@@ -97,9 +97,9 @@ class View extends \Stack\Util\ArrayObject
                 break;
             }
             if (\UString::has($template, '/')) {
-                $template = \UString::substrBeforeLast($template, '/') . '.html';
+                $template = \UString::substrBeforeLast($template, '/') . '.twig';
             } else {
-                $template = 'index.html';
+                $template = 'index.twig';
                 break;
             }
         }

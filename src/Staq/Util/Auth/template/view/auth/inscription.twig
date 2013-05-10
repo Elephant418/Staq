@@ -1,4 +1,4 @@
-{% extends "layout/index.html" %}
+{% extends "layout/index.twig" %}
 
 {% block content %}
 <h1>Inscription</h1>
@@ -7,13 +7,13 @@
 {% else %}
 <form method="post" action="{{ route( 'Auth', 'inscription' ) }}">
 
-    {% include 'part/alert-message.html' with { 'message': form.getInputErrorMessage('login'), 'type': 'error' } only %}
+    {% include 'part/alert-message.twig' with { 'message': form.getInputErrorMessage('login'), 'type': 'error' } only %}
     <label>Login: <input type="text" name="inscription[login]" value="{{ form.get('login') }}"/></label>
 
-    {% include 'part/alert-message.html' with { 'message': form.getInputErrorMessage('password'), 'type': 'error' } only %}
+    {% include 'part/alert-message.twig' with { 'message': form.getInputErrorMessage('password'), 'type': 'error' } only %}
     <label>Password: <input type="password" name="inscription[password]"/></label>
 
-    {% include 'part/alert-message.html' with { 'message': form.getInputErrorMessage('code'), 'type': 'error' } only %}
+    {% include 'part/alert-message.twig' with { 'message': form.getInputErrorMessage('code'), 'type': 'error' } only %}
     <label>Code Beta: <input type="text" name="inscription[code]" value="{{ form.get('code') }}"/></label>
 
     <input type="hidden" name="redirect" value="{{ redirect }}"/>

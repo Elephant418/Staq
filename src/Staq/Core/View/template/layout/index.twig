@@ -19,7 +19,7 @@
 <body>
 {% block body %}
 {% for notification in UINotification %}
-{% include 'part/alert-message.html' with notification only %}
+{% include 'part/alert-message.twig' with notification only %}
 {% endfor %}
 {% block content %}
 {% endblock %}
