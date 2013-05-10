@@ -9,8 +9,7 @@ class Boolean extends Boolean\__Parent
 {
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -24,8 +23,7 @@ class Boolean extends Boolean\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE METHODS
+    /* PUBLIC DATABASE METHODS
      *************************************************************************/
     public function setSeed($seed)
     {

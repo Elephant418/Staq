@@ -9,8 +9,7 @@ class Error extends Error\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public static $setting = [
         'route.view.uri' => '/error/:code',
@@ -18,8 +17,7 @@ class Error extends Error\__Parent
     ];
 
 
-    /*************************************************************************
-    ACTION METHODS
+    /* ACTION METHODS
      *************************************************************************/
     public function actionView($code)
     {

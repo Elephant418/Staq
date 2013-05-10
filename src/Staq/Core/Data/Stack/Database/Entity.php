@@ -9,8 +9,7 @@ class Entity implements \Stack\IEntity
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public static $setting = [
         'database.idField' => 'id',
@@ -23,8 +22,7 @@ class Entity implements \Stack\IEntity
     protected $fields;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct()
     {
@@ -36,8 +34,7 @@ class Entity implements \Stack\IEntity
     }
 
 
-    /*************************************************************************
-    FETCHING METHODS
+    /* FETCHING METHODS
      *************************************************************************/
     public function fetchById($id)
     {
@@ -146,8 +143,7 @@ class Entity implements \Stack\IEntity
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE REQUEST
+    /* PUBLIC DATABASE REQUEST
      *************************************************************************/
     public function delete($model = NULL)
     {
@@ -184,8 +180,7 @@ class Entity implements \Stack\IEntity
     }
 
 
-    /*************************************************************************
-    PRIVATE FETCH METHODS
+    /* PRIVATE FETCH METHODS
      *************************************************************************/
     protected function fetch($fields = [], $limit = NULL, $order = NULL, &$rows = FALSE)
     {
@@ -245,8 +240,7 @@ class Entity implements \Stack\IEntity
     }
 
 
-    /*************************************************************************
-    PRIVATE CORE METHODS
+    /* PRIVATE CORE METHODS
      *************************************************************************/
     protected function getBaseSelect($rows = FALSE)
     {

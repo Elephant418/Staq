@@ -13,14 +13,12 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $projectNamespace = 'Test\\Staq\\Project\\';
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct()
     {
@@ -32,8 +30,7 @@ class StaqTestCase extends \PHPUnit_Framework_TestCase
     }
 
 
-    /*************************************************************************
-    UTIL METHODS
+    /* UTIL METHODS
      *************************************************************************/
     public function getProjectClass($name)
     {

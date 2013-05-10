@@ -13,8 +13,7 @@ class RouterTest extends WebTestCase
 {
 
 
-    /*************************************************************************
-    GLOBAL METHODS
+    /* GLOBAL METHODS
      *************************************************************************/
     protected function setUp()
     {
@@ -25,8 +24,7 @@ class RouterTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    ERROR CONTROLLER TEST METHODS
+    /* ERROR CONTROLLER TEST METHODS
      *************************************************************************/
     public function test_extended_error_controller()
     {
@@ -35,8 +33,7 @@ class RouterTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    ANONYMOUS CONTROLLER TEST METHODS
+    /* ANONYMOUS CONTROLLER TEST METHODS
      *************************************************************************/
     public function test_anonymous_controller__magic_route()
     {
@@ -87,8 +84,7 @@ class RouterTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    PUBLIC FILE CONTROLLER TEST METHODS
+    /* PUBLIC FILE CONTROLLER TEST METHODS
      *************************************************************************/
     public function test_public_controller__match()
     {

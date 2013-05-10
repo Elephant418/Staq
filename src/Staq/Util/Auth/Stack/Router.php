@@ -9,8 +9,7 @@ class Router extends Router\__Parent
 {
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function callController($controller, $action, $route)
     {

@@ -9,16 +9,14 @@ interface IAttribute
 {
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get();
 
     public function set($value);
 
 
-    /*************************************************************************
-    PUBLIC DATABASE METHODS
+    /* PUBLIC DATABASE METHODS
      *************************************************************************/
     public function getSeed();
 

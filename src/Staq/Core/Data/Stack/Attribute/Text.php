@@ -9,8 +9,7 @@ class Text extends Text\__Parent
 {
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {

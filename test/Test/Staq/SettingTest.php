@@ -13,8 +13,7 @@ class SettingTest extends StaqTestCase
 {
 
 
-    /*************************************************************************
-    TEST METHODS
+    /* TEST METHODS
      *************************************************************************/
     public function test_unexisting_setting()
     {

@@ -9,15 +9,13 @@ class Application extends Application\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $router;
     protected $controllers = [];
 
 
-    /*************************************************************************
-    GETTER
+    /* GETTER
      *************************************************************************/
     public function getController($name)
     {
@@ -40,8 +38,7 @@ class Application extends Application\__Parent
     }
 
 
-    /*************************************************************************
-    SETTER
+    /* SETTER
      *************************************************************************/
     public function addController($uri, $controller)
     {
@@ -50,8 +47,7 @@ class Application extends Application\__Parent
     }
 
 
-    /*************************************************************************
-    INITIALIZATION
+    /* INITIALIZATION
      *************************************************************************/
     public function initialize()
     {
@@ -67,8 +63,7 @@ class Application extends Application\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function run()
     {

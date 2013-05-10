@@ -9,8 +9,7 @@ class Application
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $settings;
     protected $extensions;
@@ -19,8 +18,7 @@ class Application
     protected $initialized = FALSE;
 
 
-    /*************************************************************************
-    GETTER
+    /* GETTER
      *************************************************************************/
     public function getController($name)
     {
@@ -94,8 +92,7 @@ class Application
     }
 
 
-    /*************************************************************************
-    SETTER
+    /* SETTER
      *************************************************************************/
     public function setPlatform($platform)
     {
@@ -113,8 +110,7 @@ class Application
     }
 
 
-    /*************************************************************************
-    INITIALIZATION
+    /* INITIALIZATION
      *************************************************************************/
     public function __construct($extensions, $baseUri, $platform)
     {

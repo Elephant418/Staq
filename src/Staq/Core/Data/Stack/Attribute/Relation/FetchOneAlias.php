@@ -9,8 +9,7 @@ class FetchOneAlias extends FetchAlias
 {
 
 
-    /*************************************************************************
-    DEBUG METHODS
+    /* DEBUG METHODS
      *************************************************************************/
     public function __toString()
     {

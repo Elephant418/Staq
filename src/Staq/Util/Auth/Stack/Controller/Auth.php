@@ -11,8 +11,7 @@ class Auth extends Auth\__Parent
 {
 
 
-    /*************************************************************************
-    CONSTANTS
+    /* CONSTANTS
      *************************************************************************/
     const MSG_INSCRIPTION_VALID = 'You are now connected as %s.';
     const MSG_INSCRIPTION_KO = 'This username is not free.';
@@ -21,8 +20,7 @@ class Auth extends Auth\__Parent
     const MSG_LOGOUT_VALID = 'You are now deconnected.';
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     static public $currentUser;
     public static $setting = [
@@ -33,8 +31,7 @@ class Auth extends Auth\__Parent
     ];
 
 
-    /*************************************************************************
-    FORMS METHODS
+    /* FORMS METHODS
      *************************************************************************/
     public function getInscriptionForm()
     {
@@ -57,8 +54,7 @@ class Auth extends Auth\__Parent
     }
 
 
-    /*************************************************************************
-    ACTION METHODS
+    /* ACTION METHODS
      *************************************************************************/
     public function actionInscription()
     {
@@ -116,8 +112,7 @@ class Auth extends Auth\__Parent
     }
 
 
-    /*************************************************************************
-    PROTECTED METHODS
+    /* PROTECTED METHODS
      *************************************************************************/
     protected function getRedirectUri()
     {
@@ -138,8 +133,7 @@ class Auth extends Auth\__Parent
     }
 
 
-    /*************************************************************************
-    UTIL METHODS
+    /* UTIL METHODS
      *************************************************************************/
     public function currentUser()
     {

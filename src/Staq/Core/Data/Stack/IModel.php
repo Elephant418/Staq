@@ -9,20 +9,17 @@ interface IModel
 {
 
 
-    /*************************************************************************
-    GETTER
+    /* GETTER
      *************************************************************************/
     public function exists();
 
 
-    /*************************************************************************
-    INITIALIZATION
+    /* INITIALIZATION
      *************************************************************************/
     public function byData($data);
 
 
-    /*************************************************************************
-    PUBLIC DATABASE REQUEST
+    /* PUBLIC DATABASE REQUEST
      *************************************************************************/
     public function delete();
 
@@ -31,8 +28,7 @@ interface IModel
     public function extractSeeds();
 
 
-    /*************************************************************************
-    SPECIFIC MODEL ACCESSOR METHODS
+    /* SPECIFIC MODEL ACCESSOR METHODS
      *************************************************************************/
     public function getAttribute($index);
 

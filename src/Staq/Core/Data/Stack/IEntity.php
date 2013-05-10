@@ -9,8 +9,7 @@ interface IEntity
 {
 
 
-    /*************************************************************************
-    FETCHING METHODS
+    /* FETCHING METHODS
      *************************************************************************/
     public function fetchById($id);
 
@@ -23,8 +22,7 @@ interface IEntity
     public function deleteByFields($where);
 
 
-    /*************************************************************************
-    PUBLIC DATABASE REQUEST
+    /* PUBLIC DATABASE REQUEST
      *************************************************************************/
     public function delete($model);
 

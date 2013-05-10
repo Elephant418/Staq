@@ -9,8 +9,7 @@ class Staq
     const VERSION = '0.5';
 
 
-    /*************************************************************************
-    STATIC SHORTHAND METHODS
+    /* STATIC SHORTHAND METHODS
      *************************************************************************/
     public static function App()
     {

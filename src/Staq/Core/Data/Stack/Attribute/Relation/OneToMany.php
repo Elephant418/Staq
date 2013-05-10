@@ -9,8 +9,7 @@ class OneToMany extends OneToMany\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $changed = FALSE;
     protected $model;
@@ -19,8 +18,7 @@ class OneToMany extends OneToMany\__Parent
     protected $relatedAttributeName;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
@@ -39,8 +37,7 @@ class OneToMany extends OneToMany\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -82,8 +79,7 @@ class OneToMany extends OneToMany\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE METHODS
+    /* PUBLIC DATABASE METHODS
      *************************************************************************/
     public function getSeed()
     {
@@ -95,8 +91,7 @@ class OneToMany extends OneToMany\__Parent
     }
 
 
-    /*************************************************************************
-    HANDLER METHODS
+    /* HANDLER METHODS
      *************************************************************************/
     public function saveHandler()
     {
@@ -107,8 +102,7 @@ class OneToMany extends OneToMany\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function getRelatedModels()
     {
@@ -133,8 +127,7 @@ class OneToMany extends OneToMany\__Parent
     }
 
 
-    /*************************************************************************
-    DEBUG METHODS
+    /* DEBUG METHODS
      *************************************************************************/
     public function __toString()
     {

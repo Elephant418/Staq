@@ -12,8 +12,7 @@ class DateTime extends DateTime\__Parent
     static $mysql_format_regex = '/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/';
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -46,8 +45,7 @@ class DateTime extends DateTime\__Parent
     }
 
 
-    /*************************************************************************
-    DEBUG METHODS
+    /* DEBUG METHODS
      *************************************************************************/
     public function __toString()
     {

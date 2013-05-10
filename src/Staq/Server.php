@@ -9,8 +9,7 @@ class Server
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public static $application;
     public static $autoloader;
@@ -19,8 +18,7 @@ class Server
     public $namespaces = [];
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct()
     {
@@ -30,8 +28,7 @@ class Server
     }
 
 
-    /*************************************************************************
-    SETTER METHODS
+    /* SETTER METHODS
      *************************************************************************/
     public function addApplication($namespace, $listenings = NULL)
     {
@@ -57,8 +54,7 @@ class Server
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function createApplication($namespace = 'Staq\Core\Ground', $baseUri = NULL, $platform = NULL)
     {
@@ -104,8 +100,7 @@ class Server
     }
 
 
-    /*************************************************************************
-    APPLICATION SWITCH SETTINGS
+    /* APPLICATION SWITCH SETTINGS
      *************************************************************************/
     protected function getCurrentPlatform($request, &$baseUri)
     {
@@ -155,8 +150,7 @@ class Server
     }
 
 
-    /*************************************************************************
-    EXTENSIONS PARSING SETTINGS
+    /* EXTENSIONS PARSING SETTINGS
      *************************************************************************/
     protected function findExtensions($namespace)
     {

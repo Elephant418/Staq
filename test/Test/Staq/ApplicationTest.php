@@ -15,14 +15,12 @@ class ApplicationTest extends StaqTestCase
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $starterNamespaces = ['Staq\\App\\Starter', 'Staq\\Core\\View', 'Staq\\Core\\Router', 'Staq\\Core\\Ground', 'Pixel418\\Iniliq'];
 
 
-    /*************************************************************************
-    UTIL METHODS
+    /* UTIL METHODS
      *************************************************************************/
     public function appendProjectNamespace($name)
     {
@@ -31,8 +29,7 @@ class ApplicationTest extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    EXTENSIONS TEST METHODS
+    /* EXTENSIONS TEST METHODS
      *************************************************************************/
     public function test_empty_project__extensions()
     {
@@ -92,8 +89,7 @@ class ApplicationTest extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    EXTENSIONS TEST METHODS
+    /* EXTENSIONS TEST METHODS
      *************************************************************************/
     public function test_error_reporting__none()
     {

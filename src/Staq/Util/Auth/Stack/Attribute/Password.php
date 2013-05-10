@@ -9,14 +9,12 @@ class Password extends Password\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     const CRYPT_SEED = 'dacz:;,aafapojn';
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -37,8 +35,7 @@ class Password extends Password\__Parent
     }
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function encryptPassword($password)
     {

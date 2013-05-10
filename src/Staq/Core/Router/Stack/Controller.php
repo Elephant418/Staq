@@ -9,15 +9,13 @@ class Controller implements \Stack\IController
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $routes = [];
     public static $setting = [];
 
 
-    /*************************************************************************
-    GETTER
+    /* GETTER
      *************************************************************************/
     public function getRoutes()
     {
@@ -25,8 +23,7 @@ class Controller implements \Stack\IController
     }
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct()
     {
@@ -34,8 +31,7 @@ class Controller implements \Stack\IController
     }
 
 
-    /*************************************************************************
-    ACTION METHODS
+    /* ACTION METHODS
      *************************************************************************/
     public function actionView()
     {
@@ -43,8 +39,7 @@ class Controller implements \Stack\IController
     }
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function createView($action='view')
     {

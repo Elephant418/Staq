@@ -9,15 +9,13 @@ class ManyToOne extends ManyToOne\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $remoteModel;
     protected $remoteModelType;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
@@ -30,8 +28,7 @@ class ManyToOne extends ManyToOne\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -63,8 +60,7 @@ class ManyToOne extends ManyToOne\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE METHODS
+    /* PUBLIC DATABASE METHODS
      *************************************************************************/
     public function getSeed()
     {
@@ -78,8 +74,7 @@ class ManyToOne extends ManyToOne\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function getRelatedModels()
     {
@@ -103,8 +98,7 @@ class ManyToOne extends ManyToOne\__Parent
     }
 
 
-    /*************************************************************************
-    DEBUG METHODS
+    /* DEBUG METHODS
      *************************************************************************/
     public function __toString()
     {

@@ -6,8 +6,7 @@ class Model extends Model\__Parent
 {
 
 
-    /*************************************************************************
-    ACTION METHODS
+    /* ACTION METHODS
      *************************************************************************/
     public function actionList()
     {
@@ -28,8 +27,7 @@ class Model extends Model\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function getRouteAttributes($model)
     {
@@ -40,8 +38,7 @@ class Model extends Model\__Parent
     }
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function createView($action='view')
     {

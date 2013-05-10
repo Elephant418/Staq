@@ -9,8 +9,7 @@ class FetchAlias extends FetchAlias\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $editable = FALSE;
     protected $remoteModels = NULL;
@@ -18,8 +17,7 @@ class FetchAlias extends FetchAlias\__Parent
     protected $model;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
@@ -38,8 +36,7 @@ class FetchAlias extends FetchAlias\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -61,8 +58,7 @@ class FetchAlias extends FetchAlias\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function getRemoteEntity()
     {
@@ -80,8 +76,7 @@ class FetchAlias extends FetchAlias\__Parent
     }
 
 
-    /*************************************************************************
-    DEBUG METHODS
+    /* DEBUG METHODS
      *************************************************************************/
     public function __toString()
     {

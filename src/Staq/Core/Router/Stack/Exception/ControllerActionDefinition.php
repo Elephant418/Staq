@@ -9,8 +9,7 @@ class ControllerActionDefinition extends ControllerActionDefinition\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $defaultCode = 500;
 }

@@ -13,8 +13,7 @@ class AutoloaderTest extends StaqTestCase
 {
 
 
-    /*************************************************************************
-    TEST METHODS
+    /* TEST METHODS
      *************************************************************************/
     public function test_unexisting_class__simple()
     {

@@ -9,15 +9,13 @@ class Exception extends \Exception
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $defaultMessage = NULL;
     protected $defaultCode = 0;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct($message = NULL, $code = NULL, \Exception $previous = NULL)
     {

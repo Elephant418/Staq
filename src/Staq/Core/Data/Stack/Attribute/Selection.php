@@ -9,15 +9,13 @@ class Selection extends Selection\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $options;
     protected $allowNull = TRUE;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
@@ -33,8 +31,7 @@ class Selection extends Selection\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -55,8 +52,7 @@ class Selection extends Selection\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE METHODS
+    /* PUBLIC DATABASE METHODS
      *************************************************************************/
     public function getSeed()
     {
@@ -66,8 +62,7 @@ class Selection extends Selection\__Parent
         return reset(array_keys($this->options));
     }
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function getOptions()
     {

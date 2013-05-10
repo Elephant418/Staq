@@ -9,8 +9,7 @@ abstract class Application
 {
 
 
-    /*************************************************************************
-    STATIC SHORTHAND METHODS
+    /* STATIC SHORTHAND METHODS
      *************************************************************************/
     public static function create($path = 'Staq\Core\Ground', $baseUri = NULL, $platform = NULL)
     {

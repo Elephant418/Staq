@@ -13,8 +13,7 @@ class ViewTest extends WebTestCase
 {
 
 
-    /*************************************************************************
-    TEST METHODS
+    /* TEST METHODS
      *************************************************************************/
     public function test_text_templating__no_variable()
     {
@@ -67,8 +66,7 @@ class ViewTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    TWIG EXTENSION TEST METHODS
+    /* TWIG EXTENSION TEST METHODS
      *************************************************************************/
     public function test_public_filter()
     {

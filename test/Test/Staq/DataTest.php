@@ -13,14 +13,12 @@ class DataTest extends StaqTestCase
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $connection;
 
 
-    /*************************************************************************
-    GLOBAL METHODS
+    /* GLOBAL METHODS
      *************************************************************************/
     protected function setUp()
     {
@@ -37,8 +35,7 @@ class DataTest extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    VARCHAR SCUD TEST METHODS
+    /* VARCHAR SCUD TEST METHODS
      *************************************************************************/
     public function test_select__no_match()
     {
@@ -130,8 +127,7 @@ class DataTest extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    MANY TO ONE RELATION SCUD TEST METHODS
+    /* MANY TO ONE RELATION SCUD TEST METHODS
      *************************************************************************/
     public function test_select_relation__many_to_one__no_match()
     {
@@ -164,8 +160,7 @@ class DataTest extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    ONE TO MANY RELATION SCUD TEST METHODS
+    /* ONE TO MANY RELATION SCUD TEST METHODS
      *************************************************************************/
     public function test_select_relation__one_to_many__no_match()
     {

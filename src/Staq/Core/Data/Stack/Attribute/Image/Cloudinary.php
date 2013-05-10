@@ -9,16 +9,14 @@ class Cloudinary extends Cloudinary\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $model;
     protected $transformation = [];
     protected $original;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
@@ -39,8 +37,7 @@ class Cloudinary extends Cloudinary\__Parent
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {

@@ -9,8 +9,7 @@ class View extends View\__Parent
 {
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function addVariables()
     {

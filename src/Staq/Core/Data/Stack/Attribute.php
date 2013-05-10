@@ -9,16 +9,14 @@ class Attribute implements \Stack\IAttribute
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $editable = TRUE;
     protected $seed;
     protected $defaultSeed;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function bySetting($model, $setting)
     {
@@ -45,8 +43,7 @@ class Attribute implements \Stack\IAttribute
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -64,8 +61,7 @@ class Attribute implements \Stack\IAttribute
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE METHODS
+    /* PUBLIC DATABASE METHODS
      *************************************************************************/
     public function getSeed()
     {
@@ -81,16 +77,14 @@ class Attribute implements \Stack\IAttribute
     }
 
 
-    /*************************************************************************
-    HANDLER METHODS
+    /* HANDLER METHODS
      *************************************************************************/
     public function saveHandler()
     {
     }
 
 
-    /*************************************************************************
-    DEBUG METHODS
+    /* DEBUG METHODS
      *************************************************************************/
     public function __toString()
     {

@@ -9,15 +9,13 @@ class View extends \Stack\Util\ArrayObject
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $twig;
     protected $debug = FALSE;
 
 
-    /*************************************************************************
-    CONSTRUCTOR METHODS
+    /* CONSTRUCTOR METHODS
      *************************************************************************/
     public function __construct()
     {
@@ -47,8 +45,7 @@ class View extends \Stack\Util\ArrayObject
     }
 
 
-    /*************************************************************************
-    PUBLIC METHODS
+    /* PUBLIC METHODS
      *************************************************************************/
     public function render()
     {
@@ -69,8 +66,7 @@ class View extends \Stack\Util\ArrayObject
     }
 
 
-    /*************************************************************************
-    OVERRIDABLE METHODS
+    /* OVERRIDABLE METHODS
      *************************************************************************/
     protected function entryGet()
     {
@@ -86,8 +82,7 @@ class View extends \Stack\Util\ArrayObject
     }
 
 
-    /*************************************************************************
-    STATIC METHODS
+    /* STATIC METHODS
      *************************************************************************/
     public static function findTemplate($stack, $action = NULL)
     {
@@ -112,8 +107,7 @@ class View extends \Stack\Util\ArrayObject
     }
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function getTwigEnvironmentLoader()
     {

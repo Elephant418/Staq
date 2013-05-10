@@ -9,16 +9,14 @@ class Autoloader
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $extensions = [];
     static public $initialized = FALSE;
     static public $cacheFile;
 
 
-    /*************************************************************************
-    INITIALIZATION
+    /* INITIALIZATION
      *************************************************************************/
     public function __construct($extensions)
     {
@@ -38,8 +36,7 @@ class Autoloader
     }
 
 
-    /*************************************************************************
-    TOP-LEVEL AUTOLOAD
+    /* TOP-LEVEL AUTOLOAD
      *************************************************************************/
     public function autoload($class)
     {
@@ -57,8 +54,7 @@ class Autoloader
     }
 
 
-    /*************************************************************************
-    FILE CLASS MANAGEMENT
+    /* FILE CLASS MANAGEMENT
      *************************************************************************/
     protected function loadStackClass($class)
     {
@@ -114,8 +110,7 @@ class Autoloader
     }
 
 
-    /*************************************************************************
-    CLASS DECLARATION
+    /* CLASS DECLARATION
      *************************************************************************/
     protected function classExists($class)
     {

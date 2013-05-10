@@ -9,16 +9,14 @@ class PublicFile extends PublicFile\__Parent
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public static $setting = [
         'route.view.uri' => '/*'
     ];
 
 
-    /*************************************************************************
-    ACTION METHODS
+    /* ACTION METHODS
      *************************************************************************/
     public function actionView()
     {
@@ -36,8 +34,7 @@ class PublicFile extends PublicFile\__Parent
     }
 
 
-    /*************************************************************************
-    PRIVATE METHODS
+    /* PRIVATE METHODS
      *************************************************************************/
     protected function getPublicPath()
     {

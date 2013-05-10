@@ -9,16 +9,14 @@ class Model extends \ArrayObject implements \Stack\IModel
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $id;
     protected $schemaAttributeNames = [];
     public $entity;
 
 
-    /*************************************************************************
-    GETTER
+    /* GETTER
      *************************************************************************/
     public function exists()
     {
@@ -31,8 +29,7 @@ class Model extends \ArrayObject implements \Stack\IModel
     }
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct()
     {
@@ -82,8 +79,7 @@ class Model extends \ArrayObject implements \Stack\IModel
     }
 
 
-    /*************************************************************************
-    INITIALIZATION
+    /* INITIALIZATION
      *************************************************************************/
     public function byData($data)
     {
@@ -103,8 +99,7 @@ class Model extends \ArrayObject implements \Stack\IModel
     }
 
 
-    /*************************************************************************
-    PUBLIC DATABASE REQUEST
+    /* PUBLIC DATABASE REQUEST
      *************************************************************************/
     public function delete()
     {
@@ -140,8 +135,7 @@ class Model extends \ArrayObject implements \Stack\IModel
     }
 
 
-    /*************************************************************************
-    SPECIFIC MODEL ACCESSOR METHODS
+    /* SPECIFIC MODEL ACCESSOR METHODS
      *************************************************************************/
     public function getAttribute($index)
     {
@@ -151,8 +145,7 @@ class Model extends \ArrayObject implements \Stack\IModel
     }
 
 
-    /*************************************************************************
-    HERITED ACCESSOR METHODS
+    /* HERITED ACCESSOR METHODS
      *************************************************************************/
     public function get($index)
     {
@@ -191,8 +184,7 @@ class Model extends \ArrayObject implements \Stack\IModel
     }
 
 
-    /*************************************************************************
-    PHP MEHODS
+    /* PHP MEHODS
      *************************************************************************/
     public function __toString()
     {

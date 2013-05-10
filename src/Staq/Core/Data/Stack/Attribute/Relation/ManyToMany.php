@@ -9,15 +9,13 @@ class ManyToMany extends OneToMany
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     protected $table;
     protected $remoteAttributeName;
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function initBySetting($model, $setting)
     {
@@ -35,8 +33,7 @@ class ManyToMany extends OneToMany
     }
 
 
-    /*************************************************************************
-    PUBLIC USER METHODS
+    /* PUBLIC USER METHODS
      *************************************************************************/
     public function get()
     {
@@ -48,8 +45,7 @@ class ManyToMany extends OneToMany
     }
 
 
-    /*************************************************************************
-    HANDLER METHODS
+    /* HANDLER METHODS
      *************************************************************************/
     public function saveHandler()
     {

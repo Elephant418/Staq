@@ -13,8 +13,7 @@ class WebTestCase extends StaqTestCase
 {
 
 
-    /*************************************************************************
-    URL SIMULATE METHODS
+    /* URL SIMULATE METHODS
      *************************************************************************/
     public function getRequestUrl($url, $method = 'GET')
     {
@@ -35,8 +34,7 @@ class WebTestCase extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    HTML OUTPUT TEST METHODS
+    /* HTML OUTPUT TEST METHODS
      *************************************************************************/
     protected function setUp()
     {
@@ -57,8 +55,7 @@ class WebTestCase extends StaqTestCase
     }
 
 
-    /*************************************************************************
-    HEADERS TEST METHODS
+    /* HEADERS TEST METHODS
      *************************************************************************/
     public function is_error_document($code = 404)
     {

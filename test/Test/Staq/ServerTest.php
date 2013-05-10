@@ -13,14 +13,12 @@ class ServerTest extends WebTestCase
 {
 
 
-    /*************************************************************************
-    ATTRIBUTES
+    /* ATTRIBUTES
      *************************************************************************/
     public $starterNamespaces = ['Staq\\App\\Starter', 'Staq\\Core\\View', 'Staq\\Core\\Router', 'Staq\\Core\\Ground', 'Pixel418\\Iniliq'];
 
 
-    /*************************************************************************
-    UTIL METHODS
+    /* UTIL METHODS
      *************************************************************************/
     public function appendProjectNamespace($name)
     {
@@ -29,8 +27,7 @@ class ServerTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    CONSTRUCTOR
+    /* CONSTRUCTOR
      *************************************************************************/
     public function __construct()
     {
@@ -38,8 +35,7 @@ class ServerTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    GLOBAL METHODS
+    /* GLOBAL METHODS
      *************************************************************************/
     protected function setUp()
     {
@@ -48,8 +44,7 @@ class ServerTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    SIMPLE PLATFORM & SIMPLE APPLICATION TEST METHODS
+    /* SIMPLE PLATFORM & SIMPLE APPLICATION TEST METHODS
      *************************************************************************/
     public function test_empty_project__extensions()
     {
@@ -120,8 +115,7 @@ class ServerTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    PLATFORM SWITCHER TEST METHODS
+    /* PLATFORM SWITCHER TEST METHODS
      *************************************************************************/
     public function test_platform_switcher__default()
     {
@@ -174,8 +168,7 @@ class ServerTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    APPLICATION SWITCHER TEST METHODS
+    /* APPLICATION SWITCHER TEST METHODS
      *************************************************************************/
     public function test_application_switcher__default()
     {
@@ -228,8 +221,7 @@ class ServerTest extends WebTestCase
     }
 
 
-    /*************************************************************************
-    APPLICATION & PLATFORM SWITCHER TEST METHODS
+    /* APPLICATION & PLATFORM SWITCHER TEST METHODS
      *************************************************************************/
     public function test_application_n_platform_switcher__default()
     {

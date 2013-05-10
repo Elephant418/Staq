@@ -9,8 +9,7 @@ class Error extends Error\__Parent
 {
 
 
-    /*************************************************************************
-    ACTION METHODS
+    /* ACTION METHODS
      *************************************************************************/
     public function actionView($code)
     {
