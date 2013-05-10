@@ -6,7 +6,7 @@
 class Staq
 {
 
-    const VERSION = '0.5';
+    const VERSION = '0.6.0';
 
 
     /* STATIC SHORTHAND METHODS
