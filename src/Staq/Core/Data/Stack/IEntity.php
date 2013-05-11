@@ -17,13 +17,11 @@ interface IEntity
 
     public function fetchAll($limit);
 
+
+    /* MODEL METHODS
+     *************************************************************************/
     public function extractId(&$data);
 
-    public function deleteByFields($where);
-
-
-    /* PUBLIC DATABASE REQUEST
-     *************************************************************************/
     public function delete($model);
 
     public function save($model);

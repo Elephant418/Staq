@@ -7,13 +7,14 @@ namespace Staq\Core\Data\Stack\Storage\File;
 
 use \Michelf\MarkdownExtra;
 
-class Entity extends \Staq\Core\Data\Stack\Storage\Entity
+class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEntity
 {
 
 
     /* ATTRIBUTES
      *************************************************************************/
     protected $name;
+    protected $folder;
     protected $idField = "name";
     protected $extensions = ['json', 'md', 'html', 'php', 'txt'];
 
@@ -24,6 +25,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
     {
         $settings = (new \Stack\Setting)->parse($this);
         $this->name = \Staq\Util::getStackSubQuery($this, '_');
+        $this->folder = '/data/'.$this->name;
         if (isset($settings['idField'])) {
             $this->idField = $settings['idField'];
         }
@@ -83,6 +85,31 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
         }
     }
 
+    public function delete($model = NULL)
+    {
+        $deleted = TRUE;
+        foreach ($this->globDataFile($model->id) as $filename) {
+            $deleted = $deleted && unlink($filename);
+        }
+        return $deleted;
+    }
+
+    public function save($model)
+    {
+        $id = $model[$this->idField];
+        $filename = \Staq::App()->getFilePath().'/'.$this->folder.'/'.$id;
+        $data = $model->extractSeeds();
+        if (isset($data['content'])) {
+            // TODO: if the model exists verify that it is a markdown file
+            $converter = new \Markdownify\ConverterExtra;
+            file_put_contents($filename.'.md', $converter->parseString($model->content));
+            unset($data['content']);
+        }
+        unset($data[$this->idField]);
+        file_put_contents($filename.'.json', json_encode($data));
+        return $id;
+    }
+
 
     /* PROTECTED METHODS
      *************************************************************************/
@@ -111,7 +138,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity
 
     public function globDataFile($pattern)
     {
-        $path = '/data/'.$this->name;
+        $path = $this->folder;
         $folders = \Staq::App()->getExtensions();
         array_walk($folders, function (&$a) use ($path) {
             $a = realpath($a . $path);

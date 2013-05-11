@@ -9,7 +9,7 @@ if (is_file(__DIR__ . $autoload)) {
     require_once(__DIR__ . '/../../../' . $autoload);
 }
 
-class DataTest extends StaqTestCase
+class DatabaseTest extends StaqTestCase
 {
 
 
