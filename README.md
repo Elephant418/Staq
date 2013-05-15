@@ -60,10 +60,10 @@ Add or complete the composer.json file at the root of your repository, like this
 
 Staq can now be [downloaded via composer](http://getcomposer.org/doc/01-basic-usage.md#installing-dependencies).
 
-The last step is to include Staq in your PHP file :
+The framework and the extensions work with the composer autoload:
 
 ```php
-require_once( './vendor/pixel418/staq/src/include.php' );
+require_once( './vendor/autoload.php' );
 ```
 
 [&uarr; top](#readme)
