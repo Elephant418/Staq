@@ -13,7 +13,7 @@ class PublicFile extends PublicFile\__Parent
     ATTRIBUTES
      *************************************************************************/
     public static $setting = [
-        'route.view.uri' => '/*'
+        'route.view.uri' => '/**'
     ];
 
 
