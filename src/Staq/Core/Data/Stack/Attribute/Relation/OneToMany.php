@@ -39,11 +39,16 @@ class OneToMany extends OneToMany\__Parent
 
     /* PUBLIC USER METHODS
      *************************************************************************/
+    public function reload()
+    {
+        $class = $this->getRemoteClass();
+        $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model);
+    }
+
     public function get()
     {
         if (is_null($this->remoteModels)) {
-            $class = $this->getRemoteClass();
-            $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model);
+            $this->reload();
         }
         return $this->remoteModels;
     }

@@ -30,11 +30,16 @@ class ManyToOne extends ManyToOne\__Parent
 
     /* PUBLIC USER METHODS
      *************************************************************************/
+    public function reload()
+    {
+        $class = $this->getRemoteClass();
+        $this->remoteModel = (new $class)->entity->fetchById($this->seed);
+    }
+
     public function get()
     {
         if (is_null($this->remoteModel) && isset($this->seed)) {
-            $class = $this->getRemoteClass();
-            $this->remoteModel = (new $class)->entity->fetchById($this->seed);
+            $this->reload();
         }
         return $this->remoteModel;
     }

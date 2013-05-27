@@ -35,11 +35,16 @@ class ManyToMany extends OneToMany
 
     /* PUBLIC USER METHODS
      *************************************************************************/
+    public function reload()
+    {
+        $class = $this->getRemoteClass();
+        $this->remoteModels = (new $class)->entity->fetchByRelatedThroughTable($this->table, $this->remoteAttributeName, $this->relatedAttributeName, $this->model);
+    }
+
     public function get()
     {
         if (is_null($this->remoteModels)) {
-            $class = $this->getRemoteClass();
-            $this->remoteModels = (new $class)->entity->fetchByRelatedThroughTable($this->table, $this->remoteAttributeName, $this->relatedAttributeName, $this->model);
+            $this->reload();
         }
         return $this->remoteModels;
     }

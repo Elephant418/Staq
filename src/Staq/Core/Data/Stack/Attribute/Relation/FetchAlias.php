@@ -38,12 +38,17 @@ class FetchAlias extends FetchAlias\__Parent
 
     /* PUBLIC USER METHODS
      *************************************************************************/
+    public function reload()
+    {
+        $entity = $this->getRemoteEntity();
+        $fetchMethod = $this->fetchMethod;
+        $this->remoteModels = $entity->$fetchMethod($this->model);
+    }
+
     public function get()
     {
         if (is_null($this->remoteModels)) {
-            $entity = $this->getRemoteEntity();
-            $fetchMethod = $this->fetchMethod;
-            $this->remoteModels = $entity->$fetchMethod($this->model);
+            $this->reload();
         }
         return $this->remoteModels;
     }
