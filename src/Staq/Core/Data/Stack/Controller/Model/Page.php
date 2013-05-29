@@ -12,7 +12,7 @@ class Page extends Page\__Parent
     /* ATTRIBUTES
      *************************************************************************/
     public static $setting = [
-        'route.view.uri' => '/(:name)'
+        'route.view.uri' => '/(:id)'
     ];
 
 

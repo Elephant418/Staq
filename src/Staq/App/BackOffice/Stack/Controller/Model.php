@@ -24,8 +24,11 @@ class Model
         return $view;
     }
 
-    public function actionView($type, $id)
+    public function actionView($id, $type=NULL)
     {
+        if (is_null($type)) {
+            $type = $this->getModelName();
+        }
         $model = $this->getNewEntity($type)->fetchById($id);
         if ($model->exists()) {
             $view = $this->createView('view', $type);
@@ -121,6 +124,11 @@ class Model
 
     /* PRIVATE METHODS
      *************************************************************************/
+    protected function getModelName()
+    {
+        return \Staq\Util::getStackSubSubQuery($this);
+    }
+
     protected function getModelClass($type)
     {
         return 'Stack\\Model\\' . $type;
