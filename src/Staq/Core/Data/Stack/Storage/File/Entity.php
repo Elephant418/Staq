@@ -38,7 +38,6 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     {
         $data = [];
         foreach ($this->globDataFile($id) as $filename) {
-            // TODO merge it
             $data = array_merge($data, $this->fetchFileData($filename));
         }
         return $this->resultAsModel($data);
@@ -153,6 +152,6 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
                 $files[] = $filename;
             }
         }
-        return $files;
+        return array_reverse($files);
     }
 }
