@@ -61,17 +61,17 @@ class Route
         $uri = $this->uri;
         foreach ($parameters as $name => $value) {
             if (!is_numeric($name)) {
-                $uri = str_replace(['::'.$name, ':'.$name], $value, $uri);
+                $uri = str_replace(['#'.$name, ':'.$name], $value, $uri);
                 unset($parameters[$name]);
             }
         }
         ksort($parameters);
         foreach ($parameters as $value) {
-            $uri = preg_replace('#^([^:]*)::?\w+#', '${1}'.$value, $uri);
+            $uri = preg_replace('@^([^:#]*)[:#]\w+@', '${1}'.$value, $uri);
         }
-        $uri = preg_replace('#\(([^):]*)\)#', '${1}', $uri);
-        $uri = preg_replace('#\([^)]*\)#', '', $uri);
-        $uri = preg_replace('#::?(\w+)#', '', $uri);
+        $uri = preg_replace('@\(([^):#]*)\)@', '${1}', $uri);
+        $uri = preg_replace('@\([^)]*\)@', '', $uri);
+        $uri = preg_replace('@[:#](\w+)@', '', $uri);
         return $uri;
     }
 
