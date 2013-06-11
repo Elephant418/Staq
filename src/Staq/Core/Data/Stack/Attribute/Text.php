@@ -24,8 +24,9 @@ class Text extends Text\__Parent
 
     public function getBeginning( $maximum=300, $minimum=200 )
     {
-        $beginning = substr($this->seed, 0, $minimum);
-        $margin = substr($this->seed, $minimum, $maximum);
+        $seed = strip_tags($this->seed);
+        $beginning = substr($seed, 0, $minimum);
+        $margin = substr($seed, $minimum, $maximum);
         $part = trim( \UString::substrBeforeLast( $margin, [ '. ', '! ', '? '] ) );
         if (empty($part)){
             $part = trim( \UString::substrBeforeLast( $margin, [ ', ', '; ', ': '] ) );
