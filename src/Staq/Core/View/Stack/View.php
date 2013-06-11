@@ -132,55 +132,19 @@ class View extends \Stack\Util\ArrayObject
 
     protected function extendTwig()
     {
-        $public = function ($path) {
-            \UString::doStartWith($path, '/');
-            return \Staq::App()->getBaseUri() . $path;
-        };
-        $asset = function ($path) use ($public) {
-            $settings = (new \Stack\Setting)->parse('Application.ini');
-            if (!$settings->getAsBoolean('cache.asset')) {
-                return $public($path);
-            }
-            $realPath = \Staq::App()->getFilePath('/public/' . $path);
-            if (!$realPath) {
-                throw new \Exception('Asset not found: '.$path);
-            }
-            if (is_dir($realPath)) {
-                throw new \Exception('Asset is a directory: '.$path);
-            }
-            $hash = substr( md5(filemtime($realPath)), 22 );
-            $asset = 'asset' . $hash . '/' . $path;
-            return $public($asset);
-        };
-        $route = function ($controller, $action) use ($public) {
-            $parameters = array_slice(func_get_args(), 2);
-            $uri = \Staq::App()->getUri($controller, $action, $parameters);
-            return $public($uri);
-        };
-        $routeModelAction = function ($action, $model) use ($route, $public) {
-            $controllerName = \Staq\Util::getStackQuery($model);
-            $controller = \Staq::Ctrl($controllerName);
-            $parameters = $controller->getRouteAttributes($model);
-            $uri = \Staq::App()->getUri($controller, $action, $parameters);
-            return $public($uri);
-        };
-        $routeModel = function ($model) use ($routeModelAction) {
-            return $routeModelAction('view', $model);
-        };
-        $find = function ($stack, $action = 'view') use ($routeModelAction) {
-            return;
-        };
-        $publicFilter = new \Twig_SimpleFilter('public', $public);
+        $publicFilter = new \Twig_SimpleFilter('public', ['Staq\Util', 'getPublicRoute']);
         $this->twig->addFilter($publicFilter);
-        $publicFunction = new \Twig_SimpleFunction('public', $public);
+        $publicFunction = new \Twig_SimpleFunction('public', ['Staq\Util', 'getPublicRoute']);
         $this->twig->addFunction($publicFunction);
-        $assetFunction = new \Twig_SimpleFunction('asset', $asset);
+        $assetFunction = new \Twig_SimpleFunction('asset', ['Staq\Util', 'getAssetRoute']);
         $this->twig->addFunction($assetFunction);
-        $routeFunction = new \Twig_SimpleFunction('route', $route);
+        $routeFunction = new \Twig_SimpleFunction('route', ['Staq\Util', 'getControllerRoute']);
         $this->twig->addFunction($routeFunction);
-        $routeFunction = new \Twig_SimpleFunction('route_model_*', $routeModelAction);
+        $routeFunction = new \Twig_SimpleFunction('route_model_*', function($action, $model) {
+            return \Staq\Util::getModelControllerRoute($model, $action);
+        });
         $this->twig->addFunction($routeFunction);
-        $routeFunction = new \Twig_SimpleFunction('route_model', $routeModel);
+        $routeFunction = new \Twig_SimpleFunction('route_model', ['Staq\Util', 'getModelControllerRoute']);
         $this->twig->addFunction($routeFunction);
         $findFunction = new \Twig_SimpleFunction('find_template', array(get_class($this), 'findTemplate'));
         $this->twig->addFunction($findFunction);

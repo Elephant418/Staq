@@ -45,8 +45,13 @@ class DateTime extends DateTime\__Parent
     }
 
 
-    /* DEBUG METHODS
+    /* OUTPUT METHODS
      *************************************************************************/
+    public function format($format)
+    {
+        return $this->get()->format($format);
+    }
+
     public function __toString()
     {
         return '' . $this->getSeed();

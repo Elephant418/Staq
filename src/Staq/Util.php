@@ -222,4 +222,47 @@ abstract class Util
         $query = \Staq\Util::getStackableQuery($stackable);
         return (\UString::substrBefore($query, '\\__Parent'));
     }
+
+
+    /* ROUTE METHODS
+     *************************************************************************/
+    public static function getPublicRoute($path) {
+        \UString::doStartWith($path, '/');
+        return \Staq::App()->getBaseUri() . $path;
+    }
+
+    public static function getAssetRoute($path) {
+        $settings = (new \Stack\Setting)->parse('Application.ini');
+        if (!$settings->getAsBoolean('cache.asset')) {
+            return \Staq\Util::getPublicRoute($path);
+        }
+        $realPath = \Staq::App()->getFilePath('/public/' . $path);
+        if (!$realPath) {
+            throw new \Exception('Asset not found: '.$path);
+        }
+        if (is_dir($realPath)) {
+            throw new \Exception('Asset is a directory: '.$path);
+        }
+        $hash = substr( md5(filemtime($realPath)), 22 );
+        $asset = 'asset' . $hash . '/' . $path;
+        return \Staq\Util::getPublicRoute($asset);
+    }
+
+    public static function getControllerRoute($controller, $action) {
+        $parameters = array_slice(func_get_args(), 2);
+        $uri = \Staq::App()->getUri($controller, $action, $parameters);
+        return \Staq\Util::getPublicRoute($uri);
+    }
+
+    public static function getModelControllerRoute($model, $action='view') {
+        $controllerName = \Staq\Util::getStackQuery($model);
+        $controller = \Staq::Ctrl($controllerName);
+        if ($controller) {
+            $parameters = $controller->getRouteAttributes($model);
+        } else {
+            $parameters = [];
+        }
+        $uri = \Staq::App()->getUri($controller, $action, $parameters);
+        return \Staq\Util::getPublicRoute($uri);
+    }
 }
