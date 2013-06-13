@@ -65,13 +65,23 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $models;
     }
 
-    public function fetchAll($limit = NULL, &$rows = FALSE)
+    public function fetchAll($limit=NULL, $offset=NULL, &$count=FALSE)
     {
         $ids = [];
         foreach ($this->globDataFile('*') as $filename) {
             $ids[] = \UString::substrBeforeLast(basename($filename), '.');
         }
-        return $this->fetchByIds(array_unique($ids));
+        $ids = array_unique($ids);
+        if ($count !== FALSE) {
+            $count = count($ids);
+        }
+        if (is_null($offset)) {
+            $offset = 0;
+        }
+        if (!is_null($limit)) {
+            $ids = array_slice($ids, $offset, $offset+$limit);
+        }
+        return $this->fetchByIds($ids);
     }
 
 
