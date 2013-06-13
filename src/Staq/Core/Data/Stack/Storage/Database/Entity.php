@@ -43,12 +43,12 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     public function fetchByField($field, $value, $limit = NULL)
     {
-        return $this->fetchOne([$field => $value], NULL, $limit);
+        return $this->fetchOne([$field => $value], NULL, NULL, $limit);
     }
 
-    public function fetchAll($limit = NULL, &$rows = FALSE)
+    public function fetchAll($limit = NULL, $offset = NULL, &$count = FALSE)
     {
-        return $this->fetch([], $limit, NULL, $rows);
+        return $this->fetch([], $limit, NULL, $offset, $count);
     }
 
     public function fetchByIds($ids, $limit = NULL)
@@ -59,9 +59,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $this->fetch([$this->idField => $ids], $limit);
     }
 
-    public function fetchByRelated($field, $related, $limit = NULL, &$rows = FALSE)
+    public function fetchByRelated($field, $related, $limit = NULL, $offset = NULL, &$count = FALSE)
     {
-        return $this->fetch([$field => $related->id], $limit, NULL, $rows);
+        return $this->fetch([$field => $related->id], $limit, NULL, $offset = NULL, $count);
     }
 
     public function deleteByFields($where)
@@ -182,28 +182,28 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     /* PRIVATE FETCH METHODS
      *************************************************************************/
-    protected function fetch($fields = [], $limit = NULL, $order = NULL, &$rows = FALSE)
+    protected function fetch($fields=[], $limit=NULL, $order=NULL, $offset=NULL, &$count=FALSE)
     {
         if ($limit == 'count') {
             return $this->getCount($fields);
         }
-        $data = $this->getDataList($fields, $limit, $order, $rows !== FALSE);
-        if ($rows !== FALSE) {
-            $rows = $this->fetchRows();
+        $data = $this->getDataList($fields, $limit, $order, $offset, $count !== FALSE);
+        if ($count !== FALSE) {
+            $count = $this->fetchCount();
         }
         return $this->resultAsModelList($data);
     }
 
-    protected function fetchOne($fields = [], $order = NULL, $limit = NULL)
+    protected function fetchOne($fields=[], $order=NULL, $offset=NULL, $limit=NULL)
     {
         if ($limit == 'count') {
             return $this->getCount($fields);
         }
-        $data = $this->getData($fields, $order);
+        $data = $this->getData($fields, $order, $offset);
         return $this->resultAsModel($data);
     }
 
-    protected function fetchRows()
+    protected function fetchCount()
     {
         $parameters = [];
         $sql = 'SELECT FOUND_ROWS();';
@@ -211,16 +211,16 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return reset($request->executeOne($parameters));
     }
 
-    protected function getData($where = [], $order)
+    protected function getData($where=[], $order=NULL, $offset=NULL)
     {
-        $datas = $this->getDataList($where, 1, $order);
+        $datas = $this->getDataList($where, 1, $order, $offset);
         if (isset($datas[0])) {
             return $datas[0];
         }
         return FALSE;
     }
 
-    protected function getCount($where = [])
+    protected function getCount($where=[])
     {
         $parameters = [];
         $sql = 'SELECT COUNT(*)'
@@ -230,11 +230,11 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return reset($request->executeOne($parameters));
     }
 
-    protected function getDataList($where = [], $limit = NULL, $order = NULL, $rows = FALSE)
+    protected function getDataList($where=[], $limit=NULL, $order=NULL, $offset=NULL, $count=FALSE)
     {
         $parameters = [];
-        $sql = $this->getBaseSelect($rows)
-            . $this->getClauseByFields($where, $parameters, $limit, $order);
+        $sql = $this->getBaseSelect($count)
+            . $this->getClauseByFields($where, $parameters, $limit, $order, $offset);
         $request = new Request($sql);
         return $request->execute($parameters);
     }
@@ -242,10 +242,10 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     /* PRIVATE CORE METHODS
      *************************************************************************/
-    protected function getBaseSelect($rows = FALSE)
+    protected function getBaseSelect($count = FALSE)
     {
         $select = 'SELECT ';
-        if ($rows) {
+        if ($count) {
             $select .= 'SQL_CALC_FOUND_ROWS ';
         }
         $select .= $this->getBaseSelector() . ' FROM ' . $this->getBaseTable();
@@ -280,7 +280,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return [];
     }
 
-    protected function getClauseByFields($request, &$parameters, $limit = NULL, $order = NULL)
+    protected function getClauseByFields($request, &$parameters, $limit=NULL, $order=NULL, $offset=NULL)
     {
         $where = $this->getDefaultWhere();
         if (is_array($request)) {
@@ -316,6 +316,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         }
         if (!is_null($limit)) {
             $sql .= ' LIMIT ' . $limit;
+        }
+        if (!is_null($offset)) {
+            $sql .= ' OFFSET ' . $offset;
         }
         return $sql . ';';
     }
