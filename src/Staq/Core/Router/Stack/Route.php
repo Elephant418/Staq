@@ -144,15 +144,16 @@ class Route
         $pattern = str_replace('**', '°°', $pattern);
         $pattern = str_replace('*', '[^/]*', $pattern);
         $pattern = str_replace('°°', '.*', $pattern);
-        $pattern = preg_replace('@\(([^)]*)\)@', '(?:\1)?', $pattern);
+        $pattern = preg_replace('@\(([^)]*)\)@', '(°°\1)?', $pattern);
         $pattern = preg_replace('@\#(\w+)@', '(?<\1>[0-9]+)', $pattern);
         $pattern = preg_replace('@\:(\w+)@', '(?<\1>[^/.]+)', $pattern);
+        $pattern = str_replace('°°', '?:', $pattern);
         $pattern = '@^' . $pattern . '/?$@';
         $parameters = [];
         $result = preg_match($pattern, $uri, $parameters);
         if ($result) {
-            foreach (array_keys($parameters) as $key) {
-                if (is_numeric($key)) {
+            foreach ($parameters as $key => $value) {
+                if (is_numeric($key) || $value==='') {
                     unset($parameters[$key]);
                 }
             }
