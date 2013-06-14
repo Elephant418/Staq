@@ -305,6 +305,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
             }
         }
         $sql = '';
+        $where = array_filter($where, function($a){
+           return (!empty($a));
+        });
         if (!empty($where)) {
             $sql .= ' WHERE ' . implode(' AND ', $where);
         }
