@@ -132,19 +132,19 @@ class View extends \Stack\Util\ArrayObject
 
     protected function extendTwig()
     {
-        $publicFilter = new \Twig_SimpleFilter('public', ['Staq\Util', 'getPublicRoute']);
+        $publicFilter = new \Twig_SimpleFilter('public', ['Staq\Util', 'getPublicUrl']);
         $this->twig->addFilter($publicFilter);
-        $publicFunction = new \Twig_SimpleFunction('public', ['Staq\Util', 'getPublicRoute']);
+        $publicFunction = new \Twig_SimpleFunction('public', ['Staq\Util', 'getPublicUrl']);
         $this->twig->addFunction($publicFunction);
-        $assetFunction = new \Twig_SimpleFunction('asset', ['Staq\Util', 'getAssetRoute']);
+        $assetFunction = new \Twig_SimpleFunction('asset', ['Staq\Util', 'getAssetUrl']);
         $this->twig->addFunction($assetFunction);
-        $routeFunction = new \Twig_SimpleFunction('route', ['Staq\Util', 'getControllerRoute']);
+        $routeFunction = new \Twig_SimpleFunction('route', ['Staq\Util', 'getControllerUrl']);
         $this->twig->addFunction($routeFunction);
         $routeFunction = new \Twig_SimpleFunction('route_model_*', function($action, $model) {
-            return \Staq\Util::getModelControllerRoute($model, $action);
+            return \Staq\Util::getModelControllerUrl($model, $action);
         });
         $this->twig->addFunction($routeFunction);
-        $routeFunction = new \Twig_SimpleFunction('route_model', ['Staq\Util', 'getModelControllerRoute']);
+        $routeFunction = new \Twig_SimpleFunction('route_model', ['Staq\Util', 'getModelControllerUrl']);
         $this->twig->addFunction($routeFunction);
         $findFunction = new \Twig_SimpleFunction('find_template', array(get_class($this), 'findTemplate'));
         $this->twig->addFunction($findFunction);

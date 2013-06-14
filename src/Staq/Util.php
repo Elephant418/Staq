@@ -44,17 +44,21 @@ abstract class Util
 
     /* HTTP METHODS
      *************************************************************************/
-    public static function httpRedirect($url)
+    public static function httpRedirect($url, $code=NULL)
     {
-        header('HTTP/1.1 302 Moved Temporarily');
+        if ($code == 301) {
+            header('HTTP/1.1 301 Moved Permanently');
+        } else {
+            header('HTTP/1.1 302 Moved Temporarily');
+        }
         header('Location: ' . $url);
         die();
     }
 
-    public static function httpRedirectUri($uri)
+    public static function httpRedirectUri($uri, $code=NULL)
     {
         \UString::doStartWith($uri, '/');
-        \Staq\Util::httpRedirect(\Staq::App()->getBaseUri() . $uri);
+        \Staq\Util::httpRedirect(\Staq::App()->getBaseUri() . $uri, $code);
     }
 
     function smartUrlEncode($url)
@@ -226,15 +230,15 @@ abstract class Util
 
     /* ROUTE METHODS
      *************************************************************************/
-    public static function getPublicRoute($path) {
+    public static function getPublicUrl($path) {
         \UString::doStartWith($path, '/');
         return \Staq::App()->getBaseUri() . $path;
     }
 
-    public static function getAssetRoute($path) {
+    public static function getAssetUrl($path) {
         $settings = (new \Stack\Setting)->parse('Application.ini');
         if (!$settings->getAsBoolean('cache.asset')) {
-            return \Staq\Util::getPublicRoute($path);
+            return \Staq\Util::getPublicUrl($path);
         }
         $realPath = \Staq::App()->getFilePath('/public/' . $path);
         if (!$realPath) {
@@ -245,16 +249,16 @@ abstract class Util
         }
         $hash = substr( md5(filemtime($realPath)), 22 );
         $asset = 'asset' . $hash . '/' . $path;
-        return \Staq\Util::getPublicRoute($asset);
+        return \Staq\Util::getPublicUrl($asset);
     }
 
-    public static function getControllerRoute($controller, $action) {
+    public static function getControllerUrl($controller, $action) {
         $parameters = array_slice(func_get_args(), 2);
         $uri = \Staq::App()->getUri($controller, $action, $parameters);
-        return \Staq\Util::getPublicRoute($uri);
+        return \Staq\Util::getPublicUrl($uri);
     }
 
-    public static function getModelControllerRoute($model, $action='view') {
+    public static function getModelControllerUrl($model, $action='view') {
         $controllerName = \Staq\Util::getStackQuery($model);
         $controller = \Staq::Ctrl($controllerName);
         if ($controller) {
@@ -263,6 +267,6 @@ abstract class Util
             $parameters = [];
         }
         $uri = \Staq::App()->getUri($controller, $action, $parameters);
-        return \Staq\Util::getPublicRoute($uri);
+        return \Staq\Util::getPublicUrl($uri);
     }
 }
