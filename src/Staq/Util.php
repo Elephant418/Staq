@@ -258,13 +258,11 @@ abstract class Util
         return \Staq\Util::getPublicUrl($uri);
     }
 
-    public static function getModelControllerUrl($model, $action='view') {
+    public static function getModelControllerUrl($model, $action='view', $parameters = []) {
         $controllerName = \Staq\Util::getStackQuery($model);
         $controller = \Staq::Ctrl($controllerName);
         if ($controller) {
             $parameters = $controller->getRouteAttributes($model);
-        } else {
-            $parameters = [];
         }
         $uri = \Staq::App()->getUri($controller, $action, $parameters);
         return \Staq\Util::getPublicUrl($uri);
