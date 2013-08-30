@@ -31,7 +31,10 @@ class Text extends Text\__Parent
         if (empty($part)){
             $part = trim( \UString::substrBeforeLast( $margin, [ ', ', '; ', ': '] ) );
         }
-        return $beginning.$part.'...';
+        if ( strlen($seed) > strlen($beginning.$part) ) {
+            return $beginning.$part.'...';
+        }
+        return $seed;
     }
 
     public function set($value)
