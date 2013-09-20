@@ -143,6 +143,10 @@ class Application
         }
         error_reporting($level);
 
+        // Timezone
+        $timezone = $this->settings->get('service.timezone');
+        date_default_timezone_set($timezone);
+
         $this->initialized = TRUE;
         return $this;
     }
