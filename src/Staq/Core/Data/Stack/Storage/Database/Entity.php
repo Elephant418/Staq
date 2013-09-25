@@ -303,6 +303,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
                     $where[] = $this->getClauseCondition($parameters, $fieldName, '=', $fieldValue);
                 }
             }
+        } else {
+            $where[] = $request;
         }
         $sql = '';
         $where = array_filter($where, function($a){
