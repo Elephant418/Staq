@@ -1,7 +1,7 @@
 Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=develop)](https://travis-ci.org/Pixel418/Staq?branch=develop)
 ======
 
-Staq modern & innovative PHP framework for enjoyable web development.
+Staq is a modern & innovative PHP framework for enjoyable web development.
 
 1. [Features](#features)
 2. [Let's code](#lets-code)
