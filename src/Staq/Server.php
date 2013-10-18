@@ -83,12 +83,17 @@ class Server
         return static::$application;
     }
 
-    public function launch()
+    public function getApp()
     {
         return $this->launchCurrentApplication();
     }
 
-    public function launchCurrentApplication()
+    public function getApplication()
+    {
+        return $this->launchCurrentApplication();
+    }
+
+    public function getCurrentApplication()
     {
         $this->addDefaultEnvironment();
         $baseUri = '';
