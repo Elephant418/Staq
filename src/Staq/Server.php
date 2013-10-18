@@ -85,12 +85,12 @@ class Server
 
     public function getApp()
     {
-        return $this->launchCurrentApplication();
+        return $this->getCurrentApplication();
     }
 
     public function getApplication()
     {
-        return $this->launchCurrentApplication();
+        return $this->getCurrentApplication();
     }
 
     public function getCurrentApplication()

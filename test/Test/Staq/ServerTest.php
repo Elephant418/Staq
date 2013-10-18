@@ -50,14 +50,14 @@ class ServerTest extends WebTestCase
     {
         $app = (new \Staq\Server)
             ->addPlatform('local')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals($this->starterNamespaces, $app->getExtensionNamespaces());
     }
 
     public function test_empty_project__platform__default()
     {
         $app = (new \Staq\Server)
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('prod', $app->getPlatform());
     }
 
@@ -65,7 +65,7 @@ class ServerTest extends WebTestCase
     {
         $app = (new \Staq\Server)
             ->addPlatform('local')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('local', $app->getPlatform());
     }
 
@@ -75,7 +75,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($projectNamespace, '/')
             ->addPlatform('local')
-            ->launch();
+            ->getCurrentApplication();
         $expected = $this->appendProjectNamespace('NoConfiguration');
         $this->assertEquals($expected, $app->getExtensionNamespaces());
     }
@@ -86,7 +86,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($projectNamespace, '/')
             ->addPlatform('local')
-            ->launch();
+            ->getCurrentApplication();
         $expected = $this->appendProjectNamespace('SimpleConfiguration');
         $this->assertEquals($expected, $app->getExtensionNamespaces());
     }
@@ -97,7 +97,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($projectNamespace, '/')
             ->addPlatform('local')
-            ->launch();
+            ->getCurrentApplication();
         $expected = $this->appendProjectNamespace('ExtendNoConfiguration', 'NoConfiguration');
         $this->assertEquals($expected, $app->getExtensionNamespaces());
     }
@@ -108,7 +108,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($projectNamespace, '/')
             ->addPlatform('local')
-            ->launch();
+            ->getCurrentApplication();
         $expected = $this->appendProjectNamespace('WithoutStarter');
         \UArray::doRemoveValue($expected, 'Staq\\App\\Starter');
         $this->assertEquals($expected, $app->getExtensionNamespaces());
@@ -124,7 +124,7 @@ class ServerTest extends WebTestCase
             ->addPlatform('local', '/local')
             ->addPlatform('remote', '//example.com')
             ->addPlatform('debug', ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('prod', $app->getPlatform());
     }
 
@@ -135,7 +135,7 @@ class ServerTest extends WebTestCase
             ->addPlatform('local', '/local')
             ->addPlatform('remote', '//example.com')
             ->addPlatform('debug', ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('local', $app->getPlatform());
         $this->assertEquals('/local', $app->getBaseUri());
         $this->assertEquals('/bou', $app->getCurrentUri());
@@ -148,7 +148,7 @@ class ServerTest extends WebTestCase
             ->addPlatform('local', '/local')
             ->addPlatform('remote', '//example.com')
             ->addPlatform('debug', ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('remote', $app->getPlatform());
         $this->assertEquals('', $app->getBaseUri());
         $this->assertEquals('/lievre/tortue', $app->getCurrentUri());
@@ -161,7 +161,7 @@ class ServerTest extends WebTestCase
             ->addPlatform('local', '/local')
             ->addPlatform('remote', '//example.com')
             ->addPlatform('debug', ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('debug', $app->getPlatform());
         $this->assertEquals('', $app->getBaseUri());
         $this->assertEquals('/lievre/tortue', $app->getCurrentUri());
@@ -177,7 +177,7 @@ class ServerTest extends WebTestCase
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addApplication($this->getProjectClass('SimpleConfiguration'), '//example.com')
             ->addApplication($this->getProjectClass('WithoutStarter'), ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('Staq\\App\\Starter', $app->getNamespace());
     }
 
@@ -188,7 +188,7 @@ class ServerTest extends WebTestCase
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addApplication($this->getProjectClass('SimpleConfiguration'), '//example.com')
             ->addApplication($this->getProjectClass('WithoutStarter'), ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals($this->getProjectClass('NoConfiguration'), $app->getNamespace());
         $this->assertEquals('/noconf', $app->getBaseUri());
         $this->assertEquals('/bou', $app->getCurrentUri());
@@ -201,7 +201,7 @@ class ServerTest extends WebTestCase
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addApplication($this->getProjectClass('SimpleConfiguration'), '//example.com')
             ->addApplication($this->getProjectClass('WithoutStarter'), ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals($this->getProjectClass('SimpleConfiguration'), $app->getNamespace());
         $this->assertEquals('', $app->getBaseUri());
         $this->assertEquals('/lievre/tortue', $app->getCurrentUri());
@@ -214,7 +214,7 @@ class ServerTest extends WebTestCase
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addApplication($this->getProjectClass('SimpleConfiguration'), '//example.com')
             ->addApplication($this->getProjectClass('WithoutStarter'), ':8020')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals($this->getProjectClass('WithoutStarter'), $app->getNamespace());
         $this->assertEquals('', $app->getBaseUri());
         $this->assertEquals('/lievre/tortue', $app->getCurrentUri());
@@ -229,7 +229,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addPlatform('local', '/local')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('Staq\\App\\Starter', $app->getNamespace());
         $this->assertEquals('prod', $app->getPlatform());
         $this->assertEquals('/bou', $app->getCurrentUri());
@@ -241,7 +241,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addPlatform('local', '/local')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals($this->getProjectClass('NoConfiguration'), $app->getNamespace());
         $this->assertEquals('prod', $app->getPlatform());
         $this->assertEquals('/bou', $app->getCurrentUri());
@@ -253,7 +253,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addPlatform('local', '/local')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals('Staq\\App\\Starter', $app->getNamespace());
         $this->assertEquals('local', $app->getPlatform());
         $this->assertEquals('/bou', $app->getCurrentUri());
@@ -265,7 +265,7 @@ class ServerTest extends WebTestCase
         $app = (new \Staq\Server)
             ->addApplication($this->getProjectClass('NoConfiguration'), '/noconf')
             ->addPlatform('local', '/local')
-            ->launch();
+            ->getCurrentApplication();
         $this->assertEquals($this->getProjectClass('NoConfiguration'), $app->getNamespace());
         $this->assertEquals('local', $app->getPlatform());
         $this->assertEquals('/bou', $app->getCurrentUri());
