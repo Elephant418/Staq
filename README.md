@@ -1,7 +1,7 @@
 Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=develop)](https://travis-ci.org/Pixel418/Staq?branch=develop)
 ======
 
-Staq is a small PHP framework for an enjoyable web development.
+Staq is a modern & innovative PHP framework for enjoyable web development.
 
 1. [Features](#features)
 2. [Let's code](#lets-code)
@@ -79,7 +79,7 @@ How to Contribute
 
 If you don't know much about pull request, you can read [the Github article](https://help.github.com/articles/using-pull-requests).
 
-All pull requests must follow this particular [style guide](https://github.com/Pixel418/Style_Guide) and accompanied by passing tests.
+All pull requests must follow the [PSR2 standard](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-2-coding-style-guide.md) and be accompanied by passing [phpunit](https://github.com/sebastianbergmann/phpunit/) tests.
 
 [&uarr; top](#readme)
 
