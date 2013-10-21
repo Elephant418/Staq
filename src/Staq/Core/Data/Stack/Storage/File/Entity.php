@@ -128,7 +128,10 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         $data[$this->idField] = \UString::substrBeforeLast(basename($filePath), '.');
         $extension = \UString::substrAfterLast(basename($filePath), '.');
         if ($extension == 'json') {
-            $data = array_merge($data, json_decode(file_get_contents($filePath), TRUE));
+            $json = json_decode(file_get_contents($filePath), TRUE);
+            if (is_array($json)) {
+                $data = array_merge($data, $json);
+            }
         } else if ($extension == 'md'){
             $data['content'] = MarkdownExtra::defaultTransform(file_get_contents($filePath));
         } else if ($extension == 'html'){
