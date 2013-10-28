@@ -333,6 +333,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         $condition = NULL;
         $parameterName = 'key' . count($parameters);
         if (is_array($fieldValue)) {
+            if (empty($fieldValue)) {
+                $fieldValue = [-1];
+            }
             $conditionParameters = [];
             foreach ($fieldValue as $key => $value) {
                 $conditionParameters[':' . 'key_' . (count($parameters) + $key)] = $value;
