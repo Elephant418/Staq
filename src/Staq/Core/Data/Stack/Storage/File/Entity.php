@@ -38,7 +38,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     {
         $data = [];
         foreach ($this->globDataFile($id) as $filename) {
-            $data = array_merge($data, $this->fetchFileData($filename));
+            $data = array_merge($data, $this->fetchFileData($id, $filename));
         }
         return $this->resultAsModel($data);
     }
@@ -122,10 +122,10 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     /* PROTECTED METHODS
      *************************************************************************/
-    public function fetchFileData($filePath)
+    public function fetchFileData($id, $filePath)
     {
         $data = [];
-        $data[$this->idField] = \UString::substrBeforeLast(basename($filePath), '.');
+        $data[$this->idField] = $id;
         $extension = \UString::substrAfterLast(basename($filePath), '.');
         if ($extension == 'json') {
             $json = json_decode(file_get_contents($filePath), TRUE);
