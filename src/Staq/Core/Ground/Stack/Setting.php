@@ -31,7 +31,7 @@ class Setting
             static::$cacheFile = $path . '/setting.' . \Staq::App()->getPlatform() . '.php';
             if (is_file(static::$cacheFile)) {
                 require(static::$cacheFile);
-                if (is_array($cache)) {
+                if (isset($cache) && is_array($cache)) {
                     static::$cache = $cache;
                 }
             }
