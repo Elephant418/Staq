@@ -17,6 +17,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     protected $folder;
     protected $idField = "name";
     protected $extensions = ['json', 'md', 'html', 'php', 'txt'];
+    protected $patternAll = '*';
 
 
     /* CONSTRUCTOR
@@ -67,11 +68,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     public function fetchAll($limit=NULL, $offset=NULL, &$count=FALSE)
     {
-        $ids = [];
-        foreach ($this->globDataFile('*') as $filename) {
-            $ids[] = \UString::substrBeforeLast(basename($filename), '.');
-        }
-        $ids = array_unique($ids);
+        $ids = $this->fetchIdsByPattern($this->patternAll);
         if ($count !== FALSE) {
             $count = count($ids);
         }
@@ -122,7 +119,12 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     /* PROTECTED METHODS
      *************************************************************************/
-    public function fetchFileData($id, $filePath)
+    protected function fetchIdsByPattern($pattern)
+    {
+        return array_unique($this->globDataFile($pattern, true));
+    }
+
+    protected function fetchFileData($id, $filePath)
     {
         $data = [];
         $data[$this->idField] = $id;
@@ -148,7 +150,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $data;
     }
 
-    public function globDataFile($pattern)
+    protected function globDataFile($pattern, $asId=false)
     {
         $path = $this->folder;
         $folders = \Staq::App()->getExtensions();
@@ -162,8 +164,17 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         foreach ($folders as $folder) {
             $extensions = implode(',', $this->extensions);
             foreach (glob($folder.'/'.$pattern.'\.{'.$extensions.'}', GLOB_BRACE) as $filename) {
-                $files[] = $filename;
+                if ($asId) {
+                    $id = \UString::notStartWith($filename, $folder.'/');
+                    \UString::doSubstrBeforeLast($id, '.');
+                    $files[$id] = $id;
+                } else {
+                    $files[] = $filename;
+                }
             }
+        }
+        if ($asId) {
+            array_values($files);
         }
         return array_reverse($files);
     }
