@@ -29,7 +29,7 @@
     <tr>
         {% for field in fields %}
         <td>
-            <a href="{{ route( 'Model', 'view', controller, model.id )  }}">
+            <a href="{{ route( 'Model', 'preview', controller, model.id )  }}">
                 {% if field == 'name()' %}
                     {{ model.name() }}
                 {% else %}

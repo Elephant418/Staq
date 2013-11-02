@@ -24,17 +24,22 @@ class Model
         return $view;
     }
 
-    public function actionView($id, $type=NULL)
+    public function actionView($id, $type=NULL, $action='view')
     {
         if (is_null($type)) {
             $type = $this->getModelName();
         }
         $model = $this->getNewEntity($type)->fetchById($id);
         if ($model->exists()) {
-            $view = $this->createView('view', $type);
+            $view = $this->createView($action, $type);
             $view['model'] = $model;
             return $view;
         }
+    }
+
+    public function actionPreview($id, $type=NULL)
+    {
+        return $this->actionView($id, $type, 'preview');
     }
 
     public function actionCreate($type)
