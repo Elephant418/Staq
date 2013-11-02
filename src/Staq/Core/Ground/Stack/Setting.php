@@ -65,7 +65,7 @@ class Setting
             if ($setting->getAsBoolean('cache.setting')) {
                 if (
                     !static::$cacheFile ||
-                    !$handle = @fopen(static::$cacheFile, 'a') ||
+                    !($handle = @fopen(static::$cacheFile, 'a')) ||
                     !flock($handle, LOCK_EX)
                 ) {
                     return NULL;
