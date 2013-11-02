@@ -103,7 +103,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     public function save($model)
     {
         $id = $model[$this->idField];
-        $filename = \Staq::App()->getFilePath().'/'.$this->folder.'/'.$id;
+        $filename = \Staq::App()->getDataPath().$this->folder.'/'.$id;
         $data = $model->extractSeeds();
         if (isset($data['content'])) {
             // TODO: if the model exists verify that it is a markdown file

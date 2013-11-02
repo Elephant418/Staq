@@ -48,6 +48,17 @@ class Application
         }
     }
 
+    public function getDataPath($file = NULL, $create = FALSE)
+    {
+        if (isset($this->settings['extension']['data'])) {
+            $dataNamespace = $this->settings['extension']['data'];
+            if (isset($this->extensions[$dataNamespace])) {
+                return $this->extensions[$dataNamespace];
+            }
+        }
+        return $this->getFilePath($file);
+    }
+
     public function getExtensionNamespaces()
     {
         return array_keys($this->extensions);
