@@ -63,7 +63,7 @@ class Model
             $model->delete();
             if ($model->exists()) {
                 Notif::error('Model not deleted.');
-                $this->redirectView($type, $model);
+                $this->redirectPreview($type, $model);
             } else {
                 Notif::success('Model deleted.');
                 $this->redirectList($type);
@@ -94,7 +94,7 @@ class Model
             } else {
                 Notif::error('Model not saved.');
             }
-            $this->redirectView($type, $model);
+            $this->redirectPreview($type, $model);
         }
         $view = $this->createView('edit', $type);
         $view['model'] = $model;
@@ -111,12 +111,12 @@ class Model
 
     /* REDIRECT METHODS
      *************************************************************************/
-    protected function redirectView($type, $model)
+    protected function redirectPreview($type, $model)
     {
         $params = [];
         $params['type'] = $type;
         $params['id'] = $model->id;
-        \Staq\Util::httpRedirectUri(\Staq::App()->getUri($this, 'view', $params));
+        \Staq\Util::httpRedirectUri(\Staq::App()->getUri($this, 'preview', $params));
     }
 
     protected function redirectList($type)
