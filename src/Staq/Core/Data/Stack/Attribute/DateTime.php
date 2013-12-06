@@ -16,7 +16,11 @@ class DateTime extends DateTime\__Parent
      *************************************************************************/
     public function get()
     {
-        return \DateTime::createFromFormat(static::$mysql_format, $this->seed);
+        $date = \DateTime::createFromFormat(static::$mysql_format, $this->seed);
+        if ($date && $date->getTimestamp()) {
+            return $date;
+        }
+        return new \DateTime('2001-01-01');
     }
 
     public function set($value)
