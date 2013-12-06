@@ -67,7 +67,7 @@ class Route
         }
         ksort($parameters);
         foreach ($parameters as $value) {
-            $uri = preg_replace('@^([^:#]*)[:#]\w+@', '${1}'.$value, $uri);
+            $uri = preg_replace('@^([^:#]*)(:|::|#)\w+@', '${1}'.$value, $uri);
         }
         $uri = preg_replace('@\(([^):#]*)\)@', '${1}', $uri);
         $uri = preg_replace('@\([^)]*\)@', '', $uri);
