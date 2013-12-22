@@ -30,10 +30,10 @@ abstract class Util
     {
         return \UString::substrAfterLast($path, '.');
     }
-
+    
     public static function convertPathToNamespace($path)
     {
-        return str_replace(DIRECTORY_SEPARATOR, '\\', $path);
+        return str_replace('/', '\\', $path);
     }
 
     public static function convertNamespaceToPath($namespace)

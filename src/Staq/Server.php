@@ -159,6 +159,7 @@ class Server
      *************************************************************************/
     protected function findExtensions($namespace)
     {
+        $namespace = \Staq\Util::convertPathToNamespace($namespace);
         $this->initializeNamespaces();
         $files = [];
         $old = [];
@@ -179,12 +180,12 @@ class Server
     protected function initializeNamespaces()
     {
         if (empty($this->namespaces)) {
-            if (\UString::has(__DIR__, '/vendor/')) {
-                $baseDir = \UString::substrBeforeLast(__DIR__, '/vendor/');
+            if (\UString::has(__DIR__, DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR)) {
+                $baseDir = \UString::substrBeforeLast(__DIR__, DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR);
             } else {
-                $baseDir = __DIR__ . '/../..';
+                $baseDir = __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
             }
-            $this->namespaces = (require($baseDir . '/vendor/composer/autoload_namespaces.php'));
+            $this->namespaces = (require(realpath($baseDir.'/vendor/composer/autoload_namespaces.php')));
         }
     }
 

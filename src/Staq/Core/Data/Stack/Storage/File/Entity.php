@@ -162,8 +162,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         });
         $files = [];
         foreach ($folders as $folder) {
-            $extensions = implode(',', $this->extensions);
-            foreach (glob($folder.'/'.$pattern.'\.{'.$extensions.'}', GLOB_BRACE) as $filename) {
+            $fullFolder = $folder.DIRECTORY_SEPARATOR.$pattern;
+            foreach (glob($fullFolder.'\.*') as $filename) {
                 if ($asId) {
                     $id = \UString::notStartWith($filename, $folder.'/');
                     \UString::doSubstrBeforeLast($id, '.');
