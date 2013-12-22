@@ -77,9 +77,13 @@
 <script src="{{ public('/twbootstrap/bootstrap-dropdown.js') }}"></script>
 <script src="{{ public('/twbootstrap/bootstrap-transition.js') }}"></script>
 <script src="{{ public('/twbootstrap/bootstrap-collapse.js') }}"></script>
-<script src="{{ public('/select2/select2.min.js') }}"></script>
+<script src="{{ public('/select2/select2.min.js') }}"></script>*
+<script src="http://js.nicedit.com/nicEdit-latest.js"></script>
 <script>
-    $(".controls select").select2();
+    $(function() {
+        $(".controls select").select2();
+        nicEditors.allTextAreas();
+    });
 </script>
 {% endblock %}
 {% endblock %}

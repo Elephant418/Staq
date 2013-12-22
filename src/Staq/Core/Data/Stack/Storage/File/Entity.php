@@ -17,6 +17,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     protected $folder;
     protected $idField = "name";
     protected $extensions = ['json', 'md', 'html', 'php', 'txt'];
+    protected $patternAll = '*';
 
 
     /* CONSTRUCTOR
@@ -38,7 +39,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     {
         $data = [];
         foreach ($this->globDataFile($id) as $filename) {
-            $data = array_merge($data, $this->fetchFileData($filename));
+            $data = array_merge($data, $this->fetchFileData($id, $filename));
         }
         return $this->resultAsModel($data);
     }
@@ -67,11 +68,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     public function fetchAll($limit=NULL, $offset=NULL, &$count=FALSE)
     {
-        $ids = [];
-        foreach ($this->globDataFile('*') as $filename) {
-            $ids[] = \UString::substrBeforeLast(basename($filename), '.');
-        }
-        $ids = array_unique($ids);
+        $ids = $this->fetchIdsByPattern($this->patternAll);
         if ($count !== FALSE) {
             $count = count($ids);
         }
@@ -106,7 +103,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     public function save($model)
     {
         $id = $model[$this->idField];
-        $filename = \Staq::App()->getFilePath().'/'.$this->folder.'/'.$id;
+        $filename = \Staq::App()->getDataPath().$this->folder.'/'.$id;
         $data = $model->extractSeeds();
         if (isset($data['content'])) {
             // TODO: if the model exists verify that it is a markdown file
@@ -122,13 +119,21 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     /* PROTECTED METHODS
      *************************************************************************/
-    public function fetchFileData($filePath)
+    protected function fetchIdsByPattern($pattern)
+    {
+        return array_unique($this->globDataFile($pattern, true));
+    }
+
+    protected function fetchFileData($id, $filePath)
     {
         $data = [];
-        $data[$this->idField] = \UString::substrBeforeLast(basename($filePath), '.');
+        $data[$this->idField] = $id;
         $extension = \UString::substrAfterLast(basename($filePath), '.');
         if ($extension == 'json') {
-            $data = array_merge($data, json_decode(file_get_contents($filePath), TRUE));
+            $json = json_decode(file_get_contents($filePath), TRUE);
+            if (is_array($json)) {
+                $data = array_merge($data, $json);
+            }
         } else if ($extension == 'md'){
             $data['content'] = MarkdownExtra::defaultTransform(file_get_contents($filePath));
         } else if ($extension == 'html'){
@@ -145,7 +150,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $data;
     }
 
-    public function globDataFile($pattern)
+    protected function globDataFile($pattern, $asId=false)
     {
         $path = $this->folder;
         $folders = \Staq::App()->getExtensions();
@@ -159,8 +164,17 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         foreach ($folders as $folder) {
             $extensions = implode(',', $this->extensions);
             foreach (glob($folder.'/'.$pattern.'\.{'.$extensions.'}', GLOB_BRACE) as $filename) {
-                $files[] = $filename;
+                if ($asId) {
+                    $id = \UString::notStartWith($filename, $folder.'/');
+                    \UString::doSubstrBeforeLast($id, '.');
+                    $files[$id] = $id;
+                } else {
+                    $files[] = $filename;
+                }
             }
+        }
+        if ($asId) {
+            array_values($files);
         }
         return array_reverse($files);
     }

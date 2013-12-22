@@ -21,6 +21,9 @@ class PublicFile extends PublicFile\__Parent
     public function actionView()
     {
         $path = $this->getPublicPath();
+        if (preg_match('@^asset[a-zA-Z0-9]{10}/.*$@', $path)) {
+            $path = '/'.substr($path, 16);
+        }
         $realPath = \Staq::App()->getFilePath('/public' . $path);
         if (
             empty($realPath) ||

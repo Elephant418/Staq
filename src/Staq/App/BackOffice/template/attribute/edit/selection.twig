@@ -1,5 +1,5 @@
 {% set choice = attribute.get() %}
-<select name="{{name}}" id="{{id}}">
+<select name="{{name}}" id="{{id}}" class="input-xlarge">
     {% if attribute.allowNull() %}
     <option value=""
     {% if choice is null %}selected="selected"{% endif %} >

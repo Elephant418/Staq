@@ -29,9 +29,9 @@ class Setting
     {
         if ($path = \Staq::App()->getPath('cache/', TRUE)) {
             static::$cacheFile = $path . '/setting.' . \Staq::App()->getPlatform() . '.php';
-            if (is_file(static::$cacheFile)) {
-                require(static::$cacheFile);
-                if (is_array($cache)) {
+            if (is_file(static::$cacheFile) && is_readable(static::$cacheFile)) {
+                @include(static::$cacheFile);
+                if (isset($cache) && is_array($cache)) {
                     static::$cache = $cache;
                 }
             }
@@ -65,7 +65,7 @@ class Setting
             if ($setting->getAsBoolean('cache.setting')) {
                 if (
                     !static::$cacheFile ||
-                    !$handle = @fopen(static::$cacheFile, 'a') ||
+                    !($handle = @fopen(static::$cacheFile, 'a')) ||
                     !flock($handle, LOCK_EX)
                 ) {
                     return NULL;
