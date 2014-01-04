@@ -30,27 +30,27 @@ class Server
 
     /* SETTER METHODS
      *************************************************************************/
-    public function addApplication($namespace, $listenings = NULL)
+    public function addApplication($namespace, $listeningList = NULL)
     {
-        if (is_null($listenings)) {
-            $listenings = $this->getDefaultBaseUri();
+        if (is_null($listeningList)) {
+            $listeningList = $this->getDefaultBaseUri();
         }
-        $this->doFormatListenings($listenings);
-        $this->applications[$namespace] = $listenings;
+        $this->doFormatListeningList($listeningList);
+        $this->applications[$namespace] = $listeningList;
         return $this;
     }
 
-    public function addPlatform($platformName, $listenings = '/')
+    public function addPlatform($platformName, $listeningList = '/')
     {
-        $this->doFormatListenings($listenings);
-        $this->platforms[$platformName] = $listenings;
+        $this->doFormatListeningList($listeningList);
+        $this->platforms[$platformName] = $listeningList;
         return $this;
     }
 
-    protected function doFormatListenings(&$listenings)
+    protected function doFormatListeningList(&$listeningList)
     {
-        \UArray::doConvertToArray($listenings);
-        $listenings = (new \Staq\Url)->fromArray($listenings);
+        \UArray::doConvertToArray($listeningList);
+        $listeningList = (new \Staq\Url)->fromArray($listeningList);
     }
 
 
@@ -109,8 +109,8 @@ class Server
      *************************************************************************/
     protected function getCurrentPlatform($request, &$baseUri)
     {
-        foreach ($this->platforms as $platform => $listenings) {
-            foreach ($listenings as $listening) {
+        foreach ($this->platforms as $platform => $listeningList) {
+            foreach ($listeningList as $listening) {
                 if ($listening->match($request)) {
                     $baseUri .= $listening->uri;
                     \UString::doNotEndWith($baseUri, '/');
@@ -122,8 +122,8 @@ class Server
 
     protected function getCurrentApplicationName($request, &$baseUri)
     {
-        foreach ($this->applications as $application => $listenings) {
-            foreach ($listenings as $listening) {
+        foreach ($this->applications as $application => $listeningList) {
+            foreach ($listeningList as $listening) {
                 $listening->uri = $baseUri . $listening->uri;
                 if ($listening->match($request)) {
                     $baseUri = $listening->uri;
@@ -138,8 +138,10 @@ class Server
     {
         $baseUri = NULL;
         if (isset($_SERVER['DOCUMENT_ROOT']) && isset($_SERVER['SCRIPT_FILENAME'])) {
-            if (\UString::isStartWith($_SERVER['SCRIPT_FILENAME'], $_SERVER['DOCUMENT_ROOT'])) {
-                $baseUri = \UString::notStartWith(dirname($_SERVER['SCRIPT_FILENAME']), $_SERVER['DOCUMENT_ROOT']);
+			$rootFolderPath = \UString::notEndWith($_SERVER['DOCUMENT_ROOT'], '/');
+			$scriptFolderPath = dirname($_SERVER['SCRIPT_FILENAME']);
+            if (\UString::isStartWith($rootFolderPath, $scriptFolderPath)) {
+                $baseUri = \UString::notStartWith($rootFolderPath, $scriptFolderPath);
             }
         }
         if (empty($baseUri)) {
@@ -159,7 +161,6 @@ class Server
      *************************************************************************/
     protected function findExtensions($namespace)
     {
-        $namespace = \Staq\Util::convertPathToNamespace($namespace);
         $this->initializeNamespaces();
         $files = [];
         $old = [];
@@ -180,12 +181,13 @@ class Server
     protected function initializeNamespaces()
     {
         if (empty($this->namespaces)) {
-            if (\UString::has(__DIR__, DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR)) {
-                $baseDir = \UString::substrBeforeLast(__DIR__, DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR);
+			$vendorPath = DIRECTORY_SEPARATOR.'vendor'.DIRECTORY_SEPARATOR;
+            if (\UString::has(__DIR__, $vendorPath)) {
+                $baseDir = \UString::substrBeforeLast(__DIR__, $vendorPath);
             } else {
-                $baseDir = __DIR__ . DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'..';
+                $baseDir = __DIR__ . '/../..';
             }
-            $this->namespaces = (require(realpath($baseDir.'/vendor/composer/autoload_namespaces.php')));
+            $this->namespaces = (require($baseDir . '/vendor/composer/autoload_namespaces.php'));
         }
     }
 
