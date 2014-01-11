@@ -41,7 +41,7 @@ require_once( 'vendor/pixel418/staq/src/include.php' );
 
  * The simplest [Staq Hello World project](https://github.com/Pixel418/Staq-HelloWorld/)
  * The [Staq Hello World project with MVC structure](https://github.com/Pixel418/Staq-HelloWorldMVC/)
- * 
+
 
 ### System Requirements
 You need **PHP >= 5.4** and some happiness.
