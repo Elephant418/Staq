@@ -14,7 +14,7 @@ Staq is a modern & innovative PHP framework for enjoyable web development.
 Features
 --------
 
-Staq contains all the expected features : Extensible structure, routing, ORM ( *Planned* ), templating ( *Planned* ) & pre-coded applications ( *Planned* ). <br>
+Staq contains all the expected features : Extensible structure, routing, ORM, templating & pre-coded applications ( *Planned* ). <br>
 It mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
 
 [&uarr; top](#readme)
