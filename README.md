@@ -39,6 +39,8 @@ require_once( 'vendor/pixel418/staq/src/include.php' );
 
 ### Hello world projects
 
+You can use the Hello World projects to bootstrap an application:
+
  * The simplest [Staq Hello World project](https://github.com/Pixel418/Staq-HelloWorld/)
  * The [Staq Hello World project with MVC structure](https://github.com/Pixel418/Staq-HelloWorldMVC/)
 
