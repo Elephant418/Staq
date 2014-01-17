@@ -8,6 +8,7 @@ namespace Staq\Core\Data\Stack\Attribute;
 class DateTime extends DateTime\__Parent
 {
 
+    protected $defaultValue = '2001-01-01';
     static $mysql_format = 'Y-m-d H:i:s';
     static $mysql_format_regex = '/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/';
 
@@ -20,7 +21,7 @@ class DateTime extends DateTime\__Parent
         if ($date && $date->getTimestamp()) {
             return $date;
         }
-        return new \DateTime('2001-01-01');
+        return new \DateTime($this->defaultValue);
     }
 
     public function set($value)
