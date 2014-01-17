@@ -23,6 +23,15 @@ class DateTime extends DateTime\__Parent
         }
         return new \DateTime($this->defaultValue);
     }
+    
+    public function is_set()
+    {
+        $date = \DateTime::createFromFormat(static::$mysql_format, $this->seed);
+        if ($date && $date->getTimestamp()) {
+            return true;
+        }
+        return false;
+    }
 
     public function set($value)
     {

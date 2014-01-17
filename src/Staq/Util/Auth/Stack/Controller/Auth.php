@@ -161,7 +161,7 @@ class Auth extends Auth\__Parent
         if (!is_object($user)) {
             $user = (new \Stack\Entity\User)->fetchByLogin($user);
         }
-        if (!$user->exists()) {
+        if (!is_object($user) || !$user->exists()) {
             return FALSE;
         }
         if (!is_null($password)) {
