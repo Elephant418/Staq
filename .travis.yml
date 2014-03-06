@@ -4,3 +4,4 @@ before_script:
   - php composer.phar install
 php:
   - 5.4
+  - hhvm
