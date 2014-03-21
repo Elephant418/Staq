@@ -145,9 +145,9 @@ class Route
         $pattern = str_replace('*', '[^/]*', $pattern);
         $pattern = str_replace('°°', '.*', $pattern);
         $pattern = preg_replace('@\(([^)]*)\)@', '(°°\1)?', $pattern);
-        $pattern = preg_replace('@\#(\w+)@', '(?<\1>[0-9]+)', $pattern);
-        $pattern = preg_replace('@\:\:(\w+)@', '(?<\1>.+)', $pattern);
-        $pattern = preg_replace('@\:(\w+)@', '(?<\1>[^/.]+)', $pattern);
+        $pattern = preg_replace('@\#(\w+)@', '(?<\1>[0-9]*)', $pattern);
+        $pattern = preg_replace('@\:\:(\w+)@', '(?<\1>.*)', $pattern);
+        $pattern = preg_replace('@\:(\w+)@', '(?<\1>[^/.]*)', $pattern);
         $pattern = str_replace('°°', '?:', $pattern);
         $pattern = '@^' . $pattern . '/?$@';
         $parameters = [];
