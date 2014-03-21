@@ -2,8 +2,8 @@
 
 require_once(__DIR__ . '/../../../../../vendor/autoload.php');
 
-\Staq\App::create('Example\\Staq\\Bootstrap')
-    ->setPlatform('local')
-    ->run();
-
-?>
+( new \Staq\Server )
+    ->addApplication('Example\\Staq\\Bootstrap', '/Example/Staq/Bootstrap/public')
+    ->addPlatform( 'local')
+    ->getApp( )
+    ->run( );

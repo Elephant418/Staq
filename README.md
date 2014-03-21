@@ -1,4 +1,4 @@
-Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=develop)](https://travis-ci.org/Pixel418/Staq?branch=develop)
+Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=master)](https://travis-ci.org/Pixel418/Staq?branch=master)
 ======
 
 Staq is a modern & innovative PHP framework for enjoyable web development.
@@ -14,7 +14,7 @@ Staq is a modern & innovative PHP framework for enjoyable web development.
 Features
 --------
 
-Staq contains all the expected features : Extensible structure, routing, ORM ( *Planned* ), templating ( *Planned* ) & pre-coded applications ( *Planned* ). <br>
+Staq contains all the expected features : Extensible structure, routing, ORM, templating & pre-coded applications ( *Planned* ). <br>
 It mainly contains a new object pattern, *the stack*, for low dependency, high extensible & enjoyable development !
 
 [&uarr; top](#readme)
@@ -35,6 +35,15 @@ require_once( 'vendor/pixel418/staq/src/include.php' );
     } )
     ->run( );
 ```
+
+
+### Hello world projects
+
+You can use the Hello World projects to bootstrap an application:
+
+ * The simplest [Staq Hello World project](https://github.com/Pixel418/Staq-HelloWorld/)
+ * The [Staq Hello World project with MVC structure](https://github.com/Pixel418/Staq-HelloWorldMVC/)
+
 
 ### System Requirements
 You need **PHP >= 5.4** and some happiness.
