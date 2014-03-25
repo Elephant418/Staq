@@ -140,16 +140,29 @@ class Route
      *************************************************************************/
     protected function isUriMatch($uri, $refer)
     {
+        // Escape extra characters
         $pattern = str_replace(['.', '+', '?'], ['\.', '\+', '\?'], $refer);
+        // Escape super joker (**) 
         $pattern = str_replace('**', '°°', $pattern);
+        // Convert joker (*) 
         $pattern = str_replace('*', '[^/]*', $pattern);
+        // Convert super joker (*) 
         $pattern = str_replace('°°', '.*', $pattern);
+        // Convert optional parts
         $pattern = preg_replace('@\(([^)]*)\)@', '(°°\1)?', $pattern);
-        $pattern = preg_replace('@\#(\w+)@', '(?<\1>[0-9]*)', $pattern);
-        $pattern = preg_replace('@\:\:(\w+)@', '(?<\1>.*)', $pattern);
-        $pattern = preg_replace('@\:(\w+)@', '(?<\1>[^/.]*)', $pattern);
+        // Convert variables
+        $varPrefixMap = ['#'=>'[0-9]', '::'=>'.', ':' =>'[^/.]'];
+        foreach ($varPrefixMap as $prefix => $range) {
+            $prefix = '\\'.substr(chunk_split($prefix, 1, '\\'), 0, -1);
+            // Optional variables
+            $pattern = preg_replace('@(\([^)]*)'.$prefix.'(\w+)@', '\1(?<\2>'.$range.'*)', $pattern);
+            // Mandatory variables
+            $pattern = preg_replace('@'.$prefix.'(\w+)@', '(?<\1>'.$range.'+)', $pattern);
+        }
         $pattern = str_replace('°°', '?:', $pattern);
+        // Add regex delimiters
         $pattern = '@^' . $pattern . '/?$@';
+        
         $parameters = [];
         $result = preg_match($pattern, $uri, $parameters);
         if ($result) {
