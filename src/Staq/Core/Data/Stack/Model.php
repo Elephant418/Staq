@@ -23,6 +23,11 @@ class Model extends \ArrayObject implements \Stack\IModel
         return ($this->id !== NULL);
     }
 
+    public function is($model)
+    {
+        return (\Staq\Util::getStackQuery($model) == \Staq\Util::getStackQuery($this));
+    }
+
     public function name()
     {
         return $this->id;
