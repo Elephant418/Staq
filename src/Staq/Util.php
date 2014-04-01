@@ -108,7 +108,7 @@ abstract class Util
     public static function isStack($stack, $query = 'Stack\\')
     {
         \UObject::doConvertToClass($stack);
-        return \UString::isStartWith($stack, $query);
+        return is_string($stack) && \UString::isStartWith($stack, $query);
     }
 
     public static function getStackQuery($stack)
