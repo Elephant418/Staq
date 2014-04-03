@@ -230,15 +230,26 @@ abstract class Util
 
     /* ROUTE METHODS
      *************************************************************************/
-    public static function getPublicUrl($path) {
+    public static function getAbsoluteUrl($url) {
+        if (\UString::isStartWith($url, '/')) {
+            $url = 'http://'.$_SERVER['HTTP_HOST'].$url;
+        }
+        return $url;
+    }
+    
+    public static function getPublicUrl($path, $absoluteURL = false) {
         \UString::doStartWith($path, '/');
-        return \Staq::App()->getBaseUri() . $path;
+        $url = \Staq::App()->getBaseUri() . $path;
+        if ($absoluteURL) {
+            $url = \Staq\Util::getAbsoluteUrl($url);
+        }
+        return $url;
     }
 
-    public static function getAssetUrl($path) {
+    public static function getAssetUrl($path, $absoluteURL = false) {
         $settings = (new \Stack\Setting)->parse('Application.ini');
         if (!$settings->getAsBoolean('cache.asset')) {
-            return \Staq\Util::getPublicUrl($path);
+            return \Staq\Util::getPublicUrl($path, $absoluteURL);
         }
         $realPath = \Staq::App()->getFilePath('/public/' . $path);
         if (!$realPath) {
@@ -249,7 +260,7 @@ abstract class Util
         }
         $hash = substr( md5(filemtime($realPath)), 22 );
         $asset = 'asset' . $hash . '/' . $path;
-        return \Staq\Util::getPublicUrl($asset);
+        return \Staq\Util::getPublicUrl($asset, $absoluteURL);
     }
 
     public static function getControllerUrl($controller, $action) {
@@ -258,13 +269,13 @@ abstract class Util
         return \Staq\Util::getPublicUrl($uri);
     }
 
-    public static function getModelControllerUrl($model, $action='view', $parameters = []) {
+    public static function getModelControllerUrl($model, $action='view', $parameters = [], $absoluteURL = false) {
         $controllerName = \Staq\Util::getStackQuery($model);
         $controller = \Staq::Ctrl($controllerName);
         if ($controller) {
             $parameters = $controller->getRouteAttributes($model);
         }
         $uri = \Staq::App()->getUri($controller, $action, $parameters);
-        return \Staq\Util::getPublicUrl($uri);
+        return \Staq\Util::getPublicUrl($uri, $absoluteURL);
     }
 }
