@@ -94,7 +94,7 @@ class ApplicationTest extends StaqTestCase
     public function test_error_reporting__none()
     {
         $app = \Staq\App::create();
-        $this->assertEquals(0, ini_get('error_reporting'));
+        $this->assertEquals(0, ini_get('display_errors'));
     }
 
     public function test_error_reporting__display()
@@ -102,7 +102,7 @@ class ApplicationTest extends StaqTestCase
         $this->setExpectedException('PHPUnit_Framework_Error');
         $app = \Staq\App::create()
             ->setPlatform('local');
-        $this->assertEquals(30719, ini_get('error_reporting'));
+        $this->assertEquals(1, ini_get('display_errors'));
         trigger_error('Test of warnings', E_USER_ERROR);
     }
 }
