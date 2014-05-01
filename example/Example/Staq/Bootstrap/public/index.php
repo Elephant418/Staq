@@ -3,7 +3,7 @@
 require_once(__DIR__ . '/../../../../../vendor/autoload.php');
 
 ( new \Staq\Server )
-    ->addApplication('Example\\Staq\\Bootstrap', '/Example/Staq/Bootstrap/public')
+    ->addApplication('Example\\Staq\\Bootstrap')
     ->addPlatform( 'local')
     ->getApp( )
     ->run( );
