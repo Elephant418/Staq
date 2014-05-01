@@ -60,8 +60,10 @@ class Autoloader
     {
         $stackQuery = \Staq\Util::getStackQuery($class);
         while ($stackQuery) {
+            $relativePath = $this->getRelativePath($stackQuery);
             foreach (array_keys($this->extensions) as $extensionNamespace) {
-                if ($realClass = $this->getRealClass($stackQuery, $extensionNamespace)) {
+                if ($this->isClassExist($relativePath, $extensionNamespace)) {
+                    $realClass = $this->getRealClass($stackQuery, $extensionNamespace);
                     $this->createClassAlias($class, $realClass);
                     return TRUE;
                 }
@@ -75,24 +77,50 @@ class Autoloader
     // "stack" is now a part of the namespace, there is no burgers left at my bakery
     protected function getRealClass($stack, $extensionNamespace)
     {
-        $stackPath = \Staq\Util::convertNamespaceToPath($stack);
-        $absolutePath = realpath($this->extensions[$extensionNamespace] . '/Stack/' . $stackPath . '.php');
-        if (is_file($absolutePath)) {
-            $realClass = $extensionNamespace . '\\Stack\\' . $stack;
-            return $realClass;
+        $realClassParts = $this->getRealClassParts($stack);
+        
+        return $extensionNamespace . '\\Stack\\' . join('\\', $realClassParts);
+    }
+
+    // "stack" is now a part of the namespace, there is no burgers left at my bakery
+    protected function isClassExist($relativePath, $extensionNamespace)
+    {
+        $absolutePath = $this->extensions[$extensionNamespace] . '/Stack/' . $relativePath;
+        $classExist = !! realpath($absolutePath);
+        
+        return $classExist;
+    }
+
+    protected function getRelativePath($stack)
+    {
+        $realClassParts = $this->getRealClassParts($stack);
+        
+        return join(DIRECTORY_SEPARATOR, $realClassParts) . '.php';
+    }
+
+    protected function getRealClassParts($stack)
+    {
+        $realClassParts = explode('\\', $stack);
+        $lastIndex = count($realClassParts)-1;
+        for ($i=$lastIndex-1; $i>=0; $i--) {
+            $realClassParts[$lastIndex] .= $realClassParts[$i];
         }
+
+        return $realClassParts;
     }
 
 
     protected function loadStackParentClass($class)
     {
         $queryExtension = \Staq\Util::getStackableExtension($class);
-        $query = \Staq\Util::getParentStackQuery($class);
+        $stackQuery = \Staq\Util::getParentStackQuery($class);
         $ready = FALSE;
-        while ($query) {
+        while ($stackQuery) {
+            $relativePath = $this->getRelativePath($stackQuery);
             foreach (array_keys($this->extensions) as $extensionNamespace) {
                 if ($ready) {
-                    if ($realClass = $this->getRealClass($query, $extensionNamespace)) {
+                    if ($this->isClassExist($relativePath, $extensionNamespace)) {
+                        $realClass = $this->getRealClass($stackQuery, $extensionNamespace);
                         $this->createClassAlias($class, $realClass);
                         return TRUE;
                     }
@@ -102,7 +130,7 @@ class Autoloader
                     }
                 }
             }
-            $query = \Staq\Util::popStackQuery($query);
+            $stackQuery = \Staq\Util::popStackQuery($stackQuery);
             $ready = TRUE;
         }
 
@@ -147,6 +175,8 @@ class Autoloader
         $code .= '{ }' . PHP_EOL . '}' . PHP_EOL;
         $this->addToCache($code);
         eval($code);
+        
+        return true;
     }
 
     protected function addToCache($code)

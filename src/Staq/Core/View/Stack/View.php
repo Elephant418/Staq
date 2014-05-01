@@ -5,7 +5,7 @@
 
 namespace Staq\Core\View\Stack;
 
-class View extends \Stack\Util\ArrayObject
+class View extends \Stack\ArrayObject
 {
 
 

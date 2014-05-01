@@ -82,7 +82,7 @@ class Setting
 
     protected function getCache($settingFileName)
     {
-        return new \Stack\Util\ArrayObject(static::$cache[$settingFileName]);
+        return new \Stack\ArrayObject(static::$cache[$settingFileName]);
     }
 
 
@@ -113,7 +113,7 @@ class Setting
                     array_unshift($filePaths, $class::$setting);
                 }
             }
-            $settings = (new \Stack\Util\IniParser)->parse($filePaths);
+            $settings = (new \Stack\Parser\Ini)->parse($filePaths);
             $this->addCache($settingFileName, $settings);
         }
         return $this->getCache($settingFileName);
