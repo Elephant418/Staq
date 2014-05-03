@@ -2,7 +2,7 @@
 
 namespace Test\Staq\Project\Setting\Stack\Setting;
 
-class Coco
+class CocoSetting
 {
 
     public static $setting = [

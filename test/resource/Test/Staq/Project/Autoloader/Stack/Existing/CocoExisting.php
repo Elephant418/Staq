@@ -2,7 +2,7 @@
 
 namespace Test\Staq\Project\Autoloader\Stack\Existing;
 
-class Coco
+class CocoExisting
 {
 
     public $attribute = 'ok';

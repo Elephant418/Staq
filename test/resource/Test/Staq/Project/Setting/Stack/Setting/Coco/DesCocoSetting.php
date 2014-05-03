@@ -2,7 +2,7 @@
 
 namespace Test\Staq\Project\Setting\Stack\Setting\Coco;
 
-class Des extends Des\__Parent
+class DesCocoSetting extends DesCocoSetting\__Parent
 {
 
     public static $setting = [
