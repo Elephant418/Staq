@@ -74,8 +74,8 @@ class Setting
                     fwrite($handle, '<?php' . PHP_EOL . '$cache = array( );' . PHP_EOL);
                 }
                 fwrite($handle, '$cache["' . $settingFileName . '"] = ' . var_export($settings, TRUE) . ';' . PHP_EOL);
-                fclose($handle);
                 flock($handle, LOCK_UN);
+                fclose($handle);
             }
         }
     }
