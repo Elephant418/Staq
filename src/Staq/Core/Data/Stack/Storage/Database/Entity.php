@@ -51,12 +51,12 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $this->fetch([], $limit, NULL, $offset, $count);
     }
 
-    public function fetchByIds($ids, $limit = NULL)
+    public function fetchByIds($ids, $limit = NULL, $order = NULL)
     {
         if (empty($ids)) {
             return array();
         }
-        return $this->fetch([$this->idField => $ids], $limit);
+        return $this->fetch([$this->idField => $ids], $limit, $order);
     }
 
     public function fetchByRelated($field, $related, $limit = NULL, $offset = NULL, &$count = FALSE)
