@@ -65,10 +65,15 @@ class Application extends Application\__Parent
 
     /* PUBLIC METHODS
      *************************************************************************/
-    public function run()
+    public function start()
     {
         $this->router->initialize($this->controllers);
         $this->controllers = [];
+    }
+
+    public function run()
+    {
+        $this->start();
         echo $this->router->resolve();
     }
 }
