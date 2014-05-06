@@ -47,6 +47,12 @@ class View extends \Stack\Util\ArrayObject
 
     /* PUBLIC METHODS
      *************************************************************************/
+    public function set($index, $value)
+    {
+        $this->offsetSet($index, $value);
+        return $this;
+    }
+    
     public function render()
     {
         if (!empty($_GET)) {
