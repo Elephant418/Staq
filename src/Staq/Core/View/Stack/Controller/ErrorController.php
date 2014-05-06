@@ -5,7 +5,7 @@
 
 namespace Staq\Core\View\Stack\Controller;
 
-class ErrorController extends Error\__Parent
+class ErrorController extends ErrorController\__Parent
 {
 
 

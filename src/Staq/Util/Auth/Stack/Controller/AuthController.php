@@ -7,7 +7,7 @@ namespace Staq\Util\Auth\Stack\Controller;
 use \Stack\Util\Form;
 use \Stack\Util\UINotification as Notif;
 
-class AuthController extends Auth\__Parent
+class AuthController extends AuthController\__Parent
 {
 
 

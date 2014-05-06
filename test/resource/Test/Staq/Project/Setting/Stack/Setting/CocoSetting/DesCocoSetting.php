@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Staq\Project\Setting\Stack\Setting\Coco;
+namespace Test\Staq\Project\Setting\Stack\Setting\Setting;
 
 class DesCocoSetting extends DesCocoSetting\__Parent
 {

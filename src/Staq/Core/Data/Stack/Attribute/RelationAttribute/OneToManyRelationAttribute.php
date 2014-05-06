@@ -3,9 +3,9 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Attribute\Relation;
+namespace Staq\Core\Data\Stack\Attribute\RelationAttribute;
 
-class OneToManyRelationAttribute extends OneToMany\__Parent
+class OneToManyRelationAttribute extends OneToManyRelationAttribute\__Parent
 {
 
 

@@ -2,7 +2,7 @@
 
 namespace Staq\Core\Data\Stack\Controller;
 
-class ModelController extends Model\__Parent
+class ModelController extends ModelController\__Parent
 {
 
 

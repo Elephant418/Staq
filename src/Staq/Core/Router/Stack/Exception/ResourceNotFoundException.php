@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Router\Stack\Exception;
 
-class ResourceNotFoundException extends ResourceNotFound\__Parent
+class ResourceNotFoundException extends ResourceNotFoundException\__Parent
 {
 
 

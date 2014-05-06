@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class TextAttribute extends Text\__Parent
+class TextAttribute extends TextAttribute\__Parent
 {
 
 

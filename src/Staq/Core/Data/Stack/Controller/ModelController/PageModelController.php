@@ -3,9 +3,9 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Controller\Model;
+namespace Staq\Core\Data\Stack\Controller\ModelController;
 
-class PageModelController extends Page\__Parent
+class PageModelController extends PageModelController\__Parent
 {
 
 

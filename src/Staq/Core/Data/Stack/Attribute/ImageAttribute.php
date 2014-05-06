@@ -5,6 +5,6 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class ImageAttribute extends Image\__Parent
+class ImageAttribute extends ImageAttribute\__Parent
 {
 }

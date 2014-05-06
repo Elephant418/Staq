@@ -119,6 +119,39 @@ abstract class Util
         }
     }
 
+    protected function getStackClassParts($stack)
+    {
+        $query = \Staq\Util::getStackQuery($stack);
+        $stackParts = explode('\\', $query);
+        $lastIndex = count($stackParts)-1;
+        for ($i=0; $i<$lastIndex; $i++) {
+            $stackParts[$i+1] = $stackParts[$i+1] . $stackParts[$i];
+        }
+        return $stackParts;
+    }
+
+    public static function getStackFile($stack)
+    {
+        $stackQueryParts = \Staq\Util::getStackClassParts($stack);
+        return join(DIRECTORY_SEPARATOR, $stackQueryParts) . '.php';
+    }
+
+    public static function getStackFileFromQuery($query)
+    {
+        return \Staq\Util::getStackFile('Stack\\'.$query);
+    }
+
+    public static function getStackClass($stack)
+    {
+        $stackQueryParts = \Staq\Util::getStackClassParts($stack);
+        return join('\\', $stackQueryParts);
+    }
+
+    public static function getStackClassFromQuery($query)
+    {
+        return \Staq\Util::getStackClass('Stack\\'.$query);
+    }
+
     public static function getStackType($stack)
     {
         $query = static::getStackQuery($stack);

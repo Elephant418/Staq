@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Router\Stack\Exception;
 
-class ControllerActionDefinitionException extends ControllerActionDefinition\__Parent
+class ControllerActionDefinitionException extends ControllerActionDefinitionException\__Parent
 {
 
 

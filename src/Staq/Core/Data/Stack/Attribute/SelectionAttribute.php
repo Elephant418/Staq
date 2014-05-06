@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class SelectionAttribute extends Selection\__Parent
+class SelectionAttribute extends SelectionAttribute\__Parent
 {
 
 

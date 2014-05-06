@@ -2,8 +2,9 @@
 
 /* This file is part of the Staq project, which is under MIT license */
 
+namespace Staq\Core\Data\Stack\Storage\DatabaseStorage;
 
-namespace Staq\Core\Data\Stack\Storage\Database;
+use Staq\Core\Data\Stack\Storage\DatabaseStorage\RequestDatabaseStorage as Request;
 
 class EntityDatabaseStorage extends \Staq\Core\Data\Stack\Storage\EntityStorage implements \Stack\IEntity
 {

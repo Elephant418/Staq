@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class IntegerAttribute extends Integer\__Parent
+class IntegerAttribute extends IntegerAttribute\__Parent
 {
 
 

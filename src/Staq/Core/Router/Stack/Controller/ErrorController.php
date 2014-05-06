@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Router\Stack\Controller;
 
-class ErrorController extends Error\__Parent
+class ErrorController extends ErrorController\__Parent
 {
 
 

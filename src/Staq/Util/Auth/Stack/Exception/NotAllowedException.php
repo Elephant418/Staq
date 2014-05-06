@@ -5,7 +5,7 @@
 
 namespace Staq\Util\Auth\Stack\Exception;
 
-class NotAllowedException extends NotAllowed\__Parent
+class NotAllowedException extends NotAllowedException\__Parent
 {
 
 

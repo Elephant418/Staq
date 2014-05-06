@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class DateTimeAttribute extends DateTime\__Parent
+class DateTimeAttribute extends DateTimeAttribute\__Parent
 {
 
     protected $defaultValue = '2001-01-01';

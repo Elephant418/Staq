@@ -3,9 +3,9 @@
 /* This file is part of the Staq project, which is under MIT license */
 
 
-namespace Staq\Core\Data\Stack\Attribute\Image;
+namespace Staq\Core\Data\Stack\Attribute\ImageAttribute;
 
-class CloudinaryImageAttribute extends Cloudinary\__Parent
+class CloudinaryImageAttribute extends CloudinaryImageAttribute\__Parent
 {
 
 

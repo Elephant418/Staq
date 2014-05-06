@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Model;
 
-class PageModel extends Page\__Parent
+class PageModel extends PageModel\__Parent
 {
     public function initialize() {
         if (empty($this->title)) {

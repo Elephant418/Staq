@@ -60,7 +60,7 @@ class Autoloader
     {
         $stackQuery = \Staq\Util::getStackQuery($class);
         while ($stackQuery) {
-            $relativePath = $this->getRelativePath($stackQuery);
+            $relativePath = \Staq\Util::getStackFileFromQuery($stackQuery);
             foreach (array_keys($this->extensions) as $extensionNamespace) {
                 if ($this->isClassExist($relativePath, $extensionNamespace)) {
                     $realClass = $this->getRealClass($stackQuery, $extensionNamespace);
@@ -74,12 +74,9 @@ class Autoloader
         $this->createClassEmpty($class);
     }
 
-    // "stack" is now a part of the namespace, there is no burgers left at my bakery
     protected function getRealClass($stack, $extensionNamespace)
-    {
-        $realClassParts = $this->getRealClassParts($stack);
-        
-        return $extensionNamespace . '\\Stack\\' . join('\\', $realClassParts);
+    {        
+        return $extensionNamespace . '\\Stack\\' . \Staq\Util::getStackClassFromQuery($stack);
     }
 
     // "stack" is now a part of the namespace, there is no burgers left at my bakery
@@ -91,36 +88,17 @@ class Autoloader
         return $classExist;
     }
 
-    protected function getRelativePath($stack)
-    {
-        $realClassParts = $this->getRealClassParts($stack);
-        
-        return join(DIRECTORY_SEPARATOR, $realClassParts) . '.php';
-    }
-
-    protected function getRealClassParts($stack)
-    {
-        $realClassParts = explode('\\', $stack);
-        $lastIndex = count($realClassParts)-1;
-        for ($i=$lastIndex-1; $i>=0; $i--) {
-            $realClassParts[$lastIndex] .= $realClassParts[$i];
-        }
-
-        return $realClassParts;
-    }
-
-
     protected function loadStackParentClass($class)
     {
         $queryExtension = \Staq\Util::getStackableExtension($class);
         $stackQuery = \Staq\Util::getParentStackQuery($class);
         $ready = FALSE;
         while ($stackQuery) {
-            $relativePath = $this->getRelativePath($stackQuery);
+            $relativePath = \Staq\Util::convertNamespaceToPath($stackQuery).'.php';
             foreach (array_keys($this->extensions) as $extensionNamespace) {
                 if ($ready) {
                     if ($this->isClassExist($relativePath, $extensionNamespace)) {
-                        $realClass = $this->getRealClass($stackQuery, $extensionNamespace);
+                        $realClass = $extensionNamespace.'\\Stack\\'.$stackQuery;
                         $this->createClassAlias($class, $realClass);
                         return TRUE;
                     }

@@ -5,7 +5,7 @@
 
 namespace Staq\Util\Auth\Stack\Attribute;
 
-class PasswordAttribute extends Password\__Parent
+class PasswordAttribute extends PasswordAttribute\__Parent
 {
 
 

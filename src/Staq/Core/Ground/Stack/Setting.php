@@ -107,7 +107,8 @@ class Setting
         \UString::doSubstrBefore($settingFileName, '.');
         if (!$this->hasCache($settingFileName)) {
             $filePaths = $this->getFilePaths($settingFileName);
-            $stack = 'Stack\\' . \Staq\Util::convertPathToNamespace($settingFileName);
+            $query = \Staq\Util::convertPathToNamespace($settingFileName);
+            $stack = 'Stack\\' . $query;
             foreach (\Staq\Util::getStackDefinition($stack) as $class) {
                 if (isset($class::$setting)) {
                     array_unshift($filePaths, $class::$setting);

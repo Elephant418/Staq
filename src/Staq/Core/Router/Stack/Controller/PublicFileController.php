@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Router\Stack\Controller;
 
-class PublicFileController extends PublicFile\__Parent
+class PublicFileController extends PublicFileController\__Parent
 {
 
 

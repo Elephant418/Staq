@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class BooleanAttribute extends Boolean\__Parent
+class BooleanAttribute extends BooleanAttribute\__Parent
 {
 
 
