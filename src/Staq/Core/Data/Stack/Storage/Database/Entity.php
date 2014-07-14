@@ -63,7 +63,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     public function fetchByRelated($field, $related, $limit = NULL, $offset = NULL, &$count = FALSE)
     {
-        return $this->fetch([$field => $related->id], $limit, NULL, $offset = NULL, $count);
+        return $this->fetch([$field => $related->id], $limit, NULL, $offset, $count);
     }
 
     public function deleteByFields($where)
@@ -198,20 +198,23 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     protected function fetchOneOrNull($fields=[], $order=NULL, $offset=NULL, $limit=NULL)
     {
-        $model = $this->fetchOne($fields, $order, $offset, $limit);
-        if ($limit == self::FETCH_COUNT || $model->exists()) {
-            return $model;
+        if ($limit == self::FETCH_COUNT) {
+            return $this->getCount($fields);
+        }
+        $data = $this->getData($fields, $order, $offset);
+        if ($data) {
+            return $this->resultAsModel($data);
         }
         return NULL;
     }
 
     protected function fetchOne($fields=[], $order=NULL, $offset=NULL, $limit=NULL)
     {
-        if ($limit == self::FETCH_COUNT) {
-            return $this->getCount($fields);
+        $model = $this->fetchOneOrNull($fields, $order, $offset, $limit);
+        if ($model === NULL) {
+            $model = $this->getModel();
         }
-        $data = $this->getData($fields, $order, $offset);
-        return $this->resultAsModel($data);
+        return $model;
     }
 
     protected function fetchCount()
@@ -224,9 +227,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     protected function getData($where=[], $order=NULL, $offset=NULL)
     {
-        $datas = $this->getDataList($where, 1, $order, $offset);
-        if (isset($datas[0])) {
-            return $datas[0];
+        $dataList = $this->getDataList($where, 1, $order, $offset);
+        if (isset($dataList[0])) {
+            return $dataList[0];
         }
         return FALSE;
     }
