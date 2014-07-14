@@ -11,10 +11,11 @@ class FetchAlias extends FetchAlias\__Parent
 
     /* ATTRIBUTES
      *************************************************************************/
-    public $editable = FALSE;
-    protected $remoteModels = NULL;
+    public $editable = false;
+    protected $remoteModels = null;
     protected $fetchMethod;
     protected $model;
+    protected $initialized = false;
 
 
     /* CONSTRUCTOR
@@ -43,11 +44,12 @@ class FetchAlias extends FetchAlias\__Parent
         $entity = $this->getRemoteEntity();
         $fetchMethod = $this->fetchMethod;
         $this->remoteModels = $entity->$fetchMethod($this->model);
+        $this->initialized = true;
     }
 
     public function get()
     {
-        if (is_null($this->remoteModels)) {
+        if (! $this->initialized) {
             $this->reload();
         }
         return $this->remoteModels;
