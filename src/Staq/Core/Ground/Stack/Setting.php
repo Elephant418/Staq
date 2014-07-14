@@ -68,14 +68,17 @@ class Setting
                     !($handle = @fopen(static::$cacheFile, 'a')) ||
                     !flock($handle, LOCK_EX)
                 ) {
+                    if (isset($handle) && $handle) {
+                        fclose($handle);
+                    }
                     return NULL;
                 }
                 if (0 == filesize(static::$cacheFile)) {
                     fwrite($handle, '<?php' . PHP_EOL . '$cache = array( );' . PHP_EOL);
                 }
                 fwrite($handle, '$cache["' . $settingFileName . '"] = ' . var_export($settings, TRUE) . ';' . PHP_EOL);
-                fclose($handle);
                 flock($handle, LOCK_UN);
+                fclose($handle);
             }
         }
     }

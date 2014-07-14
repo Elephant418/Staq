@@ -10,7 +10,7 @@ class Autoloader
 
 
     /* ATTRIBUTES
-     *************************************************************************/
+     *******************************************************f******************/
     protected $extensions = [];
     static public $initialized = FALSE;
     static public $cacheFile;
@@ -157,11 +157,16 @@ class Autoloader
             !(new \Stack\Setting)
                 ->parse('Application')
                 ->getAsBoolean('cache.autoload') ||
-            !$handle = @fopen(static::$cacheFile, 'a')
+            !($handle = @fopen(static::$cacheFile, 'a')) ||
+            !flock($handle, LOCK_EX)
         ) {
+            if (isset($handle) && $handle) {
+                fclose($handle);
+            }
             return NULL;
         }
         fwrite($handle, '<?php ' . $code . ' ?>' . PHP_EOL);
+        flock($handle, LOCK_UN);
         fclose($handle);
     }
 }
