@@ -20,6 +20,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     protected $table;
     protected $idField;
     protected $fields;
+    
+    const FETCH_COUNT = 'count';
 
 
     /* CONSTRUCTOR
@@ -184,7 +186,7 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
      *************************************************************************/
     protected function fetch($fields=[], $limit=NULL, $order=NULL, $offset=NULL, &$count=FALSE)
     {
-        if ($limit == 'count') {
+        if ($limit == self::FETCH_COUNT) {
             return $this->getCount($fields);
         }
         $data = $this->getDataList($fields, $limit, $order, $offset, $count !== FALSE);
@@ -194,9 +196,18 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $this->resultAsModelList($data);
     }
 
+    protected function fetchOneOrNull($fields=[], $order=NULL, $offset=NULL, $limit=NULL)
+    {
+        $model = $this->fetchOne($fields, $order, $offset, $limit);
+        if ($limit == self::FETCH_COUNT || $model->exists()) {
+            return $model;
+        }
+        return NULL;
+    }
+
     protected function fetchOne($fields=[], $order=NULL, $offset=NULL, $limit=NULL)
     {
-        if ($limit == 'count') {
+        if ($limit == self::FETCH_COUNT) {
             return $this->getCount($fields);
         }
         $data = $this->getData($fields, $order, $offset);
