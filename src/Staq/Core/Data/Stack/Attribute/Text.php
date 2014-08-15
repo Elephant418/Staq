@@ -13,13 +13,25 @@ class Text extends Text\__Parent
      *************************************************************************/
     public function get()
     {
-        return str_replace( PHP_EOL, HTML_EOL, $this->seed );
+        $content = $this->cleanText($this->seed);
+        return $this->textToHtml($content);
     }
 
     public function getFirstParagraph()
     {
-        $paragraphs = explode( PHP_EOL, $this->seed, 1);
-        return $paragraphs[0];
+        $content = $this->cleanText($this->seed);
+        $paragraphList = explode(PHP_EOL, $content, 2);
+        return $this->textToHtml($paragraphList[0]);
+    }
+
+    public function getExceptFirstParagraph()
+    {
+        $content = $this->cleanText($this->seed);
+        $paragraphList = explode(PHP_EOL, $content, 2);
+        if (!isset($paragraphList[1])) {
+            return '';
+        }
+        return $this->textToHtml($paragraphList[1]);
     }
 
     public function getBeginning( $maximum=300, $minimum=200 )
@@ -41,5 +53,24 @@ class Text extends Text\__Parent
     {
         $value = str_replace( HTML_EOL, PHP_EOL, $value );
         return parent::set($value);
+    }
+
+
+    /* PROTECTED METHODS
+     *************************************************************************/
+    protected function textToHtml($content)
+    {
+        $content = '<p>'.preg_replace('#('.PHP_EOL.'\s*)+#', '</p><p>', $content).'</p>';
+        return $content;
+    }
+
+    protected function cleanText($content)
+    {
+        $content = preg_replace('#<[/]?p[^>]*>+#', PHP_EOL, $content);
+        $content = preg_replace('#^[\r\n\s]+#', '', $content);
+        $content = preg_replace('#[\r\n\s]+$#', '', $content);
+        $content = preg_replace('# [ ]+#', ' ', $content);
+        $content = preg_replace('#'.PHP_EOL.'[\r\n\s]+#', PHP_EOL, $content);
+        return $content;
     }
 }
