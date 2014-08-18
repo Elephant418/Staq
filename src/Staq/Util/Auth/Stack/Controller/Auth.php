@@ -56,7 +56,7 @@ class Auth extends Auth\__Parent
         if ($form->isValid()) {
             $user = (new \Stack\Model\User)
                 ->set('login', $form->login)
-                ->set('password', $form->password)
+                ->set('password', $form->password);
             try {
                 $saved = FALSE;
                 $saved = $user->save();
