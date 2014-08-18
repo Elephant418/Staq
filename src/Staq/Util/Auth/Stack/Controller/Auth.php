@@ -35,15 +35,9 @@ class Auth extends Auth\__Parent
      *************************************************************************/
     public function getInscriptionForm()
     {
-        $codes = $this->getCodes();
         return (new Form)
             ->addInput('login', 'string|required|min_length:4|max_length:19', 'inscription.login')
-                ->addInputFilter('login', 'validate_regexp:/^[a-zA-Z0-9-]*$/', 'This field must contains only letters, numbers and dash')
-            ->addInput('password', 'required', 'inscription.password')
-            ->addInput('code', 'required', 'inscription.code')
-                ->addInputFilter('code', 'validate_code', function ($field) use ($codes) {
-                    return in_array($field, $codes);
-                }, 'This is not a valid beta code');
+                ->addInputFilter('login', 'validate_regexp:/^[a-zA-Z0-9-]*$/', 'This field must contains only letters, numbers and dash');
     }
 
     public function getLoginForm()
@@ -63,7 +57,6 @@ class Auth extends Auth\__Parent
             $user = (new \Stack\Model\User)
                 ->set('login', $form->login)
                 ->set('password', $form->password)
-                ->set('code_beta', $form->code);
             try {
                 $saved = FALSE;
                 $saved = $user->save();
@@ -123,13 +116,6 @@ class Auth extends Auth\__Parent
             return $_GET['redirect'];
         }
         return \Staq::App()->getCurrentUri();
-    }
-
-    protected function getCodes()
-    {
-        return (new \Stack\Setting)
-            ->parse($this)
-            ->getAsArray('code');
     }
 
 
