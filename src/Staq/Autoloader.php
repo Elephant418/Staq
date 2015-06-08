@@ -10,7 +10,7 @@ class Autoloader
 
 
     /* ATTRIBUTES
-     *******************************************************f******************/
+     *************************************************************************/
     protected $extensions = [];
     static public $initialized = FALSE;
     static public $cacheFile;
