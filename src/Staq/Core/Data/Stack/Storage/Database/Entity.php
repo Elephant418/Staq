@@ -64,8 +64,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     public function fetchByRelated($field, $related, $limit = NULL, $offset = NULL, &$count = FALSE, $filterList = [])
     {
         $request = [$field => $related->id];
-        foreach ($filterList as $field => $value) {
-            $request[$field] = $value;
+        foreach ($filterList as $key => $value) {
+            $request[$key] = $value;
         }
         return $this->fetch($request, $limit, NULL, $offset, $count);
     }
@@ -83,8 +83,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         if (!empty($ids)) {
             $sql = 'UPDATE ' . $this->table
                 . ' SET ' . $field . '=' . $related->id;
-            foreach ($filterList as $field => $value) {
-                $sql .= ', ' . $field . '=' . $value;
+            foreach ($filterList as $key => $value) {
+                $sql .= ', ' . $key . '=' . $value;
             }
             $sql .= ' WHERE ' . $this->idField . ' IN (' . implode(', ', $ids) . ')';
             $request = new Request($sql);
@@ -92,8 +92,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         }
         $sql = 'UPDATE ' . $this->table
             . ' SET ' . $field . '=NULL';
-        foreach ($filterList as $field => $value) {
-            $sql .= ', ' . $field . '=' . NULL;
+        foreach ($filterList as $key => $value) {
+            $sql .= ', ' . $key . '=' . NULL;
         }
         $sql .= ' WHERE ' . $field . '=' . $related->id;
         if (!empty($ids)) {
@@ -123,8 +123,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
                 $sql[] = ' (' . implode(', ', $valueList) . ')';
             }
             $fieldList = [$field, $relatedField];
-            foreach (array_keys($filterList) as $field) {
-                $fieldList[] = $field;
+            foreach (array_keys($filterList) as $key) {
+                $fieldList[] = $key;
             }
             $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fieldList) . ') VALUES' . implode(',', $sql);
             $request = new Request($sql);
@@ -135,8 +135,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
             $sql = 'DELETE FROM ' . $table
                 . ' WHERE ' . $relatedField . '=' . $related->id
                 . ' AND ' . $field . ' IN (' . implode(', ', $removeIds) . ') ';
-            foreach ($filterList as $field => $value) {
-                $sql .= ' AND ' . $field . '=' . $value;
+            foreach ($filterList as $key => $value) {
+                $sql .= ' AND ' . $key . '=' . $value;
             }
             $request = new Request($sql);
             $request->execute();
@@ -150,8 +150,8 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         }
         $sql = 'SELECT ' . $field . ' FROM ' . $table
             . ' WHERE ' . $relatedField . '=' . $related->id;
-        foreach ($filterList as $field => $value) {
-            $sql .= ' AND ' . $field . '=' . $value;
+        foreach ($filterList as $key => $value) {
+            $sql .= ' AND ' . $key . '=' . $value;
         }
         $request = new Request($sql);
         $existing = $request->execute();
