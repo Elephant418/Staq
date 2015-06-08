@@ -46,7 +46,8 @@ class OneToMany extends OneToMany\__Parent
     public function reload()
     {
         $class = $this->getRemoteClass();
-        $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model);
+        $count = false;
+        $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model, null, null, $count, $this->filterList);
     }
 
     public function get()
@@ -72,9 +73,7 @@ class OneToMany extends OneToMany\__Parent
         $this->changed = TRUE;
         \UArray::doConvertToArray($remoteModels);
         foreach( $remoteModels as $model ) {
-            if (empty($model)) {
-                $remoteModel = $this->getRemoteModel();
-            } else if (is_numeric($model)) {
+            if (is_numeric($model)) {
                 $model = $this->getRemoteModel()->entity->fetchById($model);
             } else if (!\Staq\Util::isStack($model, $this->getRemoteClass())) {
                 $message = 'Input of type "' . $this->getRemoteClass() . '", but "' . gettype($model) . '" given.';
@@ -106,7 +105,7 @@ class OneToMany extends OneToMany\__Parent
     {
         if ($this->changed) {
             $class = $this->getRemoteClass();
-            (new $class)->entity->updateRelated($this->relatedAttributeName, $this->getIds(), $this->model);
+            (new $class)->entity->updateRelated($this->relatedAttributeName, $this->getIds(), $this->model, $this->filterList);
         }
     }
 

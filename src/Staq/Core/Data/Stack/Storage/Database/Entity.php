@@ -61,9 +61,13 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $this->fetch([$this->idField => $ids], $limit, $order);
     }
 
-    public function fetchByRelated($field, $related, $limit = NULL, $offset = NULL, &$count = FALSE)
+    public function fetchByRelated($field, $related, $limit = NULL, $offset = NULL, &$count = FALSE, $filterList = [])
     {
-        return $this->fetch([$field => $related->id], $limit, NULL, $offset, $count);
+        $request = [$field => $related->id];
+        foreach ($filterList as $field => $value) {
+            $request[$field] = $value;
+        }
+        return $this->fetch($request, $limit, NULL, $offset, $count);
     }
 
     public function deleteByFields($where)
@@ -74,18 +78,24 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         return $request->execute($parameters);
     }
 
-    public function updateRelated($field, $ids, $related)
+    public function updateRelated($field, $ids, $related, $filterList = [])
     {
         if (!empty($ids)) {
             $sql = 'UPDATE ' . $this->table
-                . ' SET ' . $field . '=' . $related->id
-                . ' WHERE ' . $this->idField . ' IN (' . implode(', ', $ids) . ')';
+                . ' SET ' . $field . '=' . $related->id;
+            foreach ($filterList as $field => $value) {
+                $sql .= ', ' . $field . '=' . $value;
+            }
+            $sql .= ' WHERE ' . $this->idField . ' IN (' . implode(', ', $ids) . ')';
             $request = new Request($sql);
             $request->execute();
         }
         $sql = 'UPDATE ' . $this->table
-            . ' SET ' . $field . '=NULL'
-            . ' WHERE ' . $field . '=' . $related->id;
+            . ' SET ' . $field . '=NULL';
+        foreach ($filterList as $field => $value) {
+            $sql .= ', ' . $field . '=' . NULL;
+        }
+        $sql .= ' WHERE ' . $field . '=' . $related->id;
         if (!empty($ids)) {
             $sql .= ' AND ' . $this->idField . ' NOT IN (' . implode(', ', $ids) . ')';
         }
