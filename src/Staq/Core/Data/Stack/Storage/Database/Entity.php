@@ -93,22 +93,30 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         $request->execute();
     }
 
-    public function fetchByRelatedThroughTable($table, $field, $relatedField, $related)
+    public function fetchByRelatedThroughTable($table, $field, $relatedField, $related, $filterList = [])
     {
-        $ids = $this->fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related);
+        $ids = $this->fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related, $filterList);
         return $this->fetchByIds($ids);
     }
 
-    public function updateRelatedThroughTable($table, $field, $relatedField, $ids, $related)
+    public function updateRelatedThroughTable($table, $field, $relatedField, $ids, $related, $filterList = [])
     {
         $existing = $this->fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related);
         $addIds = array_diff($ids, $existing);
         if (!empty($addIds)) {
             $sql = array();
             foreach ($addIds as $addId) {
-                $sql[] = ' (' . $addId . ', ' . $related->id . ')';
+                $valueList = [$addId, $related->id];
+                foreach ($filterList as $value) {
+                    $valueList[] = $value;
+                }
+                $sql[] = ' (' . implode(', ', $valueList) . ')';
             }
-            $sql = 'INSERT INTO ' . $table . ' (' . $field . ', ' . $relatedField . ') VALUES' . implode(',', $sql);
+            $fieldList = [$field, $relatedField];
+            foreach (array_keys($filterList) as $field) {
+                $fieldList[] = $field;
+            }
+            $sql = 'INSERT INTO ' . $table . ' (' . implode(', ', $fieldList) . ') VALUES' . implode(',', $sql);
             $request = new Request($sql);
             $request->execute();
         }
@@ -117,18 +125,24 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
             $sql = 'DELETE FROM ' . $table
                 . ' WHERE ' . $relatedField . '=' . $related->id
                 . ' AND ' . $field . ' IN (' . implode(', ', $removeIds) . ') ';
+            foreach ($filterList as $field => $value) {
+                $sql .= ' AND ' . $field . '=' . $value;
+            }
             $request = new Request($sql);
             $request->execute();
         }
     }
 
-    public function fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related)
+    public function fetchIdsByRelatedThroughTable($table, $field, $relatedField, $related, $filterList = [])
     {
         if (!$related->exists() ) {
             return array();
         }
         $sql = 'SELECT ' . $field . ' FROM ' . $table
             . ' WHERE ' . $relatedField . '=' . $related->id;
+        foreach ($filterList as $field => $value) {
+            $sql .= ' AND ' . $field . '=' . $value;
+        }
         $request = new Request($sql);
         $existing = $request->execute();
         return array_keys(\UArray::keyBy($existing, $field));
@@ -349,7 +363,6 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         $whereList = array_filter($whereList, function($a){
             return (!empty($a));
         });
-        // var_dump($whereList);
         return $whereList;
     }
 

@@ -38,7 +38,7 @@ class ManyToMany extends OneToMany
     public function reload()
     {
         $class = $this->getRemoteClass();
-        $this->remoteModels = (new $class)->entity->fetchByRelatedThroughTable($this->table, $this->remoteAttributeName, $this->relatedAttributeName, $this->model);
+        $this->remoteModels = (new $class)->entity->fetchByRelatedThroughTable($this->table, $this->remoteAttributeName, $this->relatedAttributeName, $this->model, $this->filterList);
     }
 
     public function get()
@@ -56,7 +56,7 @@ class ManyToMany extends OneToMany
     {
         if ($this->changed) {
             $class = $this->getRemoteClass();
-            (new $class)->entity->updateRelatedThroughTable($this->table, $this->remoteAttributeName, $this->relatedAttributeName, $this->getIds(), $this->model);
+            (new $class)->entity->updateRelatedThroughTable($this->table, $this->remoteAttributeName, $this->relatedAttributeName, $this->getIds(), $this->model, $this->filterList);
         }
     }
 }

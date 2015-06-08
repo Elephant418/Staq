@@ -16,6 +16,7 @@ class OneToMany extends OneToMany\__Parent
     protected $remoteModels = NULL;
     protected $remoteModelType;
     protected $relatedAttributeName;
+    protected $filterList = [];
 
 
     /* CONSTRUCTOR
@@ -30,6 +31,9 @@ class OneToMany extends OneToMany\__Parent
             }
             if (!isset($setting['related_attribute_name'])) {
                 throw new \Stack\Exception\MissingSetting('"related_attribute_name" missing for the OneToMany relation.');
+            }
+            if (isset($setting['filter_list'])) {
+                $this->filterList = $setting['filter_list'];
             }
             $this->remoteModelType = $setting['remote_class_type'];
             $this->relatedAttributeName = $setting['related_attribute_name'];
