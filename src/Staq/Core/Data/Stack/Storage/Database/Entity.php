@@ -296,36 +296,11 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
 
     protected function getClauseByFields($request, &$parameters, $limit=NULL, $order=NULL, $offset=NULL)
     {
-        $where = $this->getDefaultWhere();
-        if (is_array($request)) {
-            foreach ($request as $fieldName => $fieldValue) {
-                if (is_numeric($fieldName)) {
-                    if (is_string($fieldValue)) {
-                        $where[] = $fieldValue;
-                    } else if (
-                        is_array($fieldValue) &&
-                        isset($fieldValue[0]) &&
-                        isset($fieldValue[1]) &&
-                        isset($fieldValue[2])
-                    ) {
-                        $where[] = $this->getClauseCondition($parameters, $fieldValue[0], $fieldValue[1], $fieldValue[2]);
-                    }
-                } else {
-                    if (!\UString::has($fieldName, '.')) {
-                        $fieldName = $this->table . '.' . $fieldName;
-                    }
-                    $where[] = $this->getClauseCondition($parameters, $fieldName, '=', $fieldValue);
-                }
-            }
-        } else {
-            $where[] = $request;
-        }
+        $whereList = $this->getDefaultWhere();
+        $whereList = array_merge($whereList, $this->getClauseConditionList($request, $parameters));
         $sql = '';
-        $where = array_filter($where, function($a){
-           return (!empty($a));
-        });
-        if (!empty($where)) {
-            $sql .= ' WHERE ' . implode(' AND ', $where);
+        if (!empty($whereList)) {
+            $sql .= ' WHERE ' . implode(' AND ', $whereList);
         }
         $sql .= $this->getGroupBy();
         if (is_null($order)) {
@@ -341,25 +316,66 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         }
         return $sql . ';';
     }
+    
+    protected  function getClauseConditionList($request, &$parameters = false) {
+        $whereList = [];
+        if (is_array($request)) {
+            foreach ($request as $fieldName => $fieldValue) {
+                if (is_numeric($fieldName)) {
+                    if (is_string($fieldValue)) {
+                        $whereList[] = $fieldValue;
+                    } else if (
+                        is_array($fieldValue) &&
+                        isset($fieldValue[0]) &&
+                        isset($fieldValue[1]) &&
+                        isset($fieldValue[2])
+                    ) {
+                        $fieldName = $fieldValue[0];
+                        if (!\UString::has($fieldValue[0], '.')) {
+                            $fieldName = $this->table . '.' . $fieldName;
+                        }
+                        $whereList[] = $this->getClauseCondition($fieldName, $fieldValue[1], $fieldValue[2], $parameters);
+                    }
+                } else {
+                    if (!\UString::has($fieldName, '.')) {
+                        $fieldName = $this->table . '.' . $fieldName;
+                    }
+                    $whereList[] = $this->getClauseCondition($fieldName, '=', $fieldValue, $parameters);
+                }
+            }
+        } else {
+            $whereList[] = $request;
+        }
+        $whereList = array_filter($whereList, function($a){
+            return (!empty($a));
+        });
+        // var_dump($whereList);
+        return $whereList;
+    }
 
-    protected function getClauseCondition(&$parameters, $fieldName, $operator, $fieldValue)
+    protected function getClauseCondition($fieldName, $operator, $fieldValue, &$parameters = false)
     {
         $condition = NULL;
-        $parameterName = 'key' . count($parameters);
         if (is_array($fieldValue)) {
+            if ($parameters !== false) {
+                $conditionParameters = [];
+                foreach ($fieldValue as $key => $value) {
+                    $conditionParameters[':' . 'key_' . (count($parameters) + $key)] = $value;
+                }
+                $parameters = array_merge($parameters, $conditionParameters);
+                $fieldValue = $conditionParameters;
+            }
             if (empty($fieldValue)) {
                 $fieldValue = [-1];
             }
-            $conditionParameters = [];
-            foreach ($fieldValue as $key => $value) {
-                $conditionParameters[':' . 'key_' . (count($parameters) + $key)] = $value;
-            }
-            $condition = implode(', ', array_keys($conditionParameters));
-            $condition = $fieldName . ' IN ( ' . $condition . ' )';
-            $parameters = array_merge($parameters, $conditionParameters);
+            $condition = $fieldName . ' IN ( ' . implode(', ', array_keys($fieldValue)) . ' )';
         } else {
-            $condition = $fieldName . ' ' . $operator . ' :' . $parameterName;
-            $parameters[':' . $parameterName] = $fieldValue;
+            if ($parameters !== false) {
+                $parameterName = ':key' . count($parameters);
+                $parameters[$parameterName] = $fieldValue;
+                $fieldValue = $parameterName;
+            }
+            $condition = $fieldName . ' ' . $operator . ' ' . $fieldValue;
         }
         return $condition;
     }
