@@ -187,7 +187,14 @@ class Server
             } else {
                 $baseDir = __DIR__ . '/../..';
             }
-            $this->namespaces = (require($baseDir . '/vendor/composer/autoload_namespaces.php'));
+            $psr0 = (require($baseDir . '/vendor/composer/autoload_namespaces.php'));
+            foreach ($psr0 as $namespace => $pathList) {
+                foreach ($pathList as $key => $path) {
+                    $psr0[$namespace][$key] = $path.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+                }
+            }
+            $psr4 = (require($baseDir . '/vendor/composer/autoload_psr4.php'));
+            $this->namespaces = array_merge($psr0, $psr4);
         }
     }
 
@@ -207,12 +214,14 @@ class Server
 
     protected function findExtensionPath($namespace)
     {
-        foreach ($this->namespaces as $baseNamespace => $basePaths) {
+        foreach ($this->namespaces as $baseNamespace => $basePathList) {
             if (\UString::isStartWith($namespace, $baseNamespace)) {
-                \UArray::doConvertToArray($basePaths);
-                foreach ($basePaths as $basePath) {
-                    $path = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+                \UArray::doConvertToArray($basePathList);
+                foreach ($basePathList as $basePath) {
                     \UString::doEndWith($basePath, DIRECTORY_SEPARATOR);
+                    \UString::doNotStartWith($namespace, $baseNamespace);
+                    \UString::doNotStartWith($namespace, '\\');
+                    $path = str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
                     $path = $basePath . $path;
                     if (is_dir($path)) {
                         return $path;
