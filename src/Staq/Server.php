@@ -190,10 +190,15 @@ class Server
             $psr0 = (require($baseDir . '/vendor/composer/autoload_namespaces.php'));
             foreach ($psr0 as $namespace => $pathList) {
                 foreach ($pathList as $key => $path) {
-                    $psr0[$namespace][$key] = $path.DIRECTORY_SEPARATOR.str_replace('\\', DIRECTORY_SEPARATOR, $namespace);
+                    $psr0[$namespace][$key] = realpath($path.'/'.str_replace('\\', '/', $namespace));
                 }
             }
             $psr4 = (require($baseDir . '/vendor/composer/autoload_psr4.php'));
+            foreach ($psr4 as $namespace => $pathList) {
+                foreach ($pathList as $key => $path) {
+                    $psr0[$namespace][$key] = realpath($path);
+                }
+            }
             $this->namespaces = array_merge($psr0, $psr4);
         }
     }
