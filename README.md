@@ -1,4 +1,4 @@
-Staq [![Build Status](https://travis-ci.org/Pixel418/Staq.png?branch=master)](https://travis-ci.org/Pixel418/Staq?branch=master)
+Staq [![Build Status](https://travis-ci.org/Elephant418/Staq.png?branch=master)](https://travis-ci.org/Elephant418/Staq?branch=master)
 ======
 
 Staq is a modern & innovative PHP framework for enjoyable web development.
@@ -27,7 +27,7 @@ Let's code
 ### Hello world tutorial 
 
 ```php
-require_once( 'vendor/pixel418/staq/src/include.php' );
+require_once( 'vendor/Elephant418/staq/src/include.php' );
 
 \Staq\App::create( )
     ->addController( '/hello/:name', function( $name ) {
@@ -41,8 +41,8 @@ require_once( 'vendor/pixel418/staq/src/include.php' );
 
 You can use the Hello World projects to bootstrap an application:
 
- * The simplest [Staq Hello World project](https://github.com/Pixel418/Staq-HelloWorld/)
- * The [Staq Hello World project with MVC structure](https://github.com/Pixel418/Staq-HelloWorldMVC/)
+ * The simplest [Staq Hello World project](https://github.com/Elephant418/Staq-HelloWorld/)
+ * The [Staq Hello World project with MVC structure](https://github.com/Elephant418/Staq-HelloWorldMVC/)
 
 
 ### System Requirements
@@ -62,7 +62,7 @@ Add or complete the composer.json file at the root of your repository, like this
 ```json
 {
     "require": {
-        "pixel418/staq": "0.6.0"
+        "Elephant418/staq": "0.6.0"
     }
 }
 ```
