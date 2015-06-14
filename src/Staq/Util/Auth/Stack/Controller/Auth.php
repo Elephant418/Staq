@@ -17,7 +17,7 @@ class Auth extends Auth\__Parent
     const MSG_INSCRIPTION_KO = 'This username is not free.';
     const MSG_LOGIN_VALID = 'You are now connected as %s.';
     const MSG_LOGIN_KO = 'Wrong credentials.';
-    const MSG_LOGOUT_VALID = 'You are now deconnected.';
+    const MSG_LOGOUT_VALID = 'You are now disconnected.';
 
 
     /* ATTRIBUTES
@@ -29,6 +29,7 @@ class Auth extends Auth\__Parent
         'route.login.exceptions' => 'MustBeLogged',
         'route.logout.uri' => '/logout'
     ];
+    protected static $userClass = "User";
 
 
     /* FORMS METHODS
@@ -117,7 +118,18 @@ class Auth extends Auth\__Parent
         }
         return \Staq::App()->getCurrentUri();
     }
-
+    
+    protected function getUserEntity()
+    {
+        $class = "Stack\\Entity\\".static::$userClass;
+        return (new $class);
+    }
+    
+    protected function getUserModel()
+    {
+        $class = "Stack\\Model\\".static::$userClass;
+        return (new $class);
+    }
 
     /* UTIL METHODS
      *************************************************************************/
