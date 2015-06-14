@@ -121,13 +121,13 @@ class Auth extends Auth\__Parent
     
     protected function getUserEntity()
     {
-        $class = "\\Stack\\Entity\\" + $this->userClass;
+        $class = "Stack\\Entity\\".static::$userClass;
         return (new $class);
     }
     
     protected function getUserModel()
     {
-        $class = "\\Stack\\Model\\" + $this->userClass;
+        $class = "Stack\\Model\\".static::$userClass;
         return (new $class);
     }
 
