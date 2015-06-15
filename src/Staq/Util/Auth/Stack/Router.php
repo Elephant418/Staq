@@ -26,7 +26,7 @@ class Router extends Router\__Parent
                 throw new \Stack\Exception\MustBeLogged();
             }
             $user = \Staq::Ctrl('Auth')->currentUser();
-            if ($user->ghasAttribute('right')){
+            if ($user->hasAttribute('right')){
                 if ($user->getAttribute('right')->getSeed() < $level) {
                     throw new \Stack\Exception\NotAllowed();
                 }
