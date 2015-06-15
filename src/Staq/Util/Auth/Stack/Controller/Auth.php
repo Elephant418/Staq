@@ -38,7 +38,7 @@ class Auth extends Auth\__Parent
     {
         return (new Form)
             ->addInput('login', 'string|required|min_length:4|max_length:19', 'inscription.login')
-                ->addInputFilter('login', 'validate_regexp:/^[a-zA-Z0-9-]*$/', 'This field must contains only letters, numbers and dash');
+            ->addInputFilter('login', 'validate_regexp:/^[a-zA-Z0-9-]*$/', 'This field must contains only letters, numbers and dash');
     }
 
     public function getLoginForm()
@@ -55,7 +55,7 @@ class Auth extends Auth\__Parent
     {
         $form = $this->getInscriptionForm();
         if ($form->isValid()) {
-            $user = (new \Stack\Model\User)
+            $user = $this->getUserModel()
                 ->set('login', $form->login)
                 ->set('password', $form->password);
             try {
@@ -118,16 +118,16 @@ class Auth extends Auth\__Parent
         }
         return \Staq::App()->getCurrentUri();
     }
-    
+
     protected function getUserEntity()
     {
-        $class = "Stack\\Entity\\".static::$userClass;
+        $class = "Stack\\Entity\\" . static::$userClass;
         return (new $class);
     }
-    
+
     protected function getUserModel()
     {
-        $class = "Stack\\Model\\".static::$userClass;
+        $class = "Stack\\Model\\" . static::$userClass;
         return (new $class);
     }
 
@@ -145,7 +145,7 @@ class Auth extends Auth\__Parent
         if (!isset($_SESSION['Staq']['loggedUser'])) {
             $user = FALSE;
         } else {
-            $user = (new \Stack\Entity\User)->fetchById($_SESSION['Staq']['loggedUser']);
+            $user = $this->getUserEntity()->fetchById($_SESSION['Staq']['loggedUser']);
             if (!$user->exists()) {
                 $user = FALSE;
             }
@@ -157,7 +157,7 @@ class Auth extends Auth\__Parent
     public function login($user, $password = NULL)
     {
         if (!is_object($user)) {
-            $user = (new \Stack\Entity\User)->fetchByLogin($user);
+            $user = $this->getUserEntity()->fetchByLogin($user);
         }
         if (!is_object($user) || !$user->exists()) {
             return FALSE;
@@ -165,6 +165,14 @@ class Auth extends Auth\__Parent
         if (!is_null($password)) {
             if (!$user->getAttribute('password')->compare($password)) {
                 return FALSE;
+            }
+        }
+        if ($user->hasAttribute('lastConnectionDate')) {
+            try {
+                $user->set('lastConnectionDate', new \DateTime())
+                    ->save();
+            } catch (\PDOException $e) {
+                // Nothing critical
             }
         }
         $_SESSION['Staq']['loggedUser'] = $user->id;
