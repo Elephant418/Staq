@@ -34,11 +34,13 @@ class UINotification
 
     public static function push($message, $type = 'info')
     {
-        $info = array('message' => $message, 'type' => $type);
-        if (!isset($_SESSION['Staq']['UINotification'])) {
-            $_SESSION['Staq']['UINotification'] = array();
+        if ($message) {
+            $info = array('message' => $message, 'type' => $type);
+            if (!isset($_SESSION['Staq']['UINotification'])) {
+                $_SESSION['Staq']['UINotification'] = array();
+            }
+            $_SESSION['Staq']['UINotification'][] = $info;
         }
-        $_SESSION['Staq']['UINotification'][] = $info;
     }
 
 

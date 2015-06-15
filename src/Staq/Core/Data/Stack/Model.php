@@ -68,11 +68,6 @@ class Model extends \ArrayObject implements \Stack\IModel
         parent::offsetSet($name, $attribute);
     }
 
-    protected function hasAttribute($name)
-    {
-        return (in_array($name, $this->schemaAttributeNames));
-    }
-
     public function keys()
     {
         return array_keys($this->getArrayCopy());
@@ -142,9 +137,14 @@ class Model extends \ArrayObject implements \Stack\IModel
 
     /* SPECIFIC MODEL ACCESSOR METHODS
      *************************************************************************/
+    public function hasAttribute($index)
+    {
+        return $this->offsetExists($index);
+    }
+    
     public function getAttribute($index)
     {
-        if ($this->offsetExists($index)) {
+        if ($this->hasAttribute($index)) {
             return parent::offsetGet($index);
         }
     }
