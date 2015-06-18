@@ -15,7 +15,7 @@ class SerializedList extends SerializedArray
     {
         $list = parent::get();
         $list = array_values($list);
-        $list = array_map($list, array($this, 'formatItem'));
+        $list = array_map(array($this, 'formatItem'), $list);
         return $list;
     }
 
@@ -24,7 +24,7 @@ class SerializedList extends SerializedArray
         \UArray::doConvertToArray($list);
         $list = array_values($list);
         $list = array_filter($list, array($this, 'validateItem'));
-        $list = array_map($list, array($this, 'formatItemSeed'));
+        $list = array_map(array($this, 'formatItemSeed'), $list);
         return parent::set($list);
     }
 
@@ -50,11 +50,11 @@ class SerializedList extends SerializedArray
     protected function validateItem($item) {
         return true;
     }
-    
+
     protected function formatItemSeed($item) {
         return $item;
     }
-    
+
     protected function formatItem($item) {
         return $item;
     }
