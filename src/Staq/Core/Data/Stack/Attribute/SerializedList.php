@@ -14,13 +14,17 @@ class SerializedList extends SerializedArray
     public function get()
     {
         $list = parent::get();
-        return array_values($list);
+        $list = array_values($list);
+        $list = array_map($list, array($this, 'formatItem'));
+        return $list;
     }
 
     public function set($list)
     {
         \UArray::doConvertToArray($list);
         $list = array_values($list);
+        $list = array_filter($list, array($this, 'validateItem'));
+        $list = array_map($list, array($this, 'formatItemSeed'));
         return parent::set($list);
     }
 
@@ -38,5 +42,20 @@ class SerializedList extends SerializedArray
         $list = array_merge($list, $addList);
         $this->set($list);
         return $this;
+    }
+
+
+    /* PRIVATE USER METHODS
+     *************************************************************************/
+    protected function validateItem($item) {
+        return true;
+    }
+    
+    protected function formatItemSeed($item) {
+        return $item;
+    }
+    
+    protected function formatItem($item) {
+        return $item;
     }
 }
