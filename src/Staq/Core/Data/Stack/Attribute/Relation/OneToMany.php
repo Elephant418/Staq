@@ -17,6 +17,7 @@ class OneToMany extends OneToMany\__Parent
     protected $remoteModelType;
     protected $relatedAttributeName;
     protected $filterList = [];
+    protected $uniqueRemote = false;
 
 
     /* CONSTRUCTOR
@@ -35,6 +36,9 @@ class OneToMany extends OneToMany\__Parent
             if (isset($setting['filter_list'])) {
                 $this->filterList = $setting['filter_list'];
             }
+            if (isset($setting['unique_remote'])) {
+                $this->uniqueRelated = !!$setting['unique_remote'];
+            }
             $this->remoteModelType = $setting['remote_class_type'];
             $this->relatedAttributeName = $setting['related_attribute_name'];
         }
@@ -47,13 +51,20 @@ class OneToMany extends OneToMany\__Parent
     {
         $class = $this->getRemoteClass();
         $count = false;
-        $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model, null, null, $count, $this->filterList);
+        $limit = null;
+        if ($this->uniqueRemote) {
+            $limit = 1;
+        }
+        $this->remoteModels = (new $class)->entity->fetchByRelated($this->relatedAttributeName, $this->model, $limit, null, $count, $this->filterList);
     }
 
     public function get()
     {
         if (is_null($this->remoteModels)) {
             $this->reload();
+        }
+        if ($this->uniqueRemote) {
+            return reset($this->remoteModels);
         }
         return $this->remoteModels;
     }
@@ -72,6 +83,9 @@ class OneToMany extends OneToMany\__Parent
         $this->remoteModels = [];
         $this->changed = TRUE;
         \UArray::doConvertToArray($remoteModels);
+        if ($this->uniqueRemote) {
+            $remoteModels = array_slice($remoteModels, 0, 1);
+        }
         foreach( $remoteModels as $model ) {
             if (is_numeric($model)) {
                 $model = $this->getRemoteModel()->entity->fetchById($model);
