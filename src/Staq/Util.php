@@ -263,7 +263,7 @@ abstract class Util
         return \Staq\Util::getPublicUrl($asset, $absoluteURL);
     }
 
-    public static function getControllerUrl($controller, $action) {
+    public static function getControllerUrl($controller, $action='view') {
         $parameters = array_slice(func_get_args(), 2);
         $uri = \Staq::App()->getUri($controller, $action, $parameters);
         return \Staq\Util::getPublicUrl($uri);

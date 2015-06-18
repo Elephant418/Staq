@@ -22,7 +22,7 @@ class Application extends Application\__Parent
         return $this->router->getController($name);
     }
 
-    public function getUri($controller, $action, $parameters)
+    public function getUri($controller, $action = 'view', $parameters = [])
     {
         return $this->router->getUri($controller, $action, $parameters);
     }
