@@ -5,7 +5,7 @@
 
 namespace Staq\Core\Data\Stack\Attribute;
 
-class SerializedList extends SerializedList\__Parent
+class SerializedList extends SerializedArray
 {
 
 
@@ -13,22 +13,30 @@ class SerializedList extends SerializedList\__Parent
      *************************************************************************/
     public function get()
     {
-        $unserialized = json_decode($this->seed, TRUE);
-        \UArray::doConvertToArray($unserialized);
-        return array_values($unserialized);
+        $list = parent::get();
+        return array_values($list);
     }
 
     public function set($list)
     {
         \UArray::doConvertToArray($list);
         $list = array_values($list);
-        $this->seed = json_encode($list);
+        return parent::set($list);
     }
 
-    public function add($item)
+    public function add($add)
     {
         $list = $this->get();
-        $list[] = $item;
+        $list[] = $add;
         $this->set($list);
+        return $this;
+    }
+
+    public function addList($addList)
+    {
+        $list = $this->get();
+        $list = array_merge($list, $addList);
+        $this->set($list);
+        return $this;
     }
 }
