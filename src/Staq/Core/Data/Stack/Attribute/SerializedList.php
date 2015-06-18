@@ -31,12 +31,4 @@ class SerializedList extends SerializedList\__Parent
         $list[] = $item;
         $this->set($list);
     }
-
-
-    /* PUBLIC DATABASE METHODS
-     *************************************************************************/
-    public function getSeed()
-    {
-        return \UArray::convertToArray($this->seed);
-    }
 }
