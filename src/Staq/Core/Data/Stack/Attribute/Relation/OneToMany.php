@@ -37,7 +37,7 @@ class OneToMany extends OneToMany\__Parent
                 $this->filterList = $setting['filter_list'];
             }
             if (isset($setting['unique_remote'])) {
-                $this->uniqueRelated = !!$setting['unique_remote'];
+                $this->uniqueRemote = !!$setting['unique_remote'];
             }
             $this->remoteModelType = $setting['remote_class_type'];
             $this->relatedAttributeName = $setting['related_attribute_name'];
