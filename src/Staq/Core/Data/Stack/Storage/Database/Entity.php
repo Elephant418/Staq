@@ -322,23 +322,23 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
     {
         $whereList = $this->getDefaultWhere();
         $whereList = array_merge($whereList, $this->getClauseConditionList($request, $parameters));
-        $sql = '';
+        $sql = [];
         if (!empty($whereList)) {
-            $sql .= ' WHERE ' . implode(' AND ', $whereList);
+            $sql[] = ' WHERE ' . implode(' AND ', $whereList);
         }
-        $sql .= $this->getGroupBy();
+        $sql[] = $this->getGroupBy();
         if (is_null($order)) {
-            $sql .= $this->getDefaultOrder();
+            $sql[] = $this->getDefaultOrder();
         } else {
-            $sql .= ' ORDER BY ' . $order;
+            $sql[] = 'ORDER BY ' . $order;
         }
         if (!is_null($limit)) {
-            $sql .= ' LIMIT ' . $limit;
+            $sql[] = 'LIMIT ' . $limit;
         }
         if (!is_null($offset)) {
-            $sql .= ' OFFSET ' . $offset;
+            $sql[] = 'OFFSET ' . $offset;
         }
-        return $sql . ';';
+        return implode(' ', $sql) . ';';
     }
     
     protected  function getClauseConditionList($request, &$parameters = false) {
