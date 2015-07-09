@@ -17,9 +17,9 @@ class SerializedList extends SerializedMap
         return array_values($list);
     }
 
-    public function set($list)
+    public function set($map)
     {
-        $list = array_values($list);
-        return parent::set($list);
+        $map = array_values($map);
+        return parent::set($map);
     }
 }

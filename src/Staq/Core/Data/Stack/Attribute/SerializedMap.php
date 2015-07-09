@@ -7,47 +7,71 @@ namespace Staq\Core\Data\Stack\Attribute;
 
 class SerializedMap extends SerializedMap\__Parent
 {
+    protected $map;
 
 
-    /* PUBLIC USER METHODS
+    /* PUBLIC USER GETTER METHODS
      *************************************************************************/
-    public function get()
+    public function reload()
     {
-        $list = json_decode($this->seed, TRUE);
-        \UArray::doConvertToArray($list);
+        $map = json_decode($this->seed, TRUE);
+        \UArray::doConvertToArray($map);
         $result = [];
-        foreach ($list as $key => $item) {
+        foreach ($map as $key => $item) {
             $validation = $this->formatItem($item, $key);
             if ($validation) {
                 $result[$key] = $item;
             }
         }
-        return $result;
+        $this->map = $result;
     }
 
-    public function set($list)
+    public function get()
     {
-        \UArray::convertToArray($list);
+        if (is_null($this->map)) {
+            $this->reload();
+        }
+        return $this->map;
+    }
+
+
+    /* PUBLIC USER SETTER METHODS
+     *************************************************************************/
+    public function set($map)
+    {
+        \UArray::convertToArray($map);
         $result = [];
-        foreach ($list as $key => $item) {
+        foreach ($map as $key => $item) {
             $validation = $this->formatItemSeed($item, $key);
             if ($validation) {
                 $result[$key] = $item;
             }
         }
         $this->seed = json_encode($result);
+        $this->map = $map;
         return $this;
     }
 
     public function add($item, $key = null)
     {
-        $list = $this->get();
+        $map = $this->get();
         if (is_null($key)) {
-            $list[] = $item;
+            $map[] = $item;
         } else {
-            $list[$key] = $item;
+            $map[$key] = $item;
         }
-        return $this->set($list);
+        $this->set($map);
+        return $this;
+    }
+
+    public function remove($key)
+    {
+        $map = $this->get();
+        if (isset($map[$key])) {
+            unset($map[$key]);
+            $this->set($map);
+        }
+        return $this;
     }
 
 
