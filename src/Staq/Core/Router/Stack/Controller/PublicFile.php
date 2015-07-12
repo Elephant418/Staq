@@ -70,9 +70,13 @@ class PublicFile extends PublicFile\__Parent
         } else if ($extension === 'ico') {
             $contentType = 'image/png';
         } else {
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $contentType = finfo_file($finfo, $filePath);
-            finfo_close($finfo);
+            try {
+                $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                $contentType = finfo_file($finfo, $filePath);
+                finfo_close($finfo);
+            } catch(\Exception $e) {
+                $contentType = 'application/octet-stream';
+            }
         }
         return $contentType;
     }
