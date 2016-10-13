@@ -61,7 +61,7 @@ abstract class Util
         \Staq\Util::httpRedirect(\Staq::App()->getBaseUri() . $uri, $code);
     }
 
-    function smartUrlEncode($url)
+    public static function smartUrlEncode($url)
     {
         $revert = array('%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')');
         return strtr(rawurlencode($url), $revert);
