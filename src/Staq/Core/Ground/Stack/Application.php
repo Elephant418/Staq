@@ -154,6 +154,13 @@ class Application
         }
         error_reporting($level);
 
+        // Hide uncompatible method declaration
+        if (PHP_MAJOR_VERSION >= 7) {
+            set_error_handler(function ($errno, $errstr) {
+                return strpos($errstr, 'Declaration of') === 0;
+            }, E_WARNING);
+        }
+
         // Timezone
         $timezone = $this->settings->get('service.timezone');
         date_default_timezone_set($timezone);
