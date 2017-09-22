@@ -246,7 +246,9 @@ class Entity extends \Staq\Core\Data\Stack\Storage\Entity implements \Stack\IEnt
         $parameters = [];
         $sql = 'SELECT FOUND_ROWS();';
         $request = new Request($sql);
-        return reset($request->executeOne($parameters));
+        $result = $request->executeOne($parameters);
+        
+        return reset($result);
     }
 
     protected function getData($where=[], $order=NULL, $offset=NULL)
